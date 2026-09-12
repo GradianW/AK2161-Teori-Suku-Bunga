@@ -1,0 +1,601 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title=#1,
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title=#1,
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 01: Pendahuluan \& Konsep Dasar Suku Bunga}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 1.1--1.5)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+\section{Pendahuluan \& Motivasi}
+
+\subsection{Konsep \textit{Time Value of Money}}
+Mengapa nilai uang sekarang (\textit{present value}) berbeda dari nilai uang yang diterima di masa depan (\textit{future value})?
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Prinsip Nilai Waktu Uang (\textit{Time Value of Money}):} Satu satuan uang saat ini bernilai lebih tinggi daripada satu satuan uang yang sama di masa depan. Hal ini disebabkan adanya potensi daya produktif modal untuk menghasilkan keuntungan/imbalan seiring berjalannya waktu.
+    \item \textbf{Teori Suku Bunga (\textit{Theory of Interest}):} Merupakan kerangka metodologis deterministik (berbasis kalkulus) untuk mengukur, membandingkan, serta mengevaluasi nilai aliran dana pada titik-titik waktu yang berbeda.
+    \item \textbf{Hubungan dengan Teori Aktuaria / Asuransi:} Dalam aktuaria, klaim dan premi merupakan pembayaran tak pasti (\textit{contingent payments}) yang dimodelkan dengan \textit{teori peluang} (stokastik) serta digabungkan dengan \textit{teori suku bunga} (deterministik) untuk menentukan nilai sekarang dari kewajiban asuransi.
+\end{itemize}
+
+\subsection{Definisi Dasar \textit{Interest} (Bunga)}
+\begin{definitionbox}[Definisi: Bunga (\textit{Interest})]
+\textbf{Interest (Bunga)} adalah kompensasi atau imbalan yang dibayarkan oleh peminjam (\textit{borrower}) kepada pemilik modal (\textit{lender}) atas penggunaan sejumlah dana/modal selama selang waktu tertentu.
+\end{definitionbox}
+
+Ditinjau secara ekonomi, bunga bertindak sebagai:
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{``Uang Sewa'' Modal:} Kompensasi atas hilangnya kesempatan (\textit{opportunity cost}) pemilik modal untuk memanfaatkan dananya secara langsung selama periode peminjaman.
+    \item \textbf{Imbalan Risiko:} Mengompensasi ketidakpastian pengembalian modal serta penurunan daya beli uang akibat inflasi.
+\end{enumerate}
+
+\begin{notebox}[Pembedaan Konsep Penting]
+\textbf{Bunga (\textit{Interest}, $I$)} adalah \emph{besaran nominal/jumlah uang} yang dihasilkan, sedangkan \textbf{Suku Bunga (\textit{Interest Rate}, $i$)} adalah \emph{rasio atau tingkat persentase} perolehan bunga relatif terhadap pokok dalam suatu periode waktu pengukuran.
+\end{notebox}
+
+---
+
+\section{Fungsi Akumulasi \& Fungsi Jumlah}
+
+Misalkan $t$ menyatakan waktu yang diukur dari saat awal investasi ($t=0$). Satuan waktu pengukuran standar adalah satu tahun, kecuali dinyatakan berbeda.
+
+\subsection{Fungsi Akumulasi, $a(t)$}
+\begin{definitionbox}[Definisi: Fungsi Akumulasi (\textit{Accumulation Function})]
+Fungsi akumulasi, dinotasikan dengan $a(t)$, menyatakan nilai terakumulasi (\textit{accumulated value}) pada saat $t \ge 0$ dari sebuah investasi awal sebesar \textbf{$1$ unit modal} pada saat $t = 0$.
+\end{definitionbox}
+
+\textbf{Sifat-sifat dasar fungsi akumulasi $a(t)$:}
+\begin{enumerate}[label=\arabic*.]
+    \item $a(0) = 1$.
+    \item $a(t)$ umumnya merupakan fungsi monoton tidak turun (\textit{non-decreasing}) seiring bertambahnya waktu $t$ (karena suku bunga umumnya non-negatif).
+    \item Jika proses pertambahan bunga berlangsung secara kontinu, maka $a(t)$ merupakan fungsi yang kontinu terhadap $t$.
+\end{enumerate}
+
+\subsection{Fungsi Jumlah, $A(t)$}
+\begin{definitionbox}[Definisi: Fungsi Jumlah (\textit{Amount Function})]
+Jika pokok awal yang diinvestasikan pada saat $t = 0$ bukan $1$ melainkan $k$ unit pokok ($k > 0$), maka nilai akumulasi pada saat $t \ge 0$ dinyatakan oleh \textbf{fungsi jumlah} $A(t)$:
+\begin{equation}
+    A(t) = k \cdot a(t)
+\end{equation}
+dengan kondisi awal $A(0) = k \cdot a(0) = k$.
+\end{definitionbox}
+
+\subsection{Bentuk-Bentuk Fungsi Jumlah $A(t)$}
+Dalam pemodelan finansial, terdapat beberapa bentuk fungsi jumlah $A(t)$ berdasarkan mekanisme pertumbuhan bunganya:
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+    % 1. Linear
+    \begin{scope}[xshift=0cm]
+        \draw[->,thick] (0,0) -- (3.2,0) node[right] {\footnotesize $t$};
+        \draw[->,thick] (0,0) -- (0,2.6) node[above] {\footnotesize $A(t)$};
+        \draw[thick,blue] (0,0.8) -- (2.8,2.2);
+        \node[left] at (0,0.8) {\footnotesize $A(0)$};
+        \node[below] at (1.5,-0.3) {\footnotesize (a) Linier};
+    \end{scope}
+
+    % 2. Exponential
+    \begin{scope}[xshift=4.2cm]
+        \draw[->,thick] (0,0) -- (3.2,0) node[right] {\footnotesize $t$};
+        \draw[->,thick] (0,0) -- (0,2.6) node[above] {\footnotesize $A(t)$};
+        \draw[thick,red,domain=0:2.8,samples=50] plot (\x,{0.7*exp(0.42*\x)});
+        \node[left] at (0,0.7) {\footnotesize $A(0)$};
+        \node[below] at (1.5,-0.3) {\footnotesize (b) Eksponensial};
+    \end{scope}
+
+    % 3. Constant
+    \begin{scope}[xshift=8.4cm]
+        \draw[->,thick] (0,0) -- (3.2,0) node[right] {\footnotesize $t$};
+        \draw[->,thick] (0,0) -- (0,2.6) node[above] {\footnotesize $A(t)$};
+        \draw[thick,teal] (0,1.2) -- (2.8,1.2);
+        \node[left] at (0,1.2) {\footnotesize $A(0)$};
+        \node[below] at (1.5,-0.3) {\footnotesize (c) Konstan ($i=0$)};
+    \end{scope}
+
+    % 4. Step/Discrete
+    \begin{scope}[xshift=12.6cm]
+        \draw[->,thick] (0,0) -- (3.2,0) node[right] {\footnotesize $t$};
+        \draw[->,thick] (0,0) -- (0,2.6) node[above] {\footnotesize $A(t)$};
+        \draw[thick,purple] (0,0.6) -- (0.9,0.6);
+        \draw[thick,purple] (0.9,1.1) -- (1.8,1.1);
+        \draw[thick,purple] (1.8,1.6) -- (2.7,1.6);
+        \draw[dashed,gray] (0.9,0.6) -- (0.9,1.1);
+        \draw[dashed,gray] (1.8,1.1) -- (1.8,1.6);
+        \node[left] at (0,0.6) {\footnotesize $A(0)$};
+        \node[below] at (1.5,-0.3) {\footnotesize (d) Diskrit (Tangga)};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Jumlah Bunga pada Periode ke-$n$, $I_n$}
+Misalkan periode waktu dibagi ke dalam interval satuan: $[0,1], [1,2], \dots, [n-1,n]$.
+\begin{definitionbox}[Definisi: Bunga Periode ke-$n$]
+Jumlah bunga yang diperoleh selama periode ke-$n$ (yaitu sepanjang interval waktu $[n-1, n]$) didefinisikan sebagai selisih nilai akumulasi:
+\begin{equation}
+    I_n = A(n) - A(n-1), \quad \text{untuk } n = 1, 2, 3, \dots
+\end{equation}
+\end{definitionbox}
+
+\begin{notebox}[Catatan Perbedaan Dimensi Waktu]
+Perhatikan perbedaan interpretasi:
+\begin{itemize}
+    \item $A(t)$ adalah variabel \textbf{stok} (\textit{stock}): menyatakan nilai saldo kekayaan pada suatu titik waktu tertentu $t$.
+    \item $I_n$ adalah variabel \textbf{arus} (\textit{flow}): menyatakan jumlah pertambahan bunga sepanjang interval waktu tertentu $[n-1, n]$.
+\end{itemize}
+\end{notebox}
+
+\subsection{Contoh Soal: Proposionalitas Fungsi Jumlah}
+\begin{examplebox}[Contoh 1: Perbandingan Rasio Akumulasi]
+\textbf{Soal:}\\
+Suatu skema investasi memerlukan pokok sebesar $\$10{,}000$ saat $t = 0$, dengan nilai akumulasi sebagai berikut:
+\begin{center}
+\begin{tabular}{cccccc}
+\toprule
+$t$ & 0 & 1 & 2 & 3 & 4 \\
+\midrule
+$A(t)$ & $\$10{,}000$ & $\$10{,}400$ & $\$10{,}700$ & $\$11{,}300$ & $\$11{,}800$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Jika seseorang menginvestasikan pokok sebesar $\$8{,}000$ pada saat $t = 1$ dengan skema yang proporsional, berapa nilai dana tersebut pada saat $t = 4$?
+
+\vspace{0.5em}
+\textbf{Solusi:}\\
+Misalkan $K$ adalah nilai terakumulasi dari investasi $\$8{,}000$ pada $t = 4$. Berdasarkan sifat perbandingan rasio fungsi akumulasi:
+\begin{equation*}
+    \frac{K}{A_{\text{investasi awal}}(1)} = \frac{A(4)}{A(1)} \implies \frac{K}{8{,}000} = \frac{11{,}800}{10{,}400}
+\end{equation*}
+Maka:
+\begin{equation*}
+    K = 8{,}000 \times \frac{11{,}800}{10{,}400} = 8{,}000 \times 1.134615 \approx \$9{,}076.92
+\end{equation*}
+\end{examplebox}
+
+---
+
+\section{Suku Bunga Efektif (\textit{Effective Interest Rate})}
+
+\subsection{Definisi Formal}
+\begin{definitionbox}[Definisi: Suku Bunga Efektif]
+\textbf{Suku bunga efektif} pada periode ke-$n$, dinotasikan $i_n$, adalah rasio antara jumlah bunga yang diperoleh selama periode ke-$n$ terhadap saldo pokok pada awal periode tersebut:
+\begin{equation}
+    i_n = \frac{A(n) - A(n-1)}{A(n-1)} = \frac{I_n}{A(n-1)}
+\end{equation}
+Dalam konteks fungsi akumulasi per unit $a(t)$:
+\begin{equation}
+    i_n = \frac{a(n) - a(n-1)}{a(n-1)}
+\end{equation}
+Khusus untuk periode pertama ($n=1$):
+\begin{equation}
+    i_1 = \frac{a(1) - a(0)}{a(0)} = a(1) - 1 \implies a(1) = 1 + i_1
+\end{equation}
+\end{definitionbox}
+
+\textbf{Ciri Khas Suku Bunga Efektif:}
+\begin{itemize}
+    \item Dihitung dan dibayarkan \textbf{satu kali} pada akhir periode pengukuran.
+    \item Berbeda dari suku bunga nominal (\textit{nominal rate}), di mana konversi bunga dapat terjadi berkali-kali dalam satu periode tahunan (dibahas pada bab selanjutnya).
+\end{itemize}
+
+\begin{examplebox}[Contoh 2: Perhitungan Suku Bunga Efektif Tiap Tahun]
+Mengacu pada tabel data Contoh 1:
+\begin{align*}
+    i_1 &= \frac{A(1) - A(0)}{A(0)} = \frac{10{,}400 - 10{,}000}{10{,}000} = \frac{400}{10{,}000} = 0.04 \quad (4.00\%) \\[0.5em]
+    i_2 &= \frac{A(2) - A(1)}{A(1)} = \frac{10{,}700 - 10{,}400}{10{,}400} = \frac{300}{10{,}400} \approx 0.02885 \quad (2.88\%) \\[0.5em]
+    i_3 &= \frac{A(3) - A(2)}{A(2)} = \frac{11{,}300 - 10{,}700}{10{,}700} = \frac{600}{10{,}700} \approx 0.05607 \quad (5.61\%) \\[0.5em]
+    i_4 &= \frac{A(4) - A(3)}{A(3)} = \frac{11{,}800 - 11{,}300}{11{,}300} = \frac{500}{11{,}300} \approx 0.04425 \quad (4.42\%)
+\end{align*}
+\textit{Catatan:} Pada slide kuliah, perhitungan disederhanakan sebagai ilustrasi pembulatan.
+\end{examplebox}
+
+---
+
+\section{Suku Bunga Tunggal (\textit{Simple Interest})}
+
+\subsection{Definisi \& Rumus Akumulasi}
+\begin{definitionbox}[Definisi: Bunga Tunggal (\textit{Simple Interest})]
+Pada suku bunga tunggal dengan tingkat bunga konstan $i$, bunga yang diperoleh setiap periodenya selalu bernilai konstan karena bunga \textbf{hanya dihitung berdasarkan pokok awal investasi} (bunga tidak menghasilkan bunga baru).
+Fungsi akumulasinya berbentuk linear:
+\begin{equation}
+    a(t) = 1 + i \cdot t, \quad \text{untuk } t \ge 0
+\end{equation}
+Untuk investasi awal sebesar $k$, fungsi jumlahnya adalah:
+\begin{equation}
+    A(t) = k(1 + i \cdot t)
+\end{equation}
+\end{definitionbox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {$t$ (waktu/periode)},
+    ylabel = {$A(t)$ (Nilai Akumulasi)},
+    xmin=0, xmax=4.5,
+    ymin=90, ymax=155,
+    xtick={0, 1, 2, 3, 4},
+    ytick={100, 110, 120, 130, 140},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=9.5cm, height=5.5cm
+]
+% Line plot for simple interest $100 with i=10%
+\addplot [domain=0:4, samples=50, color=primaryblue, very thick] {100 + 10*x};
+\addplot[only marks, mark=*, mark size=2.5pt, color=primaryblue] coordinates {
+    (0,100) (1,110) (2,120) (3,130) (4,140)
+};
+\node[above left] at (axis cs:0,100) {\footnotesize $A(0)=100$};
+\node[below right] at (axis cs:1,110) {\footnotesize $A(1)=110$};
+\node[below right] at (axis cs:2,120) {\footnotesize $A(2)=120$};
+\node[below right] at (axis cs:3,130) {\footnotesize $A(3)=130$};
+\node[right] at (axis cs:4,140) {\footnotesize $A(t) = k(1+it)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Sifat Laju Efektif pada Bunga Tunggal}
+Meskipun tingkat bunga tunggal $i$ bernilai konstan di setiap periode, \textbf{suku bunga efektif $i_n$ justru menurun}:
+\begin{equation}
+    i_n = \frac{a(n) - a(n-1)}{a(n-1)} = \frac{(1 + in) - (1 + i(n-1))}{1 + i(n-1)} = \frac{i}{1 + i(n-1)}
+\end{equation}
+Karena penyebut $1 + i(n-1)$ terus membesar seiring bertambahnya $n$, maka:
+\begin{equation*}
+    i_1 > i_2 > i_3 > \dots > i_n \to 0 \quad \text{saat } n \to \infty
+\end{equation*}
+
+\textbf{Karakteristik penting bunga tunggal:}
+\begin{itemize}
+    \item Memiliki laju kenaikan nilai absolut yang konstan: $a(t+s) - a(t) = i \cdot s$ (tidak bergantung pada $t$).
+    \item Grafiknya berupa garis lurus (\textit{linear growth}).
+    \item Laju efektif $i_n$ menurun secara hiperbolik terhadap $n$, sebagaimana diilustrasikan pada kurva berikut:
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {Periode ke-$n$},
+    ylabel = {Suku Bunga Efektif $i_n$},
+    xmin=0.5, xmax=6.5,
+    ymin=0, ymax=0.12,
+    xtick={1, 2, 3, 4, 5, 6},
+    ytick={0.02, 0.04, 0.06, 0.08, 0.10},
+    yticklabels={2\%, 4\%, 6\%, 8\%, 10\%},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=9.5cm, height=5.2cm
+]
+% Hyperbolic decline: i_n = 0.10 / (1 + 0.10*(x-1))
+\addplot [domain=1:6, samples=100, color=red!80!black, very thick] {0.10 / (1 + 0.10*(x-1))};
+\addplot[only marks, mark=*, mark size=2.2pt, color=red!80!black] coordinates {
+    (1, 0.10)
+    (2, 0.0909)
+    (3, 0.0833)
+    (4, 0.0769)
+    (5, 0.0714)
+    (6, 0.0667)
+};
+\node[above right] at (axis cs:1,0.10) {\footnotesize $i_1 = 10\%$};
+\node[above right] at (axis cs:3,0.0833) {\footnotesize $i_3 = 8.33\%$};
+\node[above right] at (axis cs:6,0.0667) {\footnotesize $i_6 = 6.67\%$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{examplebox}[Contoh 3: Menghitung Nilai Bunga Tunggal]
+\textbf{Soal:}\\
+Dengan suku bunga tunggal $i$, dana $\$1{,}200$ yang diinvestasikan saat $t=0$ terakumulasi menjadi $\$1{,}320$ pada tahun ke-$T$. Tentukan nilai akumulasi pada akhir tahun ke-$2T$ jika pokok $\$500$ diinvestasikan saat $t=0$ dengan suku bunga yang sama!
+
+\vspace{0.5em}
+\textbf{Solusi:}\\
+1. Dari informasi pertama:
+\begin{equation*}
+    A(T) = 1{,}200(1 + i \cdot T) = 1{,}320 \implies 1 + i \cdot T = \frac{1{,}320}{1{,}200} = 1.10 \implies i \cdot T = 0.10
+\end{equation*}
+2. Untuk investasi kedua sebesar $A(0) = \$500$ pada waktu $t = 2T$:
+\begin{equation*}
+    A(2T) = 500(1 + i \cdot 2T) = 500\left(1 + 2(i \cdot T)\right) = 500(1 + 2(0.10)) = 500(1.20) = \$600
+\end{equation*}
+\end{examplebox}
+
+---
+
+\section{Suku Bunga Majemuk (\textit{Compound Interest})}
+
+\subsection{Definisi \& Rumus Akumulasi}
+\begin{definitionbox}[Definisi: Bunga Majemuk (\textit{Compound Interest})]
+Pada bunga majemuk, bunga yang diperoleh pada setiap akhir periode akan ditambahkan ke saldo pokok untuk bersama-sama menghasilkan bunga pada periode berikutnya (\textit{interest on interest}).
+\end{definitionbox}
+
+Penurunan fungsi akumulasi dari modal 1 unit:
+\begin{itemize}
+    \item Akhir tahun 1: $1 + i$
+    \item Akhir tahun 2: $(1 + i) + (1 + i)i = (1 + i)(1 + i) = (1 + i)^2$
+    \item Akhir tahun 3: $(1 + i)^2 + (1 + i)^2 i = (1 + i)^2(1 + i) = (1 + i)^3$
+    \item Akhir tahun ke-$t$:
+    \begin{equation}
+        a(t) = (1 + i)^t, \quad \text{untuk } t = 1, 2, 3, \dots
+    \end{equation}
+\end{itemize}
+Untuk investasi awal $k$, nilai jumlahnya adalah:
+\begin{equation}
+    A(t) = k(1 + i)^t
+\end{equation}
+
+\subsection{Konsistensi Suku Bunga Efektif}
+Jika suku bunga majemuk konstan sebesar $i$, maka suku bunga efektif di setiap periode ke-$n$ juga \textbf{konstan}:
+\begin{equation}
+    i_n = \frac{a(n) - a(n-1)}{a(n-1)} = \frac{(1 + i)^n - (1 + i)^{n-1}}{(1 + i)^{n-1}} = \frac{(1+i)^{n-1}[(1+i) - 1]}{(1+i)^{n-1}} = i
+\end{equation}
+Suku bunga efektif bernilai konstan dan identik dengan $i$ untuk semua $n$. Hal ini menjadikan suku bunga majemuk lebih alami dan disukai secara universal dalam transaksi keuangan.
+
+\subsection{Laju Pertumbuhan Relatif}
+Pada bunga majemuk, laju pertumbuhan relatif konstan:
+\begin{equation}
+    \frac{a(t+s) - a(t)}{a(t)} = \frac{(1+i)^{t+s} - (1+i)^t}{(1+i)^t} = (1+i)^s - 1
+\end{equation}
+Nilai ini hanya bergantung pada rentang durasi $s$ dan tidak bergantung pada titik awal waktu $t$.
+
+---
+
+\section{Perbandingan: Bunga Tunggal vs Bunga Majemuk}
+
+\subsection{Ekspansi Binomial}
+Dengan menggunakan teorema binomial Newton untuk $(1 + i)^t$:
+\begin{equation}
+    (1 + i)^t = 1 + t \cdot i + \frac{t(t-1)}{2!} i^2 + \frac{t(t-1)(t-2)}{3!} i^3 + \dots
+\end{equation}
+\textbf{Observasi Kunci:}
+\begin{itemize}
+    \item Dua suku pertama dari ekspansi di atas adalah $(1 + i \cdot t)$, yang merupakan rumus \textbf{bunga tunggal}.
+    \item Bunga tunggal dapat dipandang sebagai \emph{pemotongan (trunkasi)} deret bunga majemuk hingga suku deret linier saja.
+    \item Untuk $t > 1$ dan $i > 0$:
+    \begin{equation*}
+        (1+i)^t > 1 + it \quad (\text{karena suku kuadrat dan tingkat tinggi bernilai positif})
+    \end{equation*}
+    \item Untuk $0 < t < 1$ dan $i > 0$:
+    \begin{equation*}
+        \frac{t(t-1)}{2!} i^2 < 0 \implies (1+i)^t < 1 + it
+    \end{equation*}
+    Artinya, untuk periode kurang dari 1 periode konversi ($0 < t < 1$), bunga tunggal menghasilkan nilai akumulasi yang \emph{lebih besar} daripada bunga majemuk.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {$t$ (waktu)},
+    ylabel = {$a(t)$},
+    xmin=0, xmax=3.5,
+    ymin=0.8, ymax=1.8,
+    xtick={0, 1, 2, 3},
+    legend pos=north west,
+    grid = major,
+    grid style={dashed, gray!30},
+    width=10.5cm, height=6.5cm
+]
+% Simple interest: a(t) = 1 + 0.15*t
+\addplot [domain=0:3.2, samples=100, color=blue, thick] {1 + 0.15*x};
+\addlegendentry{Bunga Tunggal: $1 + it$}
+
+% Compound interest: a(t) = (1 + 0.15)^t
+\addplot [domain=0:3.2, samples=100, color=red, thick, dashed] {(1 + 0.15)^x};
+\addlegendentry{Bunga Majemuk: $(1 + i)^t$}
+
+% Point of intersection at t=1
+\addplot[mark=*,mark size=2.5pt,color=black] coordinates {(1,1.15)};
+\node[above left] at (axis cs:1,1.15) {$t=1$ (Titik Potong)};
+
+% Highlight regions
+\node[text=blue!80!black] at (axis cs:0.5,1.22) {\footnotesize Bunga Tunggal $>$ Majemuk};
+\node[text=red!80!black] at (axis cs:2.3,1.45) {\footnotesize Bunga Majemuk $>$ Tunggal};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+---
+
+\section{Periode Waktu Pecahan (\textit{Fractional Periods})}
+
+Secara teori murni, nilai akumulasi untuk $t > 0$ berlanjut eksponensial $a(t) = (1 + i)^t$. Namun dalam praktik perbankan dan pasar keuangan, sering digunakan perlakuan khusus untuk periode pecahan.
+
+Misalkan $t = n + k$, di mana $n \in \mathbb{N}$ (bagian bilangan bulat) dan $0 < k < 1$ (bagian pecahan periode).
+
+\subsection{Dua Metode Perhitungan}
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Metode Eksak / Suku Bunga Majemuk Penuh:}
+    \begin{equation}
+        A(n+k) = A(0)(1+i)^{n+k} = A(0)(1+i)^n(1+i)^k
+    \end{equation}
+    
+    \item \textbf{Metode Praktik / Interpolasi Linier (Kombinasi Majemuk + Tunggal):}
+    Bunga majemuk dihitung untuk seluruh periode bulat ($n$ tahun), kemudian diterapkan suku bunga tunggal untuk sisa periode pecahan ($k$):
+    \begin{equation}
+        A(n+k) = A(n)(1 + i \cdot k) = A(0)(1+i)^n(1 + i \cdot k)
+    \end{equation}
+\end{enumerate}
+
+\subsection{Justifikasi Geometris (Interpolasi Linier)}
+Secara geometris, metode praktis ekuivalen dengan menarik garis lurus (interpolasi linier) antara titik $(x_1, y_1) = (n, (1+i)^n)$ dan $(x_2, y_2) = (n+1, (1+i)^{n+1})$:
+\begin{align*}
+    y &= y_1 + \frac{y_2 - y_1}{x_2 - x_1}(x - x_1) \\[0.5em]
+    a(n+k) &= (1+i)^n + \frac{(1+i)^{n+1} - (1+i)^n}{(n+1) - n} \cdot k \\[0.5em]
+    &= (1+i)^n + (1+i)^n \cdot i \cdot k \\[0.5em]
+    &= (1+i)^n (1 + i \cdot k)
+\end{align*}
+Karena kurva eksponensial $(1+i)^t$ konveks ke bawah (\textit{convex}), tali busur linier selalu berada \textbf{di atas} kurva eksponensial:
+\begin{equation*}
+    (1+i)^n (1 + ik) > (1+i)^{n+k}, \quad \text{untuk } 0 < k < 1
+\end{equation*}
+Sehingga metode bunga tunggal pada periode pecahan memberikan hasil akumulasi yang sedikit lebih besar (menguntungkan investor).
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {$t$ (waktu)},
+    ylabel = {$a(t)$},
+    xmin=1.8, xmax=3.2,
+    ymin=1.20, ymax=1.55,
+    xtick={2, 2.5, 3},
+    xticklabels={$n$, $n+k$, $n+1$},
+    ytick={1.2544, 1.4049},
+    yticklabels={$(1+i)^n$, $(1+i)^{n+1}$},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=10.5cm, height=6.2cm
+]
+% Exponential curve (1.12)^x
+\addplot [domain=1.9:3.1, samples=100, color=red!80!black, thick] {(1.12)^x};
+\addlegendentry{Eksponensial Majemuk: $(1+i)^t$}
+
+% Secant / linear chord between n=2 and n=3
+% At x=2, y=1.2544; at x=3, y=1.404928; slope = 0.150528
+\addplot [domain=2:3, samples=10, color=blue, very thick] {1.2544 + 0.150528*(x-2)};
+\addlegendentry{Interpolasi Linier: $(1+i)^n(1+ik)$}
+
+% Marked points
+\addplot[only marks, mark=*, mark size=2.5pt, color=black] coordinates {(2,1.2544) (3,1.404928)};
+\node[below right] at (axis cs:2,1.2544) {\footnotesize $(n, (1+i)^n)$};
+\node[above left] at (axis cs:3,1.404928) {\footnotesize $(n+1, (1+i)^{n+1})$};
+
+% Midpoint comparison at n+k = 2.5
+\addplot[only marks, mark=square*, mark size=2.2pt, color=blue] coordinates {(2.5, 1.329664)};
+\node[above left, color=blue] at (axis cs:2.5,1.331) {\footnotesize Linier: $\$1{,}329.67$};
+
+\addplot[only marks, mark=triangle*, mark size=2.5pt, color=red!80!black] coordinates {(2.5, 1.32753)};
+\node[below right, color=red!80!black] at (axis cs:2.5,1.325) {\footnotesize Eksak: $\$1{,}327.53$};
+
+\draw[<->, thick, dashed, color=darkgray] (axis cs:2.5,1.32753) -- (axis cs:2.5,1.329664);
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{examplebox}[Contoh 4: Perhitungan Periode Pecahan]
+\textbf{Soal:}\\
+Sebanyak $\$1{,}000$ diinvestasikan selama 2 tahun 6 bulan ($t = 2.5$ tahun) dengan suku bunga tahunan $12\%$. Hitung nilai akumulasinya menggunakan kedua cara!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Diketahui $A(0) = 1{,}000$, $i = 0.12$, $n = 2$, dan $k = 0.5$.
+\begin{itemize}
+    \item \textbf{Cara I (Suku Bunga Majemuk Penuh):}
+    \begin{equation*}
+        A(2.5) = 1{,}000 \times (1 + 0.12)^{2.5} = 1{,}000 \times (1.12)^{2.5} \approx \$1{,}327.53
+    \end{equation*}
+    \item \textbf{Cara II (Kombinasi Majemuk + Tunggal):}
+    \begin{align*}
+        A(2) &= 1{,}000 \times (1.12)^2 = \$1{,}254.40 \\
+        A(2.5) &= A(2) \times (1 + 0.5 \times 0.12) = 1{,}254.40 \times 1.06 = \$1{,}329.67
+    \end{align*}
+\end{itemize}
+Terlihat jelas bahwa Cara II menghasilkan nilai yang sedikit lebih tinggi:
+\begin{equation*}
+    \$1{,}329.67 > \$1{,}327.53
+\end{equation*}
+\end{examplebox}
+
+---
+
+\section{Ringkasan Rumus Kunci}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{lll}
+\toprule
+\textbf{Konsep} & \textbf{Simbol / Notasi} & \textbf{Rumus Utama} \\
+\midrule
+Fungsi Jumlah & $A(t)$ & $A(t) = k \cdot a(t), \quad A(0) = k$ \\
+Jumlah Bunga Periode ke-$n$ & $I_n$ & $I_n = A(n) - A(n-1)$ \\
+Suku Bunga Efektif & $i_n$ & $i_n = \dfrac{A(n) - A(n-1)}{A(n-1)} = \dfrac{I_n}{A(n-1)}$ \\
+Bunga Tunggal & $a(t)$ & $a(t) = 1 + it$ \\
+Laju Efektif Bunga Tunggal & $i_n$ & $i_n = \dfrac{i}{1 + i(n-1)}$ (menurun thd $n$) \\
+Bunga Majemuk & $a(t)$ & $a(t) = (1+i)^t$ \\
+Laju Efektif Bunga Majemuk & $i_n$ & $i_n = i$ (konstan thd $n$) \\
+Periode Pecahan ($n+k$) & $a(n+k)$ & $(1+i)^n(1+ik)$ (interpolasi linier) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

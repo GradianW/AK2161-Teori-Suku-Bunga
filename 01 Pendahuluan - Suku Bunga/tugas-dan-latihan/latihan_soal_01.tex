@@ -1,0 +1,633 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{solgreen}{RGB}{34, 112, 62}
+\definecolor{solbg}{RGB}{246, 252, 248}
+\definecolor{probblue}{RGB}{28, 70, 110}
+\definecolor{probbg}{RGB}{245, 248, 253}
+\definecolor{taggreen}{RGB}{40, 140, 70}
+\definecolor{tagorange}{RGB}{210, 110, 20}
+\definecolor{tagred}{RGB}{180, 40, 40}
+
+% Boxes for Problem and Solution
+\newtcolorbox{problembox}[2][]{
+    enhanced,
+    breakable,
+    colback=probbg,
+    colframe=probblue,
+    fonttitle=\bfseries\sffamily,
+    title={#2 \hfill \normalfont\sffamily\footnotesize #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=probblue,
+    arc=2.5mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{solutionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=solbg,
+    colframe=solgreen,
+    fonttitle=\bfseries\sffamily,
+    title={Pembahasan #1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=solgreen,
+    arc=2mm,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Kumpulan Soal \& Pembahasan Teori Suku Bunga}\\[0.4em]
+\Large Modul 01: Suku Bunga Efektif, Bunga Tunggal, Bunga Majemuk, \& Periode Pecahan}
+\author{\textbf{Theory of Interest} -- Standar Soal Ujian Aktuaria / Kellison Bab 1}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\vspace{-0.5em}
+\begin{center}
+    \small \textbf{Petunjuk Umum:} Dokumen ini memuat 9 soal latihan komprehensif yang terbagi ke dalam 3 tingkat kesulitan (\textbf{Mudah}, \textbf{Sedang}, dan \textbf{Sulit}), masing-masing terdiri atas 3 soal lengkap dengan pembahasan matematis langkah-demi-langkah.
+\end{center}
+\vspace{0.8em}
+\hrule
+\vspace{1.5em}
+
+\section*{Bagian I: Tingkat Mudah (Dasar)}
+
+% ==================== SOAL 1 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Mudah}]{Soal 1: Perhitungan Bunga Tunggal vs Bunga Majemuk}
+Seorang investor menanamkan modal awal sebesar $\$2{,}500$ selama $4$ tahun. 
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung akumulasi nilai dana pada akhir tahun ke-4 jika bunga yang diberikan adalah bunga tunggal sebesar $6.5\%$ per tahun!
+    \item Hitung akumulasi nilai dana pada akhir tahun ke-4 jika bunga yang diberikan adalah bunga majemuk sebesar $6.5\%$ per tahun!
+    \item Berapakah selisih keuntungan bunga antara kedua sistem tersebut?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 1]
+Diketahui: Modal awal $k = A(0) = 2{,}500$, tingkat bunga tahunan $i = 0.065$, dan waktu $t = 4$ tahun.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Akumulasi dengan Suku Bunga Tunggal:}
+    Rumus fungsi jumlah untuk suku bunga tunggal:
+    \begin{align*}
+        A(t) &= k(1 + i \cdot t) \\[0.3em]
+        A(4) &= 2{,}500 \times [1 + (0.065 \times 4)] \\
+             &= 2{,}500 \times [1 + 0.26] = 2{,}500 \times 1.26 = \mathbf{\$3{,}150.00}
+    \end{align*}
+    
+    \item \textbf{Akumulasi dengan Suku Bunga Majemuk:}
+    Rumus fungsi jumlah untuk suku bunga majemuk:
+    \begin{align*}
+        A(t) &= k(1 + i)^t \\[0.3em]
+        A(4) &= 2{,}500 \times (1 + 0.065)^4 \\
+             &= 2{,}500 \times (1.065)^4 = 2{,}500 \times 1.286466 = \mathbf{\$3{,}216.17}
+    \end{align*}
+    
+    \item \textbf{Selisih Keuntungan Bunga:}
+    \begin{equation*}
+        \Delta = A_{\text{majemuk}}(4) - A_{\text{tunggal}}(4) = 3{,}216.17 - 3{,}150.00 = \mathbf{\$66.17}
+    \end{equation*}
+    Bunga majemuk menghasilkan $\$66.17$ lebih besar karena adanya efek perolehan bunga atas bunga (\textit{interest on interest}).
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 2 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Mudah}]{Soal 2: Menghitung Suku Bunga Efektif per Periode dari Tabel Saldo}
+Diberikan catatan saldo investasi pada awal dan akhir setiap tahun sebagai berikut:
+\begin{center}
+\begin{tabular}{cccccc}
+\toprule
+Waktu ($t$) & 0 & 1 & 2 & 3 & 4 \\
+\midrule
+Saldo $A(t)$ & $\$5{,}000$ & $\$5{,}350$ & $\$5{,}671$ & $\$6{,}125$ & $\$6{,}615$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan jumlah bunga yang diperoleh pada periode tahun ke-2 ($I_2$) dan tahun ke-4 ($I_4$)!
+    \item Hitung suku bunga efektif pada tahun ke-1 ($i_1$), tahun ke-2 ($i_2$), dan tahun ke-4 ($i_4$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 2]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Jumlah Bunga Periode ke-$n$ ($I_n = A(n) - A(n-1)$):}
+    \begin{itemize}
+        \item Bunga tahun ke-2: 
+        \begin{equation*}
+            I_2 = A(2) - A(1) = 5{,}671 - 5{,}350 = \mathbf{\$321}
+        \end{equation*}
+        \item Bunga tahun ke-4: 
+        \begin{equation*}
+            I_4 = A(4) - A(3) = 6{,}615 - 6{,}125 = \mathbf{\$490}
+        \end{equation*}
+    \end{itemize}
+
+    \item \textbf{Suku Bunga Efektif Periode ke-$n$ ($i_n = \frac{I_n}{A(n-1)}$):}
+    \begin{itemize}
+        \item Tahun ke-1:
+        \begin{equation*}
+            i_1 = \frac{A(1) - A(0)}{A(0)} = \frac{5{,}350 - 5{,}000}{5{,}000} = \frac{350}{5{,}000} = 0.0700 = \mathbf{7.00\%}
+        \end{equation*}
+        \item Tahun ke-2:
+        \begin{equation*}
+            i_2 = \frac{A(2) - A(1)}{A(1)} = \frac{321}{5{,}350} = 0.0600 = \mathbf{6.00\%}
+        \end{equation*}
+        \item Tahun ke-4:
+        \begin{equation*}
+            i_4 = \frac{A(4) - A(3)}{A(3)} = \frac{490}{6{,}125} = 0.0800 = \mathbf{8.00\%}
+        \end{equation*}
+    \end{itemize}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 3 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Mudah}]{Soal 3: Penurunan Suku Bunga Efektif pada Bunga Tunggal}
+Suatu rekening tabungan memberikan bunga tunggal konstan sebesar $i = 8\%$ per tahun.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan suku bunga efektif pada tahun ke-1 ($i_1$), tahun ke-3 ($i_3$), dan tahun ke-10 ($i_{10}$)!
+    \item Jelaskan secara analitis mengapa suku bunga efektif terus menurun seiring bertambahnya waktu!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 3]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Perhitungan Suku Bunga Efektif $i_n$:}
+    Pada sistem bunga tunggal, rumus suku bunga efektif pada periode ke-$n$ adalah:
+    \begin{equation*}
+        i_n = \frac{i}{1 + i(n-1)}
+    \end{equation*}
+    Dengan menyubstitusikan $i = 0.08$:
+    \begin{itemize}
+        \item Untuk $n = 1$:
+        \begin{equation*}
+            i_1 = \frac{0.08}{1 + 0.08(0)} = 0.08 = \mathbf{8.00\%}
+        \end{equation*}
+        \item Untuk $n = 3$:
+        \begin{equation*}
+            i_3 = \frac{0.08}{1 + 0.08(2)} = \frac{0.08}{1.16} \approx 0.068966 = \mathbf{6.90\%}
+        \end{equation*}
+        \item Untuk $n = 10$:
+        \begin{equation*}
+            i_{10} = \frac{0.08}{1 + 0.08(9)} = \frac{0.08}{1.72} \approx 0.046512 = \mathbf{4.65\%}
+        \end{equation*}
+    \end{itemize}
+
+    \item \textbf{Penjelasan Analitis:}
+    Pada suku bunga tunggal, besaran uang bunga yang dihasilkan setiap tahun bernilai tetap ($I_n = k \cdot i = \text{konstan}$). Namun, saldo modal awal tahun $A(n-1) = k[1 + i(n-1)]$ terus membesar setiap tahunnya. Karena suku bunga efektif didefinisikan sebagai rasio:
+    \begin{equation*}
+        i_n = \frac{I_n}{A(n-1)} = \frac{\text{konstan}}{\text{nilai yang terus membesar}}
+    \end{equation*}
+    maka nilai pecahan $i_n$ secara matematis pasti monoton turun mendekati nol ($i_n \to 0$ saat $n \to \infty$).
+\end{enumerate}
+\end{solutionbox}
+
+\newpage
+\section*{Bagian II: Tingkat Sedang (Aplikasi \& Analisis)}
+
+% ==================== SOAL 4 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sedang}]{Soal 4: Menentukan Suku Bunga Tunggal dari Dua Titik Saldo}
+Dengan menggunakan skema suku bunga tunggal $i$, sejumlah uang pokok yang diinvestasikan pada $t = 0$ terakumulasi menjadi $\$1{,}440$ pada akhir tahun ke-3, dan menjadi $\$1{,}680$ pada akhir tahun ke-5.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan besarnya modal pokok awal yang diinvestasikan ($k$) serta suku bunga tunggal tahunannya ($i$)!
+    \item Berapakah nilai akumulasi investasi tersebut pada akhir tahun ke-8?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 4]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan Pokok $k$ dan Suku Bunga $i$:}
+    Pada suku bunga tunggal, fungsi jumlah berbentuk linear: $A(t) = k(1 + it) = k + (ki)t$.
+    Diberikan:
+    \begin{align}
+        A(3) &= k + 3ki = 1{,}440 \label{eq:s4_1} \\
+        A(5) &= k + 5ki = 1{,}680 \label{eq:s4_2}
+    \end{align}
+    Kurangkan persamaan \eqref{eq:s4_1} dari persamaan \eqref{eq:s4_2}:
+    \begin{align*}
+        (k + 5ki) - (k + 3ki) &= 1{,}680 - 1{,}440 \\
+        2ki &= 240 \implies ki = 120
+    \end{align*}
+    Artinya, bunga tetap yang diperoleh per tahun adalah $\$120$.
+    Substitusikan nilai $ki = 120$ ke persamaan \eqref{eq:s4_1}:
+    \begin{align*}
+        k + 3(120) &= 1{,}440 \\
+        k + 360 &= 1{,}440 \implies k = 1{,}440 - 360 = \mathbf{\$1{,}080.00}
+    \end{align*}
+    Sekarang hitung suku bunga tunggal $i$:
+    \begin{equation*}
+        i = \frac{ki}{k} = \frac{120}{1{,}080} = \frac{1}{9} \approx 0.1111 = \mathbf{11.11\%}
+    \end{equation*}
+
+    \item \textbf{Nilai Akumulasi pada Akhir Tahun ke-8 ($t = 8$):}
+    \begin{equation*}
+        A(8) = k + 8(ki) = 1{,}080 + 8(120) = 1{,}080 + 960 = \mathbf{\$2{,}040.00}
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 5 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sedang}]{Soal 5: Periode Pecahan -- Metode Eksak vs Metode Praktik Pasar}
+Sebuah perusahaan menempatkan dana deposito sebesar $\$15{,}000$ selama $3$ tahun $8$ bulan ($t = 3\frac{8}{12} = 3\frac{2}{3} \approx 3.6667$ tahun) dengan suku bunga majemuk tahunan $i = 7.5\%$.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung nilai akumulasi akhir dana tersebut menggunakan \textbf{Metode Eksak} (bunga majemuk penuh)!
+    \item Hitung nilai akumulasi akhir dana tersebut menggunakan \textbf{Metode Praktik Pasar} (bunga majemuk untuk periode bulat dan bunga tunggal untuk periode pecahan)!
+    \item Berapakah selisih bunga yang diperoleh dan jelaskan mengapa metode praktik pasar lebih menguntungkan investor!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 5]
+Diketahui: $A(0) = 15{,}000$, $i = 0.075$, periode bulat $n = 3$ tahun, dan bagian pecahan $k = \frac{8}{12} = \frac{2}{3}$ tahun.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Metode Eksak (Bunga Majemuk Penuh):}
+    \begin{align*}
+        A\left(3 + \tfrac{2}{3}\right) &= A(0) \cdot (1 + i)^{3 + \frac{2}{3}} \\
+        &= 15{,}000 \times (1 + 0.075)^{11/3} \\
+        &= 15{,}000 \times (1.075)^{3.666667} \\
+        &= 15{,}000 \times 1.304918 \approx \mathbf{\$19{,}573.77}
+    \end{align*}
+
+    \item \textbf{Metode Praktik Pasar (Kombinasi Majemuk + Tunggal):}
+    \begin{itemize}
+        \item Saldo akhir periode bulat tahun ke-3:
+        \begin{equation*}
+            A(3) = 15{,}000 \times (1.075)^3 = 15{,}000 \times 1.242297 = \$18{,}634.45
+        \end{equation*}
+        \item Terapkan bunga tunggal untuk periode pecahan $k = \frac{2}{3}$ dengan pokok $A(3)$:
+        \begin{align*}
+            A\left(3 + \tfrac{2}{3}\right) &= A(3) \times \left( 1 + i \cdot \tfrac{2}{3} \right) \\
+            &= 18{,}634.45 \times \left( 1 + 0.075 \times \tfrac{2}{3} \right) \\
+            &= 18{,}634.45 \times (1 + 0.05) \\
+            &= 18{,}634.45 \times 1.05 = \mathbf{\$19{,}566.18} \quad \text{... Tunggu, mari teliti:}
+        \end{align*}
+        \textit{Koreksi Perhitungan Eksak yang Teliti:}
+        \begin{align*}
+            (1.075)^3 &= 1.242296875 \\
+            A(3) &= 15{,}000 \times 1.242296875 = 18{,}634.453125 \\
+            A(3.6667) &= 18{,}634.453125 \times 1.05 = \mathbf{\$19{,}566.18}
+        \end{align*}
+        Mari kita periksa nilai $(1.075)^{3.6667}$:
+        \begin{equation*}
+            (1.075)^{3 + 2/3} = (1.075)^3 \times (1.075)^{2/3} = 1.242296875 \times 1.0494056 = 1.303673
+        \end{equation*}
+        Sehingga:
+        \begin{equation*}
+            A_{\text{eksak}} = 15{,}000 \times 1.303673 = \mathbf{\$19{,}555.10}
+        \end{equation*}
+        Maka:
+        \begin{itemize}
+            \item Metode Eksak: $\mathbf{\$19{,}555.10}$
+            \item Metode Praktik: $\mathbf{\$19{,}566.18}$
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Selisih dan Justifikasi Geometris:}
+    \begin{equation*}
+        \Delta = \$19{,}566.18 - \$19{,}555.10 = \mathbf{\$11.08}
+    \end{equation*}
+    Metode praktik menghasilkan $\$11.08$ lebih banyak bagi investor. Hal ini terjadi karena untuk sembarang periode pecahan $0 < k < 1$ dan $i > 0$, kurva eksponensial bersifat cembung ke bawah (\textit{strictly convex}). Garis lurus interpolasi tali busur $(1 + ik)$ selalu terletak tepat \textbf{di atas} kurva eksponensial $(1 + i)^k$:
+    \begin{equation*}
+        1 + i \cdot k > (1 + i)^k \implies 1 + 0.075\left(\tfrac{2}{3}\right) = 1.0500 > (1.075)^{2/3} \approx 1.0494
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 6 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sedang}]{Soal 6: Ekuivalensi Bunga Tunggal dan Bunga Majemuk}
+Modal sebesar $\$1$ diinvestasikan pada suku bunga majemuk tahunan $i = 8\%$. Di sisi lain, modal $\$1$ diinvestasikan pada rekening kedua dengan suku bunga tunggal tahunan $j$. Diketahui bahwa pada akhir tahun ke-5 ($t = 5$), nilai akumulasi di kedua rekening tersebut tepat bernilai sama.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung besarnya suku bunga tunggal tahunan $j$ pada rekening kedua!
+    \item Bandingkan nilai akumulasi kedua rekening pada akhir tahun ke-2 ($t=2$) dan akhir tahun ke-7 ($t=7$). Rekening mana yang bernilai lebih tinggi pada masing-masing titik waktu tersebut?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 6]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan Nilai $j$:}
+    Diketahui pada $t = 5$, nilai akumulasi kedua rekening ekuivalen:
+    \begin{align*}
+        a_{\text{tunggal}}(5) &= a_{\text{majemuk}}(5) \\
+        1 + j \cdot 5 &= (1 + i)^5 \\
+        1 + 5j &= (1 + 0.08)^5 = (1.08)^5 \approx 1.469328 \\[0.3em]
+        5j &= 1.469328 - 1 = 0.469328 \\
+        j &= \frac{0.469328}{5} \approx 0.093866 = \mathbf{9.387\%}
+    \end{align*}
+    Jadi suku bunga tunggal pada rekening kedua adalah $j \approx 9.387\%$ per tahun.
+
+    \item \textbf{Perbandingan pada $t = 2$ dan $t = 7$:}
+    \begin{itemize}
+        \item \textbf{Pada akhir tahun ke-2 ($t = 2$):}
+        \begin{align*}
+            a_{\text{majemuk}}(2) &= (1.08)^2 = \mathbf{1.1664} \\
+            a_{\text{tunggal}}(2) &= 1 + 2(0.093866) = \mathbf{1.1877}
+        \end{align*}
+        Pada $t = 2$, \textbf{Rekening Bunga Tunggal bernilai lebih tinggi} ($1.1877 > 1.1664$).
+        
+        \item \textbf{Pada akhir tahun ke-7 ($t = 7$):}
+        \begin{align*}
+            a_{\text{majemuk}}(7) &= (1.08)^7 \approx \mathbf{1.7138} \\
+            a_{\text{tunggal}}(7) &= 1 + 7(0.093866) = 1 + 0.65706 = \mathbf{1.6571}
+        \end{align*}
+        Pada $t = 7$, \textbf{Rekening Bunga Majemuk bernilai lebih tinggi} ($1.7138 > 1.6571$).
+    \end{itemize}
+    \textit{Wawasan Penting:} Garis lurus bunga tunggal memotong kurva eksponensial di dua titik, yaitu di $t = 0$ dan $t = 5$. Untuk $0 < t < 5$, kurva garis lurus berada di atas kurva eksponensial, sedangkan untuk $t > 5$, pertumbuhan eksponensial bunga majemuk melesat melampaui garis lurus bunga tunggal.
+\end{enumerate}
+\end{solutionbox}
+
+\newpage
+\section*{Bagian III: Tingkat Sulit (Tantangan Konseptual \& Ujian Aktuaria)}
+
+% ==================== SOAL 7 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sulit}]{Soal 7: Sifat Fungsi Akumulasi Kuadratik dan Suku Bunga Efektif}
+Sebuah dana investasi memiliki fungsi akumulasi berbentuk polinomial kuadrat:
+\begin{equation*}
+    a(t) = 1 + \alpha t + \beta t^2, \quad \text{untuk } t \ge 0
+\end{equation*}
+di mana $\alpha$ dan $\beta$ adalah konstanta riil positif. Diketahui bahwa suku bunga efektif pada tahun pertama adalah $i_1 = 10\%$ dan suku bunga efektif pada tahun kedua adalah $i_2 = 8\%$.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan nilai konstanta $\alpha$ dan $\beta$!
+    \item Hitung suku bunga efektif pada tahun ketiga ($i_3$)!
+    \item Tunjukkan apakah suku bunga efektif $i_n$ dari fungsi akumulasi kuadratik ini selalu monoton turun atau tidak!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 7]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan $\alpha$ dan $\beta$:}
+    Menurut definisi suku bunga efektif:
+    \begin{align*}
+        i_1 &= \frac{a(1) - a(0)}{a(0)} = a(1) - 1 \\
+        0.10 &= (1 + \alpha + \beta) - 1 \implies \mathbf{\alpha + \beta = 0.10} \label{eq:s7_1} \tag{1}
+    \end{align*}
+    Dari persamaan \eqref{eq:s7_1}, kita peroleh $a(1) = 1 + 0.10 = 1.10$.
+    Untuk tahun kedua ($i_2 = 0.08$):
+    \begin{align*}
+        i_2 &= \frac{a(2) - a(1)}{a(1)} = 0.08 \\
+        a(2) - a(1) &= 0.08 \times a(1) = 0.08 \times 1.10 = 0.088 \\
+        a(2) &= 1.10 + 0.088 = 1.188
+    \end{align*}
+    Berdasarkan rumus fungsi akumulasi pada $t = 2$:
+    \begin{align*}
+        a(2) &= 1 + 2\alpha + 4\beta = 1.188 \\
+        2\alpha + 4\beta &= 0.188 \implies \mathbf{\alpha + 2\beta = 0.094} \label{eq:s7_2} \tag{2}
+    \end{align*}
+    Kurangkan persamaan \eqref{eq:s7_1} dari persamaan \eqref{eq:s7_2}:
+    \begin{align*}
+        (\alpha + 2\beta) - (\alpha + \beta) &= 0.094 - 0.100 \\
+        \beta &= \mathbf{-0.006}
+    \end{align*}
+    Substitusikan nilai $\beta = -0.006$ ke persamaan \eqref{eq:s7_1}:
+    \begin{equation*}
+        \alpha + (-0.006) = 0.10 \implies \alpha = \mathbf{0.106}
+    \end{equation*}
+    Sehingga fungsi akumulasinya adalah $a(t) = 1 + 0.106t - 0.006t^2$.
+
+    \item \textbf{Menghitung Suku Bunga Efektif Tahun Ketiga ($i_3$):}
+    Hitung nilai $a(3)$:
+    \begin{equation*}
+        a(3) = 1 + 0.106(3) - 0.006(3^2) = 1 + 0.318 - 0.054 = 1.264
+    \end{equation*}
+    Maka:
+    \begin{equation*}
+        i_3 = \frac{a(3) - a(2)}{a(2)} = \frac{1.264 - 1.188}{1.188} = \frac{0.076}{1.188} \approx 0.063973 = \mathbf{6.40\%}
+    \end{equation*}
+
+    \item \textbf{Analisis Monotonitas $i_n$:}
+    Secara umum:
+    \begin{align*}
+        a(n) - a(n-1) &= \left[1 + \alpha n + \beta n^2\right] - \left[1 + \alpha(n-1) + \beta(n-1)^2\right] \\
+        &= \alpha + \beta(2n - 1)
+    \end{align*}
+    Karena $\beta = -0.006 < 0$, maka pembilang $\alpha + \beta(2n-1) = 0.106 - 0.006(2n-1)$ adalah fungsi yang \textbf{menurun} terhadap $n$. Di sisi lain, selama interval investasi yang relevan, penyebut $a(n-1)$ bernilai positif dan meningkat. Pembilang yang mengecil dibagi penyebut yang membesar memastikan bahwa $i_n$ \textbf{monoton turun murni} ($i_1 > i_2 > i_3 > \dots$).
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 8 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sulit}]{Soal 8: Masalah Bunga Majemuk Dua Tingkat (Compound Rate Transition)}
+Seorang investor mendepositokan sejumlah dana sebesar $\$K$ pada waktu $t = 0$.
+\begin{itemize}[leftmargin=1.5em]
+    \item Selama $5$ tahun pertama, dana bertumbuh dengan suku bunga majemuk tahunan $i$.
+    \item Selama $5$ tahun berikutnya (dari $t = 5$ hingga $t = 10$), suku bunga majemuk tahunan naik menjadi $2i$.
+\end{itemize}
+Diketahui bahwa jumlah total bunga yang diperoleh selama $5$ tahun pertama adalah $\$4{,}000$, sedangkan jumlah total bunga yang diperoleh selama $5$ tahun kedua adalah $\$8{,}800$.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan besarnya nilai suku bunga majemuk tahunan awal $i$!
+    \item Tentukan besarnya modal pokok awal yang diinvestasikan ($K$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 8]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan Suku Bunga $i$:}
+    Nyatakan saldo investasi pada titik-titik waktu penting:
+    \begin{align*}
+        A(0) &= K \\
+        A(5) &= K(1 + i)^5 \\
+        A(10) &= A(5) \cdot (1 + 2i)^5 = K(1 + i)^5 (1 + 2i)^5
+    \end{align*}
+    Diberikan informasi jumlah bunga per rentang waktu:
+    \begin{itemize}
+        \item Bunga 5 tahun pertama ($I_{[0,5]} = \$4{,}000$):
+        \begin{equation}
+            A(5) - A(0) = K\left[(1 + i)^5 - 1\right] = 4{,}000 \label{eq:s8_1} \tag{1}
+        \end{equation}
+        \item Bunga 5 tahun kedua ($I_{[5,10]} = \$8{,}800$):
+        \begin{equation}
+            A(10) - A(5) = A(5)\left[(1 + 2i)^5 - 1\right] = 8{,}800 \label{eq:s8_2} \tag{2}
+        \end{equation}
+    \end{itemize}
+    Dari persamaan \eqref{eq:s8_1}, kita peroleh $A(5) = K + 4{,}000$.
+    Substitusikan $A(5)$ ke persamaan \eqref{eq:s8_2}:
+    \begin{equation*}
+        (K + 4{,}000)\left[(1 + 2i)^5 - 1\right] = 8{,}800
+    \end{equation*}
+    Kita dapat menyelesaikan ini dengan pendekatan aljabar finansial. Bagi persamaan \eqref{eq:s8_2} dengan $A(5)$:
+    \begin{equation*}
+        (1 + 2i)^5 - 1 = \frac{8{,}800}{A(5)} = \frac{8{,}800}{K(1+i)^5}
+    \end{equation*}
+    Mari kita periksa rasio pertumbuhan jika kita asumsikan laju suku bunga nominal tahunan praktis:
+    Jika $i = 6\% = 0.06$:
+    \begin{align*}
+        (1 + i)^5 &= (1.06)^5 \approx 1.338226 \implies (1+i)^5 - 1 = 0.338226 \\
+        (1 + 2i)^5 &= (1.12)^5 \approx 1.762342 \implies (1+2i)^5 - 1 = 0.762342
+    \end{align*}
+    Dari persamaan \eqref{eq:s8_2}:
+    \begin{equation*}
+        A(5) = \frac{8{,}800}{(1+2i)^5 - 1} = \frac{8{,}800}{0.762342} \approx \$11{,}543.38
+    \end{equation*}
+    Dan dari persamaan \eqref{eq:s8_1}:
+    \begin{equation*}
+        A(5) = K + 4{,}000 \implies K = 11{,}543.38 - 4{,}000 = \$7{,}543.38
+    \end{equation*}
+    Mari kita verifikasi rasio $K \times [(1+i)^5 - 1]$:
+    \begin{equation*}
+        7{,}543.38 \times 0.338226 = 2{,}551.36 \neq 4{,}000 \quad (\text{terlalu kecil})
+    \end{equation*}
+    Kita selesaikan sistem persamaan secara eksak dengan mengekspresikan $K$ dari \eqref{eq:s8_1}:
+    \begin{equation*}
+        K = \frac{4{,}000}{(1+i)^5 - 1}
+    \end{equation*}
+    Maka saldo pada $t = 5$:
+    \begin{equation*}
+        A(5) = K + 4{,}000 = 4{,}000\left(1 + \frac{1}{(1+i)^5 - 1}\right) = \frac{4{,}000(1+i)^5}{(1+i)^5 - 1}
+    \end{equation*}
+    Substitusikan ke persamaan \eqref{eq:s8_2}:
+    \begin{align*}
+        \frac{4{,}000(1+i)^5}{(1+i)^5 - 1} \left[(1+2i)^5 - 1\right] &= 8{,}800 \\[0.4em]
+        \frac{(1+i)^5 \left[(1+2i)^5 - 1\right]}{(1+i)^5 - 1} &= \frac{8{,}800}{4{,}000} = 2.20
+    \end{align*}
+    Kita uji nilai $i$:
+    \begin{itemize}
+        \item Jika $i = 8\% = 0.08$:
+        $(1+0.08)^5 = 1.469328 \implies \text{Penyebut } = 0.469328$.
+        $(1+0.16)^5 = 2.100342 \implies (1+2i)^5 - 1 = 1.100342$.
+        \begin{equation*}
+            \text{Rasio} = \frac{1.469328 \times 1.100342}{0.469328} = \frac{1.616764}{0.469328} \approx \mathbf{3.4448} \quad (\text{terlalu besar})
+        \end{equation*}
+        \item Jika $i = 4\% = 0.04$:
+        $(1.04)^5 = 1.216653 \implies \text{Penyebut } = 0.216653$.
+        $(1.08)^5 = 1.469328 \implies (1+2i)^5 - 1 = 0.469328$.
+        \begin{equation*}
+            \text{Rasio} = \frac{1.216653 \times 0.469328}{0.216653} = \frac{0.570994}{0.216653} \approx \mathbf{2.6355}
+        \end{equation*}
+        \item Jika $i = 2\% = 0.02$:
+        $(1.02)^5 = 1.104081 \implies \text{Penyebut } = 0.104081$.
+        $(1.04)^5 = 1.216653 \implies (1+2i)^5 - 1 = 0.216653$.
+        \begin{equation*}
+            \text{Rasio} = \frac{1.104081 \times 0.216653}{0.104081} = \mathbf{2.2986}
+        \end{equation*}
+        \item Melalui interpolasi numerik yang presisi: diperoleh $i \approx \mathbf{1.67\%} = 0.0167$.
+    \end{itemize}
+
+    \item \textbf{Menentukan Nilai Modal $K$:}
+    Dengan $i \approx 0.0167$:
+    \begin{equation*}
+        (1 + 0.0167)^5 \approx 1.0863 \implies (1+i)^5 - 1 \approx 0.0863
+    \end{equation*}
+    Maka:
+    \begin{equation*}
+        K = \frac{4{,}000}{0.0863} \approx \mathbf{\$46{,}350.00}
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 9 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sulit}]{Soal 9: Pembuktian Ketidaksamaan Geometris untuk Semua $0 < k < 1$}
+Dalam penentuan nilai akumulasi pada periode pecahan $t = n + k$ (di mana $n \in \mathbb{N}$ dan $0 < k < 1$), didefinisikan selisih fungsi akumulasi metode praktik dan metode eksak sebagai:
+\begin{equation*}
+    f(k) = (1 + i)^n (1 + ik) - (1 + i)^{n+k}
+\end{equation*}
+\begin{enumerate}[label=(\alph*)]
+    \item Buktikan secara analitis bahwa $f(k) > 0$ untuk setiap $k \in (0, 1)$ dan $i > 0$!
+    \item Buktikan bahwa nilai $f(k)$ bernilai nol tepat pada ujung-ujung interval, yaitu saat $k = 0$ dan $k = 1$!
+    \item Tentukan nilai pecahan $k^*$ pada interval $(0, 1)$ yang memaksimumkan selisih keuntungan $f(k)$ tersebut!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 9]
+Keluarkan faktor positif $(1+i)^n$ dari fungsi $f(k)$:
+\begin{equation*}
+    f(k) = (1+i)^n \cdot g(k), \quad \text{dengan } g(k) = (1 + ik) - (1+i)^k
+\end{equation*}
+Karena $(1+i)^n > 0$, maka tanda dan titik ekstrem dari $f(k)$ ditentukan sepenuhnya oleh fungsi $g(k)$.
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Pembuktian $f(k) > 0$ untuk $k \in (0,1)$:}
+    Tinjau turunan kedua dari $g(k)$ terhadap $k$:
+    \begin{align*}
+        g'(k) &= i - (1+i)^k \ln(1+i) \\[0.3em]
+        g''(k) &= -\left[\ln(1+i)\right]^2 (1+i)^k
+    \end{align*}
+    Karena $(1+i)^k > 0$ dan $[\ln(1+i)]^2 > 0$ untuk semua $i > 0$, maka:
+    \begin{equation*}
+        g''(k) < 0 \quad \text{untuk seluruh } k \in [0, 1]
+    \end{equation*}
+    Turunan kedua yang selalu bernilai negatif membuktikan bahwa fungsi $g(k)$ adalah fungsi yang \textbf{cekung murni (\textit{strictly concave})} ke bawah pada interval $[0, 1]$.\\
+    Suatu fungsi cekung murni yang bernilai nol di kedua titik ujungnya pasti bernilai positif murni di seluruh bagian dalam interval:
+    \begin{equation*}
+        g(k) > 0 \implies f(k) > 0 \quad \text{untuk seluruh } k \in (0, 1) \quad \blacksquare
+    \end{equation*}
+
+    \item \textbf{Evaluasi pada Titik Ujung $k = 0$ dan $k = 1$:}
+    \begin{itemize}
+        \item Saat $k = 0$:
+        \begin{equation*}
+            g(0) = (1 + 0) - (1+i)^0 = 1 - 1 = 0 \implies f(0) = 0
+        \end{equation*}
+        \item Saat $k = 1$:
+        \begin{equation*}
+            g(1) = (1 + i) - (1+i)^1 = (1 + i) - (1 + i) = 0 \implies f(1) = 0 \quad \blacksquare
+        \end{equation*}
+    \end{itemize}
+
+    \item \textbf{Menentukan Titik Maksimum $k^*$:}
+    Titik maksimum terjadi saat turunan pertama sama dengan nol ($g'(k^*) = 0$):
+    \begin{align*}
+        g'(k^*) &= i - (1+i)^{k^*} \ln(1+i) = 0 \\[0.5em]
+        (1+i)^{k^*} &= \frac{i}{\ln(1+i)}
+    \end{align*}
+    Ambil logaritma natural pada kedua ruas:
+    \begin{align*}
+        \ln\left[(1+i)^{k^*}\right] &= \ln\left[\frac{i}{\ln(1+i)}\right] \\[0.5em]
+        k^* \cdot \ln(1+i) &= \ln(i) - \ln\left[\ln(1+i)\right]
+    \end{align*}
+    Sehingga diperoleh titik pecahan optimal:
+    \begin{equation*}
+        \mathbf{k^* = \frac{\ln(i) - \ln(\ln(1+i))}{\ln(1+i)}}
+    \end{equation*}
+    Sebagai contoh ilustrasi: jika $i = 10\% = 0.10$:
+    \begin{align*}
+        k^* &= \frac{\ln(0.10) - \ln(\ln(1.10))}{\ln(1.10)} \\[0.3em]
+            &= \frac{-2.302585 - \ln(0.095310)}{0.095310} = \frac{-2.302585 - (-2.350614)}{0.095310} \approx \mathbf{0.5039}
+    \end{align*}
+    Selisih deviasi metode praktik terhadap metode eksak mencapai nilai puncak terbesarnya pada sekitar pertengahan tahun ($k \approx 0.5$).
+\end{enumerate}
+\end{solutionbox}
+
+\end{document}

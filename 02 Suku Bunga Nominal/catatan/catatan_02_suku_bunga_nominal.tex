@@ -1,0 +1,878 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 02: Nilai Sekarang, Tingkat Diskonto, Suku Bunga Nominal, \& Force of Interest}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 1.6--1.10)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+\section{Nilai Sekarang (\textit{Present Value}) \& Faktor Diskon}
+
+\subsection{Konsep Dasar Nilai Sekarang}
+Pada materi sebelumnya, kita mempelajari proses \textbf{akumulasi} (\textit{accumulation}), yaitu membawa nilai uang dari saat ini ($t=0$) maju ke masa depan ($t > 0$). Sebaliknya, proses mencari nilai setara pada masa kini dari suatu pembayaran di masa depan disebut \textbf{pendiskontoan} (\textit{discounting}).
+\begin{itemize}[leftmargin=1.5em]
+    \item Jika $1$ unit modal diinvestasikan pada $t = 0$, maka pada $t = 1$ nilainya berakumulasi menjadi $1 + i$.
+    \item Dengan logika terbalik: jika kita ingin memperoleh nilai akumulasi tepat sebesar \textbf{$1$ unit} pada $t = 1$, berapa modal yang harus diinvestasikan pada $t = 0$?
+\end{itemize}
+
+\begin{definitionbox}[Definisi: Faktor Diskon (\textit{Discount Factor}), $v$]
+Faktor diskon (dinotasikan $v$) adalah nilai sekarang dari $1$ satuan uang yang akan dibayarkan $1$ periode ke depan pada tingkat bunga efektif $i$:
+\begin{equation}
+    v = \frac{1}{1 + i} = (1 + i)^{-1}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Fungsi Diskon (\textit{Discount Function}), $a^{-1}(t)$}
+Fungsi diskon menyatakan nilai sekarang pada $t = 0$ dari pembayaran $1$ unit modal pada saat $t \ge 0$:
+\begin{equation}
+    a^{-1}(t) = \frac{1}{a(t)}
+\end{equation}
+
+\begin{notebox}[Mengapa Fungsi Diskon Berupa Resiprokal / Kebalikan: $a^{-1}(t) = \frac{1}{a(t)}$?]
+Konsep ini dapat dipahami melalui dua perspektif:
+\begin{enumerate}[label=\alph*.]
+    \item \textbf{Perspektif Aljabar Nilai Modal ($P$):}
+    Menurut definisi fungsi akumulasi, modal awal sebesar $P$ di saat $t = 0$ akan bertumbuh menjadi $P \cdot a(t)$ di waktu $t$:
+    \begin{equation*}
+        \text{Nilai di } t = P \cdot a(t)
+    \end{equation*}
+    Sekarang pertanyaannya dibalik: \emph{Berapa modal awal $P$ di saat $t = 0$ yang harus diinvestasikan agar di masa depan (pada saat $t$) tepat menjadi $1$ unit uang?}
+    \begin{equation*}
+        1 = P \cdot a(t) \implies P = \frac{1}{a(t)}
+    \end{equation*}
+    Karena nilai sekarang dari $1$ satuan uang masa depan didefinisikan sebagai fungsi diskon $a^{-1}(t)$, maka secara mutlak berlaku $a^{-1}(t) = \frac{1}{a(t)}$.
+
+    \item \textbf{Perspektif Operasi Invers (Dua Arah Garis Waktu):}
+    Proses akumulasi ($0 \to t$) dan pendiskontoan ($t \to 0$) adalah dua operasi finansial yang saling meniadakan (\emph{inverse operation}):
+    \begin{center}
+    \begin{tikzpicture}[node distance=3cm, auto, >=stealth]
+        \node (t0) at (0,0) {\textbf{Waktu $0$}};
+        \node (t) at (5,0) {\textbf{Waktu $t$}};
+        \draw[->, thick, primaryblue] (t0) to [bend left=25] node[above] {\footnotesize $\times a(t)$ (Akumulasi)} (t);
+        \draw[->, thick, accentblue] (t) to [bend left=25] node[below] {\footnotesize $\times a^{-1}(t)$ (Diskon)} (t0);
+    \end{tikzpicture}
+    \end{center}
+    Jika modal $1$ diakumulasikan ke masa depan lalu didiskontokan kembali ke waktu awal, nilainya harus kembali utuh menjadi $1$:
+    \begin{equation*}
+        1 \cdot a(t) \cdot a^{-1}(t) = 1 \implies a^{-1}(t) = \frac{1}{a(t)}
+    \end{equation*}
+\end{enumerate}
+\end{notebox}
+
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Untuk Suku Bunga Tunggal (\textit{Simple Interest}):}
+    \begin{equation}
+        a^{-1}(t) = \frac{1}{1 + it} = (1 + it)^{-1}
+    \end{equation}
+    \item \textbf{Untuk Suku Bunga Majemuk (\textit{Compound Interest}):}
+    \begin{equation}
+        a^{-1}(t) = \frac{1}{(1 + i)^t} = (1 + i)^{-t} = v^t
+    \end{equation}
+\end{itemize}
+
+\begin{notebox}[Perluasan Definisi: Waktu Negatif]
+Dengan menggunakan notasi $v^t = (1+i)^{-t}$, fungsi akumulasi bunga majemuk $a(t) = (1+i)^t$ dapat diperluas secara mulus ke seluruh garis bilangan riil $t \in \mathbb{R}$. Nilai $t < 0$ merepresentasikan nilai uang sebelum titik acuan kini.
+\end{notebox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = center,
+    xlabel = {$t$ (waktu)},
+    ylabel = {$a(t) = (1+i)^t$},
+    xmin=-3.2, xmax=3.5,
+    ymin=0, ymax=2.5,
+    xtick={-2, -1, 0, 1, 2, 3},
+    ytick={0.5, 1, 1.5, 2},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=11cm, height=6.2cm
+]
+% Plot (1+0.2)^t = 1.2^t
+\addplot [domain=-3:3, samples=100, color=primaryblue, very thick] {1.2^x};
+
+% Key points
+\addplot[only marks, mark=*, mark size=2.5pt, color=black] coordinates {(0,1) (1,1.2) (-1,0.8333)};
+\node[above left] at (axis cs:0,1) {\footnotesize $(0, 1)$};
+\node[above left] at (axis cs:1,1.2) {\footnotesize $(1, 1+i)$};
+\node[below right] at (axis cs:-1,0.8333) {\footnotesize $(-1, v)$};
+
+% Annotations
+\node[text=primaryblue] at (axis cs:2.2,2.1) {\footnotesize Akumulasi: $(1+i)^t$};
+\node[text=accentblue] at (axis cs:-2,0.45) {\footnotesize Diskon: $v^{|t|} = (1+i)^t$};
+\draw[->, thick, accentblue] (axis cs:-0.2,0.9) -- (axis cs:-1.8,0.45);
+\draw[->, thick, primaryblue] (axis cs:0.2,1.1) -- (axis cs:1.8,1.9);
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Contoh Soal: Nilai Sekarang dan Waktu Penggandaan}
+\begin{examplebox}[Contoh 1: Nilai Sekarang Pembayaran Tunggal]
+\textbf{Soal:}\\
+Hitung modal yang harus diinvestasikan pada suku bunga tahunan $9\%$ agar terakumulasi menjadi $\$1{,}000$ pada akhir tahun ke-3 menggunakan:
+\begin{enumerate}[label=(\alph*)]
+    \item Suku bunga tunggal
+    \item Suku bunga majemuk
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Diketahui $A(3) = 1{,}000$ dan $i = 0.09$. Kita mencari $k = A(0)$:
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Suku Bunga Tunggal:}
+    \begin{equation*}
+        A(0) = \frac{A(3)}{1 + i \cdot 3} = \frac{1{,}000}{1 + 3(0.09)} = \frac{1{,}000}{1.27} \approx \$787.40
+    \end{equation*}
+    \item \textbf{Suku Bunga Majemuk:}
+    \begin{equation*}
+        A(0) = A(3) \cdot v^3 = \frac{1{,}000}{(1 + 0.09)^3} = \frac{1{,}000}{1.295029} \approx \$772.18
+    \end{equation*}
+\end{enumerate}
+\end{examplebox}
+
+\begin{examplebox}[Contoh 2: Waktu Penggandaan Modal (\textit{Doubling Time})]
+\textbf{Soal:}\\
+Berapa lama waktu yang dibutuhkan untuk menggandakan modal awal jika suku bunga efektif adalah $7.5\%$ per tahun ($i = 0.075$)?
+\begin{enumerate}[label=(\alph*)]
+    \item Menggunakan suku bunga tunggal
+    \item Menggunakan suku bunga majemuk
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Target penggandaan modal berarti $A(t) = 2 \cdot A(0) \implies a(t) = 2$.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Suku Bunga Tunggal:}
+    \begin{align*}
+        1 + i \cdot t &= 2 \implies i \cdot t = 1 \\[0.3em]
+        t &= \frac{1}{i} = \frac{1}{0.075} = \frac{40}{3} \approx 13.33 \text{ tahun (13 tahun 4 bulan)}
+    \end{align*}
+    \item \textbf{Suku Bunga Majemuk:}
+    \begin{align*}
+        (1 + i)^t &= 2 \implies t \cdot \ln(1 + i) = \ln(2) \\[0.3em]
+        t &= \frac{\ln(2)}{\ln(1 + 0.075)} = \frac{0.693147}{\ln(1.075)} = \frac{0.693147}{0.072321} \approx 9.58 \text{ tahun}
+    \end{align*}
+    \textit{Catatan Praktis:} Dengan bunga majemuk, modal berlipat ganda jauh lebih cepat karena efek bunga berbunga.
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Tingkat Diskonto Efektif (\textit{Effective Rate of Discount})}
+
+\subsection{Definisi \& Motivasi Konseptual}
+Perbedaan mendasar antara suku bunga efektif $i$ dan tingkat diskonto efektif $d$ terletak pada **waktu pembebanan bunga**:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Suku Bunga Efektif ($i$):} Bunga dibayarkan di \textbf{akhir} periode per satuan modal di \textbf{awal} periode.
+    \item \textbf{Tingkat Diskonto Efektif ($d$):} Bunga (diskon) dipotong/dibayarkan di \textbf{awal} periode per satuan nilai nominal di \textbf{akhir} periode.
+\end{itemize}
+
+\begin{examplebox}[Ilustrasi Pinjaman Bank: $i = 6\%$ vs $d = 6\%$]
+Misalkan seseorang meminjam dana dengan nominal transaksi $\$100$ selama 1 tahun:
+\begin{itemize}
+    \item \textbf{Kasus Suku Bunga Efektif $i = 6\%$:}
+    Peminjam menerima penuh $\$100$ di awal ($t=0$). Di akhir tahun ($t=1$), peminjam wajib mengembalikan pokok ditambah bunga $\$6$, yaitu total $\$106$. Dana riil yang dinikmati selama setahun adalah \textbf{$\$100$}.
+    \item \textbf{Kasus Tingkat Diskonto Efektif $d = 6\%$:}
+    Bank langsung memotong bunga di depan sebesar $6\% \times \$100 = \$6$. Peminjam hanya menerima bersih $\$94$ di awal ($t=0$). Di akhir tahun ($t=1$), peminjam melunasi nilai nominal sebesar $\$100$. Dana riil yang dinikmati selama setahun hanya \textbf{$\$94$}.
+\end{itemize}
+\end{examplebox}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+    % Reference Line
+    \draw[dashed, gray!60, thick] (0,3) -- (10,3);
+    \node[above right, gray!80!black] at (0,3) {\footnotesize Nilai Par/Pokok $= 1$};
+
+    % Bar 1: Discount (t=0)
+    \draw[fill=accentblue!20, draw=accentblue, thick] (1,0) rectangle (1.8,2.2);
+    \node[below] at (1.4,0) {\footnotesize $t=0$};
+    \node at (1.4,1.1) {\footnotesize $v = 1-d$};
+    \draw[<->, thick, red!80!black] (2.1,2.2) -- (2.1,3);
+    \node[right, red!80!black] at (2.1,2.6) {\footnotesize $d$ (diskon)};
+
+    % Bar 2: Unit Principal at t=0 / t=1
+    \draw[fill=gray!20, draw=gray!80!black, thick] (5,0) rectangle (5.8,3);
+    \node[below] at (5.4,0) {\footnotesize Titik Acuan $1$};
+    \node at (5.4,1.5) {\footnotesize $1$};
+
+    % Bar 3: Accumulate (t=1)
+    \draw[fill=primaryblue!20, draw=primaryblue, thick] (8.6,0) rectangle (9.4,3);
+    \draw[fill=primaryblue!40, draw=primaryblue, thick] (8.6,3) rectangle (9.4,3.8);
+    \node[below] at (9.0,0) {\footnotesize $t=1$};
+    \node at (9.0,1.5) {\footnotesize $1$};
+    \draw[<->, thick, primaryblue] (9.7,3) -- (9.7,3.8);
+    \node[right, primaryblue] at (9.7,3.4) {\footnotesize $i$ (bunga)};
+    
+    % Direction arrows
+    \draw[->, thick, darkgray] (4.8, 4.3) -- (1.5, 4.3) node[midway, above] {\footnotesize Pendiskontoan 1 tahun};
+    \draw[->, thick, darkgray] (6.0, 4.3) -- (9.2, 4.3) node[midway, above] {\footnotesize Akumulasi 1 tahun};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Definisi Matematis Tingkat Diskonto Efektif}
+\begin{definitionbox}[Definisi: Tingkat Diskonto Efektif, $d_n$]
+Tingkat diskonto efektif pada periode ke-$n$ adalah rasio perolehan bunga/diskon selama periode ke-$n$ terhadap saldo di \textbf{akhir periode}:
+\begin{equation}
+    d_n = \frac{A(n) - A(n-1)}{A(n)} = \frac{I_n}{A(n)}
+\end{equation}
+Dalam konteks fungsi akumulasi satuan $a(t)$:
+\begin{equation}
+    d_n = \frac{a(n) - a(n-1)}{a(n)}
+\end{equation}
+Khusus untuk periode pertama ($n=1$):
+\begin{equation}
+    d_1 = \frac{a(1) - a(0)}{a(1)} = \frac{(1+i) - 1}{1+i} = \frac{i}{1+i}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Hubungan Fundamental Antara $i$, $d$, dan $v$}
+Jika dua tingkat bunga/diskon menghasilkan saldo akumulasi yang setara untuk periode yang sama, keduanya disebut \textbf{ekuivalen}.
+Dari transaksi modal 1 unit:
+\begin{enumerate}[leftmargin=1.5em]
+    \item Pinjam $1$ pada awal periode $\implies$ bayar $1 + i$ pada akhir periode.
+    \item Pinjam $1 - d$ pada awal periode $\implies$ bayar $1$ pada akhir periode.
+\end{enumerate}
+Maka tingkat pengembalian bunga per modal yang dipinjam adalah:
+\begin{equation}
+    i = \frac{1 - (1 - d)}{1 - d} = \frac{d}{1 - d}
+\end{equation}
+Sebaliknya:
+\begin{equation}
+    d = \frac{(1 + i) - 1}{1 + i} = \frac{i}{1 + i} = i \cdot v
+\end{equation}
+Selain itu, perhatikan relasi berikut:
+\begin{equation}
+    d = \frac{i}{1+i} = \frac{1+i-1}{1+i} = 1 - \frac{1}{1+i} = 1 - v
+\end{equation}
+sehingga diperoleh:
+\begin{equation}
+    v = 1 - d
+\end{equation}
+Selisih antara bunga dan diskon menyatakan bunga dari bunga (efek pemajukan):
+\begin{equation}
+    i - d = i - i \cdot v = i(1 - v) = i \cdot d
+\end{equation}
+
+---
+
+\section{Fungsi Diskonto Tunggal vs Majemuk}
+
+\subsection{Diskonto Tunggal (\textit{Simple Discount})}
+\begin{definitionbox}[Definisi: Diskonto Tunggal]
+Jika jumlah diskon per periode diasumsikan konstan sebesar $d$, maka fungsi diskonnya berbentuk linier:
+\begin{equation}
+    a^{-1}(t) = 1 - dt, \quad \text{untuk } 0 \le t < \frac{1}{d}
+\end{equation}
+\end{definitionbox}
+
+\begin{notebox}[Batasan Waktu Penting: $t < 1/d$]
+Pada diskonto tunggal, syarat $t < 1/d$ mutlak diperlukan agar nilai sekarang bernilai positif ($a^{-1}(t) > 0$). Jika $t \ge 1/d$, nilai sekarang menjadi nol atau negatif, yang secara ekonomi tidak masuk akal.
+\end{notebox}
+
+\subsection{Perbandingan Geometris Kurva Diskon}
+Sama seperti akumulasi, diskonto majemuk digunakan untuk jangka panjang, sedangkan diskonto tunggal digunakan sebagai aproksimasi linier untuk jangka pendek:
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {$t$ (waktu)},
+    ylabel = {$a^{-1}(t)$ (Nilai Sekarang)},
+    xmin=0, xmax=2.5,
+    ymin=0.65, ymax=1.05,
+    xtick={0, 1, 2},
+    ytick={0.7, 0.8, 0.9, 1.0},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=10.5cm, height=6.2cm
+]
+% Simple discount: a^{-1}(t) = 1 - 0.12*t
+\addplot [domain=0:2.2, samples=50, color=blue, thick] {1 - 0.12*x};
+\addlegendentry{Diskonto Tunggal: $1 - dt$}
+
+% Compound discount: a^{-1}(t) = (1 - 0.12)^t = 0.88^t
+\addplot [domain=0:2.2, samples=100, color=red!80!black, thick, dashed] {0.88^x};
+\addlegendentry{Diskonto Majemuk: $(1 - d)^t = v^t$}
+
+% Point of intersection at t=1
+\addplot[only marks, mark=*, mark size=2.5pt, color=black] coordinates {(1, 0.88)};
+\node[above left] at (axis cs:1, 0.88) {$t=1$};
+
+% Region labels
+\node[text=blue!80!black] at (axis cs:0.5, 0.96) {\footnotesize $0 < t < 1$: Majemuk $>$ Tunggal};
+\node[text=red!80!black] at (axis cs:1.8, 0.83) {\footnotesize $t > 1$: Majemuk $>$ Tunggal};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+---
+
+\section{Suku Bunga \& Tingkat Diskonto Nominal}
+
+Dalam realitas perbankan dan kontrak keuangan, bunga sering kali dikonversikan atau dibayarkan lebih sering daripada satu kali per tahun (misalnya semesteran, kuartalan, bulanan, atau harian). 
+
+\subsection{Definisi Suku Bunga Nominal, $i^{(m)}$}
+\begin{definitionbox}[Definisi: Suku Bunga Nominal]
+\textbf{Suku bunga nominal} per tahun yang dikonversikan (\textit{compounded/convertible}) sebanyak $m$ kali dalam setahun dinotasikan dengan $i^{(m)}$.
+\begin{itemize}[leftmargin=1.5em]
+    \item $m$ adalah frekuensi konversi per tahun ($m > 1$).
+    \item Suku bunga efektif yang berlaku \textbf{per subperiode konversi} adalah:
+    \begin{equation}
+        \frac{i^{(m)}}{m}
+    \end{equation}
+\end{itemize}
+\end{definitionbox}
+
+\textbf{Hubungan dengan Suku Bunga Efektif Tahunan $i$:}
+Akumulasi dari $1$ unit modal selama $1$ tahun dengan $m$ kali periode pemajemukan harus menghasilkan nilai yang sama dengan suku bunga efektif tahunan $1 + i$:
+\begin{equation}
+    1 + i = \left( 1 + \frac{i^{(m)}}{m} \right)^m
+\end{equation}
+
+\begin{notebox}[Mengapa Muncul Bentuk $\left(1 + \frac{i^{(m)}}{m}\right)^m$ pada Ruas Kanan (RHS)?]
+Perhatikan proses pemajemukan modal $1$ unit yang berjalan maju dari $t = 0$ hingga $t = 1$ melewati $m$ subperiode:
+\begin{itemize}[leftmargin=1.5em]
+    \item Tingkat bunga efektif yang diperoleh \textbf{setiap subperiode} adalah $j = \frac{i^{(m)}}{m}$.
+    \item Menurut prinsip bunga majemuk, bunga di akhir setiap subperiode ditambahkan ke pokok untuk bersama-sama menghasilkan bunga di subperiode berikutnya:
+    \begin{align*}
+        \text{Saldo pada } t = 0 &: 1 \\
+        \text{Saldo pada } t = \tfrac{1}{m} &: 1 \cdot (1 + j) = \left(1 + \tfrac{i^{(m)}}{m}\right) \\
+        \text{Saldo pada } t = \tfrac{2}{m} &: \left(1 + \tfrac{i^{(m)}}{m}\right) \cdot (1 + j) = \left(1 + \tfrac{i^{(m)}}{m}\right)^2 \\
+        &\;\; \vdots \\
+        \text{Saldo pada } t = \tfrac{m}{m} = 1 &: \left(1 + \tfrac{i^{(m)}}{m}\right)^m
+    \end{align*}
+    \item Karena definisi akumulasi modal $1$ unit selama satu tahun penuh pada laju efektif tahunan $i$ adalah $(1 + i)$, maka kedua nilai ini harus ekuivalen:
+    \begin{equation*}
+        1 + i = \left(1 + \frac{i^{(m)}}{m}\right)^m
+    \end{equation*}
+\end{itemize}
+\end{notebox}
+
+Maka diperoleh rumus konversi:
+\begin{equation}
+    i = \left( 1 + \frac{i^{(m)}}{m} \right)^m - 1
+\end{equation}
+dan
+\begin{equation}
+    i^{(m)} = m \left[ (1 + i)^{1/m} - 1 \right]
+\end{equation}
+
+\subsection{Definisi Tingkat Diskonto Nominal, $d^{(m)}$}
+\begin{definitionbox}[Definisi: Tingkat Diskonto Nominal]
+\textbf{Tingkat diskonto nominal} per tahun yang dapat dikonversikan (\textit{convertible/payable in advance}) sebanyak $m$ kali setahun dinotasikan dengan $d^{(m)}$.
+Tingkat diskonto efektif yang berlaku \textbf{per subperiode} adalah:
+\begin{equation}
+    \frac{d^{(m)}}{m}
+\end{equation}
+\end{definitionbox}
+
+\textbf{Hubungan dengan Tingkat Diskonto Efektif Tahunan $d$:}
+Nilai sekarang dari $1$ unit yang dibayarkan $1$ tahun kemudian:
+\begin{equation}
+    1 - d = \left( 1 - \frac{d^{(m)}}{m} \right)^m = v
+\end{equation}
+
+\begin{notebox}[Mengapa Muncul Bentuk $\left(1 - \frac{d^{(m)}}{m}\right)^m$ pada Ruas Kanan (RHS)?]
+Konsep ini merupakan bentuk cermin (\emph{dual}) dari suku bunga nominal, tetapi dilakukan dengan gerakan mundur (\emph{discounting}) dari $t=1$ menuju $t=0$:
+\begin{itemize}[leftmargin=1.5em]
+    \item Tingkat diskonto yang dipotong di awal setiap subperiode adalah $d_{\text{sub}} = \frac{d^{(m)}}{m}$.
+    \item Untuk menghasilkan nilai $1$ di \textbf{akhir} suatu subperiode, modal bersih yang harus ada di \textbf{awal} subperiode tersebut adalah:
+    \begin{equation*}
+        1 - d_{\text{sub}} = \left(1 - \frac{d^{(m)}}{m}\right)
+    \end{equation*}
+    \item Sekarang, kita ingin mencari nilai modal di awal tahun ($t = 0$) agar setelah melintasi $m$ subperiode bernilai tepat $1$ pada akhir tahun ($t = 1$):
+    \begin{align*}
+        \text{Target pada } t = 1 &: 1 \\
+        \text{Nilai setara di awal subperiode ke-$m$} &: \left(1 - \tfrac{d^{(m)}}{m}\right) \\
+        \text{Nilai setara di awal subperiode ke-$(m-1)$} &: \left(1 - \tfrac{d^{(m)}}{m}\right)^2 \\
+        &\;\; \vdots \\
+        \text{Nilai Sekarang pada } t = 0 &: \left(1 - \tfrac{d^{(m)}}{m}\right)^m
+    \end{align*}
+    \item Karena nilai sekarang dari $1$ di akhir tahun menurut definisi diskonto tahunan adalah $v = 1 - d$, maka kedua formulasi nilai sekarang ini harus bernilai identik:
+    \begin{equation*}
+        1 - d = \left(1 - \frac{d^{(m)}}{m}\right)^m = v
+    \end{equation*}
+\end{itemize}
+\end{notebox}
+
+sehingga:
+\begin{equation}
+    d^{(m)} = m \left[ 1 - (1 - d)^{1/m} \right] = m \left[ 1 - v^{1/m} \right]
+\end{equation}
+
+\subsection{Contoh Soal: Suku Bunga Nominal vs Efektif}
+\begin{examplebox}[Contoh 3: Dampak Frekuensi Konversi terhadap Laju Efektif]
+\textbf{Soal:}\\
+Diberikan suku bunga nominal $i^{(m)} = 8\%$ per tahun. Hitung suku bunga efektif tahunan $i$ jika bunga dibayarkan secara:
+\begin{enumerate}[label=(\alph*)]
+    \item Kuartalan (\textit{quarterly}, $m = 4$)
+    \item Bulanan (\textit{monthly}, $m = 12$)
+    \item Mingguan (\textit{weekly}, $m = 52$)
+    \item Harian (\textit{daily}, $m = 365$)
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Menggunakan rumus $i = \left(1 + \frac{0.08}{m}\right)^m - 1$:
+\begin{enumerate}[label=(\alph*)]
+    \item $m = 4$:
+    \begin{equation*}
+        1 + i = \left(1 + \frac{0.08}{4}\right)^4 = (1.02)^4 = 1.082432 \implies i \approx 8.243\%
+    \end{equation*}
+    \item $m = 12$:
+    \begin{equation*}
+        1 + i = \left(1 + \frac{0.08}{12}\right)^{12} = (1.006667)^{12} \approx 1.082999 \implies i \approx 8.300\%
+    \end{equation*}
+    \item $m = 52$:
+    \begin{equation*}
+        1 + i = \left(1 + \frac{0.08}{52}\right)^{52} \approx 1.083220 \implies i \approx 8.322\%
+    \end{equation*}
+    \item $m = 365$:
+    \begin{equation*}
+        1 + i = \left(1 + \frac{0.08}{365}\right)^{365} \approx 1.083278 \implies i \approx 8.328\%
+    \end{equation*}
+\end{enumerate}
+\textit{Kesimpulan Visual:} Semakin sering frekuensi pemajemukan $m$, suku bunga efektif tahunan semakin meningkat menuju suatu limit tertentu (pemajemukan kontinu).
+\end{examplebox}
+
+\begin{examplebox}[Contoh 4: Membandingkan Dua Opsi Pinjaman]
+\textbf{Soal:}\\
+Seorang nasabah ingin mengambil pinjaman dan ditawari dua opsi:
+\begin{itemize}
+    \item \textbf{Pinjaman A:} Suku bunga $8.75\%$ per tahun \textit{compounded quarterly} ($m=4$).
+    \item \textbf{Pinjaman B:} Suku bunga $8.50\%$ per tahun \textit{payable in advance and convertible monthly} ($m=12$).
+\end{itemize}
+Tentukan opsi pinjaman mana yang lebih menguntungkan bagi nasabah (peminjam)!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Nasabah memilih pinjaman dengan suku bunga efektif terkecil.
+\begin{itemize}
+    \item \textbf{Pinjaman A ($i^{(4)} = 8.75\%$):}
+    \begin{equation*}
+        1 + i_A = \left(1 + \frac{0.0875}{4}\right)^4 = (1.021875)^4 \approx 1.090438 \implies i_A \approx 9.044\%
+    \end{equation*}
+    \item \textbf{Pinjaman B ($d^{(12)} = 8.50\%$):}
+    \begin{equation*}
+        1 - d = \left(1 - \frac{0.085}{12}\right)^{12} \approx (0.992917)^{12} \approx 0.918231
+    \end{equation*}
+    Karena $1 + i_B = \frac{1}{1 - d}$:
+    \begin{equation*}
+        1 + i_B = \frac{1}{0.918231} \approx 1.089051 \implies i_B \approx 8.905\%
+    \end{equation*}
+\end{itemize}
+Karena $i_B < i_A$ ($8.905\% < 9.044\%$), maka \textbf{Pinjaman B lebih baik} untuk peminjam karena membebankan biaya bunga efektif yang lebih rendah.
+\end{examplebox}
+
+\subsection{Ekuivalensi Deretan Pembayaran Bunga Berkala}
+Jika bunga sebesar $\frac{i^{(m)}}{m}$ dibayarkan setiap interval $\frac{1}{m}$ tahun ($t = \frac{1}{m}, \frac{2}{m}, \dots, 1$), apakah nilai akumulasinya di akhir tahun setara dengan bunga efektif tahunan $i$? Jawabannya adalah \textbf{tepat sama}.
+
+\begin{notebox}[Penurunan Terperinci Persamaan Akumulasi Pembayaran Berkala]
+\textbf{1. Garis Waktu Pembayaran (\textit{Timeline}):}\\
+Dalam rentang $1$ tahun, terdapat $m$ subperiode dengan panjang masing-masing $\frac{1}{m}$ tahun. Pembayaran bunga berkala dilakukan sebesar $\frac{i^{(m)}}{m}$ pada titik-titik waktu:
+\begin{equation*}
+    t = \frac{1}{m}, \frac{2}{m}, \frac{3}{m}, \dots, \frac{k}{m}, \dots, \frac{m}{m} = 1
+\end{equation*}
+
+\begin{center}
+\begin{tikzpicture}[xscale=1.4, yscale=1]
+    % Timeline axis
+    \draw[->, thick] (0,0) -- (7.5,0) node[right] {\footnotesize Waktu $t$};
+    
+    % Ticks and labels
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {\footnotesize $0$};
+    \draw[thick] (1.5,0.15) -- (1.5,-0.15) node[below] {\footnotesize $\frac{1}{m}$};
+    \draw[thick] (3.0,0.15) -- (3.0,-0.15) node[below] {\footnotesize $\frac{2}{m}$};
+    \node at (4.2, -0.2) {\footnotesize $\dots$};
+    \draw[thick] (5.4,0.15) -- (5.4,-0.15) node[below] {\footnotesize $\frac{k}{m}$};
+    \node at (6.2, -0.2) {\footnotesize $\dots$};
+    \draw[thick] (7.0,0.15) -- (7.0,-0.15) node[below] {\footnotesize $\frac{m}{m}=1$};
+    
+    % Payment arrows
+    \draw[->, thick, primaryblue] (1.5, -0.7) -- (1.5, -0.2);
+    \node[below, primaryblue] at (1.5, -0.7) {\scriptsize $\frac{i^{(m)}}{m}$};
+    
+    \draw[->, thick, primaryblue] (3.0, -0.7) -- (3.0, -0.2);
+    \node[below, primaryblue] at (3.0, -0.7) {\scriptsize $\frac{i^{(m)}}{m}$};
+    
+    \draw[->, thick, primaryblue] (5.4, -0.7) -- (5.4, -0.2);
+    \node[below, primaryblue] at (5.4, -0.7) {\scriptsize $\frac{i^{(m)}}{m}$};
+    
+    \draw[->, thick, primaryblue] (7.0, -0.7) -- (7.0, -0.2);
+    \node[below, primaryblue] at (7.0, -0.7) {\scriptsize $\frac{i^{(m)}}{m}$};
+
+    % Compounding arcs to t=1
+    \draw[->, dashed, accentblue] (1.5, 0.25) to [bend left=30] node[above, text=accentblue] {\tiny $(1+i)^{\frac{m-1}{m}}$} (7.0, 0.35);
+    \draw[->, dashed, accentblue] (5.4, 0.25) to [bend left=25] node[above, text=accentblue] {\tiny $(1+i)^{\frac{m-k}{m}}$} (7.0, 0.25);
+\end{tikzpicture}
+\end{center}
+
+\textbf{2. Membawa Setiap Pembayaran ke Akhir Tahun ($t = 1$):}\\
+Untuk pembayaran ke-$k$ yang diterima pada waktu $t = \frac{k}{m}$, jarak waktu menuju akhir tahun ($t=1$) adalah:
+\begin{equation*}
+    \Delta t = 1 - \frac{k}{m} = \frac{m - k}{m} \text{ tahun}
+\end{equation*}
+Berdasarkan faktor bunga majemuk tahunan $(1+i)$, nilai uang tersebut di akhir tahun terakumulasi menjadi:
+\begin{equation*}
+    \frac{i^{(m)}}{m} \cdot (1+i)^{\frac{m-k}{m}}
+\end{equation*}
+
+\textbf{3. Menjumlahkan dan Melakukan Substitusi Variabel Indeks:}\\
+Total nilai seluruh pembayaran pada saat $t=1$ adalah:
+\begin{align*}
+    S &= \sum_{k=1}^m \frac{i^{(m)}}{m} (1+i)^{\frac{m-k}{m}} = \frac{i^{(m)}}{m} \sum_{k=1}^m (1+i)^{\frac{m-k}{m}}
+\end{align*}
+Perhatikan suku eksponen saat $k$ berjalan dari $1$ ke $m$:
+\begin{itemize}
+    \item Untuk $k = m$ (pembayaran terakhir di $t=1$), eksponennya adalah $\frac{m-m}{m} = 0$.
+    \item Untuk $k = m-1$, eksponennya adalah $\frac{m-(m-1)}{m} = \frac{1}{m}$.
+    \item $\dots$
+    \item Untuk $k = 1$ (pembayaran pertama di $t=\frac{1}{m}$), eksponennya adalah $\frac{m-1}{m}$.
+\end{itemize}
+Dengan mendefinisikan indeks baru $n = m - k$, di mana saat $k=m \implies n=0$ dan saat $k=1 \implies n=m-1$, urutan penjumlahan dapat dibalik dari pangkat terkecil ke terbesar:
+\begin{equation}
+    S = \frac{i^{(m)}}{m} \sum_{n=0}^{m-1} (1+i)^{\frac{n}{m}} = \frac{i^{(m)}}{m} \sum_{n=0}^{m-1} \left[(1+i)^{1/m}\right]^n
+\end{equation}
+
+\textbf{4. Penyelesaian dengan Jumlah Deret Geometri:}\\
+Deret di atas adalah deret geometri berhingga dengan suku pertama $a=1$, rasio $r = (1+i)^{1/m}$, dan total $m$ suku:
+\begin{equation*}
+    \sum_{n=0}^{m-1} r^n = \frac{r^m - 1}{r - 1} = \frac{\left[(1+i)^{1/m}\right]^m - 1}{(1+i)^{1/m} - 1} = \frac{(1+i) - 1}{(1+i)^{1/m} - 1} = \frac{i}{(1+i)^{1/m} - 1}
+\end{equation*}
+Karena dari definisi suku bunga nominal berlaku $1 + \frac{i^{(m)}}{m} = (1+i)^{1/m} \iff (1+i)^{1/m} - 1 = \frac{i^{(m)}}{m}$, maka substitusi penyebut menghasilkan:
+\begin{equation}
+    S = \frac{i^{(m)}}{m} \cdot \frac{i}{\frac{i^{(m)}}{m}} = i
+\end{equation}
+Terbukti bahwa $m$ kali penerimaan bunga berkala $\frac{i^{(m)}}{m}$ tepat ekuivalen dengan menerima satu bunga tahunan penuh $i$ pada akhir tahun.
+\end{notebox}
+
+Hal serupa juga berlaku secara dualitas untuk tingkat diskonto nominal $d^{(m)}$.
+
+---
+
+\section{\textit{Force of Interest} dan \textit{Force of Discount} ($\delta_t$)}
+
+\subsection{Definisi \& Konsep Intensitas Sesaat}
+Ketika frekuensi pemajemukan bunga mendekati tak hingga ($m \to \infty$), interval waktu antar konversi bunga menjadi sangat kecil (\textit{infinitesimal}). Ukuran intensitas suku bunga pada titik waktu sesaat $t$ disebut \textbf{\textit{force of interest}}, dinotasikan $\delta_t$.
+
+\begin{definitionbox}[Definisi: \textit{Force of Interest}, $\delta_t$]
+\textit{Force of interest} pada waktu $t$ adalah laju perubahan relatif sesaat dari fungsi akumulasi:
+\begin{equation}
+    \delta_t = \frac{A'(t)}{A(t)} = \frac{a'(t)}{a(t)} = \frac{d}{dt} \ln A(t) = \frac{d}{dt} \ln a(t)
+\end{equation}
+\end{definitionbox}
+
+Secara limit dari suku bunga nominal:
+\begin{equation}
+    \delta_t = \lim_{h \to 0} \frac{A(t+h) - A(t)}{h \cdot A(t)} = \lim_{m \to \infty} i^{(m)}
+\end{equation}
+
+\subsection{Penentuan Fungsi Akumulasi dari $\delta_t$}
+Dengan mengintegrasikan $\delta_r$ terhadap waktu dari $0$ hingga $t$:
+\begin{align}
+    \int_0^t \delta_r \, dr &= \int_0^t \frac{d}{dr} \ln a(r) \, dr = \ln a(t) - \ln a(0) = \ln a(t)
+\end{align}
+Dengan mengambil eksponensial di kedua ruas:
+\begin{equation}
+    a(t) = e^{\int_0^t \delta_r \, dr}
+\end{equation}
+Untuk investasi awal $k$, fungsi jumlahnya adalah:
+\begin{equation}
+    A(t) = k \cdot e^{\int_0^t \delta_r \, dr}
+\end{equation}
+
+\begin{notebox}[Kasus Khusus: $\delta$ Konstan]
+Jika $\delta_t = \delta$ bernilai konstan sepanjang waktu:
+\begin{equation}
+    a(t) = e^{\delta t} \implies 1 + i = e^\delta \iff \delta = \ln(1 + i)
+\end{equation}
+\end{notebox}
+
+\subsection{\textit{Force of Discount}, $\delta_t'$}
+Secara analog, \textit{force of discount} didefinisikan terhadap fungsi diskonto $a^{-1}(t)$:
+\begin{equation}
+    \delta_t' = -\frac{\frac{d}{dt} a^{-1}(t)}{a^{-1}(t)}
+\end{equation}
+Tanda negatif ditambahkan karena $a^{-1}(t)$ adalah fungsi monoton turun sehingga turunannya bernilai negatif.
+\begin{align*}
+    \delta_t' &= -\frac{-a(t)^{-2} a'(t)}{a(t)^{-1}} = \frac{a'(t)}{a(t)} = \delta_t
+\end{align*}
+\textbf{Hasil Fundamental:}
+\begin{equation}
+    \delta_t' = \delta_t
+\end{equation}
+Intensitas sesaat dari bunga dan diskonto adalah identik pada setiap titik waktu $t$.
+
+\begin{examplebox}[Contoh 5: Menghitung Waktu Berdasarkan \textit{Force of Interest}]
+\textbf{Soal:}\\
+Diberikan fungsi jumlah akumulasi $A(t) = 25\left(1 + \frac{t}{4}\right)^3$. Tentukan pada waktu $t$ berapa \textit{force of interest} bernilai $\delta_t = 0.5$?
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Gunakan rumus $\delta_t = \frac{d}{dt} \ln A(t)$:
+\begin{align*}
+    \ln A(t) &= \ln(25) + 3 \ln\left(1 + \frac{t}{4}\right) \\[0.5em]
+    \delta_t &= \frac{d}{dt} \left[ \ln(25) + 3 \ln\left(1 + \frac{t}{4}\right) \right] = 3 \cdot \frac{\frac{1}{4}}{1 + \frac{t}{4}} = \frac{3}{4 + t}
+\end{align*}
+Disamakan dengan target $\delta_t = 0.5 = \frac{1}{2}$:
+\begin{equation*}
+    \frac{3}{4 + t} = \frac{1}{2} \implies 4 + t = 6 \implies t = 2
+\end{equation*}
+Jadi, \textit{force of interest} bernilai $0.5$ pada saat $t = 2$.
+\end{examplebox}
+
+---
+
+\section{Suku Bunga Berubah Terhadap Waktu (\textit{Varying Interest})}
+
+Dalam situasi pasar keuangan riil, suku bunga jarang sekali bernilai konstan sepanjang horizon investasi. Nilai suku bunga terus berfluktuasi dari tahun ke tahun. Bagian ini membahas bagaimana merumuskan fungsi akumulasi $a(t)$ dan fungsi diskon $a^{-1}(t)$ ketika suku bunga berubah terhadap waktu, baik dalam kasus diskrit maupun kontinu.
+
+\subsection{Kasus Diskrit: Suku Bunga Efektif Berubah per Periode}
+Misalkan periode waktu dibagi menjadi interval tahunan: $[0,1], [1,2], \dots, [t-1, t]$.\\
+Definisikan $i_k$ sebagai suku bunga efektif yang berlaku secara khusus pada \textbf{periode ke-$k$} (yaitu sepanjang interval waktu $[k-1, k]$):
+\begin{equation}
+    i_k = \frac{a(k) - a(k-1)}{a(k-1)} \implies a(k) = a(k-1) \cdot (1 + i_k)
+\end{equation}
+
+\begin{notebox}[Derivasi Langkah-demi-Langkah Fungsi Akumulasi Diskrit: $a(t)$]
+Perhatikan modal awal sebesar $1$ unit yang diinvestasikan pada saat $t = 0$:
+\begin{center}
+\begin{tikzpicture}[xscale=1.5, yscale=0.9]
+    \draw[->, thick] (0,0) -- (6.5,0) node[right] {\footnotesize Waktu};
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {\footnotesize $t=0$};
+    \draw[thick] (1.5,0.15) -- (1.5,-0.15) node[below] {\footnotesize $t=1$};
+    \draw[thick] (3.0,0.15) -- (3.0,-0.15) node[below] {\footnotesize $t=2$};
+    \node at (4.0,-0.2) {\footnotesize $\dots$};
+    \draw[thick] (5.0,0.15) -- (5.0,-0.15) node[below] {\footnotesize $t-1$};
+    \draw[thick] (6.0,0.15) -- (6.0,-0.15) node[below] {\footnotesize $t$};
+
+    \draw[->, thick, primaryblue] (0,0.3) to [bend left=25] node[above] {\scriptsize $\times (1+i_1)$} (1.5,0.3);
+    \draw[->, thick, primaryblue] (1.5,0.3) to [bend left=25] node[above] {\scriptsize $\times (1+i_2)$} (3.0,0.3);
+    \draw[->, thick, primaryblue] (5.0,0.3) to [bend left=25] node[above] {\scriptsize $\times (1+i_t)$} (6.0,0.3);
+\end{tikzpicture}
+\end{center}
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Periode ke-1 ($[0,1]$):} Suku bunga efektif adalah $i_1$.
+    \begin{equation*}
+        a(1) = a(0)(1 + i_1) = 1 \cdot (1 + i_1) = (1 + i_1)
+    \end{equation*}
+    \item \textbf{Periode ke-2 ($[1,2]$):} Saldo $a(1)$ menjadi modal awal untuk periode ke-2 dengan suku bunga $i_2$:
+    \begin{equation*}
+        a(2) = a(1)(1 + i_2) = (1 + i_1)(1 + i_2)
+    \end{equation*}
+    \item \textbf{Periode ke-3 ($[2,3]$):} Saldo $a(2)$ bertumbuh dengan suku bunga $i_3$:
+    \begin{equation*}
+        a(3) = a(2)(1 + i_3) = (1 + i_1)(1 + i_2)(1 + i_3)
+    \end{equation*}
+    \item \textbf{Periode ke-$t$ ($[t-1, t]$):} Dengan menerapkan proses rantai rekursif (\textit{chain rule}) secara berulang:
+    \begin{equation}
+        a(t) = (1 + i_1)(1 + i_2)\dots(1 + i_t) = \prod_{k=1}^t (1 + i_k)
+    \end{equation}
+\end{enumerate}
+Untuk investasi modal awal sebesar $k_0$, fungsi jumlahnya adalah $A(t) = k_0 \prod_{k=1}^t (1 + i_k)$.
+\end{notebox}
+
+\begin{notebox}[Derivasi Nilai Sekarang Diskrit: $a^{-1}(t)$]
+Definisikan faktor diskon untuk periode ke-$k$ sebagai:
+\begin{equation*}
+    v_k = \frac{1}{1 + i_k} = (1 + i_k)^{-1}
+\end{equation*}
+Untuk menentukan nilai sekarang pada $t = 0$ dari pembayaran $1$ unit di waktu masa depan $t$, kita gerakkan nilai uang mundur selangkah demi selangkah dari $t$ kembali ke $0$:
+\begin{align}
+    a^{-1}(t) &= \frac{1}{a(t)} = \frac{1}{\prod_{k=1}^t (1 + i_k)} \nonumber\\[0.5em]
+              &= \frac{1}{1 + i_1} \cdot \frac{1}{1 + i_2} \cdots \frac{1}{1 + i_t} \nonumber\\[0.5em]
+              &= (1 + i_1)^{-1}(1 + i_2)^{-1}\dots(1 + i_t)^{-1} = \prod_{k=1}^t (1 + i_k)^{-1} = \prod_{k=1}^t v_k
+\end{align}
+\end{notebox}
+
+\subsection{Kasus Kontinu: \textit{Force of Interest} Berubah Berkelanjutan, $\delta_t$}
+Ketika suku bunga berubah secara kontinu setiap saat, intensitas suku bunga sesaat dinyatakan oleh fungsi $\delta_t$.
+
+\begin{notebox}[Derivasi Fungsi Akumulasi dan Nilai Sekarang Kontinu]
+Berdasarkan definisi \textit{force of interest}:
+\begin{equation*}
+    \delta_r = \frac{a'(r)}{a(r)} = \frac{d}{dr}\ln a(r)
+\end{equation*}
+\textbf{1. Menurunkan $a(t)$ Melalui Persamaan Diferensial Terpisah:}\\
+Integralkan kedua ruas terhadap variabel waktu $r$ dari $r = 0$ hingga $r = t$:
+\begin{equation*}
+    \int_0^t \delta_r \, dr = \int_0^t \frac{d}{dr}\ln a(r) \, dr = \left. \ln a(r) \right|_0^t = \ln a(t) - \ln a(0)
+\end{equation*}
+Karena $a(0) = 1 \implies \ln a(0) = \ln(1) = 0$, maka:
+\begin{equation*}
+    \ln a(t) = \int_0^t \delta_r \, dr
+\end{equation*}
+Eksponensialkan kedua ruas:
+\begin{equation}
+    a(t) = \exp\left(\int_0^t \delta_r \, dr\right) = e^{\int_0^t \delta_r \, dr}
+\end{equation}
+
+\textbf{2. Menurunkan Nilai Sekarang Kontinu $a^{-1}(t)$:}
+\begin{equation}
+    a^{-1}(t) = \frac{1}{a(t)} = \frac{1}{e^{\int_0^t \delta_r \, dr}} = \exp\left(-\int_0^t \delta_r \, dr\right) = e^{-\int_0^t \delta_r \, dr}
+\end{equation}
+
+\textbf{3. Akumulasi Antara Dua Titik Waktu Sembarang ($t_1$ ke $t_2$ dengan $t_2 > t_1$):}\\
+Nilai akumulasi pada waktu $t_2$ dari $1$ unit investasi di waktu $t_1$ adalah:
+\begin{equation}
+    \frac{a(t_2)}{a(t_1)} = \frac{e^{\int_0^{t_2} \delta_r \, dr}}{e^{\int_0^{t_1} \delta_r \, dr}} = e^{\int_0^{t_2}\delta_r \, dr - \int_0^{t_1}\delta_r \, dr} = e^{\int_{t_1}^{t_2} \delta_r \, dr}
+\end{equation}
+\end{notebox}
+
+\begin{examplebox}[Contoh 6: Perhitungan Lengkap Suku Bunga Berubah]
+\textbf{Soal:}\\
+Seseorang menginvestasikan dana sebesar $\$2{,}000$ pada $t = 0$.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung saldo pada akhir tahun ke-3 jika suku bunga efektif tahunan adalah $i_1 = 6\%$ pada tahun pertama, $i_2 = 7\%$ pada tahun kedua, dan $i_3 = 8\%$ pada tahun ketiga!
+    \item Misalkan di rekening lain berlaku \textit{force of interest} variabel $\delta_t = \frac{0.08}{1 + 0.02t}$. Tentukan nilai akumulasi dari modal $\$2{,}000$ tersebut pada akhir tahun ke-5 ($t=5$)!
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Kasus Diskrit ($t = 3$ tahun):}
+    \begin{align*}
+        A(3) &= A(0) \cdot (1 + i_1)(1 + i_2)(1 + i_3) \\
+             &= 2{,}000 \times (1 + 0.06)(1 + 0.07)(1 + 0.08) \\
+             &= 2{,}000 \times 1.06 \times 1.07 \times 1.08 \\
+             &= 2{,}000 \times 1.229472 = \$2{,}458.94
+    \end{align*}
+    
+    \item \textbf{Kasus Kontinu ($t = 5$ tahun):}
+    Hitung terlebih dahulu integral $\int_0^5 \delta_r \, dr$:
+    \begin{align*}
+        \int_0^5 \frac{0.08}{1 + 0.02r} \, dr &= \left[ \frac{0.08}{0.02} \ln(1 + 0.02r) \right]_0^5 \\
+        &= 4 \left[ \ln(1 + 0.10) - \ln(1) \right] = 4 \ln(1.10) = 4(0.095310) = 0.38124
+    \end{align*}
+    Maka fungsi akumulasinya adalah:
+    \begin{equation*}
+        a(5) = e^{4 \ln(1.10)} = (1.10)^4 = 1.4641
+    \end{equation*}
+    Sehingga nilai akumulasi saldo akhir adalah:
+    \begin{equation*}
+        A(5) = 2{,}000 \times 1.4641 = \$2{,}928.20
+    \end{equation*}
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Hubungan Lengkap Urutan Besaran Suku Bunga}
+
+Jika suku bunga efektif tahunan positif ($i > 0$), maka untuk sebarang bilangan bulat $m > 1$ berlaku relasi ketidaksamaan berantai berikut:
+\begin{equation}
+    d < d^{(m)} < \delta < i^{(m)} < i
+\end{equation}
+\begin{itemize}[leftmargin=1.5em]
+    \item Ketika $m \to \infty$, baik $i^{(m)}$ maupun $d^{(m)}$ berkonvergensi ke nilai yang sama, yaitu $\delta$:
+    \begin{equation*}
+        \lim_{m \to \infty} i^{(m)} = \lim_{m \to \infty} d^{(m)} = \delta = \ln(1 + i)
+    \end{equation*}
+\end{itemize}
+
+---
+
+\section{Ringkasan Rumus Kunci}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{lll}
+\toprule
+\textbf{Konsep} & \textbf{Simbol / Notasi} & \textbf{Rumus Utama} \\
+\midrule
+Faktor Diskon & $v$ & $v = \dfrac{1}{1+i} = 1 - d$ \\
+Tingkat Diskonto Efektif & $d$ & $d = \dfrac{i}{1+i} = 1 - v = iv$ \\
+Hubungan $i$ dan $d$ & $i, d$ & $i - d = id$ \\
+Suku Bunga Nominal & $i^{(m)}$ & $1 + i = \left(1 + \dfrac{i^{(m)}}{m}\right)^m$ \\
+Tingkat Diskonto Nominal & $d^{(m)}$ & $1 - d = \left(1 - \dfrac{d^{(m)}}{m}\right)^m = v$ \\
+\textit{Force of Interest} & $\delta_t$ & $\delta_t = \dfrac{a'(t)}{a(t)} = \dfrac{d}{dt}\ln a(t)$ \\
+Akumulasi dari $\delta_t$ & $a(t)$ & $a(t) = e^{\int_0^t \delta_r \, dr}$ \\
+Ketidaksamaan Fundamental & $-$ & $d < d^{(m)} < \delta < i^{(m)} < i \quad (m > 1)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

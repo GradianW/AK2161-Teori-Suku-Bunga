@@ -490,10 +490,12 @@ Misalkan $t = n + k$, di mana $n \in \mathbb{N}$ (bagian bilangan bulat) dan $0 
     \end{equation}
     
     \item \textbf{Metode Praktik / Interpolasi Linier (Kombinasi Majemuk + Tunggal):}
-    Bunga majemuk dihitung untuk seluruh periode bulat ($n$ tahun), kemudian diterapkan suku bunga tunggal untuk sisa periode pecahan ($k$):
-    \begin{equation}
-        A(n+k) = A(n)(1 + i \cdot k) = A(0)(1+i)^n(1 + i \cdot k)
-    \end{equation}
+    Bunga majemuk dihitung untuk seluruh periode bulat ($n$ tahun) terlebih dahulu, kemudian diterapkan suku bunga tunggal dengan pokok $A(n)$ untuk sisa periode pecahan ($k$):
+    \begin{align}
+        A(n+k) &= A(n) \cdot (1 + i \cdot k) \nonumber\\[0.3em]
+               &= A(0)(1+i)^n(1 + i \cdot k)
+    \end{align}
+    Bentuk pertama $A(n)(1 + ik)$ adalah pendekatan komputasi dua tahap (menghitung saldo akhir tahun ke-$n$ dulu), sedangkan bentuk kedua $A(0)(1+i)^n(1+ik)$ adalah formula langsung dari modal awal.
 \end{enumerate}
 
 \subsection{Justifikasi Geometris (Interpolasi Linier)}
@@ -508,7 +510,19 @@ Karena kurva eksponensial $(1+i)^t$ konveks ke bawah (\textit{convex}), tali bus
 \begin{equation*}
     (1+i)^n (1 + ik) > (1+i)^{n+k}, \quad \text{untuk } 0 < k < 1
 \end{equation*}
-Sehingga metode bunga tunggal pada periode pecahan memberikan hasil akumulasi yang sedikit lebih besar (menguntungkan investor).
+
+\begin{notebox}[Catatan Konseptual: Mengapa Cara II $>$ Cara I?]
+Sekilas mungkin tampak terjadi kontradiksi dengan grafik di Bab 6 (di mana bunga tunggal digambarkan hanya dihitung dari modal pokok awal $A(0)$). 
+\begin{itemize}
+    \item Jika bunga tunggal dihitung \textbf{dari modal awal $t=0$}: 
+    $A(2.5) = 1{,}000(1 + 0.12 \times 2.5) = \$1{,}300$, yang tentu \textbf{lebih kecil} dari bunga majemuk penuh $(\$1{,}327.53)$.
+    \item Namun pada \textbf{Cara II (Metode Praktik Pasar)}, bunga majemuk diberlakukan penuh selama $n=2$ periode pertama sehingga saldo menjadi $A(2) = \$1{,}254.40$. Kemudian saldo $A(2)$ ini dijadikan \emph{pokok baru} untuk bunga tunggal selama durasi pecahan $k = 0.5$. Karena untuk interval $0 < k < 1$ berlaku $(1+ik) > (1+i)^k$, maka:
+    \begin{equation*}
+        A(2)(1 + ik) > A(2)(1+i)^k \implies \$1{,}329.67 > \$1{,}327.53.
+    \end{equation*}
+\end{itemize}
+Metode ini adalah konvensi standar yang umum digunakan di industri perbankan karena secara historis lebih mudah dihitung tanpa kalkulator finansial dan menguntungkan deposan.
+\end{notebox}
 
 \begin{center}
 \begin{tikzpicture}
@@ -565,10 +579,19 @@ Diketahui $A(0) = 1{,}000$, $i = 0.12$, $n = 2$, dan $k = 0.5$.
         A(2.5) = 1{,}000 \times (1 + 0.12)^{2.5} = 1{,}000 \times (1.12)^{2.5} \approx \$1{,}327.53
     \end{equation*}
     \item \textbf{Cara II (Kombinasi Majemuk + Tunggal):}
-    \begin{align*}
-        A(2) &= 1{,}000 \times (1.12)^2 = \$1{,}254.40 \\
-        A(2.5) &= A(2) \times (1 + 0.5 \times 0.12) = 1{,}254.40 \times 1.06 = \$1{,}329.67
-    \end{align*}
+    \begin{itemize}
+        \item \emph{Pendekatan bertahap:}
+        \begin{align*}
+            A(2) &= 1{,}000 \times (1 + 0.12)^2 = \$1{,}254.40 \\
+            A(2.5) &= A(2) \times (1 + 0.5 \times 0.12) = 1{,}254.40 \times 1.06 = \$1{,}329.67
+        \end{align*}
+        \item \emph{Atau secara langsung menggunakan rumus gabungan:}
+        \begin{align*}
+            A(2.5) &= A(0)(1+i)^n(1 + i \cdot k) \\
+                   &= 1{,}000 \times (1.12)^2 \times (1 + 0.12 \times 0.5) \\
+                   &= 1{,}000 \times 1.2544 \times 1.06 = \$1{,}329.67
+        \end{align*}
+    \end{itemize}
 \end{itemize}
 Terlihat jelas bahwa Cara II menghasilkan nilai yang sedikit lebih tinggi:
 \begin{equation*}

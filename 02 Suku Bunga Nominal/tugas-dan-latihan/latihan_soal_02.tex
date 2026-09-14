@@ -1,0 +1,523 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{solgreen}{RGB}{34, 112, 62}
+\definecolor{solbg}{RGB}{246, 252, 248}
+\definecolor{probblue}{RGB}{28, 70, 110}
+\definecolor{probbg}{RGB}{245, 248, 253}
+
+% Boxes for Problem and Solution
+\newtcolorbox{problembox}[2][]{
+    enhanced,
+    breakable,
+    colback=probbg,
+    colframe=probblue,
+    fonttitle=\bfseries\sffamily,
+    title={#2 \hfill \normalfont\sffamily\footnotesize #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=probblue,
+    arc=2.5mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{solutionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=solbg,
+    colframe=solgreen,
+    fonttitle=\bfseries\sffamily,
+    title={Pembahasan #1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=solgreen,
+    arc=2mm,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Kumpulan Soal \& Pembahasan Teori Suku Bunga}\\[0.4em]
+\Large Modul 02: Nilai Sekarang, Tingkat Diskonto, Suku Bunga Nominal, \textit{Force of Interest}, \& \textit{Varying Interest}}
+\author{\textbf{Theory of Interest} -- Standar Soal Ujian Aktuaria / Kellison Bab 1.6--1.10}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\vspace{-0.5em}
+\begin{center}
+    \small \textbf{Petunjuk Umum:} Dokumen ini memuat 9 soal latihan komprehensif yang terbagi ke dalam 3 tingkat kesulitan (\textbf{Mudah}, \textbf{Sedang}, dan \textbf{Sulit}), masing-masing terdiri atas 3 soal lengkap dengan pembahasan matematis langkah-demi-langkah. Format disusun per nomor soal langsung diikuti pembahasannya.
+\end{center}
+\vspace{0.8em}
+\hrule
+\vspace{1.5em}
+
+\section*{Bagian I: Tingkat Mudah (Dasar)}
+
+% ==================== SOAL 1 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Mudah}]{Soal 1: Hubungan Dasar Antara $i$, $d$, dan $v$}
+Diketahui suku bunga efektif tahunan adalah $i = 8\%$.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung nilai faktor diskon tahunan ($v$)!
+    \item Hitung tingkat diskonto efektif tahunan ($d$)!
+    \item Verifikasikan kebenaran hubungan identitas $i - d = i \cdot d$ dengan hasil perhitungan Anda!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 1]
+Diketahui: $i = 0.08$.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Faktor Diskon Tahunan ($v$):}
+    \begin{equation*}
+        v = \frac{1}{1 + i} = \frac{1}{1 + 0.08} = \frac{1}{1.08} \approx \mathbf{0.925926}
+    \end{equation*}
+
+    \item \textbf{Tingkat Diskonto Efektif Tahunan ($d$):}
+    Dapat dihitung menggunakan beberapa relasi ekuivalen:
+    \begin{align*}
+        d &= 1 - v = 1 - 0.925926 = \mathbf{0.074074} \quad (7.4074\%) \\[0.3em]
+        \text{atau } d &= \frac{i}{1 + i} = \frac{0.08}{1.08} \approx \mathbf{0.074074}
+    \end{align*}
+
+    \item \textbf{Verifikasi Hubungan $i - d = i \cdot d$:}
+    \begin{itemize}
+        \item Ruas Kiri (LHS):
+        \begin{equation*}
+            i - d = 0.08 - 0.07407407 = \mathbf{0.00592593}
+        \end{equation*}
+        \item Ruas Kanan (RHS):
+        \begin{equation*}
+            i \cdot d = 0.08 \times 0.07407407 = \mathbf{0.00592593}
+        \end{equation*}
+    \end{itemize}
+    Karena LHS = RHS, maka hubungan fundamental $i - d = id$ terbukti benar dan terverifikasi secara numerik.
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 2 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Mudah}]{Soal 2: Konversi Suku Bunga Nominal ke Suku Bunga Efektif}
+Sebuah bank menawarkan produk pinjaman dengan suku bunga nominal tahunan $i^{(m)} = 12\%$.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung suku bunga efektif tahunan ($i$) jika pemajemukan dilakukan secara semesteran ($m = 2$)!
+    \item Hitung suku bunga efektif tahunan ($i$) jika pemajemukan dilakukan secara bulanan ($m = 12$)!
+    \item Hitung suku bunga efektif tahunan ($i$) jika pemajemukan dilakukan secara harian ($m = 365$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 2]
+Rumus konversi suku bunga nominal ke suku bunga efektif tahunan adalah:
+\begin{equation*}
+    1 + i = \left( 1 + \frac{i^{(m)}}{m} \right)^m \implies i = \left( 1 + \frac{i^{(m)}}{m} \right)^m - 1
+\end{equation*}
+Dengan $i^{(m)} = 0.12$:
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Pemajemukan Semesteran ($m = 2$):}
+    \begin{align*}
+        1 + i &= \left( 1 + \frac{0.12}{2} \right)^2 = (1 + 0.06)^2 = (1.06)^2 = 1.1236 \\
+        i &= 1.1236 - 1 = 0.1236 = \mathbf{12.36\%}
+    \end{align*}
+
+    \item \textbf{Pemajemukan Bulanan ($m = 12$):}
+    \begin{align*}
+        1 + i &= \left( 1 + \frac{0.12}{12} \right)^{12} = (1 + 0.01)^{12} = (1.01)^{12} \approx 1.126825 \\
+        i &= 1.126825 - 1 = 0.126825 = \mathbf{12.68\%}
+    \end{align*}
+
+    \item \textbf{Pemajemukan Harian ($m = 365$):}
+    \begin{align*}
+        1 + i &= \left( 1 + \frac{0.12}{365} \right)^{365} \approx (1.000328767)^{365} \approx 1.127475 \\
+        i &= 1.127475 - 1 = 0.127475 = \mathbf{12.75\%}
+    \end{align*}
+\end{enumerate}
+\textit{Catatan:} Hasil menunjukkan bahwa semakin besar frekuensi konversi $m$, suku bunga efektif tahunan semakin tinggi dan berkonvergensi ke batas kontinu $e^{0.12} - 1 \approx 12.7497\%$.
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 3 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Mudah}]{Soal 3: Nilai Sekarang (\textit{Present Value}) Pembayaran Masa Depan}
+Seorang debitur memiliki kewajiban untuk membayar $\$5{,}000$ tepat pada $3$ tahun yang akan datang.
+\begin{enumerate}[label=(\alph*)]
+    \item Berapakah nilai sekarang ($PV$) dari kewajiban tersebut jika suku bunga efektif tahunan adalah $i = 6\%$?
+    \item Berapakah nilai sekarang ($PV$) jika dihitung menggunakan tingkat diskonto efektif tahunan $d = 6\%$?
+    \item Mengapa nilai sekarang pada kasus (b) lebih kecil daripada kasus (a)?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 3]
+Target pembayaran masa depan adalah $A(3) = \$5{,}000$ pada waktu $t = 3$.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menggunakan Suku Bunga Efektif $i = 6\%$:}
+    Faktor diskon tahunan: $v = \frac{1}{1 + 0.06} = \frac{1}{1.06} \approx 0.943396$.
+    \begin{equation*}
+        PV = A(3) \cdot v^3 = \frac{5{,}000}{(1.06)^3} = \frac{5{,}000}{1.191016} \approx \mathbf{\$4{,}198.10}
+    \end{equation*}
+
+    \item \textbf{Menggunakan Tingkat Diskonto Efektif $d = 6\%$:}
+    Faktor diskon tahunan: $v = 1 - d = 1 - 0.06 = 0.94$.
+    \begin{equation*}
+        PV = A(3) \cdot (1 - d)^3 = 5{,}000 \times (0.94)^3 = 5{,}000 \times 0.830584 = \mathbf{\$4{,}152.92}
+    \end{equation*}
+
+    \item \textbf{Penjelasan Perbandingan Nilai Sekarang:}
+    Tingkat diskonto efektif $d = 6\%$ setara dengan suku bunga efektif yang lebih tinggi:
+    \begin{equation*}
+        i_{\text{ekuivalen}} = \frac{d}{1 - d} = \frac{0.06}{0.94} \approx 6.383\% > 6\%
+    \end{equation*}
+    Karena tingkat pendiskontoan efektif pada kasus (b) secara riil lebih tinggi ($6.383\% > 6\%$), maka nilai sekarang yang dihasilkan menjadi lebih kecil ($\$4{,}152.92 < \$4{,}198.10$).
+\end{enumerate}
+
+\vspace{0.4em}
+\noindent\textit{\textbf{*Catatan Konvensi Aktuaria \& Teori Finansial:}} 
+Istilah \textbf{``suku bunga efektif tahunan''} (\textit{annual effective rate of interest, $i$}) secara universal merujuk pada sistem \textbf{bunga majemuk} (\textit{compound interest}). Hal ini karena hanya pada bunga majemuk laju efektif antar periode konstan ($i_n = i$), sedangkan pada bunga tunggal laju efektifnya terus berubah/menurun. Dalam ujian aktuaria (SOA/PAI), asumsi bunga majemuk selalu berlaku secara \emph{default} kecuali jika soal secara tegas mencantumkan kata \textit{``bunga tunggal''} (\textit{simple interest}).
+\end{solutionbox}
+
+\newpage
+\section*{Bagian II: Tingkat Sedang (Aplikasi \& Analisis)}
+
+% ==================== SOAL 4 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sedang}]{Soal 4: Ekuivalensi Suku Bunga Nominal dan Tingkat Diskonto Nominal}
+Diberikan tingkat diskonto nominal sebesar $d^{(4)} = 8\%$ per tahun (\textit{payable quarterly}).
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan suku bunga nominal $i^{(2)}$ per tahun (\textit{compounded semiannually}) yang ekuivalen!
+    \item Hitung suku bunga efektif tahunan $i$ dan tingkat diskonto efektif tahunan $d$ yang bersesuaian!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 4]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan Suku Bunga Nominal $i^{(2)}$:}
+    Dua tingkat suku bunga/diskonto dikatakan ekuivalen apabila menghasilkan faktor akumulasi tahunan yang identik:
+    \begin{equation*}
+        1 + i = \left( 1 + \frac{i^{(2)}}{2} \right)^2 = \left( 1 - \frac{d^{(4)}}{4} \right)^{-4}
+    \end{equation*}
+    Diketahui $d^{(4)} = 0.08$, sehingga diskonto per kuartal adalah $\frac{d^{(4)}}{4} = \frac{0.08}{4} = 0.02$.
+    Maka:
+    \begin{align*}
+        1 - \frac{d^{(4)}}{4} &= 1 - 0.02 = 0.98 \\
+        \left( 1 - \frac{d^{(4)}}{4} \right)^4 &= (0.98)^4 \approx 0.92236816
+    \end{align*}
+    Akumulasi tahunan adalah:
+    \begin{equation*}
+        1 + i = \frac{1}{(0.98)^4} \approx \frac{1}{0.92236816} \approx 1.084166
+    \end{equation*}
+    Samakan dengan pemajemukan semesteran $\left(1 + \frac{i^{(2)}}{2}\right)^2$:
+    \begin{align*}
+        \left( 1 + \frac{i^{(2)}}{2} \right)^2 &= 1.084166 \\[0.4em]
+        1 + \frac{i^{(2)}}{2} &= \sqrt{1.084166} = (0.98)^{-2} = \frac{1}{(0.98)^2} = \frac{1}{0.9604} \approx 1.041233 \\[0.4em]
+        \frac{i^{(2)}}{2} &= 1.041233 - 1 = 0.041233 \\[0.4em]
+        i^{(2)} &= 2 \times 0.041233 = 0.082466 = \mathbf{8.247\%}
+    \end{align*}
+
+    \item \textbf{Suku Bunga Efektif Tahunan $i$ dan Tingkat Diskonto Efektif $d$:}
+    \begin{align*}
+        i &= 1.084166 - 1 = 0.084166 = \mathbf{8.417\%} \\[0.3em]
+        d &= 1 - v = 1 - (0.98)^4 = 1 - 0.922368 = 0.077632 = \mathbf{7.763\%}
+    \end{align*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 5 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sedang}]{Soal 5: Perhitungan \textit{Force of Interest} Variabel}
+Sebuah dana memiliki fungsi akumulasi yang diberikan oleh:
+\begin{equation*}
+    a(t) = (1 + 0.05t)^2, \quad \text{untuk } t \ge 0
+\end{equation*}
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan rumus fungsi \textit{force of interest} $\delta_t$ sebagai fungsi dari waktu $t$!
+    \item Hitung nilai $\delta_t$ pada saat $t = 0$, $t = 2$, dan $t = 5$!
+    \item Tentukan nilai suku bunga efektif pada tahun ke-3 ($i_3$) dan bandingkan dengan nilai $\delta_2$!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 5]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan Rumus $\delta_t$:}
+    Berdasarkan definisi \textit{force of interest}:
+    \begin{align*}
+        \delta_t &= \frac{d}{dt} \ln a(t) = \frac{d}{dt} \ln \left[(1 + 0.05t)^2\right] \\
+                 &= \frac{d}{dt} \left[ 2 \ln(1 + 0.05t) \right] = 2 \cdot \frac{0.05}{1 + 0.05t} = \mathbf{\frac{0.10}{1 + 0.05t}}
+    \end{align*}
+
+    \item \textbf{Evaluasi $\delta_t$ pada Berbagai Waktu:}
+    \begin{itemize}
+        \item Pada $t = 0$:
+        \begin{equation*}
+            \delta_0 = \frac{0.10}{1 + 0.05(0)} = 0.1000 = \mathbf{10.00\%}
+        \end{equation*}
+        \item Pada $t = 2$:
+        \begin{equation*}
+            \delta_2 = \frac{0.10}{1 + 0.05(2)} = \frac{0.10}{1.10} \approx 0.090909 = \mathbf{9.09\%}
+        \end{equation*}
+        \item Pada $t = 5$:
+        \begin{equation*}
+            \delta_5 = \frac{0.10}{1 + 0.05(5)} = \frac{0.10}{1.25} = 0.0800 = \mathbf{8.00\%}
+        \end{equation*}
+    \end{itemize}
+
+    \item \textbf{Perhitungan Suku Bunga Efektif Tahun ke-3 ($i_3$):}
+    Nilai akumulasi pada $t = 2$ dan $t = 3$:
+    \begin{align*}
+        a(2) &= [1 + 0.05(2)]^2 = (1.10)^2 = 1.21 \\
+        a(3) &= [1 + 0.05(3)]^2 = (1.15)^2 = 1.3225
+    \end{align*}
+    Maka:
+    \begin{equation*}
+        i_3 = \frac{a(3) - a(2)}{a(2)} = \frac{1.3225 - 1.21}{1.21} = \frac{0.1125}{1.21} \approx 0.092975 = \mathbf{9.30\%}
+    \end{equation*}
+    Perhatikan bahwa $i_3 \approx 9.30\%$ berada di antara nilai intensitas sesaat awal tahun ke-3 ($\delta_2 \approx 9.09\%$) dan intensitas rata-rata sepanjang interval $[2, 3]$.
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 6 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sedang}]{Soal 6: Investasi dengan Suku Bunga Berubah Diskrit (\textit{Varying Interest})}
+Seseorang menginvestasikan modal sebesar $\$10{,}000$ pada $t = 0$. Rekening tersebut memberikan ketentuan bunga sebagai berikut:
+\begin{itemize}[leftmargin=1.5em]
+    \item Pada $2$ tahun pertama ($t = 0$ hingga $t = 2$): Suku bunga nominal $i^{(4)} = 6\%$ (\textit{compounded quarterly}).
+    \item Pada $3$ tahun berikutnya ($t = 2$ hingga $t = 5$): Tingkat diskonto nominal $d^{(12)} = 4.8\%$ (\textit{convertible monthly}).
+    \item Pada $2$ tahun terakhir ($t = 5$ hingga $t = 7$): \textit{Force of interest} konstan $\delta = 5\%$.
+\end{itemize}
+Hitung nilai akumulasi total saldo rekening tersebut pada akhir tahun ke-7 ($t = 7$)!
+\end{problembox}
+
+\begin{solutionbox}[Soal 6]
+Kita hitung akumulasi modal secara bertahap untuk masing-masing fase waktu:
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Fase 1: Periode $[0, 2]$ ($2$ tahun, $i^{(4)} = 6\%$):}
+    Frekuensi konversi kuartalan selama 2 tahun adalah $n_1 = 2 \times 4 = 8$ periode kuartal.
+    Suku bunga per kuartal: $j_1 = \frac{0.06}{4} = 0.015$.
+    \begin{equation*}
+        A(2) = A(0) \cdot (1 + j_1)^8 = 10{,}000 \times (1.015)^8 \approx 10{,}000 \times 1.126493 = \mathbf{\$11{,}264.93}
+    \end{equation*}
+
+    \item \textbf{Fase 2: Periode $[2, 5]$ ($3$ tahun, $d^{(12)} = 4.8\%$):}
+    Frekuensi konversi bulanan selama 3 tahun adalah $n_2 = 3 \times 12 = 36$ bulan.
+    Tingkat diskonto per bulan: $d_{\text{bln}} = \frac{0.048}{12} = 0.004$.
+    Faktor akumulasi per bulan adalah $(1 - 0.004)^{-1} = (0.996)^{-1}$.
+    \begin{align*}
+        A(5) &= A(2) \cdot (1 - 0.004)^{-36} = 11{,}264.93 \times (0.996)^{-36} \\
+             &= 11{,}264.93 \times \frac{1}{0.865384} \approx 11{,}264.93 \times 1.155556 = \mathbf{\$13{,}017.27}
+    \end{align*}
+
+    \item \textbf{Fase 3: Periode $[5, 7]$ ($2$ tahun, $\delta = 0.05$ konstan):}
+    Faktor akumulasi kontinu selama 2 tahun: $e^{\delta \times 2} = e^{0.05 \times 2} = e^{0.10}$.
+    \begin{align*}
+        A(7) &= A(5) \cdot e^{0.10} = 13{,}017.27 \times e^{0.10} \\
+             &= 13{,}017.27 \times 1.105171 = \mathbf{\$14{,}386.31}
+    \end{align*}
+\end{enumerate}
+Jadi, nilai akumulasi akhir dana pada akhir tahun ke-7 adalah \textbf{$\$14{,}386.31$}.
+\end{solutionbox}
+
+\newpage
+\section*{Bagian III: Tingkat Sulit (Tantangan Konseptual \& Ujian Aktuaria)}
+
+% ==================== SOAL 7 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sulit}]{Soal 7: Menentukan Modal Awal dari \textit{Force of Interest} Variabel}
+Sebuah investasi mengakumulasi dana dengan laju intensitas sesaat (\textit{force of interest}) yang berubah terhadap waktu sesuai persamaan:
+\begin{equation*}
+    \delta_t = \frac{2t}{k + t^2}, \quad \text{untuk } t \ge 0
+\end{equation*}
+di mana $k$ adalah suatu konstanta positif. Diketahui bahwa modal awal sebesar $\$1{,}000$ yang diinvestasikan pada $t = 0$ terakumulasi menjadi $\$1{,}250$ pada akhir tahun ke-3 ($t = 3$).
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan nilai konstanta $k$ dan turunkan rumus eksplisit untuk fungsi akumulasi $a(t)$!
+    \item Hitung nilai akumulasi investasi tersebut pada akhir tahun ke-5 ($t = 5$)!
+    \item Tentukan suku bunga efektif pada tahun ke-4 ($i_4$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 7]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Menentukan $k$ dan Fungsi Akumulasi $a(t)$:}
+    Gunakan rumus integrasi \textit{force of interest}:
+    \begin{equation*}
+        a(t) = \exp\left( \int_0^t \delta_r \, dr \right) = \exp\left( \int_0^t \frac{2r}{k + r^2} \, dr \right)
+    \end{equation*}
+    Gunakan substitusi $u = k + r^2 \implies du = 2r \, dr$:
+    \begin{align*}
+        \int_0^t \frac{2r}{k + r^2} \, dr &= \left[ \ln(k + r^2) \right]_0^t = \ln(k + t^2) - \ln(k) = \ln\left( \frac{k + t^2}{k} \right) = \ln\left( 1 + \frac{t^2}{k} \right)
+    \end{align*}
+    Maka:
+    \begin{equation*}
+        a(t) = e^{\ln\left(1 + \frac{t^2}{k}\right)} = \mathbf{1 + \frac{t^2}{k}}
+    \end{equation*}
+    Diberikan informasi bahwa $A(3) = 1{,}000 \cdot a(3) = 1{,}250$:
+    \begin{align*}
+        1{,}000 \left( 1 + \frac{3^2}{k} \right) &= 1{,}250 \\[0.3em]
+        1 + \frac{9}{k} &= 1.25 \implies \frac{9}{k} = 0.25 \implies k = \frac{9}{0.25} = \mathbf{36}
+    \end{align*}
+    Sehingga fungsi akumulasinya adalah:
+    \begin{equation*}
+        a(t) = 1 + \frac{t^2}{36}
+    \end{equation*}
+
+    \item \textbf{Nilai Akumulasi pada $t = 5$:}
+    \begin{equation*}
+        A(5) = 1{,}000 \cdot a(5) = 1{,}000 \left( 1 + \frac{5^2}{36} \right) = 1{,}000 \left( 1 + \frac{25}{36} \right) = 1{,}000 \times \frac{61}{36} \approx \mathbf{\$1{,}694.44}
+    \end{equation*}
+
+    \item \textbf{Suku Bunga Efektif pada Tahun ke-4 ($i_4$):}
+    Hitung nilai $a(3)$ dan $a(4)$:
+    \begin{align*}
+        a(3) &= 1 + \frac{9}{36} = 1.25 \\
+        a(4) &= 1 + \frac{16}{36} = 1 + \frac{4}{9} \approx 1.444444
+    \end{align*}
+    Maka:
+    \begin{equation*}
+        i_4 = \frac{a(4) - a(3)}{a(3)} = \frac{\frac{45}{36} - \frac{45}{36} \text{...}}{\dots} = \frac{\frac{16-9}{36}}{\frac{45}{36}} = \frac{7}{45} \approx 0.155556 = \mathbf{15.56\%}
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 8 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sulit}]{Soal 8: Pembuktian Ketidaksamaan Lengkap $d < d^{(m)} < \delta < i^{(m)} < i$}
+Misalkan suku bunga efektif tahunan bernilai positif ($i > 0$).
+\begin{enumerate}[label=(\alph*)]
+    \item Buktikan bahwa $i^{(m)}$ merupakan fungsi monoton turun terhadap frekuensi konversi $m$, dan $\lim_{m \to \infty} i^{(m)} = \delta$!
+    \item Buktikan bahwa $d^{(m)}$ merupakan fungsi monoton naik terhadap frekuensi konversi $m$, dan $\lim_{m \to \infty} d^{(m)} = \delta$!
+    \item Simpulkan urutan ketidaksamaan berantai yang berlaku untuk setiap bilangan bulat $m > 1$:
+    \begin{equation*}
+        d < d^{(m)} < \delta < i^{(m)} < i
+    \end{equation*}
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 8]
+Misalkan $\delta = \ln(1+i) > 0$. Maka $1 + i = e^\delta$ dan $v = 1 - d = e^{-\delta}$.
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Monotonitas dan Limit dari $i^{(m)}$:}
+    Dari rumus suku bunga nominal:
+    \begin{equation*}
+        i^{(m)} = m\left[(1+i)^{1/m} - 1\right] = m\left(e^{\delta/m} - 1\right)
+    \end{equation*}
+    Gunakan ekspansi deret Taylor dari $e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dots$ dengan $x = \frac{\delta}{m}$:
+    \begin{align*}
+        i^{(m)} &= m \left[ \frac{\delta}{m} + \frac{1}{2}\left(\frac{\delta}{m}\right)^2 + \frac{1}{6}\left(\frac{\delta}{m}\right)^3 + \dots \right] \\
+                &= \delta + \frac{\delta^2}{2m} + \frac{\delta^3}{6m^2} + \dots
+    \end{align*}
+    Karena semua koefisien suku tambahan di atas bernilai positif ($\delta > 0$), maka ketika $m$ membesar ($m \ge 1$), nilai pembagi $m$ pada suku-suku tambahan membesar sehingga nilai $i^{(m)}$ **monoton turun**. Untuk $m = 1$, $i^{(1)} = i$. Saat $m \to \infty$:
+    \begin{equation*}
+        \lim_{m \to \infty} i^{(m)} = \delta \implies i^{(m)} > \delta \quad \text{untuk seluruh } m \ge 1
+    \end{equation*}
+    Khususnya untuk $m > 1$: $\delta < i^{(m)} < i$.
+
+    \item \textbf{Monotonitas dan Limit dari $d^{(m)}$:}
+    Dari rumus tingkat diskonto nominal:
+    \begin{equation*}
+        d^{(m)} = m\left[1 - (1-d)^{1/m}\right] = m\left(1 - e^{-\delta/m}\right)
+    \end{equation*}
+    Gunakan ekspansi deret Taylor untuk $e^{-x} = 1 - x + \frac{x^2}{2!} - \frac{x^3}{3!} + \dots$:
+    \begin{align*}
+        d^{(m)} &= m \left[ \frac{\delta}{m} - \frac{1}{2}\left(\frac{\delta}{m}\right)^2 + \frac{1}{6}\left(\frac{\delta}{m}\right)^3 - \dots \right] \\
+                &= \delta - \frac{\delta^2}{2m} + \frac{\delta^3}{6m^2} - \dots
+    \end{align*}
+    Karena nilai suku pengurang $\frac{\delta^2}{2m}$ semakin mengecil saat $m$ membesar, maka nilai $d^{(m)}$ **monoton naik** mendekati $\delta$ dari bawah. Untuk $m = 1$, $d^{(1)} = d$. Saat $m \to \infty$:
+    \begin{equation*}
+        \lim_{m \to \infty} d^{(m)} = \delta \implies d^{(m)} < \delta \quad \text{untuk seluruh } m \ge 1
+    \end{equation*}
+    Khususnya untuk $m > 1$: $d < d^{(m)} < \delta$.
+
+    \item \textbf{Kesimpulan Ketidaksamaan Berantai:}
+    Menggabungkan hasil dari bagian (a) dan (b), untuk setiap bilangan bulat $m > 1$ terbukti secara analitis bahwa:
+    \begin{equation*}
+        \mathbf{d < d^{(m)} < \delta < i^{(m)} < i} \quad \blacksquare
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ==================== SOAL 9 ====================
+\begin{problembox}[\color{white}\textbf{Tingkat: Sulit}]{Soal 9: Soal Standar Ujian Aktuaria -- Ekuivalensi Arus Kas Kontinu}
+Sebuah lembaga dana pensiun memiliki kewajiban membayar aliran kas berkelanjutan dengan laju pembayaran $c(t) = 100t$ per tahun selama $4$ tahun (dari $t = 0$ hingga $t = 4$). Suku bunga yang berlaku diasumsikan memiliki \textit{force of interest} konstan $\delta = 6\% = 0.06$.
+\begin{enumerate}[label=(\alph*)]
+    \item Turunkan rumus integral untuk nilai sekarang ($PV$) dari aliran kas berkelanjutan tersebut!
+    \item Hitung besarnya nilai sekarang ($PV$) dana yang harus disiapkan saat ini pada $t = 0$!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}[Soal 9]
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Formulasi Integral Nilai Sekarang ($PV$):}
+    Dalam interval diferensial waktu sesaat $[t, t+dt]$, jumlah pembayaran kas yang dilakukan adalah $c(t) \, dt = 100t \, dt$.
+    Faktor diskon dari waktu $t$ menuju masa sekarang $t=0$ pada \textit{force of interest} konstan $\delta$ adalah $v(t) = e^{-\delta t}$.
+    Maka nilai sekarang total dari seluruh pembayaran kontinu sepanjang interval $[0, 4]$ adalah:
+    \begin{equation*}
+        PV = \int_0^4 c(t) e^{-\delta t} \, dt = \int_0^4 100t \, e^{-0.06t} \, dt = 100 \int_0^4 t \, e^{-0.06t} \, dt
+    \end{equation*}
+
+    \item \textbf{Perhitungan Integral dengan Metode Parsial (\textit{Integration by Parts}):}
+    Misalkan:
+    \begin{align*}
+        u &= t \implies du = dt \\
+        dv &= e^{-0.06t} \, dt \implies v = \frac{e^{-0.06t}}{-0.06} = -\frac{100}{6} e^{-0.06t} = -\frac{50}{3} e^{-0.06t}
+    \end{align*}
+    Gunakan rumus $\int u \, dv = uv - \int v \, du$:
+    \begin{align*}
+        \int t \, e^{-0.06t} \, dt &= -\frac{t}{0.06} e^{-0.06t} - \int \left( -\frac{1}{0.06} e^{-0.06t} \right) dt \\
+        &= -\frac{t}{0.06} e^{-0.06t} - \frac{1}{(0.06)^2} e^{-0.06t} \\
+        &= -e^{-0.06t} \left[ \frac{t}{0.06} + \frac{1}{0.0036} \right] = -e^{-0.06t} \left[ \frac{t}{0.06} + \frac{2500}{9} \right]
+    \end{align*}
+    Evaluasi batas dari $t = 0$ hingga $t = 4$:
+    \begin{itemize}
+        \item Pada $t = 4$:
+        \begin{align*}
+            -e^{-0.06(4)} \left[ \frac{4}{0.06} + \frac{1}{0.0036} \right] &= -e^{-0.24} \left[ 66.6667 + 277.7778 \right] \\
+            &= -0.7866278 \times 344.4444 \approx -270.9472
+        \end{align*}
+        \item Pada $t = 0$:
+        \begin{align*}
+            -e^{0} \left[ 0 + \frac{1}{0.0036} \right] = -277.7778
+        \end{align*}
+    \end{itemize}
+    Maka hasil integralnya:
+    \begin{equation*}
+        \int_0^4 t \, e^{-0.06t} \, dt = -270.9472 - (-277.7778) = 6.8306
+    \end{equation*}
+    Sehingga nilai sekarang yang harus disiapkan dana pensiun adalah:
+    \begin{equation*}
+        PV = 100 \times 6.8306 = \mathbf{\$683.06}
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\end{document}

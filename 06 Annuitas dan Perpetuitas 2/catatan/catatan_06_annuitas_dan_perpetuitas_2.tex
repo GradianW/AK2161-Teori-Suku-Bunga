@@ -1,0 +1,601 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 06: Anuitas dan Perpetuitas (Bagian 2)\\
+\large (\textit{Unknown Time, Unknown Interest Rate, Varying Interest Rates, and Simple Interest Annuities})}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 3) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\section{Pendahuluan \& Ruang Lingkup Materi}
+
+Pada Bab 05, kita telah mempelajari fondasi anuitas dasar berjangka waktu pasti (\textit{annuity-immediate} dan \textit{annuity-due}) serta perpetuitas dengan asumsi bahwa durasi periode $n$ bernilai bulat (\textit{integer}) dan tingkat suku bunga efektif $i$ bernilai konstan sepanjang masa transaksi.
+
+Namun dalam realitas keuangan, perbankan, dan aktuarial, terdapat sejumlah kondisi non-standar yang memerlukan perlakuan matematis khusus:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Waktu Pembayaran Tidak Diketahui (\textit{Unknown Time / Non-Integer Periods}):} Berapa kali pembayaran reguler yang dapat dilakukan dari dana tertentu, dan bagaimana menyelesaikan sisa saldo fraksional yang timbul (\textit{Balloon Payment}, \textit{Drop Payment}, atau \textit{Exact Fractional Payment})?
+    \item \textbf{Tingkat Suku Bunga Tidak Diketahui (\textit{Unknown Rate of Interest}):} Bagaimana mengestimasi suku bunga efektif $i$ dari suatu kontrak anuitas menggunakan metode aproksimasi aljabar analitik maupun metode numerik iteratif?
+    \item \textbf{Suku Bunga Bervariasi Sepanjang Periode (\textit{Varying Interest Rates}):} Bagaimana memodelkan nilai anuitas ketika suku bunga berubah antar-periode menggunakan \textit{Portfolio Rate Method} dan \textit{Yield Curve Method}?
+    \item \textbf{Anuitas dengan Bunga Tunggal (\textit{Annuities under Simple Interest}):} Bagaimana menilai aliran anuitas jika bunga yang berlaku bukan bunga majemuk melainkan bunga tunggal linier?
+\end{enumerate}
+
+---
+
+\section{Anuitas dengan Waktu yang Belum Diketahui (\textit{Unknown Time})}
+
+\subsection{Latar Belakang Permasalahan}
+Misalkan seseorang meminjam modal $L$ (atau menyetorkan dana investasi $PV$) dan menyepakati pembayaran cicilan tetap sebesar $R$ di setiap akhir periode pada suku bunga efektif $i$. Persamaan nilai yang terbentuk adalah:
+\begin{equation}
+    PV = R \cdot a_{\overline{t}|i} \implies a_{\overline{t}|i} = \frac{PV}{R} = K
+\end{equation}
+di mana $K = \frac{PV}{R}$ adalah konstanta yang diketahui.
+
+Berdasarkan rumus nilai sekarang anuitas:
+\begin{equation}
+    \frac{1 - (1+i)^{-t}}{i} = K \implies 1 - (1+i)^{-t} = K \cdot i \implies (1+i)^{-t} = 1 - K \cdot i
+\end{equation}
+Mengambil logaritma natural pada kedua ruas:
+\begin{equation}
+    -t \ln(1+i) = \ln(1 - K \cdot i) \implies t = -\frac{\ln(1 - K \cdot i)}{\ln(1+i)} = \frac{-\ln\left(1 - \frac{PV \cdot i}{R}\right)}{\ln(1+i)}
+\end{equation}
+
+\begin{notebox}[Syarat Keberadaan Solusi Finansial: $R > PV \cdot i$]
+Agar argumen logaritma bernilai positif ($1 - K \cdot i > 0$), cicilan berkala $R$ \textbf{harus lebih besar daripada bunga murni satu periode} ($R > PV \cdot i$). Jika $R \le PV \cdot i$, pembayaran cicilan bahkan tidak cukup untuk menutup beban bunga berjalan, sehingga pokok utang tidak akan pernah lunas ($t \to \infty$).
+\end{notebox}
+
+Secara umum, nilai teoritis $t$ yang diperoleh \textbf{bukan merupakan bilangan bulat}, melainkan dapat dituliskan sebagai:
+\begin{equation}
+    t = n + k, \quad \text{di mana } n \in \mathbb{Z}^+ \text{ dan } 0 < k < 1
+\end{equation}
+Artinya, dana tersebut cukup untuk membiayai sebanyak $n$ kali pembayaran reguler penuh sebesar $R$, ditambah satu pembayaran sisa penyeimbang yang lebih kecil.
+
+---
+
+\subsection{Interpretasi Matematis Simbol \texorpdfstring{$a_{\overline{n+k}|i}$}{a\_n+k|i} untuk Durasi Fraksional}
+
+Berdasarkan definisi formal rumus anuitas, nilai $a_{\overline{n+k}|}$ didefinisikan sebagai:
+\begin{equation}
+    a_{\overline{n+k}|i} = \frac{1 - v^{n+k}}{i}
+\end{equation}
+Kita dapat memanipulasi bentuk aljabar pembilang dengan menambahkan dan mengurangkan suku $v^n$:
+\begin{align}
+    a_{\overline{n+k}|i} &= \frac{1 - v^n + v^n - v^{n+k}}{i} = \frac{1 - v^n}{i} + \frac{v^n(1 - v^k)}{i} \nonumber\\[0.4em]
+    &= a_{\overline{n}|i} + v^n \cdot v^k \left( \frac{v^{-k} - 1}{i} \right) \nonumber\\[0.4em]
+    &= a_{\overline{n}|i} + v^{n+k} \left( \frac{(1+i)^k - 1}{i} \right)
+\end{align}
+
+\begin{definitionbox}[Dekomposisi Aktuarial: Makna $a_{\overline{n+k}|i}$]
+Simbol $a_{\overline{n+k}|i}$ menyatakan \textbf{Nilai Sekarang} dari:
+\begin{enumerate}
+    \item Suatu anuitas-immediate $n$ periode dengan pembayaran sebesar $\$1$ per periode (pada $t = 1, 2, \dots, n$), \textbf{DITAMBAH}
+    \item Satu pembayaran akhir sebesar $\mathbf{\dfrac{(1+i)^k - 1}{i}}$ yang dibayarkan tepat pada waktu fraksional $\mathbf{t = n + k}$.
+\end{enumerate}
+\end{definitionbox}
+
+\begin{notebox}[Aproksimasi Linier Sisa Pembayaran Fraksional]
+Menggunakan ekspansi binomial / deret Taylor untuk suku bunga majemuk $(1+i)^k \approx 1 + k \cdot i$:
+\begin{equation}
+    \frac{(1+i)^k - 1}{i} \approx \frac{(1 + k \cdot i) - 1}{i} = \frac{k \cdot i}{i} = k
+\end{equation}
+Sehingga diperoleh aproksimasi yang sangat praktis:
+\begin{equation}
+    a_{\overline{n+k}|i} \approx a_{\overline{n}|i} + k \cdot v^{n+k}
+\end{equation}
+\end{notebox}
+
+---
+
+\subsection{Tiga Metode Penyelesaian Pembayaran Sisa Penyeimbang}
+
+Terdapat 3 opsi standar yang umum digunakan dalam perjanjian kredit/investasi untuk menyelesaikan sisa saldo:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {Waktu ($t$)};
+    
+    % Ticks
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (1.5,0.15) -- (1.5,-0.15) node[below] {$1$};
+    \draw[thick] (3,0.15) -- (3,-0.15) node[below] {$2$};
+    \draw[thick] (5.5,0.15) -- (5.5,-0.15) node[below] {$n-1$};
+    \draw[thick] (7.5,0.15) -- (7.5,-0.15) node[below] {$n$};
+    \draw[thick] (8.5,0.15) -- (8.5,-0.15) node[below] {$n+k$};
+    \draw[thick] (9.5,0.15) -- (9.5,-0.15) node[below] {$n+1$};
+    
+    \draw[dotted, thick] (3.3,0) -- (5.2,0);
+    
+    % Regular payments
+    \foreach \x in {1.5, 3, 5.5} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 1.1) node[above] {\small $R$};
+    }
+    
+    % Options at n, n+k, n+1
+    \draw[->, thick, darkred] (7.5, 0.2) -- (7.5, 1.6) node[above] {\small (a) $R + X_{\text{balloon}}$};
+    \draw[->, thick, darkorange] (8.5, 0.2) -- (8.5, 1.1) node[above] {\small (c) $X_{n+k}$};
+    \draw[->, thick, darkgreen] (9.5, 0.2) -- (9.5, 1.1) node[above] {\small (b) $X_{\text{drop}}$};
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\textbf{(\alph*)}]
+    \item \textbf{Metode 1: \textit{Balloon Payment} pada Waktu $t = n$}
+    Sisa saldo dilunasi sekaligus bersamaan dengan pembayaran reguler terakhir di $t = n$. 
+    Total pembayaran di $t = n$ menjadi $(R + X)$, di mana $X$ adalah tambahan pelunasan:
+    \begin{equation}
+        PV = R \cdot a_{\overline{n-1}|i} + (R + X) v^n = R \cdot a_{\overline{n}|i} + X \cdot v^n
+    \end{equation}
+    \begin{equation}
+        X_{\text{balloon}} = (PV - R \cdot a_{\overline{n}|i})(1+i)^n = B_n
+    \end{equation}
+    di mana $B_n$ adalah saldo pinjaman yang tersisa tepat setelah pembayaran ke-$n$.
+
+    \item \textbf{Metode 2: \textit{Drop Payment} pada Waktu $t = n + 1$}
+    Debitur melakukan $n$ kali pembayaran penuh sebesar $R$, kemudian satu periode setelah pembayaran terakhir ($t = n + 1$), debitur melakukan pembayaran sisa yang lebih kecil sebesar $X_{\text{drop}}$ ($X < R$):
+    \begin{equation}
+        PV = R \cdot a_{\overline{n}|i} + X \cdot v^{n+1}
+    \end{equation}
+    \begin{equation}
+        X_{\text{drop}} = (PV - R \cdot a_{\overline{n}|i})(1+i)^{n+1} = B_n (1+i)
+    \end{equation}
+
+    \item \textbf{Metode 3: Pembayaran Tepat pada Waktu Fraksional $t = n + k$}
+    Debitur membayar $n$ kali pembayaran penuh sebesar $R$, dan persis pada waktu $t = n + k$ dibayarkan sisa $X_{n+k}$:
+    \begin{equation}
+        PV = R \cdot a_{\overline{n}|i} + X \cdot v^{n+k}
+    \end{equation}
+    \begin{equation}
+        X_{n+k} = (PV - R \cdot a_{\overline{n}|i})(1+i)^{n+k} = B_n (1+i)^k
+    \end{equation}
+\end{enumerate}
+
+---
+
+\section{Anuitas dengan Suku Bunga Belum Diketahui (\textit{Unknown Rate of Interest})}
+
+Dalam valuasi obligasi, evaluasi kredit, dan perbandingan produk asuransi, sering kali nilai sekarang $PV$, besar pembayaran $R$, dan jumlah periode $n$ diketahui, namun tingkat suku bunga efektif $i$ tidak diketahui.
+
+Persamaan nilai sekarang:
+\begin{equation}
+    a_{\overline{n}|i} = \frac{1 - (1+i)^{-n}}{i} = \frac{PV}{R} = K
+\end{equation}
+Persamaan ini merupakan persamaan transendental/polinomial berderajat tinggi terhadap $i$, sehingga \textbf{tidak memiliki solusi analitik tertutup} (\textit{closed-form solution}). Diperlukan metode aproksimasi analitik atau metode numerik.
+
+\subsection{Penurunan Rumus Aproksimasi Aljabar Orde-2 (Deret Maclaurin)}
+
+Definisikan rasio pembayaran terhadap nilai sekarang sebagai $g$:
+\begin{equation}
+    g = \frac{1}{a_{\overline{n}|i}} = \frac{R}{PV} = \frac{i}{1 - (1+i)^{-n}}
+\end{equation}
+
+Gunakan ekspansi binomial Newton untuk $(1+i)^{-n}$ di sekitar $i = 0$:
+\begin{align}
+    (1+i)^{-n} &= 1 + (-n)i + \frac{(-n)(-n-1)}{2!} i^2 + \mathcal{O}(i^3) \nonumber\\[0.4em]
+               &= 1 - ni + \frac{n(n+1)}{2} i^2 - \dots
+\end{align}
+Substitusikan ekspansi di atas ke dalam penyebut:
+\begin{equation}
+    1 - (1+i)^{-n} \approx ni - \frac{n(n+1)}{2} i^2 = ni \left[ 1 - \frac{n+1}{2} i \right]
+\end{equation}
+Maka nilai $g$ dapat dihampiri oleh:
+\begin{equation}
+    g = \frac{i}{1 - (1+i)^{-n}} \approx \frac{i}{ni \left[ 1 - \frac{n+1}{2} i \right]} = \frac{1}{n} \left( 1 - \frac{n+1}{2} i \right)^{-1}
+\end{equation}
+Gunakan aproksimasi deret geometri $(1 - x)^{-1} \approx 1 + x$:
+\begin{equation}
+    g \approx \frac{1}{n} \left[ 1 + \frac{n+1}{2} i \right] = \frac{1}{n} + \frac{n+1}{2n} i
+\end{equation}
+Selesaikan untuk $i$:
+\begin{align}
+    \frac{n+1}{2n} i &\approx g - \frac{1}{n} = \frac{n g - 1}{n} \nonumber\\[0.4em]
+    i &\approx \frac{2n}{n+1} \left( \frac{n g - 1}{n} \right) \implies \mathbf{i \approx \frac{2(n - K)}{K(n + 1)} = \frac{2(n g - 1)}{g(n+1)}}
+\end{align}
+
+Jika dituliskan dalam parameter $g = \frac{1}{a_{\overline{n}|}}$ dan $K = a_{\overline{n}|}$:
+\begin{definitionbox}[Rumus Aproksimasi Kellison untuk Suku Bunga Anuitas]
+\begin{equation}
+    \mathbf{i \approx \frac{2(n - a_{\overline{n}|})}{a_{\overline{n}|}(n + 1)} = \frac{2(n - K)}{K(n + 1)}}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Metode Interpolasi Linier \& Newton-Raphson}
+Untuk mendapatkan tingkat ketelitian yang lebih tinggi:
+\begin{enumerate}[label=\alph*.]
+    \item \textbf{Interpolasi Linier Antara Dua Titik Uji ($i_1 < i^* < i_2$):}
+    \begin{equation}
+        i^* \approx i_1 + \frac{a_{\overline{n}|i_1} - K}{a_{\overline{n}|i_1} - a_{\overline{n}|i_2}} (i_2 - i_1)
+    \end{equation}
+    \item \textbf{Metode Iterasi Newton-Raphson:}
+    Definisikan $f(i) = a_{\overline{n}|i} - K = \frac{1 - (1+i)^{-n}}{i} - K$.
+    Turunan pertama terhadap $i$:
+    \begin{equation}
+        f'(i) = \frac{n v^{n+1} i - (1 - v^n)}{i^2} = -\frac{a_{\overline{n}|i} - n v^{n+1}}{i}
+    \end{equation}
+    Rumus iterasi: $i_{k+1} = i_k - \frac{f(i_k)}{f'(i_k)}$.
+\end{enumerate}
+
+---
+
+\section{Anuitas dengan Suku Bunga Bervariasi (\textit{Varying Interest Rates})}
+
+Ketika suku bunga tidak konstan dari tahun ke tahun, terdapat dua metodologi pemodelan yang sangat berbeda secara konseptual dalam teori aktuaria:
+
+\subsection{Metode 1: \textit{Portfolio Rate Method} (Metode Tingkat Portofolio)}
+
+\begin{definitionbox}[Konsep \textit{Portfolio Rate Method}]
+Pada metode ini, suku bunga $i_k$ berlaku untuk \textbf{seluruh saldo dana yang mengendap pada periode ke-$k$}, tanpa memperhatikan kapan masing-masing unit kas disetorkan ke dalam rekening.
+\end{definitionbox}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    % Time axis
+    \draw[->, thick] (0,0) -- (8,0) node[right] {$t$};
+    \foreach \x/\lbl in {0/0, 2/1, 4/2, 6/3, 8/n} {
+        \draw[thick] (\x,0.15) -- (\x,-0.15) node[below] {\small $\lbl$};
+    }
+    % Rates above intervals
+    \node[above, primaryblue] at (1, 0.2) {\textbf{Bunga $i_1$}};
+    \node[above, primaryblue] at (3, 0.2) {\textbf{Bunga $i_2$}};
+    \node[above, primaryblue] at (5, 0.2) {\textbf{Bunga $i_3$}};
+    \node[above, primaryblue] at (7, 0.2) {\textbf{Bunga $i_n$}};
+\end{tikzpicture}
+\end{center}
+
+\textbf{1. Nilai Sekarang Anuitas Akhir ($a_{\overline{n}|}$):}
+Setiap pembayaran ke-$t$ didiskontokan melalui rangkaian suku bunga periode ke-$1, 2, \dots, t$:
+\begin{equation}
+    a_{\overline{n}|} = (1+i_1)^{-1} + (1+i_1)^{-1}(1+i_2)^{-1} + \dots + \prod_{s=1}^n (1+i_s)^{-1} = \sum_{t=1}^n \prod_{s=1}^t (1+i_s)^{-1}
+\end{equation}
+
+\textbf{2. Nilai Akumulasi Anuitas Awal ($\ddot{s}_{\overline{n}|}$):}
+Setiap pembayaran diakumulasikan melewati periode-periode setelahnya hingga $t = n$:
+\begin{equation}
+    \ddot{s}_{\overline{n}|} = (1+i_n) + (1+i_n)(1+i_{n-1}) + \dots + \prod_{s=1}^n (1+i_s) = \sum_{t=1}^n \prod_{s=1}^t (1+i_{n-s+1})
+\end{equation}
+Hubungan antara anuitas akhir dan anuitas awal: $s_{\overline{n+1}|} = \ddot{s}_{\overline{n}|} + 1$.
+
+---
+
+\subsection{Metode 2: \textit{Yield Curve Method} (Metode Kurva Imbal Hasil / \textit{Spot Rate})}
+
+\begin{definitionbox}[Konsep \textit{Yield Curve Method}]
+Pada metode ini, suku bunga $i_k$ \textbf{melekat pada pembayaran ke-$k$} dan berlaku konstan sebagai tingkat diskon majemuk sepanjang seluruh masa pengendapan dana tersebut sejak waktu $0$ hingga $k$ (setara dengan konsep \textit{Spot Rate} $s_k$).
+\end{definitionbox}
+
+\textbf{1. Nilai Sekarang Anuitas Akhir ($a_{\overline{n}|}$):}
+Setiap pembayaran ke-$t$ didiskontokan dengan suku bunga $i_t$ yang dipangkatkan $t$:
+\begin{equation}
+    a_{\overline{n}|} = (1+i_1)^{-1} + (1+i_2)^{-2} + (1+i_3)^{-3} + \dots + (1+i_n)^{-n} = \sum_{t=1}^n (1+i_t)^{-t}
+\end{equation}
+Untuk anuitas awal: $\ddot{a}_{\overline{n}|} = 1 + a_{\overline{n-1}|}$.
+
+\textbf{2. Nilai Akumulasi Anuitas Awal ($\ddot{s}_{\overline{n}|}$):}
+\begin{equation}
+    \ddot{s}_{\overline{n}|} = (1+i_n)^1 + (1+i_{n-1})^2 + \dots + (1+i_1)^n = \sum_{t=1}^n (1+i_{n-t+1})^t
+\end{equation}
+
+---
+
+\section{Anuitas Tanpa Bunga Majemuk (Bunga Tunggal / \textit{Simple Interest})}
+
+Dalam beberapa instrumen jangka pendek khusus atau regulasi hukum tertentu, bunga dihitung menggunakan \textbf{bunga tunggal} (\textit{simple interest}), di mana fungsi akumulasinya berbentuk linier: $a(t) = 1 + it$.
+
+\subsection{Nilai Sekarang pada Bunga Tunggal}
+Nilai sekarang dari aliran $n$ pembayaran sebesar $\$1$ di setiap akhir periode ($t = 1, 2, \dots, n$):
+\begin{equation}
+    a_{\overline{n}|} = \sum_{t=1}^n \frac{1}{a(t)} = \sum_{t=1}^n \frac{1}{1 + it} = \frac{1}{1+i} + \frac{1}{1+2i} + \dots + \frac{1}{1+ni}
+\end{equation}
+
+\subsection{Nilai Akumulasi pada Bunga Tunggal}
+Nilai akumulasi pada $t = n$ dari $n$ pembayaran sebesar $\$1$ di setiap akhir periode:
+\begin{itemize}
+    \item Pembayaran ke-$n$ di $t = n$ bernilai $1$ (mengendap 0 periode).
+    \item Pembayaran ke-$(n-1)$ di $t = n-1$ menghasilkan akumulasi $(1 + i \cdot 1)$.
+    \item Pembayaran ke-$1$ di $t = 1$ menghasilkan akumulasi $(1 + i(n-1))$.
+\end{itemize}
+Menjumlahkan seluruh suku:
+\begin{equation}
+    s_{\overline{n}|} = \sum_{t=0}^{n-1} (1 + it) = \sum_{t=0}^{n-1} 1 + i \sum_{t=0}^{n-1} t = n + i \left[ \frac{(n-1)n}{2} \right]
+\end{equation}
+
+\begin{definitionbox}[Rumus Nilai Terakumulasi Anuitas Bunga Tunggal]
+\begin{equation}
+    \mathbf{s_{\overline{n}|} = n + i \cdot \frac{n(n-1)}{2}}
+\end{equation}
+\end{definitionbox}
+
+\begin{notebox}[Peringatan: Ketidaksamaan $s_{\overline{n}|} \neq a_{\overline{n}|}(1+ni)$ pada Bunga Tunggal]
+Pada sistem bunga tunggal, prinsip konsistensi waktu tidak terpenuhi. Nilai sekarang yang diakumulasikan tidak sama dengan nilai akumulasi langsung ($a_{\overline{n}|}(1+ni) \neq s_{\overline{n}|}$). Oleh karena itu, valuasi harus selalu dilakukan langsung dari masing-masing komponen arus kas.
+\end{notebox}
+
+---
+
+\section{Contoh Soal Terperinci \& Pembahasan Langkah demi Langkah}
+
+\begin{examplebox}[Contoh 1: Penentuan Waktu \& 3 Jenis Pembayaran Sisa (\textit{Slide Perkuliahan})]
+\textbf{Soal:}\\
+Suatu investasi awal sebesar $\$1{,}000$ digunakan untuk mendanai penarikan dana berkala sebesar $\$100$ pada setiap akhir tahun selama mungkin. Dana tersebut menghasilkan suku bunga efektif tahunan sebesar $5\%$ ($i = 0.05$).
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung berapa kali pembayaran reguler penuh yang dapat dilakukan!
+    \item Tentukan besaran pembayaran sisa jika dibayarkan pada tanggal pembayaran reguler terakhir (\textit{Balloon Payment})!
+    \item Tentukan besaran pembayaran sisa jika dibayarkan satu tahun setelah pembayaran reguler terakhir (\textit{Drop Payment})!
+    \item Tentukan besaran pembayaran sisa jika dibayarkan tepat pada waktu fraksional $t = n + k$!
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Menentukan Waktu Teoritis $t$}
+Persamaan nilai sekarang:
+\begin{align*}
+    1{,}000 &= 100 \cdot a_{\overline{t}|0.05} \implies a_{\overline{t}|0.05} = 10 \\[0.4em]
+    \frac{1 - (1.05)^{-t}}{0.05} &= 10 \implies 1 - (1.05)^{-t} = 0.50 \implies (1.05)^{-t} = 0.50 \\[0.4em]
+    (1.05)^t &= 2 \implies t = \frac{\ln(2)}{\ln(1.05)} \approx \frac{0.693147}{0.048790} \approx \mathbf{14.2067 \text{ tahun}}
+\end{align*}
+Diperoleh: $n = 14$ kali pembayaran penuh, dan bagian fraksional $k = 0.2067$.
+
+\textbf{Langkah 2: Menghitung Sisa Saldo Setelah 14 Pembayaran ($t = 14$)}
+\begin{align*}
+    PV_{14 \text{ cicilan}} &= 100 \cdot a_{\overline{14}|0.05} = 100 \left[\frac{1 - (1.05)^{-14}}{0.05}\right] = 100 \times 9.898641 = \$989.864 \\[0.4em]
+    \text{Sisa Nilai Sekarang} &= 1{,}000 - 989.864 = \$10.136 \\[0.4em]
+    B_{14} &= \$10.136 \times (1.05)^{14} = 10.136 \times 1.979932 = \mathbf{\$20.068} \quad (\approx \$20.07)
+\end{align*}
+
+\textbf{Langkah 3: Menjawab Bagian (a), (b), (c), dan (d)}
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Pembayaran Reguler Penuh:} Dapat dilakukan sebanyak **$14$ kali pembayaran penuh** sebesar $\$100$.
+    \item \textbf{\textit{Balloon Payment} pada $t = 14$ ($100 + X$):}
+    \begin{align*}
+        100 \cdot a_{\overline{13}|0.05} + (100 + X)(1.05)^{-14} &= 1{,}000 \\
+        100 \times 9.393573 + (100 + X)(1.05)^{-14} &= 1{,}000 \\
+        100 + X &= (1{,}000 - 939.3573)(1.05)^{14} \\
+                &= 60.6427 \times 1.979932 = \$120.07 \\
+        \mathbf{X} &= \$120.07 - \$100 = \mathbf{\$20.07}
+    \end{align*}
+    (Sehingga total pembayaran pada $t = 14$ menjadi $\$120.07$).
+    \item \textbf{\textit{Drop Payment} pada $t = 15$ ($X$):}
+    \begin{align*}
+        X &= B_{14} \times (1.05) = \$20.068 \times 1.05 = \mathbf{\$21.07}
+    \end{align*}
+    \item \textbf{Pembayaran pada Waktu Fraksional $t = 14.2067$ ($X$):}
+    \begin{align*}
+        X &= B_{14} \times (1.05)^{0.2067} = \$20.068 \times (1.01014) = \mathbf{\$20.27}
+    \end{align*}
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 2: Penentuan Suku Bunga yang Belum Diketahui (\textit{Slide Perkuliahan})]
+\textbf{Soal:}\\
+Suatu anuitas memberikan nilai sekarang (\textit{present value}) sebesar $\$16{,}000$ dari serangkaian pembayaran sebesar $\$1{,}000$ pada setiap akhir triwulan (kuartalan) selama 5 tahun. 
+Tentukan nilai suku bunga nominal tahunan yang dikonversi secara kuartalan ($i^{(4)}$) dengan:
+\begin{enumerate}[label=(\alph*)]
+    \item Metode Aproksimasi Aljabar Orde-2.
+    \item Metode Coba-Coba (\textit{Trial \& Error}) / Interpolasi.
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Identifikasi Parameter Soal}
+\begin{itemize}
+    \item $PV = \$16{,}000$, pembayaran kuartalan $R = \$1{,}000$.
+    \item Total periode kuartal: $n = 5 \text{ tahun} \times 4 \text{ kuartal/tahun} = 20 \text{ periode}$.
+    \item Suku bunga efektif per kuartal: $j = \frac{i^{(4)}}{4}$.
+    \item Nilai anuitas per unit: $a_{\overline{20}|j} = \frac{PV}{R} = \frac{16{,}000}{1{,}000} = 16.0 \implies K = 16.0$.
+    \item Rasio $g = \frac{1}{K} = \frac{1}{16} = 0.0625$.
+\end{itemize}
+
+\textbf{Langkah 2: Pengerjaan Bagian (a) - Rumus Aproksimasi Aljabar}
+\begin{align*}
+    j &\approx \frac{2(n - K)}{K(n + 1)} = \frac{2(20 - 16)}{16(20 + 1)} = \frac{2(4)}{16 \times 21} = \frac{8}{336} \approx \mathbf{0.0238 \ (2.38\% \text{ per kuartal})}
+\end{align*}
+Maka suku bunga nominal tahunan terkonversi kuartalan:
+\begin{equation*}
+    i^{(4)} \approx 4 \times 0.0238 = \mathbf{0.0952 \ (9.52\%)}
+\end{equation*}
+
+\textbf{Langkah 3: Pengerjaan Bagian (b) - Metode Coba-Coba \& Interpolasi}
+Fungsi target: $f(j) = a_{\overline{20}|j} - 16.0 = 0$.
+\begin{itemize}
+    \item Uji $j_1 = 0.020 \ (2.0\%)$: $a_{\overline{20}|0.02} = \frac{1 - (1.02)^{-20}}{0.02} \approx 16.3514 > 16.0$.
+    \item Uji $j_2 = 0.025 \ (2.5\%)$: $a_{\overline{20}|0.025} = \frac{1 - (1.025)^{-20}}{0.025} \approx 15.5892 < 16.0$.
+\end{itemize}
+Interpolasi linier antara $2.0\%$ dan $2.5\%$:
+\begin{align*}
+    j &\approx 0.020 + \frac{16.0 - 16.3514}{15.5892 - 16.3514} (0.025 - 0.020) \\[0.4em]
+    &= 0.020 + \frac{-0.3514}{-0.7622} (0.005) = 0.020 + (0.46103)(0.005) \approx \mathbf{0.0223 \ (2.23\% \text{ per kuartal})}
+\end{align*}
+Maka suku bunga nominal tahunan konversi kuartalan:
+\begin{equation*}
+    i^{(4)} = 4 \times 0.0223 \approx \mathbf{0.0892 \ (8.92\%)} \quad (\text{Nilai eksak: } j \approx 2.231\% \implies i^{(4)} \approx 8.92\%)
+\end{equation*}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 3: Suku Bunga Bervariasi - Portfolio vs Yield Curve Method (\textit{Slide Perkuliahan})]
+\textbf{Soal:}\\
+Diberikan suatu anuitas-immediate 10 tahun dengan pembayaran sebesar $\$100$ per tahun ($t = 1, 2, \dots, 10$). Suku bunga tahunan diketahui sebesar $5\%$ untuk 6 tahun pertama dan $4\%$ untuk 4 tahun terakhir.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung nilai akumulasi pada akhir tahun ke-10 menggunakan \textbf{\textit{Portfolio Rate Method}}!
+    \item Hitung nilai akumulasi pada akhir tahun ke-10 jika 6 pembayaran pertama diinvestasikan pada suku bunga $5\%$ dan 4 pembayaran terakhir diinvestasikan pada suku bunga $4\%$ (\textbf{\textit{Yield Curve Method}})!
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Karakteristik Dasar Anuitas:}
+\begin{itemize}
+    \item 6 tahun pertama ($t = 1, \dots, 6$): $i_1 = 5\% = 0.05 \implies s_{\overline{6}|0.05} = \frac{(1.05)^6 - 1}{0.05} \approx 6.801913$.
+    \item 4 tahun terakhir ($t = 7, \dots, 10$): $i_2 = 4\% = 0.04 \implies s_{\overline{4}|0.04} = \frac{(1.04)^4 - 1}{0.04} \approx 4.246464$.
+\end{itemize}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{\textit{Portfolio Rate Method}:}
+    Pada metode ini, suku bunga $4\%$ berlaku untuk seluruh portofolio dana selama 4 tahun terakhir ($t = 6$ hingga $t = 10$):
+    \begin{align*}
+        AV_{10} &= 100 \cdot \left[ s_{\overline{6}|0.05} \cdot (1 + 0.04)^4 + s_{\overline{4}|0.04} \right] \\[0.4em]
+                &= 100 \cdot \left[ 6.801913 \cdot (1.04)^4 + 4.246464 \right] \\[0.4em]
+                &= 100 \cdot \left[ 6.801913 \times 1.169859 + 4.246464 \right] \\[0.4em]
+                &= 100 \cdot \left[ 7.957276 + 4.246464 \right] = 100 \times 12.20374 = \mathbf{\$1{,}220.38}
+    \end{align*}
+
+    \item \textbf{\textit{Yield Curve Method}:}
+    Pada metode ini, 6 pembayaran pertama terus menghasilkan bunga $5\%$ sepanjang sisa masa investasi (diinvestasikan pada instrumen 6 tahunan berbunga $5\%$):
+    \begin{align*}
+        AV_{10} &= 100 \cdot \left[ s_{\overline{6}|0.05} \cdot (1 + 0.05)^4 + s_{\overline{4}|0.04} \right] \\[0.4em]
+                &= 100 \cdot \left[ 6.801913 \cdot (1.05)^4 + 4.246464 \right] \\[0.4em]
+                &= 100 \cdot \left[ 6.801913 \times 1.215506 + 4.246464 \right] \\[0.4em]
+                &= 100 \cdot \left[ 8.267768 + 4.246464 \right] = 100 \times 12.51423 = \mathbf{\$1{,}251.43}
+    \end{align*}
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 4: Valuasi Anuitas pada Sistem Bunga Tunggal (\textit{SOA FM Level})]
+\textbf{Soal:}\\
+Suatu anuitas membayarkan $\$500$ di setiap akhir tahun selama 5 tahun ($t = 1, 2, 3, 4, 5$). Jika suku bunga yang diberlakukan adalah bunga tunggal sebesar $6\%$ per tahun ($i = 0.06$):
+\begin{enumerate}[label=(\alph*)]
+    \item Hitunglah nilai sekarang ($PV$) dari anuitas tersebut pada $t = 0$!
+    \item Hitunglah nilai terakumulasi ($AV$) dari anuitas tersebut pada $t = 5$!
+    \item Tunjukkan bahwa $PV \cdot (1 + 5 \cdot 0.06) \neq AV$ pada sistem bunga tunggal!
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Nilai Sekarang ($PV$) pada Bunga Tunggal:}
+    \begin{align*}
+        PV &= 500 \sum_{t=1}^5 \frac{1}{1 + 0.06t} = 500 \left[ \frac{1}{1.06} + \frac{1}{1.12} + \frac{1}{1.18} + \frac{1}{1.24} + \frac{1}{1.30} \right] \\[0.4em]
+           &= 500 \left[ 0.943396 + 0.892857 + 0.847458 + 0.806452 + 0.769231 \right] \\[0.4em]
+           &= 500 \times 4.259394 = \mathbf{\$2{,}129.70}
+    \end{align*}
+
+    \item \textbf{Nilai Terakumulasi ($AV$) pada Bunga Tunggal:}
+    Gunakan rumus $s_{\overline{n}|} = n + i \frac{n(n-1)}{2}$:
+    \begin{align*}
+        s_{\overline{5}|} &= 5 + 0.06 \times \frac{5 \times 4}{2} = 5 + 0.06 \times 10 = 5 + 0.60 = 5.60 \\[0.4em]
+        AV &= 500 \times s_{\overline{5}|} = 500 \times 5.60 = \mathbf{\$2{,}800.00}
+    \end{align*}
+
+    \item \textbf{Pembuktian Ketidaksamaan Konsistensi Waktu:}
+    Jika nilai sekarang diakumulasikan selama 5 tahun dengan faktor akumulasi $(1 + 5 \times 0.06) = 1.30$:
+    \begin{equation*}
+        PV \times (1 + 5 \times 0.06) = \$2{,}129.70 \times 1.30 = \mathbf{\$2{,}768.61} \neq \mathbf{\$2{,}800.00}
+    \end{equation*}
+    Hal ini membuktikan secara empiris bahwa hukum konsistensi waktu tidak berlaku pada bunga tunggal.
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Tabel Ringkasan Rumus Kunci Modul 06}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{p{3.8cm}cc}
+\toprule
+\textbf{Topik / Kasus} & \textbf{Rumus Pokok / Formula Aktuarial} & \textbf{Keterangan} \\
+\midrule
+Penentuan Waktu ($t$) & $t = -\dfrac{\ln(1 - K \cdot i)}{\ln(1+i)}, \quad K = \dfrac{PV}{R}$ & Syarat: $R > PV \cdot i$ \\[0.8em]
+Dekomposisi $a_{\overline{n+k}|}$ & $a_{\overline{n+k}|} \approx a_{\overline{n}|} + k v^{n+k}$ & $n \in \mathbb{Z}^+, 0 < k < 1$ \\[0.8em]
+Balloon Payment ($t=n$) & $X_{\text{balloon}} = (PV - R \cdot a_{\overline{n}|})(1+i)^n = B_n$ & Tambahan di $t=n$ \\[0.8em]
+Drop Payment ($t=n+1$) & $X_{\text{drop}} = (PV - R \cdot a_{\overline{n}|})(1+i)^{n+1} = B_n (1+i)$ & Dibayar di $t=n+1$ \\[0.8em]
+Aproksimasi Suku Bunga & $i \approx \dfrac{2(n - K)}{K(n + 1)}$ & Orde-2 Maclaurin \\[0.8em]
+Portfolio Rate ($PV$) & $a_{\overline{n}|} = \sum_{t=1}^n \prod_{s=1}^t (1+i_s)^{-1}$ & Suku bunga periode-$s$ \\[0.8em]
+Yield Curve ($PV$) & $a_{\overline{n}|} = \sum_{t=1}^n (1+i_t)^{-t}$ & Spot rate ke-$t$ \\[0.8em]
+Bunga Tunggal ($PV$) & $a_{\overline{n}|} = \sum_{t=1}^n \dfrac{1}{1 + it}$ & Jumlah diskonto \\[0.8em]
+Bunga Tunggal ($AV$) & $s_{\overline{n}|} = n + i \cdot \dfrac{n(n-1)}{2}$ & Deret akumulasi \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

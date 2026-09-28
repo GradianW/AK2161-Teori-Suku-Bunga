@@ -1,0 +1,1004 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{darkred}{RGB}{178, 34, 34}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 03: Masalah Mengenai Suku Bunga\\
+\large (\textit{Equations of Value, Unknown Time \& Rate, Day-Count Conventions})}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 2.1--2.7)}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+\section{Pendahuluan \& Empat Variabel Fundamental}
+
+Dalam transaksi finansial yang melibatkan penanaman modal atau pinjaman, seluruh permasalahan matematika bunga berakar pada hubungan antara empat variabel dasar:
+
+\begin{definitionbox}[Empat Variabel Dasar dalam Masalah Bunga]
+Setiap transaksi keuangan dengan tingkat imbal hasil deterministik melibatkan kombinasi dari 4 besaran berikut:
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Pokok Modal Awal / \textit{Principal} ($k$ atau $P$):} Besarnya modal mula-mula yang diinvestasikan atau dipinjamkan pada awal periode ($t=0$).
+    \item \textbf{Lama Waktu Investasi / \textit{Time Horizon} ($t$ atau $n$):} Durasi atau panjangnya selang waktu transaksi dari saat awal hingga jatuh tempo.
+    \item \textbf{Tingkat Bunga / Parameter Imbal Hasil ($i, d, \text{atau } \delta$):} Laju pertumbuhan modal per periode waktu, yang dapat dinyatakan sebagai suku bunga efektif ($i$), tingkat diskonto efektif ($d$), suku bunga nominal ($i^{(m)}$), tingkat diskonto nominal ($d^{(m)}$), ataupun \textit{force of interest} ($\delta$).
+    \item \textbf{Nilai Akumulasi / Nilai Akhir / \textit{Accumulated Value} ($A(t), S, \text{atau } FV$):} Besarnya total dana pada akhir periode $t$, yang mencakup pokok modal awal ditambah seluruh bunga yang terbentuk.
+\end{enumerate}
+\end{definitionbox}
+
+\begin{notebox}[Prinsip Dasar Hubungan Variabel]
+Secara umum, hubungan fundamental keempat variabel tersebut dirumuskan oleh fungsi jumlah $A(t)$:
+\begin{equation}
+    A(t) = k \cdot a(t)
+\end{equation}
+di mana $a(t)$ adalah fungsi akumulasi. Jika salah satu dari keempat variabel tersebut tidak diketahui (\textit{unknown}) sementara ketiga variabel lainnya diketahui, maka variabel yang belum diketahui tersebut dapat ditentukan secara unik melalui manipulasi aljabar atau analisis numerik.
+\end{notebox}
+
+---
+
+\section{Suku Bunga dan \textit{Force of Interest} yang Bervariasi}
+
+Pada pertemuan sebelumnya, diasumsikan bahwa suku bunga atau \textit{force of interest} bernilai konstan sepanjang waktu. Namun dalam dunia nyata, kondisi ekonomi dan suku bunga pasar terus mengalami perubahan.
+
+\subsection{Tipe 1: Suku Bunga Efektif Bervariasi per Periode Diskrit}
+
+Misalkan $i_k$ menyatakan suku bunga efektif yang berlaku khusus selama periode ke-$k$ (yaitu pada interval waktu $[k-1, k]$) untuk $k = 1, 2, \dots, t$.
+
+\begin{definitionbox}[Fungsi Akumulasi \& Diskon dengan Suku Bunga Bervariasi]
+Untuk $t \ge 1$ bilangan bulat positif:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Fungsi Akumulasi:}
+    \begin{equation}
+        a(t) = (1 + i_1)(1 + i_2)\cdots(1 + i_t) = \prod_{k=1}^t (1 + i_k)
+    \end{equation}
+    Jika $i_1 = i_2 = \cdots = i_t = i$ (konstan), maka rumus tereduksi kembali menjadi $a(t) = (1 + i)^t$.
+    
+    \item \textbf{Fungsi Diskon (\textit{Present Value Factor}):}
+    \begin{equation}
+        a^{-1}(t) = (1 + i_1)^{-1}(1 + i_2)^{-1}\cdots(1 + i_t)^{-1} = \prod_{k=1}^t (1 + i_k)^{-1} = \prod_{k=1}^t v_k
+    \end{equation}
+    di mana $v_k = (1 + i_k)^{-1}$ adalah faktor diskon pada periode ke-$k$.
+\end{itemize}
+\end{definitionbox}
+
+\subsubsection{Suku Bunga Efektif Rata-Rata Tahunan Ekuivalen}
+Jika suku bunga berubah-ubah dari tahun ke tahun, sering kali diperlukan satu nilai suku bunga efektif tunggal konstan (dinotasikan $i_{\text{eq}}$ atau $\bar{i}$) yang memberikan hasil akumulasi akhir yang tepat sama selama $t$ tahun:
+\begin{equation}
+    (1 + i_{\text{eq}})^t = a(t) = \prod_{k=1}^t (1 + i_k)
+\end{equation}
+\begin{equation}
+    i_{\text{eq}} = [a(t)]^{1/t} - 1 = \left( \prod_{k=1}^t (1 + i_k) \right)^{1/t} - 1
+\end{equation}
+\textit{Catatan:} $(1 + i_{\text{eq}})$ merupakan \textbf{rata-rata geometrik} (\textit{geometric mean}) dari faktor akumulasi tahunan $(1 + i_k)$.
+
+\subsection{Tipe 2: \textit{Force of Interest} yang Bervariasi}
+
+\subsubsection{Variasi Kontinu Umum}
+Jika laju bunga seketika dinyatakan oleh fungsi kontinu $\delta(r)$, maka:
+\begin{equation}
+    a(t) = \exp\left( \int_0^t \delta(r)\,dr \right), \qquad a^{-1}(t) = \exp\left( -\int_0^t \delta(r)\,dr \right)
+\end{equation}
+
+\subsubsection{Variasi Sepotong-Sepotong (\textit{Piecewise Constant})}
+Jika $\delta_r$ konstan di dalam setiap periode ke-$r$ (interval $[r-1, r]$), di mana $\delta_r = \ln(1 + i_r)$, maka integral berubah menjadi jumlahan berhingga:
+\begin{equation}
+    a(t) = \exp\left( \sum_{r=1}^t \delta_r \right) = \prod_{r=1}^t e^{\delta_r} = \prod_{r=1}^t (1 + i_r)
+\end{equation}
+\begin{equation}
+    a^{-1}(t) = \exp\left( -\sum_{r=1}^t \delta_r \right) = \prod_{r=1}^t e^{-\delta_r} = \prod_{r=1}^t v_r
+\end{equation}
+
+\begin{examplebox}[Contoh 1: Suku Bunga Berjenjang \& Suku Bunga Efektif Ekuivalen]
+\textbf{Soal:}\\
+Hitung nilai akumulasi dari modal sebesar $\$1{,}000$ pada akhir tahun ke-15 jika suku bunga efektif tahunan adalah:
+\begin{itemize}
+    \item $5\%$ per tahun untuk 5 tahun pertama ($t = 0$ s.d. $t = 5$),
+    \item $4.5\%$ per tahun untuk 5 tahun kedua ($t = 5$ s.d. $t = 10$), dan
+    \item $5\%$ per tahun untuk 5 tahun ketiga ($t = 10$ s.d. $t = 15$).
+\end{itemize}
+Tentukan pula suku bunga efektif tahunan ekuivalen ($i_{\text{eq}}$) untuk keseluruhan periode 15 tahun tersebut!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Nilai Akumulasi pada $t=15$ ($A(15)$):}
+    \begin{align*}
+        A(15) &= 1{,}000 \cdot (1 + 0.05)^5 \cdot (1 + 0.045)^5 \cdot (1 + 0.05)^5 \\
+              &= 1{,}000 \cdot (1.05)^5 \cdot (1.045)^5 \cdot (1.05)^5 \\
+              &= 1{,}000 \cdot (1.276282) \cdot (1.246182) \cdot (1.276282) \\
+              &= 1{,}000 \cdot 2.029904 \approx \$2{,}029.90
+    \end{align*}
+    
+    \item \textbf{Suku Bunga Efektif Ekuivalen ($i_{\text{eq}}$):}
+    \begin{align*}
+        1{,}000 \cdot (1 + i_{\text{eq}})^{15} &= 2{,}029.904 \\[0.4em]
+        (1 + i_{\text{eq}})^{15} &= 2.029904 \\[0.4em]
+        15 \ln(1 + i_{\text{eq}}) &= \ln(2.029904) \approx 0.707993 \\[0.4em]
+        \ln(1 + i_{\text{eq}}) &= \frac{0.707993}{15} \approx 0.0471995 \\[0.4em]
+        1 + i_{\text{eq}} &= e^{0.0471995} \approx 1.048332 \implies i_{\text{eq}} \approx 4.833\%
+    \end{align*}
+    Suku bunga efektif rata-rata adalah sekitar $4.83\%$ per tahun (berada di antara $4.5\%$ dan $5\%$).
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Persamaan Nilai (\textit{Equations of Value}) \& Titik Perbandingan}
+
+\subsection{Prinsip Dasar \textit{Time Value of Money} untuk Aliran Kas}
+Dua atau lebih pembayaran yang terjadi pada waktu yang berlainan \textbf{tidak dapat langsung dijumlahkan atau dibandingkan} secara nominal karena nilai uang bergantung pada waktu terjadinya. 
+
+Agar dapat diperbandingkan atau disamakan, seluruh arus kas harus ditransformasikan ke satu titik waktu acuan yang sama, yang dinamakan \textbf{Titik Perbandingan} (\textit{Comparison Date} atau \textit{Focal Date}).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    % Time axis
+    \draw[->, thick, line width=1.2pt] (-0.5,0) -- (10.5,0) node[right] {\textbf{Waktu ($t$)}};
+    
+    % Ticks
+    \foreach \x in {0, 2, 5, 8, 10} {
+        \draw[thick] (\x, 0.15) -- (\x, -0.15);
+    }
+    
+    \node[below] at (0,-0.2) {$t_0 = 0$};
+    \node[below] at (2,-0.2) {$t_1$};
+    \node[below] at (5,-0.2) {$t_2$};
+    \node[below] at (8,-0.2) {$t_3$};
+    \node[below] at (10,-0.2) {$t_n$};
+    
+    % Cash inflows (above axis)
+    \draw[->, very thick, darkgreen] (2, 0.2) -- (2, 1.3) node[above] {\textbf{Inflow $C_1$}};
+    \draw[->, very thick, darkgreen] (8, 0.2) -- (8, 1.3) node[above] {\textbf{Inflow $C_3$}};
+    
+    % Cash outflows (below axis)
+    \draw[->, very thick, darkred] (0, -0.6) -- (0, -1.7) node[below] {\textbf{Outflow $B_0$}};
+    \draw[->, very thick, darkred] (5, -0.6) -- (5, -1.7) node[below] {\textbf{Outflow $B_2$}};
+    \draw[->, very thick, darkred] (10, -0.6) -- (10, -1.7) node[below] {\textbf{Outflow $B_n$}};
+    
+    % Comparison date marker
+    \draw[dashed, primaryblue, line width=1pt] (5, -2.2) -- (5, 2.0);
+    \node[above, primaryblue, fill=white, rounded corners=2pt] at (5, 2.0) {\textbf{Titik Perbandingan ($t = t_2$)}};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Definisi Persamaan Nilai (\textit{Equation of Value})}
+
+\begin{definitionbox}[Definisi: Persamaan Nilai]
+\textbf{Persamaan Nilai (\textit{Equation of Value})} adalah persamaan aljabar yang menyatakan kesetaraan finansial antara total nilai arus kas masuk (\textit{cash inflows} / penerimaan) dengan total nilai arus kas keluar (\textit{cash outflows} / pembayaran/kewajiban) yang seluruhnya dievaluasi pada suatu \textbf{titik perbandingan} ($t = t_0$):
+\begin{equation}
+    \sum_{j} \text{Nilai Inflow}_j \text{ pada saat } t_0 = \sum_{k} \text{Nilai Outflow}_k \text{ pada saat } t_0
+\end{equation}
+\end{definitionbox}
+
+Misalkan seseorang melakukan serangkaian pembayaran $B_1, \dots, B_m$ pada waktu $t_1, \dots, t_m$, dan menerima pembayaran $C_1, \dots, C_n$ pada waktu $\tau_1, \dots, \tau_n$.
+\begin{itemize}[leftmargin=1.5em]
+    \item Jika titik perbandingan dipilih pada \textbf{saat kini ($t = 0$)}, persamaan nilai dibentuk dari \textbf{Nilai Sekarang (\textit{Present Value})}:
+    \begin{equation}
+        \sum_{j=1}^n C_j v^{\tau_j} = \sum_{k=1}^m B_k v^{t_k}
+    \end{equation}
+    \item Jika titik perbandingan dipilih pada suatu waktu masa depan \textbf{$t = T$}, persamaan nilai dibentuk dari \textbf{Nilai Akumulasi (\textit{Accumulated Value})}:
+    \begin{equation}
+        \sum_{j=1}^n C_j (1 + i)^{T - \tau_j} = \sum_{k=1}^m B_k (1 + i)^{T - t_k}
+    \end{equation}
+\end{itemize}
+
+\subsection{Teorema Independensi Titik Perbandingan pada Bunga Majemuk}
+
+\begin{definitionbox}[Teorema: Independensi Titik Perbandingan pada Bunga Majemuk]
+Pada sistem \textbf{suku bunga majemuk}, pemilihan tanggal/titik perbandingan (\textit{comparison date}) \textbf{tidak memengaruhi} hasil solusi persamaan. Solusi yang diperoleh pada titik perbandingan $t_1$ akan selalu identik dengan solusi pada titik perbandingan $t_2$.
+\end{definitionbox}
+
+\begin{proof}
+Misalkan persamaan nilai pada titik perbandingan $t = 0$ adalah:
+\begin{equation*}
+    \sum C_j v^{\tau_j} - \sum B_k v^{t_k} = 0
+\end{equation*}
+Untuk memindahkan seluruh persamaan ke titik perbandingan baru $t = T$, kita kalikan kedua ruas dengan faktor akumulasi $(1 + i)^T$:
+\begin{equation*}
+    (1 + i)^T \left( \sum C_j v^{\tau_j} - \sum B_k v^{t_k} \right) = (1 + i)^T \cdot 0
+\end{equation*}
+Mengingat $v^{\tau_j} (1 + i)^T = (1 + i)^{-\tau_j} (1 + i)^T = (1 + i)^{T - \tau_j}$, persamaan menjadi:
+\begin{equation*}
+    \sum C_j (1 + i)^{T - \tau_j} - \sum B_k (1 + i)^{T - t_k} = 0
+\end{equation*}
+Karena $(1 + i)^T \neq 0$ untuk setiap nilai $i > -1$, perkalian ini tidak mengubah himpunan akar/solusi dari persamaan aljabar tersebut.
+\end{proof}
+
+\begin{notebox}[Peringatan Kritis: Bunga Tunggal TIDAK Independen terhadap Titik Perbandingan!]
+Sifat independensi di atas \textbf{hanya berlaku pada bunga majemuk}. Pada \textbf{bunga tunggal} (\textit{simple interest}), karena $(1 + it_1)(1 + it_2) \neq 1 + i(t_1 + t_2)$, pemilihan titik perbandingan yang berbeda akan menghasilkan nilai solusi pembayaran yang berbeda! Oleh karena itu, dalam transaksi berbasis bunga tunggal, kontrak hukum harus secara eksplisit mendefinisikan tanggal perbandingan acuan.
+\end{notebox}
+
+\begin{examplebox}[Contoh 2: Persamaan Nilai \& Titik Perbandingan]
+\textbf{Soal:}\\
+Seseorang dijanjikan akan menerima dana sebesar $\$600$ pada akhir tahun ke-8 dari sekarang. Sebagai gantinya, ia diwajibkan menyetorkan sejumlah uang sebanyak 3 kali, yaitu:
+\begin{itemize}
+    \item $\$100$ sekarang ($t = 0$),
+    \item $\$200$ pada akhir tahun ke-5 ($t = 5$), dan
+    \item Pembayaran terakhir sebesar $\$X$ pada akhir tahun ke-10 ($t = 10$).
+\end{itemize}
+Hitung besar pembayaran terakhir $X$ jika suku bunga nominal adalah $8\%$ dikonversi semesteran (\textit{convertible semiannually})! Tunjukkan bahwa hasilnya sama bila dihitung pada $t = 0$ dan $t = 10$.
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Tentukan satuan waktu dan suku bunga per periode.}
+Suku bunga nominal $i^{(2)} = 8\%$. Frekuensi konversi $m = 2$ (semesteran).
+Suku bunga efektif per setengah tahun (1 semester):
+\begin{equation*}
+    j = \frac{i^{(2)}}{2} = \frac{0.08}{2} = 0.04 = 4\% \text{ per semester}
+\end{equation*}
+Faktor diskon per semester: $v = (1 + j)^{-1} = (1.04)^{-1}$.
+
+Panjang periode dalam satuan semester:
+\begin{itemize}
+    \item $t = 0 \text{ tahun} \implies n_0 = 0 \text{ semester}$
+    \item $t = 5 \text{ tahun} \implies n_1 = 5 \times 2 = 10 \text{ semester}$
+    \item $t = 8 \text{ tahun} \implies n_2 = 8 \times 2 = 16 \text{ semester}$
+    \item $t = 10 \text{ tahun} \implies n_3 = 10 \times 2 = 20 \text{ semester}$
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (11.5,0) node[right] {\footnotesize Semester ($n$)};
+    \foreach \x/\label/\yr in {0/0/0, 2.5/10/5, 6/16/8, 9/20/10} {
+        \draw[thick] (\x, 0.1) -- (\x, -0.1);
+        \node[below] at (\x, -0.15) {\footnotesize $n=\label$};
+        \node[below] at (\x, -0.55) {\scriptsize ($t=\yr$ th)};
+    }
+    % Payments (outflow)
+    \draw[->, thick, darkred] (0, -0.9) -- (0, -1.8) node[below] {\footnotesize $\$100$};
+    \draw[->, thick, darkred] (2.5, -0.9) -- (2.5, -1.8) node[below] {\footnotesize $\$200$};
+    \draw[->, thick, darkred] (9, -0.9) -- (9, -1.8) node[below] {\footnotesize $\$X$};
+    % Receipt (inflow)
+    \draw[->, thick, darkgreen] (6, 0.2) -- (6, 1.2) node[above] {\footnotesize $\$600$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Metode A: Menggunakan Titik Perbandingan $t = 0$ ($n = 0$):}
+Persamaan nilai sekarang pada $n = 0$:
+\begin{align*}
+    100 + 200 v^{10} + X v^{20} &= 600 v^{16} \\[0.4em]
+    X v^{20} &= 600 v^{16} - 100 - 200 v^{10} \\[0.4em]
+    X &= \frac{600 v^{16} - 100 - 200 v^{10}}{v^{20}} = 600 v^{-4} - 100 v^{-20} - 200 v^{-10} \\[0.4em]
+    X &= 600 (1.04)^4 - 100 (1.04)^{20} - 200 (1.04)^{10} \\[0.4em]
+    X &= 600(1.169859) - 100(2.191123) - 200(1.480244) \\[0.4em]
+    X &= 701.915 - 219.112 - 296.049 = \$186.754 \approx \$186.76
+\end{align*}
+
+\textbf{Metode B: Menggunakan Titik Perbandingan $t = 10$ ($n = 20$):}
+Persamaan nilai akumulasi pada $n = 20$:
+\begin{align*}
+    100(1.04)^{20} + 200(1.04)^{10} + X &= 600(1.04)^4 \\[0.4em]
+    X &= 600(1.04)^4 - 100(1.04)^{20} - 200(1.04)^{10} \\[0.4em]
+    X &= 701.915 - 219.112 - 296.049 = \$186.76
+\end{align*}
+Terbukti bahwa kedua pilihan titik perbandingan memberikan hasil yang persis sama.
+\end{examplebox}
+
+---
+
+\section{Menentukan Waktu yang Belum Diketahui (\textit{Unknown Time})}
+
+\subsection{Kasus 1: Pembayaran Tunggal}
+Jika modal pokok $S$ diinvestasikan pada suku bunga majemuk $i$ per periode dan diakumulasikan menjadi $A$, lama waktu $t$ ditentukan dari:
+\begin{equation}
+    S(1 + i)^t = A \implies (1 + i)^t = \frac{A}{S}
+\end{equation}
+Mengambil logaritma alami ($\ln$) pada kedua ruas:
+\begin{equation}
+    t = \frac{\ln(A/S)}{\ln(1 + i)}
+\end{equation}
+
+\subsection{Kasus 2: Penyatuan Pembayaran (\textit{Consolidation of Payments})}
+Misalkan terdapat serangkaian kewajiban pembayaran $s_1, s_2, \dots, s_n$ yang masing-masing jatuh tempo pada waktu $t_1, t_2, \dots, t_n$. 
+
+Jika seluruh pembayaran tersebut digantikan oleh \textbf{satu pembayaran tunggal} sebesar total nilai nominalnya, yaitu:
+\begin{equation*}
+    S = s_1 + s_2 + \dots + s_n = \sum_{k=1}^n s_k
+\end{equation*}
+pada suatu waktu $t$, kapankah waktu yang tepat $t$ sehingga pembayaran tunggal ini bernilai ekuivalen secara finansial dengan seluruh pembayaran terpisah semula?
+
+\begin{definitionbox}[Waktu Eksak Penyatuan Pembayaran]
+Persamaan nilai sekarang pada $t = 0$ adalah:
+\begin{equation}
+    \left( \sum_{k=1}^n s_k \right) v^t = \sum_{k=1}^n s_k v^{t_k}
+\end{equation}
+\begin{equation}
+    v^t = \frac{\sum_{k=1}^n s_k v^{t_k}}{\sum_{k=1}^n s_k}
+\end{equation}
+Dengan menyelesaikan $t$ menggunakan logaritma:
+\begin{equation}
+    t = \frac{\ln\left( \dfrac{\sum_{k=1}^n s_k v^{t_k}}{\sum_{k=1}^n s_k} \right)}{\ln v} = -\frac{\ln\left( \sum_{k=1}^n \left(\dfrac{s_k}{\sum s_j}\right) v^{t_k} \right)}{\delta}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Metode Waktu Terimbang (\textit{Method of Equated Time})}
+Karena rumus logaritma eksak di atas memerlukan komputasi yang cukup rumit (terutama sebelum adanya kalkulator elektronik), para praktisi mengembangkan metode hampiran aritmatika terbobot yang disebut \textbf{\textit{Method of Equated Time}}:
+
+\begin{definitionbox}[Metode Waktu Terimbang (\textit{Method of Equated Time}), $\bar{t}$]
+Waktu terimbang $\bar{t}$ adalah rata-rata tertimbang (\textit{weighted arithmetic mean}) dari waktu jatuh tempo masing-masing pembayaran, dengan bobot berupa besarnya nominal masing-masing pembayaran:
+\begin{equation}
+    \bar{t} = \frac{s_1 t_1 + s_2 t_2 + \dots + s_n t_n}{s_1 + s_2 + \dots + s_n} = \frac{\sum_{k=1}^n s_k t_k}{\sum_{k=1}^n s_k}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Analisis Matematis: Hubungan $\bar{t}$ dan $t$ (Ketaksamaan Jensen)}
+
+\begin{definitionbox}[Teorema: Hubungan Waktu Terimbang vs Waktu Eksak]
+Untuk suku bunga positif $i > 0$ dan waktu jatuh tempo yang tidak semuanya bernilai sama, estimasi \textit{Method of Equated Time} ($\bar{t}$) selalu \textbf{lebih besar} daripada waktu eksak ($t$):
+\begin{equation}
+    \bar{t} > t \quad (\text{untuk } i > 0)
+\end{equation}
+\end{definitionbox}
+
+\begin{proof}[Pembuktian menggunakan Konveksitas \& Ketaksamaan Jensen]
+Definisikan fungsi $f(x) = v^x = e^{-\delta x}$. 
+Turunan kedua dari $f(x)$ terhadap $x$ adalah:
+\begin{equation*}
+    f''(x) = \delta^2 e^{-\delta x} > 0 \quad \text{untuk seluruh } x \in \mathbb{R} \text{ dan } \delta > 0.
+\end{equation*}
+Karena $f''(x) > 0$, maka fungsi $f(x) = v^x$ adalah fungsi yang \textbf{konveks murni} (\textit{strictly convex}).
+
+Misalkan bobot $w_k = \dfrac{s_k}{\sum_{j=1}^n s_j} > 0$ sedemikian sehingga $\sum_{k=1}^n w_k = 1$.
+Berdasarkan \textbf{Ketaksamaan Jensen} (\textit{Jensen's Inequality}) untuk fungsi konveks:
+\begin{equation*}
+    f\left( \sum_{k=1}^n w_k t_k \right) < \sum_{k=1}^n w_k f(t_k)
+\end{equation*}
+Substitusikan $f(x) = v^x$ dan $\sum w_k t_k = \bar{t}$:
+\begin{equation*}
+    v^{\bar{t}} < \sum_{k=1}^n w_k v^{t_k}
+\end{equation*}
+Namun dari definisi waktu eksak $t$, kita mempunyai $v^t = \sum_{k=1}^n w_k v^{t_k}$. Dengan demikian:
+\begin{equation*}
+    v^{\bar{t}} < v^t
+\end{equation*}
+Karena faktor diskon $v = \frac{1}{1+i} < 1$ untuk $i > 0$, fungsi $g(x) = v^x$ merupakan fungsi yang monoton turun (\textit{strictly decreasing}). Oleh karena itu:
+\begin{equation*}
+    v^{\bar{t}} < v^t \implies \bar{t} > t
+\end{equation*}
+\end{proof}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {$t$ (waktu)},
+    ylabel = {$f(t) = v^t$},
+    xmin=0, xmax=10,
+    ymin=0.25, ymax=1.05,
+    xtick={2, 4.53, 5, 8},
+    xticklabels={$t_1$, $t$, $\bar{t}$, $t_2$},
+    ytick={0.4305, 0.5905, 0.6202, 0.8100},
+    yticklabels={$v^{t_2}$, $v^{\bar{t}}$, $v^t$, $v^{t_1}$},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=11cm, height=6.5cm
+]
+% Convex curve v^t = (0.9)^x
+\addplot [domain=0.5:9.5, samples=100, color=primaryblue, very thick] {(0.9)^x};
+\addlegendentry{Fungsi Diskon: $f(t) = v^t$}
+
+% Secant chord between t1=2 and t2=8: y1 = 0.81, y2 = 0.430467
+\addplot [domain=2:8, samples=10, color=darkred, thick, dashed] {0.81 - ((0.81 - 0.430467)/6)*(x - 2)};
+\addlegendentry{Tali Busur: $w_1 v^{t_1} + w_2 v^{t_2}$}
+
+% Key points
+\addplot[only marks, mark=*, mark size=2.5pt, color=black] coordinates {(2, 0.81) (8, 0.430467)};
+\node[above right] at (axis cs:2, 0.81) {\footnotesize $(t_1, v^{t_1})$};
+\node[above right] at (axis cs:8, 0.430467) {\footnotesize $(t_2, v^{t_2})$};
+
+% Point on chord: (t_bar, v^t)
+\addplot[only marks, mark=square*, mark size=2.5pt, color=darkgreen] coordinates {(5, 0.62023)};
+\node[above right, darkgreen] at (axis cs:5, 0.62023) {\footnotesize $(\bar{t}, v^t)$};
+
+% Point on curve: (t_bar, v^{\bar{t}})
+\addplot[only marks, mark=triangle*, mark size=2.8pt, color=primaryblue] coordinates {(5, 0.59049)};
+\node[below left, primaryblue] at (axis cs:5, 0.59049) {\footnotesize $(\bar{t}, v^{\bar{t}})$};
+
+% Point on curve for exact t: (t, v^t)
+\addplot[only marks, mark=diamond*, mark size=2.8pt, color=darkred] coordinates {(4.53, 0.62023)};
+\node[above left, darkred] at (axis cs:4.53, 0.62023) {\footnotesize $(t, v^t)$};
+
+% Dashed projection lines
+\draw[dashed, darkgreen] (axis cs:0, 0.62023) -- (axis cs:5, 0.62023);
+\draw[dashed, primaryblue] (axis cs:0, 0.59049) -- (axis cs:5, 0.59049);
+\draw[dashed, darkgreen] (axis cs:5, 0) -- (axis cs:5, 0.62023);
+\draw[dashed, darkred] (axis cs:4.53, 0) -- (axis cs:4.53, 0.62023);
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{notebox}[Makna Finansial $\bar{t} > t$]
+Karena $\bar{t} > t$, jika debitur membayar sebesar total nominal $\sum s_k$ pada waktu $\bar{t}$, maka debitur membayar \textbf{terlambat} dibandingkan waktu ekuivalen teoritis $t$. Akibatnya, metode $\bar{t}$ menguntungkan debitur/peminjam dan sedikit merugikan kreditur/pemberi pinjaman.
+\end{notebox}
+
+\begin{examplebox}[Contoh 3: Komparasi Numerik Waktu Terimbang vs Waktu Eksak]
+\textbf{Soal:}\\
+Sebuah kewajiban pembayaran terdiri dari $\$500$ yang jatuh tempo pada akhir tahun ke-1 ($t_1 = 1$) dan $\$1{,}000$ yang jatuh tempo pada akhir tahun ke-4 ($t_2 = 4$). Jika suku bunga efektif tahunan adalah $8\%$ ($i = 0.08$):
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung waktu jatuh tempo terimbang $\bar{t}$ (\textit{Method of Equated Time}).
+    \item Hitung waktu jatuh tempo eksak $t$ secara teoritis.
+    \item Bandingkan kedua hasil tersebut.
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Waktu Terimbang ($\bar{t}$):}
+    \begin{equation*}
+        \bar{t} = \frac{s_1 t_1 + s_2 t_2}{s_1 + s_2} = \frac{500(1) + 1{,}000(4)}{500 + 1{,}000} = \frac{500 + 4{,}000}{1{,}500} = \frac{4{,}500}{1{,}500} = 3.00 \text{ tahun}
+    \end{equation*}
+
+    \item \textbf{Waktu Eksak ($t$):}
+    Persamaan nilai sekarang total pembayaran pada $t = 0$:
+    \begin{align*}
+        1{,}500 v^t &= 500(1.08)^{-1} + 1{,}000(1.08)^{-4} \\[0.4em]
+        1{,}500 v^t &= 500(0.925926) + 1{,}000(0.735030) \\[0.4em]
+        1{,}500 v^t &= 462.963 + 735.030 = 1{,}197.993 \\[0.4em]
+        v^t &= \frac{1{,}197.993}{1{,}500} \approx 0.798662
+    \end{align*}
+    Mengambil logaritma alami dengan $v = (1.08)^{-1}$:
+    \begin{equation*}
+        t = \frac{\ln(0.798662)}{-\ln(1.08)} = \frac{-0.224817}{-0.076961} \approx 2.921 \text{ tahun}
+    \end{equation*}
+
+    \item \textbf{Perbandingan:}
+    Terbukti secara numerik bahwa:
+    \begin{equation*}
+        \bar{t} = 3.000 \text{ tahun} > t = 2.921 \text{ tahun}
+    \end{equation*}
+    Selisih waktu adalah sekitar $0.079$ tahun ($\approx 29$ hari).
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\subsection{Aturan Penggandaan Modal (\textit{Rules for Doubling Time})}
+
+Berapa lama waktu $n$ yang diperlukan agar modal awal berlipat ganda menjadi 2 kali lipatnya pada suku bunga majemuk $i$?
+\begin{equation*}
+    (1 + i)^n = 2 \implies n = \frac{\ln 2}{\ln(1 + i)}
+\end{equation*}
+Mengingat $\ln 2 \approx 0.693147$, kita dapat menuliskan:
+\begin{equation}
+    n = \frac{0.693147}{i} \cdot \left( \frac{i}{\ln(1 + i)} \right)
+\end{equation}
+
+\subsubsection{Penurunan Aturan 72 (\textit{Rule of 72})}
+Menggunakan ekspansi deret Taylor untuk $\ln(1 + i)$ di sekitar $i = 0$:
+\begin{equation*}
+    \ln(1 + i) = i - \frac{i^2}{2} + \frac{i^3}{3} - \dots \approx i \left(1 - \frac{i}{2}\right)
+\end{equation*}
+Sehingga:
+\begin{equation*}
+    \frac{i}{\ln(1 + i)} \approx \frac{1}{1 - \frac{i}{2}} \approx 1 + \frac{i}{2}
+\end{equation*}
+Maka:
+\begin{equation*}
+    n \approx \frac{0.6931}{i} \left(1 + \frac{i}{2}\right) = \frac{0.6931}{i} + 0.3466
+\end{equation*}
+Untuk suku bunga di kisaran menengah yang lazim dalam dunia perbankan/pasar modal ($i \approx 8\% = 0.08$):
+\begin{equation*}
+    \frac{0.08}{\ln(1.08)} \approx 1.0395 \implies n \approx \frac{0.693147 \times 1.0395}{i} = \frac{0.7205}{i} \approx \frac{72}{100i}
+\end{equation*}
+
+\begin{definitionbox}[Aturan 72, Aturan 70, dan Aturan 69.3]
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Aturan 72 (\textit{Rule of 72}):} $n \approx \dfrac{72}{\text{Suku Bunga (\%)}}$. Sangat akurat untuk suku bunga sekitar $6\% - 10\%$ dan angka 72 memiliki banyak faktor pembagi ($1, 2, 3, 4, 6, 8, 9, 12, 18, 24, 36$).
+    \item \textbf{Aturan 70 (\textit{Rule of 70}):} $n \approx \dfrac{70}{\text{Suku Bunga (\%)}}$. Cocok untuk suku bunga yang lebih rendah ($2\% - 5\%$).
+    \item \textbf{Aturan 69.3 (\textit{Rule of 69.3}):} $n \approx \dfrac{69.3}{\text{Suku Bunga (\%)}}$. Merupakan hampiran eksak untuk pemajemukan kontinu (\textit{continuous compounding}).
+\end{itemize}
+\end{definitionbox}
+
+\subsubsection{Tabel Komparasi Akurasi Aturan 72 vs Nilai Eksak}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{cccc}
+\toprule
+\textbf{Suku Bunga ($i$)} & \textbf{Aturan 72 ($72 / 100i$)} & \textbf{Nilai Eksak ($n = \frac{\ln 2}{\ln(1+i)}$)} & \textbf{Galat Relatif} \\
+\midrule
+$4\%$ & $18.00$ tahun & $17.67$ tahun & $+1.87\%$ \\
+$6\%$ & $12.00$ tahun & $11.90$ tahun & $+0.84\%$ \\
+$8\%$ & $9.00$ tahun & $9.01$ tahun & $-0.11\%$ \\
+$10\%$ & $7.20$ tahun & $7.27$ tahun & $-0.96\%$ \\
+$12\%$ & $6.00$ tahun & $6.12$ tahun & $-1.96\%$ \\
+$18\%$ & $4.00$ tahun & $4.19$ tahun & $-4.53\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{examplebox}[Contoh 4: Penentuan Waktu dengan Logaritma \& Interpolasi Linear]
+\textbf{Soal:}\\
+Hitung waktu yang diperlukan agar modal awal $\$1{,}000$ terakumulasi menjadi $\$1{,}500$ jika suku bunga yang berlaku adalah $6\%$ per tahun dikonversi semesteran (\textit{convertible semiannually}) menggunakan:
+\begin{enumerate}[label=(\alph*)]
+    \item Perhitungan eksak logaritma
+    \item Interpolasi linear dari tabel suku bunga
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Diketahui $A(0) = 1{,}000$, $A(t) = 1{,}500$, $i^{(2)} = 6\% \implies j = \frac{0.06}{2} = 0.03$ per semester.
+Persamaan akumulasi:
+\begin{equation*}
+    1{,}000 (1.03)^n = 1{,}500 \implies (1.03)^n = 1.5
+\end{equation*}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Perhitungan Logaritma Eksak:}
+    \begin{equation*}
+        n = \frac{\ln(1.5)}{\ln(1.03)} = \frac{0.405465}{0.029559} \approx 13.717 \text{ semester}
+    \end{equation*}
+    Waktu dalam satuan tahun:
+    \begin{equation*}
+        t = \frac{n}{2} = \frac{13.717}{2} \approx 6.859 \text{ tahun (sekitar 6 tahun 10 bulan)}
+    \end{equation*}
+    
+    \item \textbf{Interpolasi Linear dari Tabel Suku Bunga:}
+    Dari tabel nilai akumulasi $a(n) = (1.03)^n$:
+    \begin{itemize}
+        \item Untuk $n = 13 \implies a(13) = (1.03)^{13} \approx 1.46853$
+        \item Untuk $n = 14 \implies a(14) = (1.03)^{14} \approx 1.51259$
+    \end{itemize}
+    Karena nilai target $1.5$ berada di antara $1.46853$ dan $1.51259$, maka $13 < n < 14$.
+    
+    Persamaan garis interpolasi linear:
+    \begin{align*}
+        \frac{n - 13}{14 - 13} &= \frac{1.50000 - 1.46853}{1.51259 - 1.46853} \\[0.4em]
+        n &= 13 + \frac{0.03147}{0.04406} = 13 + 0.71425 = 13.71425 \text{ semester}
+    \end{align*}
+    Waktu dalam satuan tahun:
+    \begin{equation*}
+        t = \frac{n}{2} = \frac{13.71425}{2} \approx 6.857 \text{ tahun}
+    \end{equation*}
+    Hasil interpolasi linear sangat dekat dengan nilai eksak (galat hanya sekitar 0.03\%).
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Menentukan Suku Bunga yang Belum Diketahui (\textit{Unknown Rate of Interest})}
+
+Dalam analisis kelayakan investasi atau evaluasi pinjaman, sering kali jumlah modal awal, lama waktu, dan jadwal arus kas telah ditentukan, sedangkan tingkat suku bunga efektif atau imbal hasil (\textit{yield rate}) harus dicari.
+
+Terdapat empat pendekatan utama untuk menentukan suku bunga yang belum diketahui:
+
+\subsection{1. Metode Solusi Analitik Langsung (Pembayaran Tunggal)}
+Jika masalah hanya melibatkan satu pembayaran awal $S$ dan satu pembayaran akhir $A$ setelah $t$ periode:
+\begin{equation}
+    S(1 + i)^t = A \implies 1 + i = \left(\frac{A}{S}\right)^{1/t} \implies i = \left(\frac{A}{S}\right)^{1/t} - 1
+\end{equation}
+
+\subsection{2. Metode Aljabar (Polinomial Berderajat Rendah)}
+Jika arus kas terjadi pada beberapa titik waktu tertentu (misalnya $t = 1, 2, \dots$), persamaan nilai dapat diubah menjadi persamaan polinomial terhadap faktor diskon $v$:
+\begin{equation}
+    S_1 v + S_2 v^2 + \dots + S_n v^n = A
+\end{equation}
+\begin{itemize}[leftmargin=1.5em]
+    \item Untuk persamaan kuadratik dalam $v$ (misal $a v^2 + b v + c = 0$ atau $a v^4 + b v^2 + c = 0$), akar-akar persamaan dapat diselesaikan secara eksak menggunakan rumus kuadratik (\textit{rumus abc}):
+    \begin{equation}
+        v = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+    \end{equation}
+    \item Setelah nilai $v > 0$ diperoleh, suku bunga efektif ditentukan oleh $i = \frac{1}{v} - 1$.
+\end{itemize}
+
+\subsection{3. Metode Interpolasi Linear Tabel Suku Bunga}
+Mengevaluasi fungsi persamaan nilai pada dua suku bunga yang berdekatan ($i_1$ dan $i_2$) dari tabel standar, lalu menginterpolasi secara linear:
+\begin{equation}
+    i \approx i_1 + \frac{f(i) - f(i_1)}{f(i_2) - f(i_1)} (i_2 - i_1)
+\end{equation}
+
+\subsection{4. Metode Aproksimasi Suksesif / Iteratif Numerik}
+Untuk persamaan polinomial berderajat tinggi ($n \ge 3$) atau persamaan non-linier transenden, digunakan algoritma analisis numerik:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Metode Bagi Dua (\textit{Bisection Method}) \& Regula Falsi:} Menjepit akar fungsi pada selang $[a, b]$ di mana $f(a) \cdot f(b) < 0$.
+    \item \textbf{Metode Newton-Raphson:} Menggunakan turunan fungsi untuk konvergensi kuadratik yang cepat:
+    \begin{equation}
+        i_{k+1} = i_k - \frac{f(i_k)}{f'(i_k)}
+    \end{equation}
+    \item \textbf{Metode Secant:} Mirip Newton-Raphson tanpa perlu menghitung turunan analitik secara eksplisit.
+\end{itemize}
+
+\begin{examplebox}[Contoh 5: Menentukan Suku Bunga Nominal Kuartalan]
+\textbf{Soal:}\\
+Tentukan suku bunga nominal yang dikonversi kuartalan ($i^{(4)}$) sedemikian sehingga investasi awal sebesar $\$1{,}000$ akan terakumulasi menjadi $\$1{,}600$ dalam jangka waktu 6 tahun!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Misalkan $j = \frac{i^{(4)}}{4}$ adalah suku bunga per kuartal.
+Total periode waktu dalam kuartal: $n = 6 \text{ tahun} \times 4 \text{ kuartal/tahun} = 24 \text{ kuartal}$.
+
+Persamaan nilai:
+\begin{align*}
+    1{,}000 (1 + j)^{24} &= 1{,}600 \\[0.4em]
+    (1 + j)^{24} &= 1.6 \\[0.4em]
+    1 + j &= (1.6)^{1/24} \approx 1.019776 \\[0.4em]
+    j &\approx 0.019776 = 1.9776\% \text{ per kuartal}
+\end{align*}
+Suku bunga nominal tahunan convertible quarterly:
+\begin{equation*}
+    i^{(4)} = 4 \times j = 4 \times 0.019776 = 0.079104 \approx 7.91\%
+\end{equation*}
+\end{examplebox}
+
+\begin{examplebox}[Contoh 6: Menentukan Suku Bunga Menggunakan Persamaan Kuadratik]
+\textbf{Soal:}\\
+Tentukan suku bunga efektif tahunan $i$ sedemikian sehingga nilai sekarang (\textit{present value}) dari penerimaan sebesar $\$2{,}000$ pada akhir tahun ke-2 dan $\$3{,}000$ pada akhir tahun ke-4 adalah tepat sama dengan $\$4{,}000$ hari ini!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Persamaan nilai sekarang pada $t = 0$:
+\begin{equation*}
+    4{,}000 = 2{,}000 v^2 + 3{,}000 v^4
+\end{equation*}
+Bagi kedua ruas dengan $1{,}000$:
+\begin{equation*}
+    4 = 2 v^2 + 3 v^4 \iff 3 v^4 + 2 v^2 - 4 = 0
+\end{equation*}
+Misalkan $u = v^2$, maka diperoleh persamaan kuadrat:
+\begin{equation*}
+    3 u^2 + 2 u - 4 = 0
+\end{equation*}
+Gunakan rumus kuadratik (\textit{abc}):
+\begin{equation*}
+    u = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} = \frac{-2 \pm \sqrt{2^2 - 4(3)(-4)}}{2(3)} = \frac{-2 \pm \sqrt{4 + 48}}{6} = \frac{-2 \pm \sqrt{52}}{6}
+\end{equation*}
+Karena $u = v^2 = (1+i)^{-2} > 0$, kita ambil akar positif:
+\begin{equation*}
+    v^2 = u = \frac{-2 + \sqrt{52}}{6} = \frac{-2 + 7.211103}{6} = \frac{5.211103}{6} \approx 0.868517
+\end{equation*}
+Maka:
+\begin{align*}
+    (1 + i)^{-2} &= 0.868517 \\[0.4em]
+    (1 + i)^2 &= \frac{1}{0.868517} \approx 1.151388 \\[0.4em]
+    1 + i &= \sqrt{1.151388} \approx 1.073027 \\[0.4em]
+    i &\approx 0.07303 = 7.303\% \approx 7.30\%
+\end{align*}
+\end{examplebox}
+
+\begin{examplebox}[Contoh 7: Aproksimasi Numerik Menggunakan Metode Newton-Raphson]
+\textbf{Soal:}\\
+Sebuah proyek investasi memerlukan modal awal sebesar $\$1{,}000$ pada $t = 0$ dan menghasilkan arus kas masuk sebesar $\$500$ pada akhir tahun ke-1 serta $\$700$ pada akhir tahun ke-2. Tentukan tingkat imbal hasil efektif tahunan $i$ menggunakan metode iterasi Newton-Raphson dengan tebakan awal (\textit{initial guess}) $i_0 = 10\%$ ($0.10$)!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Persamaan nilai sekarang bersih (\textit{Net Present Value}) dari proyek investasi pada $t = 0$:
+\begin{equation*}
+    f(i) = 500(1 + i)^{-1} + 700(1 + i)^{-2} - 1{,}000 = 0
+\end{equation*}
+Turunan pertama $f'(i)$ terhadap $i$:
+\begin{equation*}
+    f'(i) = -500(1 + i)^{-2} - 1{,}400(1 + i)^{-3}
+\end{equation*}
+
+\textbf{Iterasi 1 ($k = 0$):}
+\begin{align*}
+    f(i_0) &= f(0.10) = 500(1.10)^{-1} + 700(1.10)^{-2} - 1{,}000 \\
+           &= 454.545 + 578.512 - 1{,}000 = +33.057 \\[0.4em]
+    f'(i_0) &= f'(0.10) = -500(1.10)^{-2} - 1{,}400(1.10)^{-3} \\
+            &= -413.223 - 1{,}051.841 = -1{,}465.064 \\[0.4em]
+    i_1 &= i_0 - \frac{f(i_0)}{f'(i_0)} = 0.10 - \frac{33.057}{-1{,}465.064} = 0.10 + 0.022563 = 0.122563 \ (12.26\%)
+\end{align*}
+
+\textbf{Iterasi 2 ($k = 1$):}
+\begin{align*}
+    f(i_1) &= f(0.122563) = 500(1.122563)^{-1} + 700(1.122563)^{-2} - 1{,}000 \\
+           &= 445.410 + 555.500 - 1{,}000 = +0.910 \\[0.4em]
+    f'(i_1) &= f'(0.122563) = -500(1.122563)^{-2} - 1{,}400(1.122563)^{-3} \\
+            &= -396.788 - 989.626 = -1{,}386.414 \\[0.4em]
+    i_2 &= i_1 - \frac{f(i_1)}{f'(i_1)} = 0.122563 - \frac{0.910}{-1{,}386.414} \\[0.3em]
+            &= 0.122563 + 0.000656 = 0.123219 \ (12.32\%)
+\end{align*}
+
+\textbf{Verifikasi Analitik Eksak:}
+Persamaan kuadrat $1{,}000(1+i)^2 - 500(1+i) - 700 = 0 \iff 10(1+i)^2 - 5(1+i) - 7 = 0$:
+\begin{align*}
+    1 + i &= \frac{5 + \sqrt{25 - 4(10)(-7)}}{20} = \frac{5 + \sqrt{305}}{20} \\[0.3em]
+          &= \frac{5 + 17.464249}{20} \approx 1.123212 \implies i \approx 12.321\%
+\end{align*}
+Hanya dalam 2 iterasi, metode Newton-Raphson telah konvergen hingga ketelitian 5 angka di belakang koma.
+\end{examplebox}
+
+---
+
+\section{Konvensi Penghitungan Hari \& Periode Waktu}
+
+Dalam transaksi jangka pendek (kurang dari 1 tahun), seperti sertifikat deposito, surat berharga pasar uang (\textit{treasury bills}), pinjaman komersial, atau bunga akrual, penentuan jumlah hari yang tepat antara dua tanggal kalender sangat krusial.
+
+\subsection{Tiga Metode Penghitungan Hari}
+
+Terdapat tiga konvensi utama yang digunakan di pasar uang internasional:
+
+\begin{definitionbox}[Tiga Konvensi Penghitungan Hari (\textit{Day-Count Conventions})]
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{\textit{Exact Simple Interest} (Konvensi \textit{Actual/Actual} atau \textit{Actual/365}):}
+    \begin{itemize}
+        \item Menggunakan jumlah hari kalender eksak (\textit{exact number of days}) di antara dua tanggal.
+        \item Menggunakan jumlah hari sebenarnya dalam 1 tahun kalender, yaitu $365$ hari (atau $366$ hari pada tahun kabisat).
+        \item Faktor waktu: $t = \dfrac{\text{Jumlah hari aktual}}{365} \quad (\text{atau } \dfrac{\text{aktual}}{366})$.
+    \end{itemize}
+
+    \item \textbf{\textit{Ordinary Simple Interest} (Konvensi \textit{30/360} / \textit{Commercial}):}
+    \begin{itemize}
+        \item Mengasumsikan setiap bulan terdiri dari tepat $30$ hari dan 1 tahun terdiri dari $360$ hari ($12 \times 30$).
+        \item Jarak hari antara tanggal $(D_1, M_1, Y_1)$ ke $(D_2, M_2, Y_2)$ dihitung dengan rumus:
+        \begin{equation}
+            \text{Hari}_{30/360} = 360(Y_2 - Y_1) + 30(M_2 - M_1) + (D_2 - D_1)
+        \end{equation}
+        \item Faktor waktu: $t = \dfrac{\text{Hari}_{30/360}}{360}$.
+    \end{itemize}
+
+    \item \textbf{Aturan Banker (\textit{Banker's Rule} / Konvensi \textit{Actual/360}):}
+    \begin{itemize}
+        \item Metode campuran (\textit{hybrid}): menggunakan \textbf{jumlah hari eksak} pada pembilang, namun menggunakan \textbf{360 hari} pada penyebut sebagai basis tahun.
+        \item Faktor waktu: $t = \dfrac{\text{Jumlah hari aktual}}{360}$.
+    \end{itemize}
+\end{enumerate}
+\end{definitionbox}
+
+\subsection{Perbandingan Finansial Ketiga Metode}
+
+\begin{notebox}[Mengapa Aturan Banker (\textit{Actual/360}) Paling Disukai Pemberi Pinjaman?]
+Karena $360 < 365$, maka untuk jumlah hari aktual yang sama berlaku:
+\begin{equation}
+    \frac{\text{Actual}}{360} > \frac{\text{Actual}}{365}
+\end{equation}
+Selain itu, untuk sebagian besar rentang waktu sepanjang tahun (karena ada 7 bulan yang memiliki 31 hari), $\text{Actual} \ge \text{Hari}_{30/360}$, sehingga:
+\begin{equation}
+    \frac{\text{Actual}}{360} > \frac{\text{Hari}_{30/360}}{360}
+\end{equation}
+Dengan demikian, \textbf{Aturan Banker menghasilkan perolehan bunga paling tinggi} di antara ketiga metode. Hal ini menjadikannya standar yang paling disukai oleh bank dan lembaga keuangan dalam pembebanan bunga pinjaman.
+\end{notebox}
+
+\subsection{Tabel Nomor Urutan Hari dalam Satu Tahun (\textit{Day of the Year})}
+
+Untuk mempermudah penghitungan hari eksak, digunakan tabel nomor urut hari kalender standar (tahun non-kabisat):
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4.2pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{rcccccccccccc}
+\toprule
+\textbf{Tgl} & \textbf{Jan} & \textbf{Feb} & \textbf{Mar} & \textbf{Apr} & \textbf{Mei} & \textbf{Jun} & \textbf{Jul} & \textbf{Agu} & \textbf{Sep} & \textbf{Okt} & \textbf{Nov} & \textbf{Des} \\
+\midrule
+1 & 1 & 32 & 60 & 91 & 121 & 152 & 182 & 213 & 244 & 274 & 305 & 335 \\
+10 & 10 & 41 & 69 & 100 & 130 & 161 & 191 & 222 & 253 & 283 & 314 & 344 \\
+15 & 15 & 46 & 74 & 105 & 135 & 166 & 196 & 227 & 258 & 288 & 319 & 349 \\
+17 & 17 & 48 & 76 & 107 & 137 & 168 & 198 & 229 & 260 & 290 & 321 & 351 \\
+20 & 20 & 51 & 79 & 110 & 140 & 171 & 201 & 232 & 263 & 293 & 324 & 354 \\
+28 & 28 & 59 & 87 & 118 & 148 & 179 & 209 & 240 & 271 & 301 & 332 & 362 \\
+30 & 30 & -- & 89 & 120 & 150 & 181 & 211 & 242 & 273 & 303 & 334 & 364 \\
+31 & 31 & -- & 90 & -- & 151 & -- & 212 & 243 & -- & 304 & -- & 365 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textit{Catatan:} Pada tahun kabisat, untuk setiap tanggal setelah tanggal 28 Februari, tambahkan 1 hari ke nomor urut di atas.
+
+\begin{examplebox}[Contoh 8: Komparasi Tiga Metode Penghitungan Hari]
+\textbf{Soal:}\\
+Hitung besarnya saldo akumulasi yang diperoleh jika dana sebesar $\$2{,}000$ didepositokan pada tanggal \textbf{17 Januari} dan ditarik pada tanggal \textbf{10 September} pada tahun yang sama, dengan suku bunga tunggal $8\%$ per tahun ($i = 0.08$) berdasarkan:
+\begin{enumerate}[label=(\alph*)]
+    \item \textit{Exact Simple Interest} (\textit{Actual/Actual} atau \textit{Actual/365})
+    \item \textit{Ordinary Simple Interest} (\textit{30/360})
+    \item Aturan Banker (\textit{Banker's Rule} / \textit{Actual/360})
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{\textit{Exact Simple Interest}:}
+    Dari tabel kalender: 10 September adalah hari ke-$253$, dan 17 Januari adalah hari ke-$17$.
+    Jumlah hari eksak: $253 - 17 = 236$ hari.
+    \begin{itemize}
+        \item \emph{Tahun Biasa (365 hari):}
+        \begin{equation*}
+            A = 2{,}000 \left( 1 + \frac{236}{365} \times 0.08 \right) = 2{,}000 (1 + 0.0517260) \approx \$2{,}103.45
+        \end{equation*}
+        \item \emph{Tahun Kabisat (366 hari, selang hari $= 237$):}
+        \begin{equation*}
+            A = 2{,}000 \left( 1 + \frac{237}{366} \times 0.08 \right) = 2{,}000 (1 + 0.0518033) \approx \$2{,}103.61
+        \end{equation*}
+    \end{itemize}
+
+    \item \textbf{\textit{Ordinary Simple Interest} (30/360):}
+    Dari $(D_1, M_1) = (17, 1)$ ke $(D_2, M_2) = (10, 9)$:
+    \begin{equation*}
+        \text{Hari}_{30/360} = 360(0) + 30(9 - 1) + (10 - 17) = 30(8) - 7 = 240 - 7 = 233 \text{ hari}
+    \end{equation*}
+    \begin{equation*}
+        A = 2{,}000 \left( 1 + \frac{233}{360} \times 0.08 \right) = 2{,}000 (1 + 0.0517778) \approx \$2{,}103.56
+    \end{equation*}
+
+    \item \textbf{Aturan Banker (\textit{Actual/360}):}
+    Menggunakan hari eksak ($236$ hari pada tahun biasa):
+    \begin{equation*}
+        A = 2{,}000 \left( 1 + \frac{236}{360} \times 0.08 \right) = 2{,}000 (1 + 0.0524444) \approx \$2{,}104.89
+    \end{equation*}
+    (Jika tahun kabisat dengan $237$ hari: $A = 2{,}000 \left( 1 + \frac{237}{360} \times 0.08 \right) \approx \$2{,}105.33$).
+\end{enumerate}
+
+\textbf{Kesimpulan Komparasi:}\\
+Urutan perolehan dana dari yang terbesar:
+\begin{equation*}
+    \text{Aturan Banker } (\$2{,}104.89) > \text{Ordinary } (\$2{,}103.56) > \text{Exact } (\$2{,}103.45)
+\end{equation*}
+\end{examplebox}
+
+---
+
+\section{Penerapan Praktis dalam Produk Perbankan \& Pasar Finansial}
+
+\subsection{1. Sertifikat Deposito: Suku Bunga Nominal vs Hasil Tahunan (\textit{APY / APR})}
+
+Bank sering membedakan antara \textbf{Suku Bunga Nominal (\textit{Nominal Rate})} dengan \textbf{\textit{Annual Percentage Yield} (APY)} atau \textbf{\textit{Annual Percentage Rate} (APR)}:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{\textit{Nominal Interest Rate}} ($i^{(m)}$): Suku bunga yang dinyatakan sebelum memperhitungkan pemajemukan intra-tahun.
+    \item \textbf{\textit{Annual Percentage Yield} (APY / $i_{\text{eff}}$):} Laju pengembalian efektif tahunan setelah memperhitungkan frekuensi pemajemukan:
+    \begin{equation}
+        \text{APY} = \left( 1 + \frac{i^{(m)}}{m} \right)^m - 1
+    \end{equation}
+\end{itemize}
+
+\begin{examplebox}[Contoh 9: Interpretasi Iklan Deposito Bank]
+\textbf{Kasus:}\\
+Sebuah bank mengiklankan produk sertifikat deposito (CD) dengan label \textbf{``5.20\% Rate / 5.30\% Yield''}. Jelaskan makna matematis dari pernyataan tersebut!
+
+\vspace{0.5em}
+\textbf{Penjelasan:}\\
+Label tersebut berarti bahwa suku bunga nominal yang ditetapkan adalah $i^{(4)} = 5.20\%$ yang dikonversi kuartalan ($m = 4$). Maka suku bunga efektif tahunan (\textit{yield}) yang sebenarnya diterima nasabah adalah:
+\begin{equation*}
+    i = \left( 1 + \frac{0.052}{4} \right)^4 - 1 = (1 + 0.013)^4 - 1 = 1.053023 - 1 \approx 5.302\% \approx 5.30\%
+\end{equation*}
+\end{examplebox}
+
+\subsection{2. Trik Iklan Komputasi Hari Majemuk (\textit{Compounded Daily})}
+Beberapa institusi perbankan mengiklankan suku bunga majemuk harian $6\%$ yang menghasilkan yield $6.27\%$. Secara teoritis:
+\begin{itemize}
+    \item Jika pemajemukan harian standar (365 hari): $\left(1 + \frac{0.06}{365}\right)^{365} - 1 \approx 6.183\%$
+    \item Jika basis tahun 360 hari: $\left(1 + \frac{0.06}{360}\right)^{360} - 1 \approx 6.183\%$
+\end{itemize}
+Lalu dari manakah angka $6.27\%$ diperoleh? 
+Ternyata bank menerapkan \textbf{Aturan Banker pada Bunga Majemuk}, yaitu suku bunga harian dibagi $360$, namun dimajemukkan selama $365$ hari dalam setahun:
+\begin{equation}
+    \text{Yield} = \left(1 + \frac{0.06}{360}\right)^{365} - 1 = (1.00016667)^{365} - 1 \approx 6.2716\% \approx 6.27\%
+\end{equation}
+
+\subsection{3. Penalti Penarikan Dana Awal (\textit{Early Withdrawal Penalty})}
+Pada sertifikat deposito (CD), nasabah menyepakati dana dikunci selama periode tertentu. Jika dana ditarik sebelum jatuh tempo, bank akan memberlakukan penalti berupa penurunan suku bunga retroaktif atau pemotongan bunga pada beberapa bulan terakhir.
+
+\begin{examplebox}[Contoh 10: Valuasi CD dengan Penalti Penarikan Dini]
+\textbf{Soal:}\\
+Sebuah Sertifikat Deposito (CD) berjangka waktu 2 tahun memberikan suku bunga $6\%$ dikonversi kuartalan. Jika CD dicairkan sebelum 2 tahun, berlaku aturan penalti di mana suku bunga untuk 3 bulan terakhir turun menjadi $4\%$ dikonversi kuartalan.
+
+Jika seorang nasabah menempatkan dana awal sebesar $\$5{,}000$ dan mencairkannya setelah \textbf{18 bulan} (1.5 tahun), berapakah total dana yang diterima nasabah?
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Total durasi simpanan adalah 18 bulan = 6 kuartal (masing-masing 3 bulan per kuartal).
+\begin{itemize}
+    \item Untuk 5 kuartal pertama (15 bulan pertama), nasabah tetap menikmati suku bunga normal:
+    \begin{equation*}
+        j_1 = \frac{i^{(4)}}{4} = \frac{0.06}{4} = 0.015 = 1.5\% \text{ per kuartal}
+    \end{equation*}
+    \item Untuk 1 kuartal terakhir (3 bulan terakhir), berlaku penalti suku bunga:
+    \begin{equation*}
+        j_2 = \frac{i_{\text{penalti}}^{(4)}}{4} = \frac{0.04}{4} = 0.010 = 1.0\% \text{ per kuartal}
+    \end{equation*}
+\end{itemize}
+Maka total nilai akumulasi dana pada akhir bulan ke-18 adalah:
+\begin{align*}
+    A(18 \text{ bulan}) &= 5{,}000 \cdot (1 + j_1)^5 \cdot (1 + j_2)^1 \\
+                        &= 5{,}000 \cdot (1.015)^5 \cdot (1.010)^1 \\
+                        &= 5{,}000 \cdot (1.077284) \cdot (1.010) \\
+                        &= 5{,}000 \cdot 1.088057 = \$5{,}440.28
+    \end{align*}
+\end{examplebox}
+
+---
+
+\section{Ringkasan Rumus Kunci Bab 03}
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{lll}
+\toprule
+\textbf{Topik / Konsep} & \textbf{Notasi / Besaran} & \textbf{Rumus Utama} \\
+\midrule
+Bunga Bervariasi (Diskrit) & $a(t), a^{-1}(t)$ & $a(t) = \prod_{k=1}^t (1 + i_k), \quad a^{-1}(t) = \prod_{k=1}^t v_k$ \\
+Bunga Efektif Ekuivalen & $i_{\text{eq}}$ & $i_{\text{eq}} = [a(t)]^{1/t} - 1 = \left(\prod_{k=1}^t (1+i_k)\right)^{1/t} - 1$ \\
+\textit{Force} Bervariasi & $a(t)$ & $a(t) = \exp\left(\int_0^t \delta(r)\,dr\right) = \exp\left(\sum_{r=1}^t \delta_r\right)$ \\
+Persamaan Nilai ($t=0$) & \textit{Equation of Value} & $\sum C_j v^{\tau_j} = \sum B_k v^{t_k}$ \\
+Waktu Eksak Penyatuan & $t$ & $v^t = \dfrac{\sum s_k v^{t_k}}{\sum s_k} \implies t = \dfrac{\ln\left(\sum s_k v^{t_k} / \sum s_k\right)}{\ln v}$ \\
+\textit{Method of Equated Time} & $\bar{t}$ & $\bar{t} = \dfrac{\sum s_k t_k}{\sum s_k} \quad (\bar{t} > t \text{ untuk } i > 0)$ \\
+Aturan Penggandaan (Rule 72) & $n_{\text{double}}$ & $n \approx \dfrac{72}{100i} \quad \left(\text{eksak: } n = \dfrac{\ln 2}{\ln(1+i)}\right)$ \\
+\textit{Exact Simple Interest} & $t_{\text{exact}}$ & $t = \dfrac{\text{Actual Days}}{365} \quad (\text{atau } /366)$ \\
+\textit{Ordinary Simple Interest} & $t_{30/360}$ & $\text{Hari} = 360\Delta Y + 30\Delta M + \Delta D, \quad t = \dfrac{\text{Hari}}{360}$ \\
+Aturan Banker (\textit{Banker's Rule}) & $t_{\text{banker}}$ & $t = \dfrac{\text{Actual Days}}{360} \quad (\text{tertinggi nilainya})$ \\
+\textit{Annual Percentage Yield} & APY & $\text{APY} = \left(1 + \dfrac{i^{(m)}}{m}\right)^m - 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

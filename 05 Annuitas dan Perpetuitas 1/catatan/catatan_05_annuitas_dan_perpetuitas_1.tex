@@ -1,0 +1,978 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 05: Anuitas dan Perpetuitas (Bagian 1)\\
+\large (\textit{Annuity-Immediate, Annuity-Due, Perpetuity, and Arbitrary Date Valuation})}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 3) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\section{Pendahuluan \& Konsep Dasar Anuitas}
+
+Dalam transaksi keuangan modern, arus kas jarang terjadi hanya sebagai pembayaran tunggal di masa depan. Sebagian besar instrumen finansial penting—seperti kredit pemilikan rumah (KPR), cicilan kendaraan bermotor, sewa properti, pembayaran premi asuransi, penerimaan uang pensiun, serta kupon obligasi—melibatkan \textbf{serangkaian pembayaran berkala} yang dilakukan dalam interval waktu yang teratur.
+
+\begin{definitionbox}[Definisi Fundamental: Anuitas (\textit{Annuity})]
+Secara umum, \textbf{Anuitas (\textit{Annuity})} didefinisikan sebagai suatu \textbf{rangkaian atau deretan pembayaran berkala} dengan jumlah tertentu yang dilakukan pada interval waktu yang berjarak sama (\textit{equal payment intervals}).
+\end{definitionbox}
+
+\subsection{Etimologi \& Perkembangan Makna}
+Kata \textit{annuity} berakar dari bahasa Latin \textit{annus} yang berarti \textbf{tahun}. Pada masa awal perkembangan matematika keuangan dan aktuarial, anuitas merujuk pada pembayaran yang hanya dilakukan satu kali setiap tahun. 
+
+Namun dalam penerapan praktis saat ini, interval pembayaran anuitas dapat berupa periode waktu apa pun yang disepakati, seperti:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Tahunan (\textit{Annual}):} Kupon obligasi pemerintah tertentu, donasi yayasan tahunan.
+    \item \textbf{Semesteran (\textit{Semiannual}):} Kupon obligasi korporasi, biaya kuliah semesteran.
+    \item \textbf{Kuartalan (\textit{Quarterly}):} Dividen saham preferen, sewa tempat usaha komersial.
+    \item \textbf{Bulanan (\textit{Monthly}):} Cicilan KPR, sewa apartemen/rumah, uang pensiun bulanan, premi asuransi jiwa.
+\end{itemize}
+
+\subsection{Taksonomi \& Klasifikasi Anuitas}
+
+Anuitas dapat diklasifikasikan berdasarkan beberapa dimensi utama:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Berdasarkan Kepastian Masa Pembayaran:}
+    \begin{itemize}
+        \item \textbf{Anuitas Pasti (\textit{Annuity-Certain}):} Anuitas yang waktu mulai dan waktu berakhirnya telah ditentukan secara pasti di awal perjanjian, tanpa bergantung pada kejadian acak apa pun. Panjang masa anuitas memiliki durasi tetap (\textit{fixed period}) dan bebas dari risiko kontinjensi.
+        \item \textbf{Anuitas Kontinjensi (\textit{Contingent Annuity}):} Anuitas yang durasi atau jumlah pembayarannya bergantung pada terjadinya suatu peristiwa acak yang tidak pasti di masa depan. Contoh paling mendasar adalah \textbf{Anuitas Jiwa (\textit{Life Annuity})}, di mana uang pensiun hanya dibayarkan selama tertanggung masih hidup dan otomatis berhenti saat tertanggung meninggal dunia.
+    \end{itemize}
+
+    \item \textbf{Berdasarkan Titik Waktu Pembayaran dalam Setiap Periode:}
+    \begin{itemize}
+        \item \textbf{Anuitas Akhir (\textit{Annuity-Immediate / Ordinary Annuity}):} Pembayaran dilakukan pada \textbf{setiap akhir periode} pembayaran ($t = 1, 2, \dots, n$).
+        \item \textbf{Anuitas Awal (\textit{Annuity-Due}):} Pembayaran dilakukan pada \textbf{setiap awal periode} pembayaran ($t = 0, 1, \dots, n-1$).
+    \end{itemize}
+
+    \item \textbf{Berdasarkan Panjang Durasi Waktu:}
+    \begin{itemize}
+        \item \textbf{Anuitas Berhingga (\textit{Finite Annuity}):} Pembayaran berlangsung selama sejumlah $n$ periode tertentu yang terbatas.
+        \item \textbf{Perpetuitas (\textit{Perpetuity / Infinite Annuity}):} Pembayaran berlangsung secara kontinu dan abadi untuk selamanya ($n \to \infty$).
+    \end{itemize}
+
+    \item \textbf{Berdasarkan Keselarasan Periode Pembayaran dan Periode Konversi Bunga:}
+    \begin{itemize}
+        \item \textbf{Anuitas Sederhana (\textit{Simple Annuity}):} Periode pembayaran persis berimpit dengan periode konversi suku bunga (misal: pembayaran tahunan dengan bunga efektif tahunan $i$).
+        \item \textbf{Anuitas Umum (\textit{General Annuity}):} Frekuensi pembayaran berbeda dari frekuensi penggabungan bunga (akan dibahas mendalam pada Bab 07 dan 08).
+    \end{itemize}
+\end{enumerate}
+
+\begin{notebox}[Fokus Pembahasan Bab 05]
+Pada modul ini, kita mengasumsikan pembayaran bernilai satuan $1$ (atau kelipatan tetap $R$), berjangka waktu pasti (\textit{annuity-certain}), serta tingkat suku bunga efektif per periode pembayaran bernilai konstan sebesar $i > 0$.
+\end{notebox}
+
+---
+
+\section{Anuitas Akhir (\textit{Annuity-Immediate / Ordinary Annuity})}
+
+\subsection{Definisi \& Notasi Aktuarial}
+Pada anuitas akhir (\textit{annuity-immediate}), pembayaran pertama dilakukan pada akhir periode pertama ($t = 1$), pembayaran kedua pada akhir periode kedua ($t = 2$), hingga pembayaran ke-$n$ dilakukan pada akhir periode ke-$n$ ($t = n$).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (9.5,0) node[right] {Waktu ($t$)};
+    
+    % Ticks and labels
+    \foreach \x/\lbl in {0/0, 1.5/1, 3/2, 4.5/3, 7.5/{n-1}, 9/n} {
+        \draw[thick] (\x,0.15) -- (\x,-0.15) node[below] {\small $\lbl$};
+    }
+    \draw[dotted, thick] (4.8,0) -- (7.2,0);
+    
+    % Cash flows (at end of each period: 1, 2, 3, ..., n)
+    \foreach \x in {1.5, 3, 4.5, 7.5, 9} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 1.2) node[above] {\textbf{\$1}};
+    }
+    
+    % Present Value Bracket at t=0
+    \draw[<-, thick, darkred] (0, -0.7) -- (0, -1.4) node[below] {\small $PV = a_{\overline{n}|i}$ (1 periode sebelum pmbt-1)};
+    
+    % Future Value Bracket at t=n
+    \draw[<-, thick, darkgreen] (9, -0.7) -- (9, -1.4) node[below] {\small $AV = s_{\overline{n}|i}$ (pada saat pmbt-$n$)};
+\end{tikzpicture}
+\end{center}
+
+\begin{definitionbox}[Notasi Standar Aktuaria: $a_{\overline{n}|i}$ dan $s_{\overline{n}|i}$]
+\begin{itemize}[leftmargin=1.5em]
+    \item $a_{\overline{n}|i}$ (dibaca \textit{"a angle n at rate i"}): \textbf{Nilai Sekarang (\textit{Present Value})} dari anuitas-immediate sebesar $1$ per periode selama $n$ periode, dihitung \textbf{satu periode sebelum pembayaran pertama} ($t = 0$).
+    \item $s_{\overline{n}|i}$ (dibaca \textit{"s angle n at rate i"}): \textbf{Nilai Terakumulasi (\textit{Accumulated Value / Future Value})} dari anuitas-immediate sebesar $1$ per periode selama $n$ periode, dihitung \textbf{persis pada saat pembayaran terakhir} ($t = n$).
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Penurunan Matematis Nilai Sekarang (\texorpdfstring{$a_{\overline{n}|i}$}{a\_n|i})}
+
+Nilai sekarang pada $t = 0$ adalah jumlah dari nilai diskonto seluruh $n$ pembayaran:
+\begin{equation}
+    a_{\overline{n}|i} = v + v^2 + v^3 + \dots + v^{n-1} + v^n
+\end{equation}
+di mana $v = \frac{1}{1+i}$ adalah faktor diskon per periode.
+
+Deret di atas merupakan deret geometri dengan suku pertama $a_1 = v$, rasio persekutuan $r = v$, dan jumlah suku $n$:
+\begin{equation}
+    a_{\overline{n}|i} = v \cdot \frac{1 - v^n}{1 - v}
+\end{equation}
+Ingat kembali hubungan dasar antara suku bunga $i$, tingkat diskon $d$, dan faktor diskon $v$:
+\begin{equation}
+    1 - v = 1 - \frac{1}{1+i} = \frac{i}{1+i} = i \cdot v
+\end{equation}
+Substitusikan $1 - v = i \cdot v$ ke dalam penyebut:
+\begin{equation}
+    a_{\overline{n}|i} = v \cdot \frac{1 - v^n}{i \cdot v} = \frac{1 - v^n}{i}
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok Nilai Sekarang Anuitas Akhir]
+\begin{equation}
+    \mathbf{a_{\overline{n}|i} = \frac{1 - v^n}{i} = \frac{1 - (1+i)^{-n}}{i}}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Penurunan Matematis Nilai Terakumulasi (\texorpdfstring{$s_{\overline{n}|i}$}{s\_n|i})}
+
+Nilai akumulasi pada $t = n$ diperoleh dengan membawa seluruh arus kas ke titik waktu $t = n$:
+\begin{itemize}
+    \item Pembayaran ke-$n$ di $t = n$ bernilai $1$ (tanpa akumulasi bunga).
+    \item Pembayaran ke-$(n-1)$ di $t = n-1$ menghasilkan bunga selama 1 periode: $1 \cdot (1+i)^1$.
+    \item Pembayaran ke-$2$ di $t = 2$ menghasilkan bunga selama $(n-2)$ periode: $1 \cdot (1+i)^{n-2}$.
+    \item Pembayaran ke-$1$ di $t = 1$ menghasilkan bunga selama $(n-1)$ periode: $1 \cdot (1+i)^{n-1}$.
+\end{itemize}
+
+Menjumlahkan seluruh nilai akumulasi dari suku terakhir ke suku pertama:
+\begin{equation}
+    s_{\overline{n}|i} = 1 + (1+i) + (1+i)^2 + \dots + (1+i)^{n-2} + (1+i)^{n-1}
+\end{equation}
+Deret geometri ini memiliki suku pertama $1$, rasio $(1+i)$, dan $n$ suku:
+\begin{equation}
+    s_{\overline{n}|i} = \frac{1 \cdot \left((1+i)^n - 1\right)}{(1+i) - 1} = \frac{(1+i)^n - 1}{i}
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok Nilai Terakumulasi Anuitas Akhir]
+\begin{equation}
+    \mathbf{s_{\overline{n}|i} = \frac{(1+i)^n - 1}{i}}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Hubungan Fundamental Antara \texorpdfstring{$a_{\overline{n}|i}$}{a\_n|i} dan \texorpdfstring{$s_{\overline{n}|i}$}{s\_n|i}}
+
+\subsubsection{1. Hubungan Nilai Waktu dari Uang (\textit{Time Value Equivalence})}
+Karena $a_{\overline{n}|}$ dievaluasi pada $t = 0$ dan $s_{\overline{n}|}$ dievaluasi pada $t = n$, maka mengakumulasikan $a_{\overline{n}|}$ selama $n$ periode akan menghasilkan $s_{\overline{n}|}$:
+\begin{equation}
+    s_{\overline{n}|i} = a_{\overline{n}|i} \cdot (1+i)^n \quad \iff \quad a_{\overline{n}|i} = s_{\overline{n}|i} \cdot v^n
+\end{equation}
+
+\subsubsection{2. Identitas Aljabar \& Hubungan Resiprokal}
+Bagi kedua ruas rumus $s_{\overline{n}|}$ dengan $(1+i)^n$:
+\begin{equation}
+    \frac{1}{s_{\overline{n}|i}} + i = \frac{1}{a_{\overline{n}|i}}
+\end{equation}
+\textit{Bukti Aljabar:}
+\begin{align*}
+    \frac{1}{a_{\overline{n}|i}} - \frac{1}{s_{\overline{n}|i}} &= \frac{i}{1 - v^n} - \frac{i}{(1+i)^n - 1} \\
+    &= \frac{i}{1 - v^n} - \frac{i \cdot v^n}{1 - v^n} = \frac{i(1 - v^n)}{1 - v^n} = i
+\end{align*}
+
+\begin{notebox}[Interpretasi Keuangan Hubungan Resiprokal: $\frac{1}{a_{\overline{n}|}} = \frac{1}{s_{\overline{n}|}} + i$]
+Misalkan seseorang meminjam modal sebesar $\$1$ pada suku bunga $i$ selama $n$ periode:
+\begin{itemize}
+    \item Ruas kiri ($\frac{1}{a_{\overline{n}|}}$) adalah besaran cicilan berkala tetap untuk melunasi pokok pinjaman $\$1$ beserta seluruh bunganya (\textit{amortization payment}).
+    \item Ruas kanan ($\frac{1}{s_{\overline{n}|}} + i$) terdiri dari dua komponen:
+    \begin{enumerate}
+        \item $i$: Membayar beban bunga murni dari pokok pinjaman $\$1$ setiap periode.
+        \item $\frac{1}{s_{\overline{n}|}}$: Menyetorkan dana cadangan pelunasan (\textit{sinking fund deposit}) ke rekening simpanan terpisah agar tepat terakumulasi menjadi $\$1$ pada saat jatuh tempo di akhir periode ke-$n$.
+    \end{enumerate}
+\end{itemize}
+Kedua strategi pelunasan tersebut secara finansial adalah identik sempurna.
+\end{notebox}
+
+---
+
+\section{Anuitas Awal (\textit{Annuity-Due})}
+
+\subsection{Definisi \& Notasi Aktuarial}
+Pada anuitas awal (\textit{annuity-due}), pembayaran pertama dilakukan pada \textbf{awal periode pertama} ($t = 0$), pembayaran kedua pada awal periode kedua ($t = 1$), hingga pembayaran ke-$n$ dilakukan pada awal periode ke-$n$ ($t = n - 1$).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (9.5,0) node[right] {Waktu ($t$)};
+    
+    % Ticks and labels
+    \foreach \x/\lbl in {0/0, 1.5/1, 3/2, 4.5/3, 7.5/{n-1}, 9/n} {
+        \draw[thick] (\x,0.15) -- (\x,-0.15) node[below] {\small $\lbl$};
+    }
+    \draw[dotted, thick] (4.8,0) -- (7.2,0);
+    
+    % Cash flows (at start of each period: 0, 1, 2, ..., n-1)
+    \foreach \x in {0, 1.5, 3, 4.5, 7.5} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 1.2) node[above] {\textbf{\$1}};
+    }
+    
+    % Present Value Bracket at t=0
+    \draw[<-, thick, darkred] (0, -0.7) -- (0, -1.4) node[below] {\small $PV = \ddot{a}_{\overline{n}|i}$ (pada saat pmbt-1)};
+    
+    % Future Value Bracket at t=n
+    \draw[<-, thick, darkgreen] (9, -0.7) -- (9, -1.4) node[below] {\small $AV = \ddot{s}_{\overline{n}|i}$ (1 periode setelah pmbt-$n$)};
+\end{tikzpicture}
+\end{center}
+
+\begin{definitionbox}[Notasi Standar Aktuaria: $\ddot{a}_{\overline{n}|i}$ dan $\ddot{s}_{\overline{n}|i}$]
+Simbol \textit{double dot} (trema) di atas huruf melambangkan anuitas-due:
+\begin{itemize}[leftmargin=1.5em]
+    \item $\ddot{a}_{\overline{n}|i}$ (dibaca \textit{"a double dot angle n at rate i"}): \textbf{Nilai Sekarang (\textit{Present Value})} dari anuitas-due sebesar $1$ per periode selama $n$ periode, dievaluasi \textbf{persis pada saat pembayaran pertama} ($t = 0$).
+    \item $\ddot{s}_{\overline{n}|i}$ (dibaca \textit{"s double dot angle n at rate i"}): \textbf{Nilai Terakumulasi (\textit{Accumulated Value})} dari anuitas-due sebesar $1$ per periode selama $n$ periode, dievaluasi \textbf{satu periode setelah pembayaran terakhir} ($t = n$).
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Penurunan Matematis Nilai Sekarang (\texorpdfstring{$\ddot{a}_{\overline{n}|i}$}{\"a\_n|i})}
+
+Nilai sekarang pada $t = 0$ merupakan jumlah nilai diskonto dari $n$ pembayaran yang terjadi di $t = 0, 1, \dots, n-1$:
+\begin{equation}
+    \ddot{a}_{\overline{n}|i} = 1 + v + v^2 + \dots + v^{n-1}
+\end{equation}
+Deret geometri ini memiliki suku pertama $1$, rasio $v$, dan $n$ suku:
+\begin{equation}
+    \ddot{a}_{\overline{n}|i} = \frac{1 - v^n}{1 - v}
+\end{equation}
+Mengingat bahwa tingkat diskon efektif didefinisikan sebagai $d = 1 - v = \frac{i}{1+i}$:
+\begin{equation}
+    \ddot{a}_{\overline{n}|i} = \frac{1 - v^n}{d}
+\end{equation}
+
+Hubungan antara anuitas-due dan anuitas-immediate:
+\begin{equation}
+    \ddot{a}_{\overline{n}|i} = \frac{1 - v^n}{d} = \frac{1 - v^n}{i v} = (1+i) \left(\frac{1 - v^n}{i}\right) = (1+i) a_{\overline{n}|i}
+\end{equation}
+
+Selain itu, jika pembayaran pertama di $t = 0$ (bernilai $1$) dipisahkan dari $(n-1)$ pembayaran sisanya:
+\begin{equation}
+    \ddot{a}_{\overline{n}|i} = 1 + (v + v^2 + \dots + v^{n-1}) = 1 + a_{\overline{n-1}|i}
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok Nilai Sekarang Anuitas Awal]
+\begin{equation}
+    \mathbf{\ddot{a}_{\overline{n}|i} = \frac{1 - v^n}{d} = (1+i) a_{\overline{n}|i} = 1 + a_{\overline{n-1}|i}}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Penurunan Matematis Nilai Terakumulasi (\texorpdfstring{$\ddot{s}_{\overline{n}|i}$}{\"s\_n|i})}
+
+Nilai akumulasi pada $t = n$ dari seluruh pembayaran yang terjadi di $t = 0, 1, \dots, n-1$:
+\begin{equation}
+    \ddot{s}_{\overline{n}|i} = (1+i)^n + (1+i)^{n-1} + \dots + (1+i)^1
+\end{equation}
+Keluarkan faktor $(1+i)$:
+\begin{equation}
+    \ddot{s}_{\overline{n}|i} = (1+i) \left[ 1 + (1+i) + \dots + (1+i)^{n-1} \right] = (1+i) s_{\overline{n}|i}
+\end{equation}
+Substitusikan rumus $s_{\overline{n}|i} = \frac{(1+i)^n - 1}{i}$ dan gunakan $d = \frac{i}{1+i}$:
+\begin{equation}
+    \ddot{s}_{\overline{n}|i} = (1+i) \cdot \frac{(1+i)^n - 1}{i} = \frac{(1+i)^n - 1}{d}
+\end{equation}
+
+Selain itu, jika deret di atas ditambahkan dan dikurangkan dengan $1$:
+\begin{equation}
+    \ddot{s}_{\overline{n}|i} = \left[ 1 + (1+i) + \dots + (1+i)^n \right] - 1 = s_{\overline{n+1}|i} - 1
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok Nilai Terakumulasi Anuitas Awal]
+\begin{equation}
+    \mathbf{\ddot{s}_{\overline{n}|i} = \frac{(1+i)^n - 1}{d} = (1+i) s_{\overline{n}|i} = s_{\overline{n+1}|i} - 1}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Hubungan Fundamental \& Resiprokal untuk Anuitas Awal}
+\begin{equation}
+    \ddot{s}_{\overline{n}|i} = (1+i)^n \ddot{a}_{\overline{n}|i}
+\end{equation}
+\begin{equation}
+    \frac{1}{\ddot{a}_{\overline{n}|i}} - \frac{1}{\ddot{s}_{\overline{n}|i}} = d \quad \iff \quad \frac{1}{\ddot{a}_{\overline{n}|i}} = \frac{1}{\ddot{s}_{\overline{n}|i}} + d
+\end{equation}
+
+---
+
+\section{Tabel Komparasi: Anuitas Akhir vs Anuitas Awal}
+
+Tabel berikut merangkum seluruh hubungan struktural dan aljabar antara \textit{annuity-immediate} dan \textit{annuity-due}:
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4.5pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Karakteristik / Nilai} & \textbf{Anuitas Akhir (\textit{Immediate})} & \textbf{Anuitas Awal (\textit{Due})} \\
+\midrule
+Waktu Pembayaran & $t = 1, 2, \dots, n$ & $t = 0, 1, \dots, n-1$ \\
+Titik Evaluasi $PV$ & $t = 0$ (1 periode sebelum pmbt-1) & $t = 0$ (saat pmbt-1) \\
+Rumus Nilai Sekarang ($PV$) & $a_{\overline{n}|i} = \dfrac{1 - v^n}{i}$ & $\ddot{a}_{\overline{n}|i} = \dfrac{1 - v^n}{d}$ \\
+Titik Evaluasi $AV$ & $t = n$ (saat pmbt-$n$) & $t = n$ (1 periode setelah pmbt-$n$) \\
+Rumus Terakumulasi ($AV$) & $s_{\overline{n}|i} = \dfrac{(1+i)^n - 1}{i}$ & $\ddot{s}_{\overline{n}|i} = \dfrac{(1+i)^n - 1}{d}$ \\
+Faktor Pembagi Suku Bunga & Basis suku bunga $i$ & Basis tingkat diskon $d$ \\
+Hubungan $PV$ dan $AV$ & $s_{\overline{n}|} = (1+i)^n a_{\overline{n}|}$ & $\ddot{s}_{\overline{n}|} = (1+i)^n \ddot{a}_{\overline{n}|}$ \\
+Hubungan Antar-Jenis Anuitas & $a_{\overline{n}|} = v \ddot{a}_{\overline{n}|}$ & $\ddot{a}_{\overline{n}|} = (1+i) a_{\overline{n}|} = 1 + a_{\overline{n-1}|}$ \\
+Hubungan Antar-Akumulasi & $s_{\overline{n}|} = v \ddot{s}_{\overline{n}|}$ & $\ddot{s}_{\overline{n}|} = (1+i) s_{\overline{n}|} = s_{\overline{n+1}|} - 1$ \\
+Identitas Resiprokal & $\dfrac{1}{a_{\overline{n}|}} - \dfrac{1}{s_{\overline{n}|}} = i$ & $\dfrac{1}{\ddot{a}_{\overline{n}|}} - \dfrac{1}{\ddot{s}_{\overline{n}|}} = d$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{notebox}[Intuisi Finansial Perbandingan Due vs Immediate]
+Karena setiap pembayaran pada anuitas-due dilakukan \textbf{satu periode lebih awal} dibandingkan anuitas-immediate, maka setiap unit pembayaran memiliki kesempatan untuk menghasilkan bunga selama satu periode ekstra. Oleh karena itu, seluruh nilai anuitas-due selalu \textbf{lebih besar persis sebesar faktor $(1+i)$} dibandingkan anuitas-immediate:
+\begin{equation}
+    \ddot{a}_{\overline{n}|} = (1+i) a_{\overline{n}|} \quad \text{dan} \quad \ddot{s}_{\overline{n}|} = (1+i) s_{\overline{n}|}
+\end{equation}
+\end{notebox}
+
+---
+
+\section{Valuasi Anuitas pada Titik Waktu Sembarang}
+
+Dalam berbagai aplikasi praktis, kita sering kali perlu mengevaluasi nilai suatu anuitas pada titik waktu yang \textbf{tidak berimpit} dengan awal maupun akhir periode pembayaran standar. 
+
+Misalkan suatu anuitas terdiri dari $n$ pembayaran berkala sebesar $1$ yang dilakukan pada waktu $t = m+1, m+2, \dots, m+n$. Terdapat 3 kasus utama titik evaluasi:
+
+\subsection{Kasus 1: Valuasi Sebelum Pembayaran Pertama (Anuitas Ditunda / \textit{Deferred Annuity})}
+
+Misalkan kita ingin mencari nilai sekarang pada waktu $t = 0$ dari anuitas $n$ periode yang pembayarannya baru dimulai pada akhir periode ke-$(m+1)$ hingga akhir periode ke-$(m+n)$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {$t$};
+    
+    % Ticks
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (3,0.15) -- (3,-0.15) node[below] {$m$};
+    \draw[thick] (4.5,0.15) -- (4.5,-0.15) node[below] {$m+1$};
+    \draw[thick] (6,0.15) -- (6,-0.15) node[below] {$m+2$};
+    \draw[thick] (9.5,0.15) -- (9.5,-0.15) node[below] {$m+n$};
+    
+    \draw[dotted, thick] (6.3,0) -- (9.2,0);
+    
+    % Cash flows starting at m+1
+    \foreach \x in {4.5, 6, 9.5} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 1.1) node[above] {\textbf{\$1}};
+    }
+    
+    % Valuation arrows
+    \draw[<-, thick, darkred] (0, -0.6) -- (0, -1.2) node[below] {${}_m| a_{\overline{n}|} = v^m a_{\overline{n}|}$};
+    \draw[<-, thick, accentblue] (3, -0.6) -- (3, -1.2) node[below] {$a_{\overline{n}|}$};
+\end{tikzpicture}
+\end{center}
+
+\begin{definitionbox}[Notasi: Anuitas Ditunda (\textit{Deferred Annuity})]
+Simbol ${}_m| a_{\overline{n}|i}$ menyatakan nilai sekarang pada $t = 0$ dari anuitas sebesar $1$ selama $n$ periode yang \textbf{ditunda selama $m$ periode}.
+\end{definitionbox}
+
+Nilai sekarang anuitas ditunda dapat dirumuskan melalui dua cara aljabar yang ekuivalen:
+\begin{enumerate}[label=\alph*.]
+    \item \textbf{Metode Diskonto Langsung:} Nilai anuitas pada $t = m$ adalah $a_{\overline{n}|}$. Didiskontokan selama $m$ periode ke $t = 0$:
+    \begin{equation}
+        {}_m| a_{\overline{n}|} = v^m a_{\overline{n}|}
+    \end{equation}
+    
+    \item \textbf{Metode Selisih Dua Anuitas:} Pandang sebagai anuitas penuh selama $(m+n)$ periode dikurangi anuitas $m$ periode pertama yang tidak dibayarkan:
+    \begin{equation}
+        {}_m| a_{\overline{n}|} = a_{\overline{m+n}|} - a_{\overline{m}|}
+    \end{equation}
+\end{enumerate}
+
+\textit{Bukti Kesetaraan:}
+\begin{equation*}
+    a_{\overline{m+n}|} - a_{\overline{m}|} = \frac{1 - v^{m+n}}{i} - \frac{1 - v^m}{i} = \frac{v^m - v^{m+n}}{i} = v^m \left(\frac{1 - v^n}{i}\right) = v^m a_{\overline{n}|}
+\end{equation*}
+
+Untuk \textbf{Deferred Annuity-Due}:
+\begin{equation}
+    {}_m| \ddot{a}_{\overline{n}|} = v^m \ddot{a}_{\overline{n}|} = \ddot{a}_{\overline{m+n}|} - \ddot{a}_{\overline{m}|}
+\end{equation}
+
+---
+
+\subsection{Kasus 2: Valuasi Setelah Tanggal Pembayaran Terakhir}
+
+Misalkan $n$ pembayaran dilakukan pada $t = 1, 2, \dots, n$, dan kita ingin mengetahui nilai akumulasi pada waktu $t = n + k$ ($k$ periode setelah pembayaran terakhir).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {$t$};
+    
+    % Ticks
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (1.5,0.15) -- (1.5,-0.15) node[below] {$1$};
+    \draw[thick] (6,0.15) -- (6,-0.15) node[below] {$n$};
+    \draw[thick] (9.5,0.15) -- (9.5,-0.15) node[below] {$n+k$};
+    
+    \draw[dotted, thick] (1.8,0) -- (5.7,0);
+    \draw[dashed, thick] (6.3,0) -- (9.2,0);
+    
+    % Cash flows at 1, ..., n
+    \foreach \x in {1.5, 6} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 1.1) node[above] {\textbf{\$1}};
+    }
+    
+    % Valuation arrows
+    \draw[<-, thick, accentblue] (6, -0.6) -- (6, -1.2) node[below] {$s_{\overline{n}|}$};
+    \draw[<-, thick, darkgreen] (9.5, -0.6) -- (9.5, -1.2) node[below] {$(1+i)^k s_{\overline{n}|} = s_{\overline{n+k}|} - s_{\overline{k}|}$};
+\end{tikzpicture}
+\end{center}
+
+Nilai pada $t = n + k$:
+\begin{equation}
+    \text{Nilai}_{t = n+k} = (1+i)^k s_{\overline{n}|} = s_{\overline{n+k}|} - s_{\overline{k}|}
+\end{equation}
+
+\textit{Bukti Kesetaraan:}
+\begin{align*}
+    s_{\overline{n+k}|} - s_{\overline{k}|} &= \frac{(1+i)^{n+k} - 1}{i} - \frac{(1+i)^k - 1}{i} \\
+    &= \frac{(1+i)^{n+k} - (1+i)^k}{i} = (1+i)^k \left[\frac{(1+i)^n - 1}{i}\right] = (1+i)^k s_{\overline{n}|}
+\end{align*}
+
+Jika diekspresikan dalam anuitas-due:
+\begin{equation}
+    (1+i)^{k-1} \ddot{s}_{\overline{n}|} = s_{\overline{n+k}|} - s_{\overline{k}|}
+\end{equation}
+
+---
+
+\subsection{Kasus 3: Valuasi di Antara Tanggal Pembayaran Pertama dan Terakhir (\textit{Intermediate Value})}
+
+Misalkan $n$ pembayaran dilakukan pada $t = 1, 2, \dots, n$, dan kita ingin mencari nilai seluruh rangkaian anuitas tersebut pada suatu titik waktu perantara $t = k$ (di mana $1 \le k < n$).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {$t$};
+    
+    % Ticks
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (1.5,0.15) -- (1.5,-0.15) node[below] {$1$};
+    \draw[thick] (5,0.15) -- (5,-0.15) node[below] {\textbf{Titik $k$}};
+    \draw[thick] (9,0.15) -- (9,-0.15) node[below] {$n$};
+    
+    \draw[dotted, thick] (1.8,0) -- (4.7,0);
+    \draw[dotted, thick] (5.3,0) -- (8.7,0);
+    
+    % Cash flows
+    \draw[->, thick, primaryblue] (1.5, 0.2) -- (1.5, 1.1) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (5, 0.2) -- (5, 1.1) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (9, 0.2) -- (9, 1.1) node[above] {\textbf{\$1}};
+    
+    % Valuation decomposition
+    \draw[<-, thick, darkorange] (5, -0.7) -- (5, -1.3) node[below] {$\text{Nilai}_{t=k} = s_{\overline{k}|} + a_{\overline{n-k}|}$};
+\end{tikzpicture}
+\end{center}
+
+Rangkaian arus kas dapat dipecah menjadi dua bagian di titik $t = k$:
+\begin{enumerate}
+    \item Sebanyak $k$ pembayaran pertama ($t = 1, 2, \dots, k$) telah terjadi di masa lalu/saat ini, sehingga nilai akumulasinya pada $t = k$ adalah $\mathbf{s_{\overline{k}|}}$.
+    \item Sebanyak $(n - k)$ pembayaran berikutnya ($t = k+1, \dots, n$) berada di masa depan, sehingga nilai sekarangnya pada $t = k$ adalah $\mathbf{a_{\overline{n-k}|}}$.
+\end{enumerate}
+
+Dengan demikian:
+\begin{equation}
+    \mathbf{\text{Nilai}_{t=k} = (1+i)^k a_{\overline{n}|} = v^{n-k} s_{\overline{n}|} = s_{\overline{k}|} + a_{\overline{n-k}|}}
+\end{equation}
+
+\textit{Bukti Kesetaraan Aljabar:}
+\begin{align*}
+    s_{\overline{k}|} + a_{\overline{n-k}|} &= \frac{(1+i)^k - 1}{i} + \frac{1 - v^{n-k}}{i} \\
+    &= \frac{(1+i)^k - v^{n-k}}{i} = (1+i)^k \left[ \frac{1 - v^n}{i} \right] = (1+i)^k a_{\overline{n}|}
+\end{align*}
+
+Jika menggunakan anuitas awal (\textit{annuity-due}):
+\begin{equation}
+    (1+i)^k \ddot{a}_{\overline{n}|} = v^{n-k} \ddot{s}_{\overline{n}|} = \ddot{s}_{\overline{k}|} + \ddot{a}_{\overline{n-k}|}
+\end{equation}
+
+---
+
+\section{Perpetuitas (\textit{Perpetuity / Infinite Annuity})}
+
+\subsection{Definisi \& Konsep}
+
+\begin{definitionbox}[Definisi: Perpetuitas (\textit{Perpetuity})]
+\textbf{Perpetuitas (\textit{Perpetuity})} adalah anuitas di mana interval pembayarannya berlangsung terus-menerus untuk selamanya (\textbf{panjang waktu tak terbatas / durasi tak hingga}, $n \to \infty$).
+\end{definitionbox}
+
+Contoh instrumen di dunia nyata yang menyerupai perpetuitas:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Obligasi Abadi (\textit{Consols} / \textit{Perpetual Bonds}):} Obligasi yang diterbitkan oleh Pemerintah Inggris Raya (*British Consols*) yang tidak memiliki tanggal jatuh tempo pelunasan pokok, melainkan membayar kupon bunga tetap setiap periode selamanya.
+    \item \textbf{Dana Abadi (\textit{Endowment Funds}):} Dana abadi universitas atau yayasan filantropi di mana pokok modal disimpan secara permanen dan hanya hasil bunga/imbal hasilnya yang ditarik untuk mendanai beasiswa selamanya.
+    \item \textbf{Saham Preferen Non-Callable:} Saham yang membagikan dividen tetap per lembar tanpa batas waktu.
+\end{itemize}
+
+\subsection{Perpetuitas Akhir (\textit{Perpetuity-Immediate})}
+
+Pada \textit{perpetuity-immediate}, pembayaran sebesar $\$1$ dilakukan di setiap akhir periode ($t = 1, 2, 3, \dots$).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (8.5,0) node[right] {$t$};
+    
+    % Ticks
+    \foreach \x/\lbl in {0/0, 1.5/1, 3/2, 4.5/3, 6/4} {
+        \draw[thick] (\x,0.15) -- (\x,-0.15) node[below] {\small $\lbl$};
+    }
+    \draw[dotted, thick] (6.5,0) -- (8,0);
+    
+    % Cash flows
+    \foreach \x in {1.5, 3, 4.5, 6} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 1.1) node[above] {\textbf{\$1}};
+    }
+    
+    % PV
+    \draw[<-, thick, darkred] (0, -0.6) -- (0, -1.2) node[below] {$a_{\overline{\infty}|} = \dfrac{1}{i}$};
+\end{tikzpicture}
+\end{center}
+
+Nilai sekarang diperoleh dengan mengambil limit $n \to \infty$ pada rumus $a_{\overline{n}|}$:
+\begin{equation}
+    a_{\overline{\infty}|i} = \lim_{n \to \infty} a_{\overline{n}|i} = \lim_{n \to \infty} \left( \frac{1 - v^n}{i} \right)
+\end{equation}
+Karena $i > 0$, maka faktor diskon memenuhi $0 < v < 1$, sehingga $\lim_{n \to \infty} v^n = 0$.
+
+\begin{definitionbox}[Rumus Pokok Nilai Sekarang Perpetuitas Akhir]
+\begin{equation}
+    \mathbf{a_{\overline{\infty}|i} = \frac{1}{i}}
+\end{equation}
+\end{definitionbox}
+
+\begin{notebox}[Intuisi Finansial: Mengapa $a_{\overline{\infty}|} = \frac{1}{i}$?]
+Jika Anda menyetorkan modal awal sebesar $P = \frac{1}{i}$ ke dalam rekening bank yang memberikan suku bunga $i$ per periode:
+\begin{itemize}
+    \item Pada akhir periode ke-1, bunga yang dihasilkan adalah $P \cdot i = \left(\frac{1}{i}\right) \cdot i = 1$.
+    \item Anda menarik uang bunga $\$1$ tersebut. Sisa saldo di rekening tetap utuh sebesar $P = \frac{1}{i}$.
+    \item Proses ini dapat berulang setiap periode untuk selamanya tanpa pernah mengurangi pokok tabungan.
+    \item Jadi, modal yang dibutuhkan sekarang untuk menyediakan aliran kas $\$1$ selamanya adalah tepat $\frac{1}{i}$.
+\end{itemize}
+\end{notebox}
+
+\subsection{Perpetuitas Awal (\textit{Perpetuity-Due})}
+
+Pada \textit{perpetuity-due}, pembayaran sebesar $1$ dilakukan di setiap awal periode ($t = 0, 1, 2, \dots$).
+
+Nilai sekarang dievaluasi pada $t = 0$:
+\begin{equation}
+    \ddot{a}_{\overline{\infty}|i} = \lim_{n \to \infty} \ddot{a}_{\overline{n}|i} = \lim_{n \to \infty} \left( \frac{1 - v^n}{d} \right) = \frac{1}{d}
+\end{equation}
+Atau dapat dituliskan sebagai pembayaran pertama $1$ di $t = 0$ ditambah perpetuitas-immediate setelahnya:
+\begin{equation}
+    \ddot{a}_{\overline{\infty}|i} = 1 + a_{\overline{\infty}|i} = 1 + \frac{1}{i} = \frac{1+i}{i} = \frac{1}{d}
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok Nilai Sekarang Perpetuitas Awal]
+\begin{equation}
+    \mathbf{\ddot{a}_{\overline{\infty}|i} = \frac{1}{d} = \frac{1+i}{i} = 1 + \frac{1}{i}}
+\end{equation}
+\end{definitionbox}
+
+\subsection{Perpetuitas Ditunda (\textit{Deferred Perpetuity})}
+
+Nilai sekarang dari perpetuitas yang ditunda selama $m$ periode:
+\begin{equation}
+    {}_m| a_{\overline{\infty}|i} = v^m a_{\overline{\infty}|i} = \frac{v^m}{i}
+\end{equation}
+\begin{equation}
+    {}_m| \ddot{a}_{\overline{\infty}|i} = v^m \ddot{a}_{\overline{\infty}|i} = \frac{v^m}{d}
+\end{equation}
+
+\begin{notebox}[Catatan: Ketiadaan Nilai Terakumulasi untuk Perpetuitas]
+Perpetuitas \textbf{tidak memiliki nilai akumulasi terhingga} ($s_{\overline{\infty}|} = \infty$) karena pembayaran berlangsung selamanya tanpa pernah mencapai titik akhir waktu evaluasi.
+\end{notebox}
+
+\subsection{Dekomposisi Keuangan: Hubungan Anuitas Berhingga dan Perpetuitas}
+
+Perhatikan manipulasi aljabar berikut pada rumus nilai sekarang anuitas berhingga:
+\begin{equation}
+    a_{\overline{n}|i} = \frac{1 - v^n}{i} = \frac{1}{i} - \frac{v^n}{i} = a_{\overline{\infty}|i} - v^n a_{\overline{\infty}|i}
+\end{equation}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9, >=stealth]
+    % Line 1: Infinite
+    \draw[->, thick] (0, 2) -- (7.5, 2) node[right] {\footnotesize Perpetuitas Awal ($t=0 \to \infty$): $PV = \frac{1}{i}$};
+    \foreach \x in {1, 2, 3, 4, 5, 6} { \draw[->, primaryblue] (\x, 2.1) -- (\x, 2.5) node[above] {\tiny $1$}; }
+    
+    % Minus sign
+    \node at (0.3, 1.3) {\large $-$};
+    
+    % Line 2: Deferred Infinite
+    \draw[->, thick] (0, 0.6) -- (7.5, 0.6) node[right] {\footnotesize Ditunda ($t=n \to \infty$): $PV = \frac{v^n}{i}$};
+    \foreach \x in {4, 5, 6} { \draw[->, darkred] (\x, 0.7) -- (\x, 1.1) node[above] {\tiny $1$}; }
+    
+    % Equal sign
+    \node at (0.3, -0.1) {\large $=$};
+    
+    % Line 3: Finite Annuity
+    \draw[->, thick] (0, -0.8) -- (7.5, -0.8) node[right] {\footnotesize Anuitas Berhingga ($t=1 \to n$): $PV = a_{\overline{n}|}$};
+    \foreach \x in {1, 2, 3} { \draw[->, darkgreen] (\x, -0.7) -- (\x, -0.3) node[above] {\tiny $1$}; }
+\end{tikzpicture}
+\end{center}
+
+\textbf{Makna Finansial:} Membeli hak atas anuitas berhingga selama $n$ tahun setara dengan membeli hak atas aliran kas abadi mulai hari ini ($\frac{1}{i}$), lalu menjual kembali hak aliran kas abadi tersebut mulai tahun ke-$n$ kepada pihak lain seharga $\frac{v^n}{i}$.
+
+---
+
+\section{Contoh Soal Terperinci \& Pembahasan Langkah demi Langkah}
+
+\begin{examplebox}[Contoh 1: Nilai Sekarang Anuitas Akhir (\textit{Slide Perkuliahan})]
+\textbf{Soal:}\\
+Tentukan nilai sekarang (\textit{present value}) dari suatu anuitas yang membayarkan $\$500$ pada setiap akhir tengah tahun (semesteran) selama 20 tahun, jika diberikan suku bunga nominal $9\%$ dikonversi secara semesteran (\textit{convertible semiannually})!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Identifikasi Parameter Soal}
+\begin{itemize}
+    \item Besar pembayaran per periode: $R = \$500$
+    \item Suku bunga nominal per tahun: $i^{(2)} = 9\% = 0.09$
+    \item Frekuensi pemajemukan: $m = 2$ kali per tahun
+    \item Suku bunga efektif per periode semesteran:
+    \begin{equation*}
+        i = \frac{i^{(2)}}{2} = \frac{0.09}{2} = 0.045 \quad (4.5\% \text{ per semester})
+    \end{equation*}
+    \item Total periode pembayaran: $n = 20 \text{ tahun} \times 2 \text{ semester/tahun} = 40 \text{ periode}$.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung Nilai Sekarang ($PV$)}
+Karena pembayaran dilakukan di akhir setiap semester, instrumen ini merupakan \textit{annuity-immediate}:
+\begin{align*}
+    PV &= R \cdot a_{\overline{n}|i} = 500 \cdot a_{\overline{40}|0.045} \\[0.4em]
+       &= 500 \cdot \left[ \frac{1 - (1 + 0.045)^{-40}}{0.045} \right] \\[0.4em]
+       &= 500 \cdot \left[ \frac{1 - (1.045)^{-40}}{0.045} \right]
+\end{align*}
+
+Hitung nilai diskonto:
+\begin{equation*}
+    (1.045)^{-40} \approx 0.1719287
+\end{equation*}
+Maka nilai anuitas per unit:
+\begin{equation*}
+    a_{\overline{40}|0.045} = \frac{1 - 0.1719287}{0.045} = \frac{0.8280713}{0.045} \approx 18.401584
+\end{equation*}
+
+Kalikan dengan besar pembayaran semesteran $R = \$500$:
+\begin{equation*}
+    PV = 500 \times 18.401584 = \mathbf{\$9{,}200.79}
+\end{equation*}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 2: Perencanaan Dana Pensiun dengan Anuitas Awal (\textit{Slide Perkuliahan})]
+\textbf{Soal:}\\
+Seorang investor berharap mendapatkan nilai akumulasi sebesar $\$100{,}000$ dalam dana pensiunnya 12 tahun mendatang ($t = 12$). Untuk mendapatkan dana tersebut, investor berencana menyetorkan uang ke deposito secara rutin \textbf{setiap akhir tahun hingga satu tahun sebelum periode investasi berakhir} (yaitu setoran dilakukan pada $t = 1, 2, \dots, 11$).
+
+Berapa besar dana ($R$) yang perlu disetorkan ke deposito setiap tahunnya jika investasi menghasilkan tingkat suku bunga efektif tahunan sebesar $7\%$ ($i = 0.07$)?
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Analisis Garis Waktu Aliran Kas}
+\begin{itemize}
+    \item Periode total investasi: 12 tahun ($t = 0$ hingga $t = 12$).
+    \item Setoran dilakukan pada $t = 1, 2, \dots, 11$ (total terdapat $n = 11$ kali setoran).
+    \item Setoran terakhir terjadi pada $t = 11$.
+    \item Target nilai akumulasi $\$100{,}000$ dievaluasi pada $t = 12$, yaitu \textbf{1 tahun setelah setoran terakhir}.
+\end{itemize}
+
+\textbf{Langkah 2: Pemilihan Formula Aktuarial yang Tepat}
+Karena nilai akumulasi dievaluasi 1 periode setelah pembayaran terakhir, rangkaian 11 setoran ini membentuk \textbf{Anuitas Awal (\textit{Annuity-Due})} berdurasi 11 periode yang dievaluasi pada $t = 12$:
+\begin{equation*}
+    R \cdot \ddot{s}_{\overline{11}|0.07} = 100{,}000
+\end{equation*}
+Atau setara dengan nilai akumulasi \textit{annuity-immediate} yang diakumulasikan 1 tahun ekstra:
+\begin{equation*}
+    R \cdot s_{\overline{11}|0.07} \cdot (1 + 0.07) = 100{,}000
+\end{equation*}
+
+\textbf{Langkah 3: Perhitungan Numerik}
+Hitung nilai $\ddot{s}_{\overline{11}|0.07}$:
+\begin{align*}
+    \ddot{s}_{\overline{11}|0.07} &= \frac{(1.07)^{11} - 1}{d} = \frac{(1.07)^{11} - 1}{\frac{0.07}{1.07}} \\[0.4em]
+    (1.07)^{11} &\approx 2.104852 \\
+    \ddot{s}_{\overline{11}|0.07} &= \frac{2.104852 - 1}{0.06542056} = \frac{1.104852}{0.06542056} \approx 16.88845
+\end{align*}
+
+Maka besar setoran tahunan yang diperlukan:
+\begin{equation*}
+    R = \frac{100{,}000}{\ddot{s}_{\overline{11}|0.07}} = \frac{100{,}000}{16.88845} = \mathbf{\$5{,}921.21}
+\end{equation*}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 3: Valuasi Anuitas pada Titik Waktu Sembarang (3 Kasus Slide)]
+\textbf{Soal:}\\
+Suatu anuitas terdiri dari 7 pembayaran tahunan sebesar $\$1{,}000$ yang dilakukan pada akhir tahun ke-3, ke-4, ke-5, ke-6, ke-7, ke-8, dan ke-9 (yaitu $t = 3, 4, 5, 6, 7, 8, 9$). Diberikan suku bunga efektif $i = 6\%$.
+
+Tentukan nilai anuitas tersebut pada:
+\begin{enumerate}[label=(\alph*)]
+    \item Waktu $t = 0$ (Kasus 1: Valuasi sebelum pembayaran pertama / \textit{Deferred Annuity}).
+    \item Waktu $t = 12$ (Kasus 2: Valuasi setelah pembayaran terakhir / \textit{Accumulated Value}).
+    \item Waktu $t = 6$ (Kasus 3: Valuasi di antara masa pembayaran / \textit{Intermediate Value}).
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Karakteristik dasar anuitas:} Jumlah pembayaran $n = 7$, besar pembayaran $R = \$1{,}000$.
+Nilai sekarang anuitas 7 tahun pada $t = 2$ (satu periode sebelum pembayaran pertama di $t = 3$):
+\begin{equation*}
+    a_{\overline{7}|0.06} = \frac{1 - (1.06)^{-7}}{0.06} = \frac{1 - 0.665057}{0.06} \approx 5.58238
+\end{equation*}
+Nilai akumulasi pada $t = 9$ (saat pembayaran terakhir):
+\begin{equation*}
+    s_{\overline{7}|0.06} = a_{\overline{7}|0.06} \cdot (1.06)^7 = 5.58238 \times 1.503630 \approx 8.39384
+\end{equation*}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Nilai pada $t = 0$ (Kasus 1 - Anuitas Ditunda 2 Tahun, ${}_2| a_{\overline{7}|}$):}
+    \begin{align*}
+        PV_0 &= 1{,}000 \cdot v^2 \cdot a_{\overline{7}|0.06} = 1{,}000 \cdot (1.06)^{-2} \cdot 5.58238 \\
+             &= 1{,}000 \cdot (0.889996) \cdot 5.58238 = \mathbf{\$4{,}968.30}
+    \end{align*}
+    \textit{Metode Alternatif ($a_{\overline{9}|} - a_{\overline{2}|}$):}
+    \begin{equation*}
+        1{,}000 \cdot (a_{\overline{9}|0.06} - a_{\overline{2}|0.06}) = 1{,}000 \cdot (6.80169 - 1.83339) = \mathbf{\$4{,}968.30}
+    \end{equation*}
+
+    \item \textbf{Nilai pada $t = 12$ (Kasus 2 - Diakumulasikan 3 Tahun Setelah $t = 9$):}
+    \begin{align*}
+        AV_{12} &= 1{,}000 \cdot (1+i)^3 \cdot s_{\overline{7}|0.06} = 1{,}000 \cdot (1.06)^3 \cdot 8.39384 \\
+                &= 1{,}000 \cdot (1.191016) \cdot 8.39384 = \mathbf{\$9{,}997.20}
+    \end{align*}
+    \textit{Metode Alternatif ($s_{\overline{10}|} - s_{\overline{3}|}$ jika dihitung dari $t=2$):}
+    \begin{equation*}
+        1{,}000 \cdot (s_{\overline{10}|0.06} - s_{\overline{3}|0.06}) = 1{,}000 \cdot (13.18079 - 3.18360) = \mathbf{\$9{,}997.19}
+    \end{equation*}
+
+    \item \textbf{Nilai pada $t = 6$ (Kasus 3 - Nilai Perantara):}
+    Pada $t = 6$, pembayaran di $t = 3, 4, 5, 6$ (sebanyak 4 pembayaran) telah selesai, dan tersisa 3 pembayaran di $t = 7, 8, 9$:
+    \begin{align*}
+        \text{Nilai}_{t=6} &= 1{,}000 \cdot \left[ s_{\overline{4}|0.06} + a_{\overline{3}|0.06} \right] \\
+        s_{\overline{4}|0.06} &= \frac{(1.06)^4 - 1}{0.06} \approx 4.37462 \\
+        a_{\overline{3}|0.06} &= \frac{1 - (1.06)^{-3}}{0.06} \approx 2.67301 \\
+        \text{Nilai}_{t=6} &= 1{,}000 \cdot [4.37462 + 2.67301] = 1{,}000 \times 7.04763 = \mathbf{\$7{,}047.63}
+    \end{align*}
+    \textit{Metode Alternatif ($(1+i)^4 \cdot a_{\overline{7}|}$ dari $t=2$):}
+    \begin{equation*}
+        1{,}000 \cdot (1.06)^4 \cdot 5.58238 = 1{,}000 \cdot (1.262477) \cdot 5.58238 = \mathbf{\$7{,}047.63}
+    \end{equation*}
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 4: Pembagian Portofolio Obligasi Abadi (\textit{Slide Perkuliahan})]
+\textbf{Soal:}\\
+Sebuah obligasi abadi (\textit{perpetual bond}) memiliki nilai nominal $\$100{,}000$ dan menjanjikan kupon bunga tahunan sebesar $7\%$ per tahun ($i = 7\%$). Kupon bunga tersebut disepakati untuk dialokasikan sebagai dana donasi dengan pembagian sebagai berikut:
+\begin{itemize}
+    \item Donasi untuk \textbf{Kegiatan B}: Diberikan selama 10 tahun pertama ($t = 1$ s.d. $t = 10$).
+    \item Donasi untuk \textbf{Kegiatan C}: Diberikan selama 10 tahun kedua ($t = 11$ s.d. $t = 20$).
+    \item Donasi untuk \textbf{Kegiatan D}: Diberikan untuk tahun-tahun berikutnya selamanya ($t = 21, 22, \dots, \infty$).
+\end{itemize}
+Tentukan nilai sekarang (\textit{present value}) dari masing-masing porsi donasi B, C, dan D!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Menghitung Besaran Aliran Kas Kupon Tahunan}
+Kupon tahunan yang dihasilkan dari obligasi abadi:
+\begin{equation*}
+    K = \$100{,}000 \times 7\% = \$7{,}000 \text{ per tahun}.
+\end{equation*}
+
+\textbf{Langkah 2: Menghitung Nilai Sekarang Masing-Masing Donasi}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Besaran Nilai Sekarang Donasi B ($PV_B$):}
+    Merupakan anuitas-immediate standar selama 10 tahun:
+    \begin{align*}
+        PV_B &= 7{,}000 \cdot a_{\overline{10}|0.07} = 7{,}000 \cdot \left[ \frac{1 - (1.07)^{-10}}{0.07} \right] \\
+             &= 7{,}000 \cdot 7.0235815 \approx \mathbf{\$49{,}165.07} \quad (\approx \$49{,}165)
+    \end{align*}
+
+    \item \textbf{Besaran Nilai Sekarang Donasi C ($PV_C$):}
+    Merupakan anuitas 10 tahun yang ditunda selama 10 tahun (${}_{10}| a_{\overline{10}|}$):
+    \begin{align*}
+        PV_C &= 7{,}000 \cdot v^{10} \cdot a_{\overline{10}|0.07} = 7{,}000 \cdot (1.07)^{-10} \cdot 7.0235815 \\
+             &= 7{,}000 \cdot (0.508349) \cdot 7.0235815 \approx \mathbf{\$24{,}992.83} \quad (\approx \$24{,}993)
+    \end{align*}
+
+    \item \textbf{Besaran Nilai Sekarang Donasi D ($PV_D$):}
+    Merupakan perpetuitas abadi yang ditunda selama 20 tahun (${}_{20}| a_{\overline{\infty}|}$):
+    \begin{align*}
+        PV_D &= 7{,}000 \cdot v^{20} \cdot a_{\overline{\infty}|0.07} = 7{,}000 \cdot (1.07)^{-20} \cdot \left(\frac{1}{0.07}\right) \\
+             &= \frac{7{,}000 \cdot (0.258419)}{0.07} = 100{,}000 \times 0.258419 \approx \mathbf{\$25{,}841.90} \quad (\approx \$25{,}842)
+    \end{align*}
+\end{enumerate}
+
+\textbf{Verifikasi Konsistensi Total:}\\
+Jumlah total dari ketiga nilai sekarang donasi harus tepat sama dengan nilai pasar obligasi abadi ($\$100{,}000$):
+\begin{equation*}
+    PV_{\text{Total}} = \$49{,}165.07 + \$24{,}992.83 + \$25{,}841.90 = \mathbf{\$100{,}000.00} \quad (\text{Konsisten sempurna!})
+\end{equation*}
+\end{examplebox}
+
+---
+
+\begin{examplebox}[Contoh 5: Penentuan Durasi Anuitas \& Pembayaran Penyeimbang (\textit{SOA FM Level})]
+\textbf{Soal:}\\
+Seseorang meminjam uang sebesar $\$20{,}000$ dengan suku bunga efektif tahunan $8\%$. Pinjaman tersebut akan dilunasi dengan cicilan tahunan sebesar $\$3{,}000$ di setiap akhir tahun selama mungkin, ditambah dengan satu pembayaran penyeimbang yang lebih kecil pada saat pelunasan terakhir.
+\begin{enumerate}[label=(\alph*)]
+    \item Berapa kali pembayaran reguler penuh sebesar $\$3{,}000$ yang dapat dilakukan?
+    \item Tentukan besaran pembayaran terakhir jika dilakukan bersamaan dengan pembayaran reguler terakhir (\textit{Balloon Payment}).
+    \item Tentukan besaran pembayaran terakhir jika dilakukan 1 tahun setelah pembayaran reguler terakhir (\textit{Drop Payment}).
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Menentukan Nilai $n$ Teoritis}
+Persamaan nilai sekarang pinjaman:
+\begin{align*}
+    20{,}000 &= 3{,}000 \cdot a_{\overline{n}|0.08} = 3{,}000 \left(\frac{1 - (1.08)^{-n}}{0.08}\right) \\[0.4em]
+    \frac{20{,}000 \times 0.08}{3{,}000} &= 1 - (1.08)^{-n} \implies \frac{1{,}600}{3{,}000} = 0.533333 = 1 - (1.08)^{-n} \\[0.4em]
+    (1.08)^{-n} &= 1 - 0.533333 = 0.466667 \\[0.4em]
+    -n \ln(1.08) &= \ln(0.466667) \implies n = -\frac{-0.762140}{0.076961} \approx 9.903 \text{ tahun}
+\end{align*}
+Jadi, peminjam dapat melakukan **$9$ kali pembayaran reguler penuh** sebesar $\$3{,}000$, dan sisa saldo diselesaikan dengan pembayaran penyeimbang.
+
+\textbf{Langkah 2: Menghitung Saldo Pinjaman Setelah 9 Kali Pembayaran}
+Nilai akumulasi pinjaman pada $t = 9$:
+\begin{equation*}
+    20{,}000 \cdot (1.08)^9 = 20{,}000 \times 1.9990046 = \$39{,}980.09
+\end{equation*}
+Nilai akumulasi 9 kali setoran reguler $\$3{,}000$:
+\begin{equation*}
+    3{,}000 \cdot s_{\overline{9}|0.08} = 3{,}000 \cdot \left[\frac{(1.08)^9 - 1}{0.08}\right] = 3{,}000 \times 12.487558 = \$37{,}462.67
+\end{equation*}
+Sisa saldo pinjaman persis setelah pembayaran ke-9 ($t = 9$):
+\begin{equation*}
+    B_9 = \$39{,}980.09 - \$37{,}462.67 = \mathbf{\$2{,}517.42}
+\end{equation*}
+
+\textbf{Langkah 3: Menghitung Jenis Pembayaran Penyeimbang}
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{\textit{Balloon Payment} pada $t = 9$:}
+    Pembayaran ke-9 ditingkatkan untuk langsung melunasi sisa pokok:
+    \begin{equation*}
+        \text{Total Pembayaran ke-9} = \$3{,}000 + B_9 = \$3{,}000 + \$2{,}517.42 = \mathbf{\$5{,}517.42}
+    \end{equation*}
+
+    \item \textbf{\textit{Drop Payment} pada $t = 10$ ($X$):}
+    Sisa saldo $B_9$ diakumulasikan bunga selama 1 tahun ke $t = 10$:
+    \begin{equation*}
+        X = B_9 \times (1 + 0.08) = \$2{,}517.42 \times 1.08 = \mathbf{\$2{,}718.81}
+    \end{equation*}
+    (Pembayaran ke-10 sebesar $\$2{,}718.81$ dilakukan satu tahun setelah pembayaran ke-9).
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Tabel Ringkasan Rumus Kunci Anuitas \& Perpetuitas}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Tipe Instrumen} & \textbf{Simbol} & \textbf{Nilai Sekarang ($PV$)} & \textbf{Nilai Akumulasi ($AV$)} \\
+\midrule
+Anuitas Akhir (\textit{Immediate}) & $a_{\overline{n}|}$, $s_{\overline{n}|}$ & $\dfrac{1 - v^n}{i}$ & $\dfrac{(1+i)^n - 1}{i}$ \\[0.8em]
+Anuitas Awal (\textit{Due}) & $\ddot{a}_{\overline{n}|}$, $\ddot{s}_{\overline{n}|}$ & $\dfrac{1 - v^n}{d} = (1+i) a_{\overline{n}|}$ & $\dfrac{(1+i)^n - 1}{d} = (1+i) s_{\overline{n}|}$ \\[0.8em]
+Perpetuitas Akhir & $a_{\overline{\infty}|}$ & $\dfrac{1}{i}$ & $\infty$ (Tak terdefinisi) \\[0.8em]
+Perpetuitas Awal & $\ddot{a}_{\overline{\infty}|}$ & $\dfrac{1}{d} = \dfrac{1+i}{i} = 1 + \dfrac{1}{i}$ & $\infty$ (Tak terdefinisi) \\[0.8em]
+Anuitas Ditunda (\textit{Deferred}) & ${}_m| a_{\overline{n}|}$ & $v^m a_{\overline{n}|} = a_{\overline{m+n}|} - a_{\overline{m}|}$ & $(1+i)^n s_{\overline{n}|}$ (pada $t=m+n$) \\[0.8em]
+Perpetuitas Ditunda & ${}_m| a_{\overline{\infty}|}$ & $v^m a_{\overline{\infty}|} = \dfrac{v^m}{i}$ & $\infty$ \\[0.8em]
+Nilai Perantara ($t = k$) & -- & $s_{\overline{k}|} + a_{\overline{n-k}|}$ & $(1+i)^k a_{\overline{n}|} = v^{n-k} s_{\overline{n}|}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

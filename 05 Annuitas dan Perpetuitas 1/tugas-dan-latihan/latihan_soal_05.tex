@@ -1,0 +1,466 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{solgreen}{RGB}{34, 112, 62}
+\definecolor{solbg}{RGB}{246, 252, 248}
+\definecolor{probblue}{RGB}{28, 70, 110}
+\definecolor{probbg}{RGB}{245, 248, 253}
+
+% Boxes for Problem and Solution
+\newtcolorbox{problembox}[2][]{
+    enhanced,
+    breakable,
+    colback=probbg,
+    colframe=probblue,
+    fonttitle=\bfseries\sffamily,
+    title={#2 \hfill \normalfont\sffamily\footnotesize #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=probblue,
+    arc=2.5mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{solutionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=solbg,
+    colframe=solgreen,
+    fonttitle=\bfseries\sffamily,
+    title={Pembahasan #1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=solgreen,
+    arc=2mm,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Kumpulan Soal \& Pembahasan Lengkap Teori Suku Bunga}\\[0.3em]
+\Large Modul 05: Anuitas dan Perpetuitas (Bagian 1)\\
+\large (\textit{Annuity-Immediate, Annuity-Due, Perpetuity, and Arbitrary Date Valuation})}
+\author{\textbf{Standar:} SOA Exam FM / PAI A10 \& Perkuliahan Aktuaria ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1em}
+
+\section*{Petunjuk Pengerjaan}
+Kumpulan latihan soal ini dirancang komprehensif untuk menguji pemahaman konsep fundamental anuitas berhingga (\textit{annuity-immediate} dan \textit{annuity-due}), perpetuitas, valuasi titik waktu perantara dan ditunda (\textit{deferred}), penentuan waktu ($n$), suku bunga ($i$), serta pembayaran penyeimbang (\textit{balloon} dan \textit{drop payments}).
+
+\vspace{1em}
+
+% ------------------- SOAL 1 -------------------
+\begin{problembox}[Bobot: Dasar / Nilai Sekarang Anuitas Akhir]{Soal 1}
+Sebuah pinjaman KPR sebesar $\$150{,}000$ dikenakan suku bunga nominal tahunan $6\%$ yang dikonversi secara bulanan. Pinjaman tersebut akan dilunasi secara penuh melalui angsuran tetap setiap akhir bulan selama 15 tahun.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitunglah besar angsuran bulanan ($R$) yang harus dibayarkan!
+    \item Tentukan total seluruh uang yang dibayarkan oleh debitur sepanjang 15 tahun dan hitung total beban bunga yang dibayarkan!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 1}
+\textbf{Langkah 1: Identifikasi Parameter}
+\begin{itemize}
+    \item Pokok pinjaman ($PV$): $\$150{,}000$
+    \item Suku bunga nominal: $i^{(12)} = 6\% = 0.06$
+    \item Suku bunga efektif per bulan: $j = \frac{0.06}{12} = 0.005 \ (0.5\% \text{ per bulan})$
+    \item Durasi pembayaran: $n = 15 \times 12 = 180 \text{ bulan}$.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung Angsuran Bulanan ($R$)}
+Persamaan anuitas-immediate:
+\begin{align*}
+    PV &= R \cdot a_{\overline{n}|j} \implies 150{,}000 = R \cdot a_{\overline{180}|0.005} \\[0.4em]
+    a_{\overline{180}|0.005} &= \frac{1 - (1 + 0.005)^{-180}}{0.005} = \frac{1 - (1.005)^{-180}}{0.005} \\[0.4em]
+    (1.005)^{-180} &\approx 0.407482 \implies a_{\overline{180}|0.005} = \frac{1 - 0.407482}{0.005} \approx 118.5035 \\[0.4em]
+    R &= \frac{150{,}000}{118.5035} = \mathbf{\$1{,}265.79 \text{ per bulan}}
+\end{align*}
+
+\textbf{Langkah 3: Menghitung Total Pembayaran \& Total Bunga}
+\begin{itemize}
+    \item Total pembayaran $= 180 \times \$1{,}265.79 = \mathbf{\$227{,}842.20}$
+    \item Total beban bunga $= \text{Total Pembayaran} - \text{Pokok} = \$227{,}842.20 - \$150{,}000 = \mathbf{\$77{,}842.20}$
+\end{itemize}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 2 -------------------
+\begin{problembox}[Bobot: Menengah / Akumulasi Anuitas Awal]{Soal 2}
+Seorang orang tua ingin menyiapkan dana pendidikan kuliah untuk anaknya yang saat ini baru lahir. Orang tua tersebut berencana menyisihkan sejumlah uang $R$ pada \textbf{setiap awal tahun}, dimulai hari ini ($t = 0$) hingga awal tahun ke-17 ($t = 17$, total 18 kali setoran).
+
+Target dana yang ingin dicapai adalah $\$80{,}000$ persis pada saat anak berusia 18 tahun ($t = 18$). Jika rekening tabungan pendidikan memberikan imbal hasil efektif tahunan sebesar $5.5\%$, berapakah besar setoran tahunan $R$?
+\end{problembox}
+
+\begin{solutionbox}{Soal 2}
+\textbf{Langkah 1: Analisis Garis Waktu}
+\begin{itemize}
+    \item Jumlah setoran: $n = 18$ setoran (pada $t = 0, 1, 2, \dots, 17$).
+    \item Setoran terakhir dilakukan pada $t = 17$.
+    \item Nilai target dievaluasi pada $t = 18$ (yaitu 1 tahun setelah setoran terakhir).
+    \item Suku bunga: $i = 5.5\% = 0.055$, tingkat diskon $d = \frac{0.055}{1.055} \approx 0.0521327$.
+\end{itemize}
+
+\textbf{Langkah 2: Perhitungan Nilai Akumulasi Anuitas-Due}
+\begin{align*}
+    R \cdot \ddot{s}_{\overline{18}|0.055} &= 80{,}000 \\[0.4em]
+    \ddot{s}_{\overline{18}|0.055} &= \frac{(1.055)^{18} - 1}{d} = \frac{(1.055)^{18} - 1}{\frac{0.055}{1.055}} = (1.055) \left[\frac{(1.055)^{18} - 1}{0.055}\right] \\[0.4em]
+    (1.055)^{18} &\approx 2.621475 \implies \ddot{s}_{\overline{18}|0.055} = (1.055) \times \frac{1.621475}{0.055} \approx 31.1030 \\[0.4em]
+    R &= \frac{80{,}000}{31.1030} = \mathbf{\$2{,}572.09 \text{ per tahun}}
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 3 -------------------
+\begin{problembox}[Bobot: Menengah / Hubungan Resiprokal]{Soal 3}
+Diketahui nilai sekarang dari anuitas akhir $n$-periode adalah $a_{\overline{n}|} = 10.0$ dan nilai akumulasinya adalah $s_{\overline{n}|} = 25.0$.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan tingkat suku bunga efektif per periode $i$!
+    \item Tentukan durasi periode waktu $n$!
+    \item Tentukan nilai sekarang dari anuitas awal $\ddot{a}_{\overline{n}|}$!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 3}
+\textbf{Langkah 1: Menentukan Suku Bunga $i$ Menggunakan Hubungan Resiprokal}
+Gunakan identitas fundamental:
+\begin{align*}
+    \frac{1}{a_{\overline{n}|}} - \frac{1}{s_{\overline{n}|}} &= i \\[0.4em]
+    \frac{1}{10.0} - \frac{1}{25.0} &= i \implies 0.10 - 0.04 = i \implies \mathbf{i = 0.06 \ (6\%)}
+\end{align*}
+
+\textbf{Langkah 2: Menentukan Nilai $n$}
+Gunakan hubungan $s_{\overline{n}|} = a_{\overline{n}|}(1+i)^n$:
+\begin{align*}
+    25.0 &= 10.0 \cdot (1.06)^n \implies (1.06)^n = 2.5 \\[0.4em]
+    n \ln(1.06) &= \ln(2.5) \implies n = \frac{\ln(2.5)}{\ln(1.06)} = \frac{0.916291}{0.058269} \approx \mathbf{15.725 \text{ periode}}
+\end{align*}
+
+\textbf{Langkah 3: Menentukan $\ddot{a}_{\overline{n}|}$}
+\begin{equation*}
+    \ddot{a}_{\overline{n}|} = (1+i) a_{\overline{n}|} = (1.06) \times 10.0 = \mathbf{10.60}
+\end{equation*}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 4 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Anuitas Ditunda]{Soal 4}
+Sebuah polis asuransi menjanjikan pembayaran manfaat pensiun sebesar $\$12{,}000$ per tahun selama 20 tahun. Pembayaran pertama akan dilakukan tepat pada ulang tahun tertanggung yang ke-65 ($t = 15$ dari hari ini). Hari ini tertanggung tepat berusia 50 tahun ($t = 0$).
+
+Jika diasumsikan suku bunga efektif tahunan konstan sebesar $6.5\%$, hitunglah:
+\begin{enumerate}[label=(\alph*)]
+    \item Nilai sekarang manfaat pensiun tersebut pada hari ini ($t = 0$)!
+    \item Nilai terakumulasi dari seluruh pembayaran pensiun tersebut pada saat pembayaran terakhir (usia 84 tahun, $t = 34$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 4}
+\textbf{Langkah 1: Analisis Waktu Arus Kas}
+\begin{itemize}
+    \item Hari ini: $t = 0$ (usia 50).
+    \item Pembayaran pertama terjadi pada usia 65 ($t = 15$).
+    \item Total 20 pembayaran: pada $t = 15, 16, 17, \dots, 34$.
+    \item Suku bunga: $i = 6.5\% = 0.065$, faktor diskon $v = (1.065)^{-1} \approx 0.938967$.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung Nilai Sekarang pada $t = 0$ (${}_{14}| a_{\overline{20}|}$)}
+Satu periode sebelum pembayaran pertama di $t=15$ adalah pada titik $t = 14$:
+\begin{align*}
+    PV_{14} &= 12{,}000 \cdot a_{\overline{20}|0.065} = 12{,}000 \left[\frac{1 - (1.065)^{-20}}{0.065}\right] \\[0.4em]
+    (1.065)^{-20} &\approx 0.283797 \implies a_{\overline{20}|0.065} = \frac{1 - 0.283797}{0.065} \approx 11.018507 \\[0.4em]
+    PV_{14} &= 12{,}000 \times 11.018507 = \$132{,}222.08
+\end{align*}
+Diskontokan selama 14 tahun ke $t = 0$:
+\begin{align*}
+    PV_0 &= PV_{14} \cdot (1.065)^{-14} = 132{,}222.08 \times (0.414643) = \mathbf{\$54{,}824.97}
+\end{align*}
+
+\textbf{Langkah 3: Menghitung Nilai Akumulasi pada Saat Pembayaran Terakhir ($t = 34$)}
+Titik $t = 34$ adalah persis saat pembayaran ke-20 dilakukan:
+\begin{align*}
+    AV_{34} &= 12{,}000 \cdot s_{\overline{20}|0.065} = 12{,}000 \left[\frac{(1.065)^{20} - 1}{0.065}\right] \\[0.4em]
+    (1.065)^{20} &\approx 3.523645 \implies s_{\overline{20}|0.065} = \frac{2.523645}{0.065} \approx 38.82531 \\[0.4em]
+    AV_{34} &= 12{,}000 \times 38.82531 = \mathbf{\$465{,}903.72}
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 5 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Perpetuitas \& Persamaan Nilai]{Soal 5}
+Sebuah yayasan dana abadi (\textit{endowment fund}) menerima donasi hari ini yang cukup untuk membiayai dua program beasiswa:
+\begin{itemize}
+    \item \textbf{Program 1:} Memberikan beasiswa tahunan sebesar $\$5{,}000$ di setiap akhir tahun selamanya.
+    \item \textbf{Program 2:} Memberikan beasiswa tahunan sebesar $\$8{,}000$ di setiap akhir tahun, tetapi pembayarannya baru dimulai pada akhir tahun ke-11 ($t = 11$) dan berlangsung selamanya setelahnya.
+\end{itemize}
+Jika suku bunga efektif tahunan adalah $5\%$, hitunglah:
+\begin{enumerate}[label=(\alph*)]
+    \item Total dana awal yang harus disetorkan ke yayasan hari ini ($t = 0$)!
+    \item Jika donasi tersebut ditukar menjadi anuitas tetap 20 tahun yang dibayarkan di setiap akhir tahun ($t = 1$ s.d. $t = 20$), berapa besar pembayaran tahunan yang dapat dihasilkan?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 5}
+\textbf{Langkah 1: Menghitung Nilai Sekarang Kedua Program Perpetuitas}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Nilai Sekarang Program 1 ($PV_1$):}
+    \begin{equation*}
+        PV_1 = 5{,}000 \cdot a_{\overline{\infty}|0.05} = \frac{5{,}000}{0.05} = \$100{,}000
+    \end{equation*}
+
+    \item \textbf{Nilai Sekarang Program 2 ($PV_2$ - Perpetuitas Ditunda 10 Tahun):}
+    \begin{align*}
+        PV_2 &= 8{,}000 \cdot v^{10} \cdot a_{\overline{\infty}|0.05} = \frac{8{,}000 \cdot (1.05)^{-10}}{0.05} \\[0.4em]
+        (1.05)^{-10} &\approx 0.613913 \implies PV_2 = \frac{8{,}000 \times 0.613913}{0.05} = \$98{,}226.08
+    \end{align*}
+\end{enumerate}
+
+Total dana awal yang harus disetor:
+\begin{equation*}
+    PV_{\text{Total}} = PV_1 + PV_2 = \$100{,}000 + \$98{,}226.08 = \mathbf{\$198{,}226.08}
+\end{equation*}
+
+\textbf{Langkah 2: Konversi ke Anuitas 20 Tahun}
+Misalkan $R$ adalah pembayaran tahunan:
+\begin{align*}
+    198{,}226.08 &= R \cdot a_{\overline{20}|0.05} = R \left[\frac{1 - (1.05)^{-20}}{0.05}\right] \\[0.4em]
+    a_{\overline{20}|0.05} &= \frac{1 - 0.376889}{0.05} \approx 12.46221 \\[0.4em]
+    R &= \frac{198{,}226.08}{12.46221} = \mathbf{\$15{,}906.18 \text{ per tahun}}
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 6 -------------------
+\begin{problembox}[Bobot: Menantang / Drop Payment vs Balloon Payment]{Soal 6}
+Sebuah pinjaman sebesar $\$30{,}000$ dengan suku bunga efektif tahunan $7\%$ akan dicicil dengan pembayaran tahunan sebesar $\$4{,}000$ di setiap akhir tahun selama mungkin. Sisa saldo terakhir yang kurang dari $\$4{,}000$ akan dibayarkan sebagai pembayaran penyeimbang.
+\begin{enumerate}[label=(\alph*)]
+    \item Berapa kali pembayaran penuh sebesar $\$4{,}000$ yang dilakukan?
+    \item Tentukan nilai pembayaran penyeimbang jika dibayarkan bersamaan dengan pembayaran reguler terakhir (\textit{Balloon Payment})!
+    \item Tentukan nilai pembayaran penyeimbang jika dibayarkan 1 tahun setelah pembayaran reguler terakhir (\textit{Drop Payment})!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 6}
+\textbf{Langkah 1: Menentukan Waktu $n$}
+\begin{align*}
+    30{,}000 &= 4{,}000 \cdot a_{\overline{n}|0.07} = 4{,}000 \left[\frac{1 - (1.07)^{-n}}{0.07}\right] \\[0.4em]
+    \frac{30{,}000 \times 0.07}{4{,}000} &= 0.525 = 1 - (1.07)^{-n} \implies (1.07)^{-n} = 0.475 \\[0.4em]
+    -n \ln(1.07) &= \ln(0.475) \implies n = -\frac{-0.744440}{0.067659} \approx 11.0028 \text{ tahun}
+\end{align*}
+Jadi, terdapat **$11$ kali pembayaran reguler penuh** sebesar $\$4{,}000$.
+
+\textbf{Langkah 2: Menghitung Saldo Pinjaman pada $t = 11$}
+\begin{itemize}
+    \item Akumulasi pinjaman pada $t = 11$: $30{,}000 \times (1.07)^{11} = 30{,}000 \times 2.104852 = \$63{,}145.56$
+    \item Akumulasi 11 cicilan: $4{,}000 \times s_{\overline{11}|0.07} = 4{,}000 \times \left[\frac{2.104852 - 1}{0.07}\right] = 4{,}000 \times 15.78360 = \$63{,}134.40$
+    \item Sisa saldo pada $t = 11$:
+    \begin{equation*}
+        B_{11} = \$63{,}145.56 - \$63{,}134.40 = \mathbf{\$11.16}
+    \end{equation*}
+\end{itemize}
+
+\textbf{Langkah 3: Menentukan Balloon \& Drop Payment}
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{\textit{Balloon Payment} pada $t = 11$:}
+    \begin{equation*}
+        \text{Total Pembayaran ke-11} = \$4{,}000 + B_{11} = \$4{,}000 + \$11.16 = \mathbf{\$4{,}011.16}
+    \end{equation*}
+    \item \textbf{\textit{Drop Payment} pada $t = 12$ ($X$):}
+    \begin{equation*}
+        X = B_{11} \times (1 + 0.07) = \$11.16 \times 1.07 = \mathbf{\$11.94}
+    \end{equation*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 7 -------------------
+\begin{problembox}[Bobot: Tingkat Lanjut / Unknown Interest Rate]{Soal 7}
+Sebuah anuitas-due 10 tahun membayarkan $\$1{,}000$ di setiap awal tahun. Nilai sekarang dari anuitas tersebut diketahui sama dengan $\$7{,}246.89$.
+\begin{enumerate}[label=(\alph*)]
+    \item Tuliskan persamaan nilai sekarang dalam suku bunga efektif $i$!
+    \item Dengan menggunakan metode interpolasi linear antara $i = 7\%$ dan $i = 9\%$, tentukan estimasi suku bunga efektif tahunan $i$!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 7}
+\textbf{Langkah 1: Persamaan Nilai Sekarang}
+\begin{equation*}
+    1{,}000 \cdot \ddot{a}_{\overline{10}|i} = 7{,}246.89 \implies \ddot{a}_{\overline{10}|i} = 7.24689
+\end{equation*}
+Ingat bahwa $\ddot{a}_{\overline{10}|i} = (1+i) \left[\frac{1 - (1+i)^{-10}}{i}\right]$.
+
+\textbf{Langkah 2: Evaluasi pada Titik Uji}
+\begin{itemize}
+    \item Untuk $i_1 = 7\% = 0.07$:
+    \begin{equation*}
+        \ddot{a}_{\overline{10}|0.07} = (1.07) \times a_{\overline{10}|0.07} = 1.07 \times 7.02358 = 7.51523
+    \end{equation*}
+    \item Untuk $i_2 = 9\% = 0.09$:
+    \begin{equation*}
+        \ddot{a}_{\overline{10}|0.09} = (1.09) \times a_{\overline{10}|0.09} = 1.09 \times 6.41766 = 6.99525
+    \end{equation*}
+\end{itemize}
+
+\textbf{Langkah 3: Interpolasi Linear}
+\begin{align*}
+    i &\approx i_1 + \frac{\ddot{a}_{\text{target}} - \ddot{a}_1}{\ddot{a}_2 - \ddot{a}_1} (i_2 - i_1) \\[0.4em]
+    i &\approx 0.07 + \frac{7.24689 - 7.51523}{6.99525 - 7.51523} (0.09 - 0.07) \\[0.4em]
+    &= 0.07 + \frac{-0.26834}{-0.51998} (0.02) = 0.07 + (0.51606)(0.02) = \mathbf{0.08032 \ (8.03\%)}
+\end{align*}
+(Nilai eksak adalah tepat $i = 8.00\%$).
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 8 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Nilai Perantara Kasus 3]{Soal 8}
+Suatu anuitas terdiri dari pembayaran sebesar $\$2{,}000$ di setiap akhir tahun selama 12 tahun ($t = 1, 2, \dots, 12$) dengan tingkat suku bunga efektif tahunan $6\%$.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung nilai anuitas tersebut pada titik waktu perantara $t = 5$ menggunakan dekomposisi nilai terakumulasi dan nilai sekarang ($s_{\overline{5}|} + a_{\overline{7}|}$)!
+    \item Verifikasi hasil tersebut dengan mengakumulasikan nilai sekarang $PV_0$ selama 5 tahun!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 8}
+\textbf{Langkah 1: Menggunakan Dekomposisi Titik Perantara}
+Pada $t = 5$:
+\begin{itemize}
+    \item Nilai terakumulasi dari 5 pembayaran pertama ($t=1$ s.d. $t=5$):
+    \begin{equation*}
+        2{,}000 \cdot s_{\overline{5}|0.06} = 2{,}000 \left[\frac{(1.06)^5 - 1}{0.06}\right] = 2{,}000 \times 5.63709 = \$11{,}274.18
+    \end{equation*}
+    \item Nilai sekarang dari 7 pembayaran yang tersisa ($t=6$ s.d. $t=12$):
+    \begin{equation*}
+        2{,}000 \cdot a_{\overline{7}|0.06} = 2{,}000 \left[\frac{1 - (1.06)^{-7}}{0.06}\right] = 2{,}000 \times 5.58238 = \$11{,}164.76
+    \end{equation*}
+\end{itemize}
+Total nilai pada $t = 5$:
+\begin{equation*}
+    \text{Nilai}_{t=5} = \$11{,}274.18 + \$11{,}164.76 = \mathbf{\$22{,}438.94}
+\end{equation*}
+
+\textbf{Langkah 2: Verifikasi dari $PV_0$}
+\begin{align*}
+    PV_0 &= 2{,}000 \cdot a_{\overline{12}|0.06} = 2{,}000 \left[\frac{1 - (1.06)^{-12}}{0.06}\right] = 2{,}000 \times 8.38384 = \$16{,}767.68 \\[0.4em]
+    \text{Nilai}_{t=5} &= PV_0 \cdot (1.06)^5 = 16{,}767.68 \times (1.338226) = \mathbf{\$22{,}438.94} \quad (\text{Identik!})
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 9 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Hubungan Anuitas 10-Tahun \& 20-Tahun]{Soal 9}
+Diketahui nilai sekarang dari anuitas akhir 20 tahun adalah $1.5$ kali nilai sekarang dari anuitas akhir 10 tahun dengan suku bunga efektif tahunan konstan $i$ ($a_{\overline{20}|i} = 1.5 a_{\overline{10}|i}$).
+\begin{enumerate}[label=(\alph*)]
+    \item Hitunglah tingkat suku bunga efektif tahunan $i$!
+    \item Jika anuitas tersebut membayarkan $\$100$ per tahun, tentukan nilai sekarang dari perpetuitas akhir yang membayarkan $\$100$ di setiap akhir tahun selamanya pada suku bunga $i$ tersebut!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 9}
+\textbf{Langkah 1: Menentukan Suku Bunga $i$}
+Gunakan hubungan aljabar anuitas 10 tahun dan 20 tahun:
+\begin{align*}
+    a_{\overline{20}|i} &= 1.5 \cdot a_{\overline{10}|i} \\[0.4em]
+    \frac{1 - v^{20}}{i} &= 1.5 \left(\frac{1 - v^{10}}{i}\right) \\[0.4em]
+    1 - v^{20} &= 1.5 (1 - v^{10})
+\end{align*}
+Faktorkan ruas kiri sebagai selisih dua kuadrat: $1 - v^{20} = (1 - v^{10})(1 + v^{10})$:
+\begin{align*}
+    (1 - v^{10})(1 + v^{10}) &= 1.5 (1 - v^{10})
+\end{align*}
+Karena $v^{10} \neq 1$, bagi kedua ruas dengan $(1 - v^{10})$:
+\begin{align*}
+    1 + v^{10} &= 1.5 \implies v^{10} = 0.5 \\[0.4em]
+    (1+i)^{10} &= \frac{1}{0.5} = 2 \implies 1 + i = 2^{1/10} = 2^{0.1} \approx 1.071773 \\[0.4em]
+    \mathbf{i} &= 1.071773 - 1 \approx \mathbf{7.177\% \text{ per tahun}}
+\end{align*}
+
+\textbf{Langkah 2: Menghitung Nilai Sekarang Perpetuitas}
+Untuk pembayaran tahunan $R = \$100$:
+\begin{align*}
+    PV_{\text{perpetuitas}} &= 100 \cdot a_{\overline{\infty}|i} = \frac{100}{i} = \frac{100}{0.0717734} \approx \mathbf{\$1{,}393.27}
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.5em}
+
+% ------------------- SOAL 10 -------------------
+\begin{problembox}[Bobot: Standar Aplikasi Bisnis / Valuasi Mesin Industri]{Soal 10}
+Sebuah pabrik mempertimbangkan pembelian mesin otomatisasi seharga $\$50{,}000$. Mesin tersebut diperkirakan mampu memberikan penghematan biaya tenaga kerja sebesar $\$9{,}000$ di setiap akhir tahun selama 8 tahun masa pakainya. Di samping itu, mesin memerlukan biaya servis tahunan sebesar $\$1{,}200$ yang dibayarkan di setiap awal tahun ($t = 0, 1, \dots, 7$). Pada akhir tahun ke-8, mesin dapat dijual sebagai besi tua dengan nilai sisa (\textit{salvage value}) sebesar $\$5{,}000$.
+
+Jika biaya modal perusahaan (\textit{cost of capital}) adalah $8\%$ efektif per tahun:
+\begin{enumerate}[label=(\alph*)]
+    \item Hitunglah Nilai Sekarang Bersih (\textit{Net Present Value} - NPV) dari investasi mesin tersebut!
+    \item Apakah pabrik layak membeli mesin tersebut berdasarkan kriteria NPV?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 10}
+\textbf{Langkah 1: Identifikasi Komponen Arus Kas}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item Biaya pembelian awal di $t = 0$: $-\$50{,}000$.
+    \item Penghematan biaya tenaga kerja (Anuitas Akhir 8 tahun):
+    \begin{equation*}
+        PV_{\text{hemat}} = 9{,}000 \cdot a_{\overline{8}|0.08} = 9{,}000 \left[\frac{1 - (1.08)^{-8}}{0.08}\right] = 9{,}000 \times 5.746639 = +\$51{,}719.75
+    \end{equation*}
+    \item Biaya servis tahunan (Anuitas Awal 8 tahun):
+    \begin{equation*}
+        PV_{\text{servis}} = 1{,}200 \cdot \ddot{a}_{\overline{8}|0.08} = 1{,}200 \times (1.08) \times 5.746639 = 1{,}200 \times 6.206370 = -\$7{,}447.64
+    \end{equation*}
+    \item Nilai sisa mesin di $t = 8$:
+    \begin{equation*}
+        PV_{\text{sisa}} = 5{,}000 \cdot (1.08)^{-8} = 5{,}000 \times 0.540269 = +\$2{,}701.35
+    \end{equation*}
+\end{enumerate}
+
+\textbf{Langkah 2: Menghitung Nilai Sekarang Bersih ($NPV$)}
+\begin{align*}
+    NPV &= -\$50{,}000 + \$51{,}719.75 - \$7{,}447.64 + \$2{,}701.35 \\
+        &= -\$50{,}000 + \$46{,}973.46 = \mathbf{-\$3{,}026.54}
+\end{align*}
+
+\textbf{Langkah 3: Keputusan Investasi}
+Karena $NPV = -\$3{,}026.54 < 0$, maka investasi pembelian mesin tersebut **TIDAK LAYAK (DITOLAK)** karena menghasilkan imbal hasil yang lebih rendah dari biaya modal $8\%$.
+\end{solutionbox}
+
+\end{document}

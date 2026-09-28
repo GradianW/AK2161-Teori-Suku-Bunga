@@ -1,0 +1,695 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{darkred}{RGB}{178, 34, 34}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 04: Tingkat Imbal Hasil (\textit{Yield Rates})\\
+\large (\textit{Internal Rate of Return, Dollar-Weighted Rate, Time-Weighted Rate})}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 5) \& Slide Perkuliahan Teori Suku Bunga}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+\section{Pendahuluan \& Definisi \textit{Yield Rate} / \textit{Internal Rate of Return} (IRR)}
+
+Dalam analisis investasi, penganggaran modal (\textit{capital budgeting}), serta evaluasi portofolio keuangan, investor sering kali dihadapkan pada serangkaian arus kas masuk (\textit{cash inflows}) dan arus kas keluar (\textit{cash outflows}) yang terjadi pada berbagai titik waktu yang berbeda. Untuk menilai efisiensi dan profitabilitas dari keseluruhan proyek investasi tersebut, diperlukan suatu ukuran tunggal laju pengembalian yang disebut \textbf{\textit{Yield Rate}} atau \textbf{\textit{Internal Rate of Return} (IRR)}.
+
+\subsection{Definisi Nilai Sekarang Bersih (\textit{Net Present Value} - NPV)}
+
+Misalkan suatu proyek investasi melibatkan serangkaian arus kas bersih $C_0, C_1, C_2, \dots, C_n$ yang terjadi masing-masing pada waktu $t = 0, 1, 2, \dots, n$, di mana:
+\begin{itemize}[leftmargin=1.5em]
+    \item $C_t > 0$ menyatakan arus kas masuk bersih (\textit{net cash inflow} / penerimaan keuntungan),
+    \item $C_t < 0$ menyatakan arus kas keluar bersih (\textit{net cash outflow} / setoran modal / biaya operasional).
+\end{itemize}
+
+\begin{definitionbox}[Definisi: Nilai Sekarang Bersih (\textit{Net Present Value} - NPV)]
+Untuk suatu tingkat suku bunga diskonto $i$, \textbf{Nilai Sekarang Bersih (\textit{Net Present Value})} dari seluruh aliran kas proyek adalah:
+\begin{equation}
+    NPV(i) = \sum_{t=0}^n C_t (1 + i)^{-t} = \sum_{t=0}^n C_t v^t
+\end{equation}
+di mana $v = (1 + i)^{-1}$.
+\end{definitionbox}
+
+\subsection{Definisi Formal \textit{Yield Rate} (IRR)}
+
+\begin{definitionbox}[Definisi: Tingkat Imbal Hasil / \textit{Internal Rate of Return} (IRR)]
+\textbf{\textit{Yield Rate}} atau \textbf{\textit{Internal Rate of Return} (IRR)} dari suatu transaksi investasi adalah tingkat suku bunga efektif $i^*$ yang menyebabkan \textbf{Nilai Sekarang Bersih (\textit{NPV}) bernilai tepat sama dengan nol}:
+\begin{equation}
+    NPV(i^*) = 0 \iff \sum_{t=0}^n C_t (1 + i^*)^{-t} = 0
+\end{equation}
+Dengan kata lain, IRR adalah tingkat suku bunga yang menyamakan total nilai sekarang dari seluruh penerimaan kas masuk (\textit{inflows}) dengan total nilai sekarang dari seluruh pengeluaran kas keluar (\textit{outflows}):
+\begin{equation}
+    \sum_{t} \text{PV}(\text{Arus Kas Masuk}) = \sum_{t} \text{PV}(\text{Arus Kas Keluar})
+\end{equation}
+\end{definitionbox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = center,
+    xlabel = {$i$ (Suku Bunga / \textit{Discount Rate})},
+    ylabel = {$NPV(i)$},
+    xmin=-0.02, xmax=0.30,
+    ymin=-3000, ymax=6000,
+    xtick={0, 0.05, 0.10, 0.1296, 0.20, 0.25},
+    xticklabels={$0$, $5\%$, $10\%$, \textbf{$i^*=\text{IRR}$}, $20\%$, $25\%$},
+    ytick={-2000, 0, 2000, 4000},
+    grid = major,
+    grid style={dashed, gray!30},
+    width=11cm, height=6.2cm
+]
+% Standard NPV profile for conventional investment: C0 = -10000, inflows later
+\addplot [domain=0:0.28, samples=100, color=primaryblue, very thick] { -10000 + 4000/(1+x) + 4000/(1+x)^2 + 5000/(1+x)^3 };
+\addlegendentry{Kurva Profil NPV: $NPV(i)$}
+
+% Root point (IRR)
+\addplot[only marks, mark=*, mark size=3pt, color=darkred] coordinates {(0.1296, 0)};
+\node[above right, darkred] at (axis cs:0.13, 300) {\footnotesize Titik Impas: $NPV(\text{IRR}) = 0$};
+
+% Profit and Loss regions
+\node[text=darkgreen] at (axis cs:0.06, 2500) {\footnotesize $NPV > 0$ (Layak/Untung)};
+\node[text=darkred] at (axis cs:0.22, -1500) {\footnotesize $NPV < 0$ (Rugi)};
+\draw[dashed, darkred] (axis cs:0.1296, -3000) -- (axis cs:0.1296, 0);
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Kriteria Pengambilan Keputusan Finansial}
+Misalkan $i_{\text{hurdle}}$ adalah tingkat suku bunga acuan minimal yang disyaratkan oleh investor (\textit{cost of capital} / \textit{hurdle rate}):
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Kriteria NPV:}
+    \begin{itemize}
+        \item Jika $NPV(i_{\text{hurdle}}) > 0 \implies$ Proyek diterima (\textit{profitable}).
+        \item Jika $NPV(i_{\text{hurdle}}) < 0 \implies$ Proyek ditolak.
+        \item Jika $NPV(i_{\text{hurdle}}) = 0 \implies$ Proyek mencapai titik impas (\textit{break-even}).
+    \end{itemize}
+    \item \textbf{Kriteria IRR (untuk proyek investasi konvensional):}
+    \begin{itemize}
+        \item Jika $\text{IRR} > i_{\text{hurdle}} \implies$ Proyek diterima.
+        \item Jika $\text{IRR} < i_{\text{hurdle}} \implies$ Proyek ditolak.
+    \end{itemize}
+\end{enumerate}
+
+---
+
+\section{Sifat Matematis \& Keunikan Nilai IRR}
+
+\subsection{Kapan IRR Dijamin Bernilai Unik?}
+
+Secara aljabar, persamaan $NPV(i) = 0$ merupakan persamaan polinomial berderajat $n$ terhadap faktor diskon $v = (1+i)^{-1}$:
+\begin{equation}
+    C_0 + C_1 v + C_2 v^2 + \dots + C_n v^n = 0
+\end{equation}
+Berdasarkan Teorema Dasar Aljabar, polinomial derajat $n$ memiliki tepat $n$ akar (riil maupun kompleks). Namun dalam konteks finansial, kita hanya tertarik pada akar riil $v > 0$ yang menghasilkan suku bunga riil $i > -1$.
+
+\begin{definitionbox}[Aturan Tanda Descartes (\textit{Descartes' Rule of Signs})]
+Banyaknya akar riil positif dari suatu persamaan polinomial paling banyak sama dengan banyaknya \textbf{pergantian tanda} (\textit{sign changes}) pada urutan koefisien-koefisiennya ($C_0, C_1, C_2, \dots, C_n$).
+\end{definitionbox}
+
+\subsection{Investasi Murni (\textit{Pure Investment}) vs Proyek Campuran (\textit{Mixed Project})}
+
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{Proyek Investasi Murni (\textit{Pure Investment / Conventional Cash Flow}):}
+    Arus kas diawali dengan pengeluaran modal awal ($C_0 < 0$) dan seluruh arus kas berikutnya bernilai non-negatif ($C_t \ge 0$ untuk $t \ge 1$), atau sebaliknya.
+    \begin{itemize}
+        \item Tanda barisan kas: $(-, +, +, +, \dots, +)$.
+        \item Pergantian tanda terjadi \textbf{tepat 1 kali}.
+        \item \textbf{Kesimpulan:} Dijamin terdapat \textbf{tepat satu nilai IRR riil unik} $i^* > -1$.
+    \end{itemize}
+
+    \item \textbf{Proyek Campuran (\textit{Mixed Investment / Non-Conventional Cash Flow}):}
+    Arus kas keluar dan masuk bergantian beberapa kali sepanjang masa proyek (misalnya proyek tambang dengan biaya restorasi lingkungan yang sangat besar pada akhir tahun penutupan).
+    \begin{itemize}
+        \item Tanda barisan kas: $(-, +, +, -, +, -)$.
+        \item Pergantian tanda terjadi lebih dari 1 kali.
+        \item \textbf{Konsekuensi:} Proyek dapat memiliki \textbf{lebih dari satu nilai IRR riil positif} (\textit{multiple IRRs}) atau \textbf{tidak memiliki IRR riil sama sekali}.
+    \end{itemize}
+\end{enumerate}
+
+\begin{notebox}[Kondisi Keunikan Saldo Proyek (\textit{Unrecovered Investment Balance})]
+Definisikan saldo proyek yang belum terpulihkan pada waktu $t$ sebagai:
+\begin{equation}
+    B_0(i) = -C_0, \qquad B_t(i) = B_{t-1}(i)(1 + i) - C_t \quad (t = 1, 2, \dots, n)
+\end{equation}
+Jika untuk suatu suku bunga $i^*$, saldo proyek $B_t(i^*) > 0$ untuk setiap $t = 0, 1, \dots, n-1$ dan $B_n(i^*) = 0$, maka proyek bertindak murni sebagai investasi modal sepanjang durasinya, sehingga $i^*$ adalah \textbf{satu-satunya IRR yang valid dan unik}.
+\end{notebox}
+
+\begin{examplebox}[Contoh 1: Penentuan IRR pada Proyek Investasi Jangka Panjang]
+\textbf{Soal:}\\
+Misalkan suatu proyek investasi berjangka waktu 10 tahun memiliki struktur arus kas sebagai berikut:
+\begin{itemize}
+    \item Investor menyetor modal sebesar $\$10{,}000$ di awal tahun ke-1 ($t = 0$),
+    \item Investor menyetor tambahan modal sebesar $\$5{,}000$ di awal tahun ke-2 ($t = 1$),
+    \item Membayar biaya pemeliharaan/perawatan sebesar $\$1{,}000$ setiap awal tahun mulai dari awal tahun ke-2 hingga awal tahun ke-10 ($t = 1, 2, \dots, 9$).
+    \item Proyek menghasilkan keuntungan investasi yang diterima di setiap akhir tahun sebesar $\$8{,}000$ pada akhir tahun ke-5 ($t = 5$), dan keuntungan meningkat sebesar $\$1{,}000$ setiap tahunnya hingga akhir tahun ke-10 ($t = 10$, di mana keuntungan mencapai $\$12{,}000$).
+\end{itemize}
+Susun tabel arus kas bersih dan tentukan \textit{Yield Rate} (IRR) dari proyek investasi tersebut!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Susun Tabel Arus Kas Bersih (\textit{Net Cash Flow}):}
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{cccc}
+\toprule
+\textbf{Tahun ($t$)} & \textbf{Kontribusi} & \textbf{Keuntungan} & \textbf{Net Cash Flow ($C_t$)} \\
+\midrule
+0 & $\$10{,}000$ & $\$0$ & $-\$10{,}000$ \\
+1 & $\$5{,}000$ & $\$0$ & $-\$5{,}000$ \\
+2 & $\$1{,}000$ & $\$0$ & $-\$1{,}000$ \\
+3 & $\$1{,}000$ & $\$0$ & $-\$1{,}000$ \\
+4 & $\$1{,}000$ & $\$0$ & $-\$1{,}000$ \\
+5 & $\$1{,}000$ & $\$0$ & $-\$1{,}000$ \\
+6 & $\$1{,}000$ & $\$8{,}000$ & $+\$7{,}000$ \\
+7 & $\$1{,}000$ & $\$9{,}000$ & $+\$8{,}000$ \\
+8 & $\$1{,}000$ & $\$10{,}000$ & $+\$9{,}000$ \\
+9 & $\$1{,}000$ & $\$11{,}000$ & $+\$10{,}000$ \\
+10 & $\$0$ & $\$12{,}000$ & $+\$12{,}000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textit{Sesuai spesifikasi slide perkuliahan:}
+Arus kas bersih per tahun:
+\begin{align*}
+    C_0 &= -10{,}000, \quad C_1 = -5{,}000, \quad C_2 = -1{,}000, \quad C_3 = -1{,}000, \\
+    C_4 &= -1{,}000, \quad C_5 = -1{,}000, \quad C_6 = +7{,}000, \quad C_7 = +8{,}000, \\
+    C_8 &= +9{,}000, \quad C_9 = +10{,}000, \quad C_{10} = +12{,}000
+\end{align*}
+
+\textbf{Langkah 2: Bentuk Persamaan Nilai Sekarang Bersih ($NPV = 0$):}
+\begin{align*}
+    NPV(i) &= -10{,}000 - 5{,}000 v - 1{,}000 v^2 - 1{,}000 v^3 - 1{,}000 v^4 - 1{,}000 v^5 \\
+           &\quad + 7{,}000 v^6 + 8{,}000 v^7 + 9{,}000 v^8 + 10{,}000 v^9 + 12{,}000 v^{10} = 0
+\end{align*}
+Bagi seluruh suku dengan $1{,}000$:
+\begin{equation*}
+    -10 - 5v - v^2 - v^3 - v^4 - v^5 + 7v^6 + 8v^7 + 9v^8 + 10v^9 + 12v^{10} = 0
+\end{equation*}
+
+\textbf{Langkah 3: Penyelesaian Numerik / Iterasi:}
+\begin{itemize}
+    \item Untuk $i = 12\% = 0.12 \implies v = 0.892857$: Nilai ruas kiri $= +1.286 > 0$.
+    \item Untuk $i = 14\% = 0.14 \implies v = 0.877193$: Nilai ruas kiri = $-1.152 < 0$.
+    \item Melalui interpolasi linear atau metode Newton-Raphson:
+    \begin{equation*}
+        \text{IRR} \approx 12.96\% \quad (i^* = 0.1296)
+    \end{equation*}
+\end{itemize}
+
+\vspace{0.4em}
+\noindent\textit{\textbf{*Catatan Analisis Kritis Soal vs Tabel Slide:}}
+Terdapat perbedaan kecil antara teks narasi soal asli dengan tabel solusi pada slide perkuliahan:
+\begin{enumerate}[label=\alph*.]
+    \item \textbf{Waktu Mulai Biaya Perawatan:} Narasi menyebutkan biaya $\$1{,}000$ dimulai pada \textit{awal tahun kedua} ($t = 1$), namun pada tabel slide biaya $\$1{,}000$ baru dicatat mulai $t = 2$.
+    \item \textbf{Waktu Mulai Keuntungan:} Narasi menyebutkan keuntungan $\$8{,}000$ diterima di \textit{akhir tahun kelima} ($t = 5$), namun pada tabel slide keuntungan $\$8{,}000$ dicatat pada $t = 6$ (akhir tahun ke-6).
+    \item \textbf{Hasil Komparasi:} Perhitungan di atas setia mengikuti tabel matriks slide dosen ($\text{IRR} = 12.96\%$). Jika narasi soal diikuti secara literal murni (mulai untung di $t=5$ dan biaya rawat masuk di $t=1$), maka arus kas di $t=5$ menjadi $+7{,}000$ dan di $t=10$ menjadi $+13{,}000$, yang menghasilkan $\text{IRR} \approx 17.53\%$.
+\end{enumerate}
+\end{examplebox}
+
+---
+
+\section{Pengukuran Kinerja Portofolio \& Rekening Dana Investasi}
+
+Dalam pengelolaan dana investasi bersama (\textit{investment funds}), reksa dana, dana pensiun, maupun perusahaan asuransi, manajer investasi mengelola dana yang nilai totalnya selalu berfluktuasi. 
+
+Selain hasil imbal hasil pasar, terdapat \textbf{arus kas eksternal} yang masuk (\textit{deposits / new contributions}) dan arus kas yang ditarik keluar (\textit{withdrawals / redemptions}) oleh para investor sepanjang periode berjalan.
+
+Untuk mengukur tingkat suku bunga efektif tahunan dari dana tersebut, terdapat dua metodologi utama:
+\begin{enumerate}[label=\arabic*.]
+    \item \textbf{\textit{Dollar-Weighted Rate of Return} (DWRR) / \textit{Money-Weighted Rate}:} Menghitung suku bunga efektif berdasarkan jumlah nominal dana yang benar-benar diinvestasikan dan lama waktu dana tersebut mengendap.
+    \item \textbf{\textit{Time-Weighted Rate of Return} (TWRR):} Menghitung suku bunga efektif tanpa terpengaruh oleh besar dan waktu penambahan/penarikan dana oleh nasabah.
+\end{enumerate}
+
+---
+
+\section{Metode \textit{Dollar-Weighted Rate of Return} (DWRR)}
+
+\subsection{Notasi Standar Aktuarial}
+Misalkan kita mengevaluasi kinerja dana selama 1 periode waktu (standar: 1 tahun kalender, $t \in [0, 1]$):
+\begin{itemize}[leftmargin=1.5em]
+    \item $A$ = Saldo nilai dana pada awal periode ($t = 0$).
+    \item $B$ = Saldo nilai dana pada akhir periode ($t = 1$).
+    \item $C_t$ = Jumlah kontribusi bersih (\textit{net deposit}) yang disetorkan pada waktu $t$ ($0 \le t \le 1$). (Jika terjadi penarikan dana, $C_t < 0$).
+    \item $C = \sum C_t$ = Total seluruh kontribusi bersih sepanjang periode.
+    \item $I$ = Total pendapatan investasi bersih (\textit{net investment income} / bunga \& apresiasi modal) yang diperoleh selama 1 periode:
+    \begin{equation}
+        I = B - A - C
+    \end{equation}
+\end{itemize}
+
+\subsection{Penurunan Rumus DWRR Pendekatan Bunga Tunggal}
+
+Berdasarkan prinsip bunga tunggal, setiap unit dana yang masuk akan menghasilkan bunga secara proporsional terhadap sisa waktu yang tersedia hingga akhir tahun:
+\begin{itemize}
+    \item Modal awal $A$ berada di dalam dana selama \textbf{1 periode penuh} ($t=0$ hingga $t=1$), sehingga menghasilkan bunga sebesar $i \cdot A$.
+    \item Setiap kontribusi $C_t$ yang masuk pada saat $t$ berada di dalam dana selama sisa durasi $(1 - t)$, sehingga menghasilkan bunga sebesar $i \cdot C_t (1 - t)$.
+\end{itemize}
+
+Maka total pendapatan bunga $I$ yang diperoleh adalah:
+\begin{equation}
+    I = i \cdot A + \sum_t i \cdot C_t (1 - t) = i \left[ A + \sum_t C_t (1 - t) \right]
+\end{equation}
+Dengan mengisolasi suku bunga $i$, diperoleh rumus dasar \textit{Dollar-Weighted Rate of Return}:
+
+\begin{definitionbox}[Rumus Umum \textit{Dollar-Weighted Rate of Return} (DWRR)]
+\begin{equation}
+    i_{\text{DWR}} \approx \frac{I}{A + \sum_t C_t (1 - t)}
+\end{equation}
+di mana:
+\begin{itemize}
+    \item Pembilang ($I = B - A - C$) adalah total pendapatan investasi bersih.
+    \item Penyebut $\left[ A + \sum C_t (1 - t) \right]$ adalah \textbf{rata-rata tertimbang modal} (\textit{time-weighted average capital base}) yang dikelola sepanjang tahun.
+\end{itemize}
+\end{definitionbox}
+
+\subsection{Kasus Khusus: Arus Kas di Pertengahan Tahun \texorpdfstring{($t = 0.5$)}{(t = 0.5)}}
+
+Jika seluruh arus kas masuk/keluar terjadi tepat di pertengahan tahun ($t = 0.5$), atau diasumsikan terdistribusi secara merata sepanjang tahun:
+\begin{equation*}
+    \sum_t C_t (1 - t) = \sum_t C_t (1 - 0.5) = 0.5 \sum_t C_t = 0.5 C
+\end{equation*}
+Penyebut rumus menjadi:
+\begin{equation*}
+    \text{Penyebut} = A + 0.5 C
+\end{equation*}
+Mengingat $C = B - A - I$, kita dapat mensubstitusikan nilai $C$:
+\begin{equation*}
+    A + 0.5(B - A - I) = A + 0.5 B - 0.5 A - 0.5 I = 0.5 A + 0.5 B - 0.5 I = \frac{1}{2}(A + B - I)
+\end{equation*}
+
+Substitusikan kembali ke rumus DWRR:
+\begin{equation*}
+    i = \frac{I}{\frac{1}{2}(A + B - I)} = \frac{2I}{A + B - I}
+\end{equation*}
+
+\begin{definitionbox}[Rumus Pendekatan Praktis Aktuaria / Industri Asuransi]
+Jika seluruh transaksi arus kas bersih dianggap terjadi di pertengahan tahun ($t = 0.5$):
+\begin{equation}
+    i \approx \frac{I}{A + 0.5 C} = \frac{2I}{A + B - I}
+\end{equation}
+\end{definitionbox}
+
+\begin{notebox}[Keunggulan Rumus $\frac{2I}{A+B-I}$]
+Rumus ini sangat populer dalam laporan keuangan tahunan industri asuransi dan dana pensiun karena:
+\begin{enumerate}[label=\alph*.]
+    \item Hanya membutuhkan 3 data agregat makro: Saldo Awal ($A$), Saldo Akhir ($B$), dan Laba Investasi Bersih ($I$).
+    \item Tidak memerlukan pencatatan tanggal detail harian untuk setiap transaksi arus kas masuk/keluar nasabah.
+\end{enumerate}
+\end{notebox}
+
+\begin{examplebox}[Contoh 2: Perhitungan Imbal Hasil Asuransi dengan Formula $i = \frac{2I}{A+B-I}$]
+\textbf{Soal:}\\
+Sebuah perusahaan asuransi memiliki data keuangan pada tahun kalender yang lalu sebagai berikut:
+\begin{itemize}
+    \item Total Aset pada awal tahun ($A$): $\text{Rp}10{,}000{,}000$
+    \item Penerimaan premi masuk: $\text{Rp}1{,}000{,}000$
+    \item Hasil investasi neto ($I$): $\text{Rp}510{,}000$
+    \item Pembayaran klaim manfaat asuransi: $\text{Rp}420{,}000$
+    \item Pembayaran biaya operasional lainnya: $\text{Rp}180{,}000$
+\end{itemize}
+Diasumsikan seluruh arus kas premi, klaim, dan biaya timbul pada pertengahan tahun ($t = 0.5$). Hitunglah tingkat imbal hasil efektif tahunan ($i$) dari perusahaan asuransi tersebut!
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+\textbf{Langkah 1: Identifikasi variabel-variabel dasar:}
+\begin{itemize}
+    \item Saldo Awal: $A = 10{,}000{,}000$
+    \item Hasil Investasi Neto: $I = 510{,}000$
+    \item Total Kontribusi Bersih ($C$):
+    \begin{equation*}
+        C = \text{Premi} - \text{Klaim} - \text{Biaya} = 1{,}000{,}000 - 420{,}000 - 180{,}000 = \text{Rp}400{,}000
+    \end{equation*}
+    \item Saldo Aset Akhir Tahun ($B$):
+    \begin{equation*}
+        B = A + C + I = 10{,}000{,}000 + 400{,}000 + 510{,}000 = \text{Rp}10{,}910{,}000
+    \end{equation*}
+\end{itemize}
+
+\textbf{Langkah 2: Hitung suku bunga efektif menggunakan rumus aktuaria:}
+\begin{align*}
+    i &= \frac{2I}{A + B - I} \\[0.4em]
+      &= \frac{2 \times 510{,}000}{10{,}000{,}000 + 10{,}910{,}000 - 510{,}000} \\[0.4em]
+      &= \frac{1{,}020{,}000}{20{,}400{,}000} = 0.05 = 5.00\%
+\end{align*}
+Tingkat imbal hasil efektif perusahaan asuransi tersebut adalah tepat $5\%$ per tahun.
+\end{examplebox}
+
+---
+
+\section{Metode \textit{Time-Weighted Rate of Return} (TWRR)}
+
+\subsection{Motivasi \& Filosofi Dasar}
+Pada metode \textit{Dollar-Weighted}, tingkat return sangat dipengaruhi oleh \textbf{keputusan waktu (\textit{timing})} dan \textbf{besaran setoran/penarikan modal} yang dilakukan oleh nasabah/investor. 
+
+Padahal, seorang Manajer Investasi (\textit{Fund Manager}) umumnya tidak memiliki kendali atas kapan investor menyetor atau menarik uang mereka. 
+\begin{itemize}[leftmargin=1.5em]
+    \item Jika investor menyetor dana dalam jumlah besar tepat sebelum pasar melonjak naik, DWRR akan tinggi meskipun kemampuan analisis manajer biasa saja.
+    \item Sebaliknya, jika investor menyetor dana besar tepat sebelum pasar anjlok, DWRR akan bernilai sangat rendah meskipun strategi pemilihan aset manajer sudah optimal.
+\end{itemize}
+
+Untuk menilai **murni kinerja dan kepiawaian manajer investasi**, digunakan metode \textbf{\textit{Time-Weighted Rate of Return} (TWRR)}.
+
+\subsection{Mekanisme Perhitungan TWRR (Valuasi Sub-Interval)}
+
+Dalam metode TWRR, periode 1 tahun dibagi menjadi beberapa sub-interval setiap kali terjadi transaksi arus kas masuk atau keluar:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    % Main time axis
+    \draw[->, thick, line width=1.2pt] (-0.5,0) -- (10.5,0) node[right] {\textbf{Waktu ($t$)}};
+    
+    % Points
+    \draw[thick] (0, 0.15) -- (0, -0.15) node[below] {$t_0 = 0$};
+    \draw[thick] (3, 0.15) -- (3, -0.15) node[below] {$t_1$};
+    \draw[thick] (6.5, 0.15) -- (6.5, -0.15) node[below] {$t_2$};
+    \draw[thick] (9.5, 0.15) -- (9.5, -0.15) node[below] {$t_m = 1$};
+    
+    % Sub-periods labels
+    \node at (1.5, 0.5) {\footnotesize Sub-periode 1 ($j_1$)};
+    \node at (4.75, 0.5) {\footnotesize Sub-periode 2 ($j_2$)};
+    \node at (8.0, 0.5) {\footnotesize Sub-periode $m$ ($j_m$)};
+    
+    % Fund balances
+    \node[above, primaryblue] at (0, 0.8) {$B_0$};
+    \node[above, primaryblue] at (3, 0.8) {$B_1', \ B_1' + C_1'$};
+    \node[above, primaryblue] at (6.5, 0.8) {$B_2', \ B_2' + C_2'$};
+    \node[above, primaryblue] at (9.5, 0.8) {$B_m'$};
+    
+    \draw[dashed, gray] (3, -0.5) -- (3, 1.4);
+    \draw[dashed, gray] (6.5, -0.5) -- (6.5, 1.4);
+\end{tikzpicture}
+\end{center}
+
+Misalkan terdapat $m$ titik waktu di mana transaksi kas terjadi:
+\begin{itemize}[leftmargin=1.5em]
+    \item $B_k'$ = Nilai portofolio pada saat $t_k$ sesaat \textbf{sebelum} penambahan/pengurangan kontribusi $C_k'$.
+    \item $C_k'$ = Jumlah kontribusi kas bersih yang disetor pada waktu $t_k$.
+    \item Saldo awal sub-periode ke-$(k+1)$ sesaat setelah transaksi adalah: $B_k' + C_k'$.
+\end{itemize}
+
+\begin{definitionbox}[Rumus Tingkat Imbal Hasil Sub-Interval ($j_k$)]
+Tingkat imbal hasil pada sub-interval ke-$k$ (dari $t_{k-1}$ hingga $t_k$) didefinisikan sebagai:
+\begin{equation}
+    1 + j_k = \frac{B_k'}{B_{k-1}' + C_{k-1}'}
+\end{equation}
+di mana $B_0' + C_0' = A$ (saldo modal awal).
+\end{definitionbox}
+
+\begin{definitionbox}[Rumus \textit{Time-Weighted Rate of Return} (TWRR Tahunan)]
+Tingkat imbal hasil tahunan \textit{Time-Weighted} ($i_{\text{TWR}}$) adalah hasil kali geometrik dari seluruh faktor pertumbuhan sub-interval:
+\begin{equation}
+    1 + i_{\text{TWR}} = (1 + j_1)(1 + j_2)\cdots(1 + j_m) = \prod_{k=1}^m (1 + j_k)
+\end{equation}
+\begin{equation}
+    1 + i_{\text{TWR}} = \left( \frac{B_1'}{A} \right) \cdot \left( \frac{B_2'}{B_1' + C_1'} \right) \cdots \left( \frac{B}{B_{m-1}' + C_{m-1}'} \right)
+\end{equation}
+\end{definitionbox}
+
+\subsubsection{Generalisasi untuk Periode Multi-Tahun atau Pecahan Tahun}
+Jika seluruh proses evaluasi berlangsung selama total horizon waktu $T$ tahun (misalnya $T = 11/12$ tahun atau $T = 3$ tahun), maka suku bunga efektif tahunan \textit{annualized} ditentukan oleh:
+\begin{equation}
+    (1 + i_{\text{TWR}})^T = \prod_{k=1}^m (1 + j_k) \implies i_{\text{TWR}} = \left[ \prod_{k=1}^m (1 + j_k) \right]^{1/T} - 1
+\end{equation}
+
+---
+
+\section{Komparasi Komprehensif: DWRR vs TWRR}
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{p{3.2cm}p{5.4cm}p{5.4cm}}
+\toprule
+\textbf{Dimensi Perbandingan} & \textbf{\textit{Dollar-Weighted} (DWRR)} & \textbf{\textit{Time-Weighted} (TWRR)} \\
+\midrule
+\textbf{Prinsip Dasar} & Menghitung IRR dari seluruh arus kas modal yang masuk dan keluar. & Menghitung rata-rata geometrik return aset tanpa bobot nominal setoran. \\
+\textbf{Kebutuhan Data} & Hanya memerlukan saldo awal, saldo akhir, serta waktu \& jumlah arus kas. & Memerlukan valuasi nilai pasar portofolio ($B_k'$) di setiap tanggal transaksi kas. \\
+\textbf{Pengaruh \textit{Cash Flow}} & Sangat dipengaruhi oleh waktu dan volume setoran/penarikan kas nasabah. & Sepenuhnya kebal (\textit{immune}) terhadap setoran/penarikan dana nasabah. \\
+\textbf{Fungsi Penggunaan} & Mengukur kinerja imbal hasil finansial pribadi investor (\textit{investor's personal return}). & Mengukur murni keahlian dan performa manajer investasi (\textit{manager's skill}). \\
+\textbf{Standar Industri} & Analisis internal pemegang rekening dan laporan tahunan aktuaria/asuransi. & Standar pelaporan reksa dana global (\textit{Global Investment Performance Standards} - GIPS). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Kapan DWRR Berbeda Signifikan dari TWRR?}
+
+\begin{notebox}[Aturan Perbandingan DWRR vs TWRR]
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{$\text{DWRR} > \text{TWRR}$:} Terjadi jika investor menyetorkan dana tambahan (\textit{net deposit}) sebelum periode di mana pasar mengalami kenaikan hasil yang tinggi, atau menarik dana sebelum pasar jatuh.
+    \item \textbf{$\text{DWRR} < \text{TWRR}$:} Terjadi jika investor menyetorkan dana dalam jumlah besar sebelum pasar anjlok, atau menarik dana sesaat sebelum pasar melonjak naik.
+\end{itemize}
+\end{notebox}
+
+\begin{examplebox}[Contoh 3: Komparasi Lengkap DWRR vs TWRR (Kasus Tabungan Bulanan)]
+\textbf{Soal:}\\
+Adi baru mulai menabung pada suatu Dana Investasi pada bulan ke-2 tahun 2022 (1 Februari 2022). Penarikan atau pemasukan dana selalu dilakukan pada tanggal 1 (awal bulan). Saldo rekening tabungan berjalan dari awal menabung sampai akhir tahun tercatat pada tabel berikut (dalam ribuan rupiah):
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{cccc}
+\toprule
+\textbf{Bulan ($t$)} & \textbf{Saldo Awal ($B_k'$)} & \textbf{Debet (Setor)} & \textbf{Kredit (Tarik)} \\
+\midrule
+2 (Feb) & $0$ & $230$ & $0$ \\
+4 (Apr) & $237.820$ & $300$ & $100$ \\
+7 (Jul) & $447.890$ & $220$ & $190$ \\
+9 (Sep) & $488.881$ & $340$ & $20$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Saldo pada akhir tahun (31 Desember 2022) adalah $\text{Rp}835.547$ ribu.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan tingkat imbal hasil efektif tahunan menggunakan metode \textbf{\textit{Dollar-Weighted}} (baik formula eksak maupun hampiran aktuaria).
+    \item Tentukan tingkat imbal hasil efektif tahunan menggunakan metode \textbf{\textit{Time-Weighted}}.
+    \item Bandingkan kedua hasil tersebut dan jelaskan metode mana yang memberikan yield rate lebih besar!
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Durasi investasi berjalan dari 1 Februari 2022 hingga 31 Desember 2022, yaitu selama \textbf{11 bulan} ($T = \frac{11}{12}$ tahun).
+Arus kas bersih ($C_k = \text{Setor} - \text{Tarik}$):
+\begin{itemize}
+    \item 1 Feb (Bulan 2): $C_1 = 230 - 0 = +230$ (mengendap selama $11/12$ tahun).
+    \item 1 Apr (Bulan 4): $C_2 = 300 - 100 = +200$ (mengendap selama $9/12$ tahun).
+    \item 1 Jul (Bulan 7): $C_3 = 220 - 190 = +30$ (mengendap selama $6/12$ tahun).
+    \item 1 Sep (Bulan 9): $C_4 = 340 - 20 = +320$ (mengendap selama $4/12$ tahun).
+\end{itemize}
+Total seluruh setoran modal bersih: $C = 230 + 200 + 30 + 320 = 780$ ribu rupiah.
+Saldo akhir tahun: $B = 835.547$ ribu rupiah.
+Total pendapatan investasi bersih:
+\begin{equation*}
+    I = B - A - C = 835.547 - 0 - 780 = 55.547 \text{ ribu rupiah}
+\end{equation*}
+
+\textbf{Bagian (a): Perhitungan Dollar-Weighted Rate (DWRR):}
+\begin{itemize}
+    \item \textbf{Cara 1: Metode Bunga Tunggal Aktuaria:}
+    \begin{align*}
+        j_{\text{DWR}} &= \frac{I}{\sum C_k \cdot (\text{sisa waktu})} \\[0.4em]
+                       &= \frac{55.547}{230 \left(\frac{11}{12}\right) + 200 \left(\frac{9}{12}\right) + 30 \left(\frac{6}{12}\right) + 320 \left(\frac{4}{12}\right)} \\[0.4em]
+                       &= \frac{55.547}{210.833 + 150.000 + 15.000 + 106.667} = \frac{55.547}{482.500} \approx 0.11512 = 11.51\%
+    \end{align*}
+    
+    \item \textbf{Cara 2: Persamaan Nilai Majemuk Eksak (IRR):}
+    \begin{equation*}
+        230 (1 + j)^{11/12} + 200 (1 + j)^{9/12} + 30 (1 + j)^{6/12} + 320 (1 + j)^{4/12} = 835.547
+    \end{equation*}
+    Mengevaluasi fungsi $F(j)$:
+    \begin{itemize}
+        \item Untuk $j = 11\% = 0.11 \implies F(0.11) = 832.307 \implies F(0.11) - 835.547 = -3.240$
+        \item Untuk $j = 12\% = 0.12 \implies F(0.12) = 836.987 \implies F(0.12) - 835.547 = +1.440$
+    \end{itemize}
+    Interpolasi linear:
+    \begin{equation*}
+        j = 0.11 + \frac{0 - (-3.240)}{1.440 - (-3.240)} \times (0.12 - 0.11) = 0.11 + \frac{3.240}{4.680} \times 0.01 \approx 11.69\%
+    \end{equation*}
+\end{itemize}
+
+\textbf{Bagian (b): Perhitungan Time-Weighted Rate (TWRR):}
+Bagi periode menjadi 4 sub-interval:
+\begin{enumerate}[label=\arabic*.]
+    \item Sub-periode 1 (Feb s.d. Apr): $1 + j_1 = \dfrac{B_1'}{C_1} = \dfrac{237.820}{230} = 1.034000$
+    \item Sub-periode 2 (Apr s.d. Jul): $1 + j_2 = \dfrac{B_2'}{B_1' + C_2} = \dfrac{447.890}{237.820 + 200} = \dfrac{447.890}{437.820} \approx 1.023000$
+    \item Sub-periode 3 (Jul s.d. Sep): $1 + j_3 = \dfrac{B_3'}{B_2' + C_3} = \dfrac{488.881}{447.890 + 30} = \dfrac{488.881}{477.890} \approx 1.023000$
+    \item Sub-periode 4 (Sep s.d. Des): $1 + j_4 = \dfrac{B}{B_3' + C_4} = \dfrac{835.547}{488.881 + 320} = \dfrac{835.547}{808.881} \approx 1.032966$
+\end{enumerate}
+
+Faktor akumulasi total selama 11 bulan:
+\begin{align*}
+    (1 + j_{\text{TWR}})^{11/12} &= (1 + j_1)(1 + j_2)(1 + j_3)(1 + j_4) \\
+                                 &= (1.034000) \times (1.023000) \times (1.023000) \times (1.032966) \\
+                                 &= 1.117865
+\end{align*}
+Tingkat imbal hasil disetahunkan (\textit{annualized yield}):
+\begin{equation*}
+    1 + j_{\text{TWR}} = (1.117865)^{12/11} = (1.117865)^{1.090909} \approx 1.129202 \implies j_{\text{TWR}} \approx 12.92\%
+\end{equation*}
+
+\textbf{Bagian (c): Kesimpulan Perbandingan:}
+\begin{equation*}
+    \text{TWRR } (12.92\%) > \text{DWRR } (11.69\% \text{ atau } 11.51\%)
+\end{equation*}
+Metode \textbf{\textit{Time-Weighted Rate of Return}} menghasilkan nilai yang lebih besar dibandingkan \textit{Dollar-Weighted}. Hal ini terjadi karena kinerja return aset reksa dana pada sub-periode awal (Februari--April) relatif tinggi ($3.40\%$), namun saldo dana investor pada saat itu masih relatif kecil ($\text{Rp}230$ ribu).
+\end{examplebox}
+
+---
+
+\section{Metode Alokasi Pendapatan Investasi: \textit{Portfolio Method} vs \textit{Investment Year Method}}
+
+Dalam pengelolaan portofolio institusional (seperti asuransi jiwa dan dana pensiun kelompok), dana yang masuk berasal dari berbagai tahun yang berbeda dengan kondisi suku bunga pasar yang berbeda. Terdapat dua filosofi alokasi bunga:
+
+\subsection{1. Metode Portofolio (\textit{Portfolio Method})}
+\begin{itemize}[leftmargin=1.5em]
+    \item Seluruh aset digabungkan ke dalam satu portofolio agregat tunggal.
+    \item Setiap pemegang polis/investor menerima tingkat suku bunga yang sama rata ($i_{\text{port}}$), terlepas dari kapan dana tersebut disetorkan.
+    \item \textbf{Kelemahan:} Ketika suku bunga pasar melonjak tajam, nasabah lama enggan menyetor dana baru dan nasabah baru lebih memilih instrumen pasar uang luar karena suku bunga portofolio gabungan tertinggal dari suku bunga pasar baru (\textit{new money rate}).
+\end{itemize}
+
+\subsection{2. Metode Tahun Investasi (\textit{Investment Year Method} / \textit{New Money Method})}
+\begin{itemize}[leftmargin=1.5em]
+    \item Dana yang disetorkan pada tahun kalender tertentu ($y$) dialokasikan suku bunga sesuai tingkat bunga pasar pada tahun penempatan tersebut ($i_1^y$).
+    \item Dana tersebut menerima suku bunga spesifik tahun investasi selama $m$ tahun pertama ($i_1^y, i_2^y, \dots, i_m^y$).
+    \item Setelah $m$ tahun berlalu (periode \textit{rollover}), dana tersebut dilebur ke dalam tingkat suku bunga portofolio agregat ($i_{\text{port}}^{y+m}$).
+\end{itemize}
+
+\begin{examplebox}[Contoh 4: Matriks Suku Bunga \textit{Investment Year Method}]
+Misalkan tabel suku bunga \textit{Investment Year Method} untuk periode $m = 3$ tahun adalah:
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Tahun Penempatan ($y$)} & \textbf{$i_1$} & \textbf{$i_2$} & \textbf{$i_3$} & \textbf{Portfolio Rate ($i_{\text{port}}$)} \\
+\midrule
+2020 & $8.0\%$ & $8.2\%$ & $8.5\%$ & $7.5\%$ \\
+2021 & $9.0\%$ & $8.8\%$ & $8.4\%$ & $7.6\%$ \\
+2022 & $10.0\%$ & $9.5\%$ & $9.0\%$ & $7.8\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Pertanyaan:} Berapa nilai akumulasi pada akhir tahun 2023 dari dana $\$1{,}000$ yang disetorkan pada awal tahun 2020?
+
+\vspace{0.5em}
+\textbf{Penyelesaian:}\\
+Dana disetor pada awal tahun 2020 dan mengendap selama 4 tahun (2020, 2021, 2022, 2023):
+\begin{itemize}
+    \item Tahun 1 (2020): menggunakan $i_1^{2020} = 8.0\%$
+    \item Tahun 2 (2021): menggunakan $i_2^{2020} = 8.2\%$
+    \item Tahun 3 (2022): menggunakan $i_3^{2020} = 8.5\%$
+    \item Tahun 4 (2023): telah melewati $m = 3$ tahun, sehingga menggunakan \textbf{Portfolio Rate tahun 2023}: $i_{\text{port}}^{2023} = 7.8\%$.
+\end{itemize}
+Nilai Akumulasi akhir 2023:
+\begin{equation*}
+    A(4) = 1{,}000 \times (1 + 0.080) \times (1 + 0.082) \times (1 + 0.085) \times (1 + 0.078) = \$1{,}367.66
+\end{equation*}
+\end{examplebox}
+
+---
+
+\section{Ringkasan Rumus Kunci Bab 04}
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{p{4.2cm}cp{7.6cm}}
+\toprule
+\textbf{Konsep / Metodologi} & \textbf{Notasi} & \textbf{Formula Matematis Utama} \\
+\midrule
+\textit{Net Present Value} & $NPV(i)$ & $NPV(i) = \sum_{t=0}^n C_t (1+i)^{-t} = \sum_{t=0}^n C_t v^t$ \\
+\textit{Internal Rate of Return} & IRR & $NPV(i^*) = 0 \iff \sum \text{PV}(\text{Inflow}) = \sum \text{PV}(\text{Outflow})$ \\
+Laba Investasi Bersih & $I$ & $I = B - A - C = B - A - \sum C_t$ \\
+DWRR (Bunga Tunggal) & $i_{\text{DWR}}$ & $i_{\text{DWR}} \approx \dfrac{I}{A + \sum C_t (1 - t)}$ \\
+DWRR (Pertengahan Tahun) & $i_{\text{DWR}}$ & $i \approx \dfrac{I}{A + 0.5 C} = \dfrac{2I}{A + B - I}$ \\
+TWRR (Sub-Interval $k$) & $1 + j_k$ & $1 + j_k = \dfrac{B_k'}{B_{k-1}' + C_{k-1}'}$ \\
+TWRR (Tahunan Total) & $1 + i_{\text{TWR}}$ & $1 + i_{\text{TWR}} = \prod_{k=1}^m (1 + j_k)$ \\
+TWRR Disetahunkan & $i_{\text{TWR}}$ & $i_{\text{TWR}} = \left( \prod_{k=1}^m (1 + j_k) \right)^{1/T} - 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

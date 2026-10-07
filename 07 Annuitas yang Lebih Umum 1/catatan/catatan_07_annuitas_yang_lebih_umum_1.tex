@@ -1,0 +1,1038 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 07: Anuitas yang Lebih Umum (Bagian 1)\\
+\large (\textit{General Annuities: Payment Frequency Differs from Interest Conversion Frequency \& Continuous Annuities})}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 4) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\section{Pendahuluan \& Konsep Dasar Tiga Periode Waktu}
+
+Pada Bab 05 dan 06, kita telah mempelajari \textbf{Anuitas Sederhana (\textit{Simple Annuities})}, di mana terdapat asumsi dasar yang sangat penting:
+\begin{center}
+    \textbf{Frekuensi pembayaran cicilan/setoran persis sama dengan frekuensi konversi (pemajemukan) suku bunga.}
+\end{center}
+Sebagai contoh, jika bunga dimajemukkan secara tahunan, maka pembayaran cicilan juga dilakukan setahun sekali; jika bunga dimajemukkan secara bulanan, pembayaran cicilan juga bulanan.
+
+Namun dalam praktik dunia keuangan, perbankan, dan aktuarial modern, kondisi ideal ini sering kali tidak terpenuhi. Sebagai contoh:
+\begin{itemize}[leftmargin=1.5em]
+    \item Seseorang membayar premi asuransi atau menabung cicilan \textbf{setiap bulan}, tetapi bank memajemukkan bunga secara \textbf{semesteran} atau \textbf{tahunan}.
+    \item Suatu perusahaan menerima kupon obligasi \textbf{setiap semester}, tetapi dana tersebut diinvestasikan kembali pada rekening dengan pemajemukan bunga \textbf{bulanan}.
+    \item Aliran kas bisnis atau penerimaan premi terjadi terus-menerus sepanjang waktu (\textbf{secara kontinu}).
+\end{itemize}
+
+Oleh karena itu, kita memerlukan teori \textbf{Anuitas yang Lebih Umum (\textit{General Annuities})}.
+
+\begin{definitionbox}[Tiga Dimensi Periode Waktu dalam Transaksi Anuitas]
+Dalam menganalisis anuitas umum, kita wajib mengidentifikasi tiga periode waktu yang berbeda:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Periode Konversi Suku Bunga (\textit{Interest Conversion Period}):} Interval waktu di mana bunga dihitung dan ditambahkan ke pokok (\textit{compounded}), misalnya tahunan, semesteran, kuartalan, atau bulanan.
+    \item \textbf{Periode Pembayaran Dana/Cicilan (\textit{Payment Period}):} Interval waktu antara dua pembayaran berturut-turut, misalnya setiap 3 bulan, setiap bulan, atau setiap minggu.
+    \item \textbf{Periode / Jangka Waktu Investasi (\textit{Investment Term}):} Total rentang waktu keseluruhan transaksi anuitas berlangsung, misalnya 4 tahun, 10 tahun, atau selamanya ($\infty$).
+\end{enumerate}
+\end{definitionbox}
+
+\subsection{Dua Pendekatan Penyelesaian Masalah}
+
+Ketika periode pembayaran dan periode konversi suku bunga \textbf{tidak sama}, terdapat dua pendekatan utama dalam teori suku bunga:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95, >=stealth]
+    \node[draw=primaryblue, fill=boxbg, rounded corners, thick, text width=6.5cm, align=center, inner sep=8pt] (p1) at (-4,0) {
+        \textbf{\large Pendekatan 1: Perhitungan Numerik}\\[0.3em]
+        \small (\textit{Effective Interest Rate Equivalence})\\[0.5em]
+        Mengonversi suku bunga menjadi suku bunga efektif per periode pembayaran ($j$), lalu menggunakan rumus anuitas standar.
+    };
+    
+    \node[draw=accentblue, fill=white, rounded corners, thick, text width=6.5cm, align=center, inner sep=8pt] (p2) at (4,0) {
+        \textbf{\large Pendekatan 2: Analisis Aljabar}\\[0.3em]
+        \small (\textit{Actuarial Formulaic Approach})\\[0.5em]
+        Mempertahankan periode konversi bunga sebagai unit waktu acuan dan membangun rumus analitik baru berbasis simbol aktuaria ($a_{\overline{n}|}/s_{\overline{k}|}$, $a_{\overline{n}|}^{(m)}$, $\bar{a}_{\overline{n}|}$).
+    };
+\end{tikzpicture}
+\end{center}
+
+---
+
+\section{Pendekatan 1: Perhitungan Numerik (Suku Bunga Ekuivalen)}
+
+\subsection{Prinsip Dasar Ekuivalensi Suku Bunga}
+Prinsip fundamental dari pendekatan ini adalah:
+\begin{quote}
+    \textit{"Ubah satuan waktu masalah agar sesuai dengan interval pembayaran, lalu cari suku bunga efektif per periode pembayaran tersebut."}
+\end{quote}
+
+Jika diketahui suku bunga efektif per periode konversi bunga adalah $i$, dan dalam satu periode pembayaran terdapat kelipatan atau fraksi periode bunga, kita mencari suku bunga efektif per periode pembayaran, dinotasikan dengan $j$, menggunakan persamaan akumulasi:
+\begin{equation}
+    (1 + j) = (1 + i)^t
+\end{equation}
+di mana $t$ adalah lamanya satu periode pembayaran diukur dalam satuan periode konversi bunga.
+
+Setelah suku bunga $j$ diperoleh, seluruh perhitungan nilai sekarang ($PV$) dan nilai terakumulasi ($AV/FV$) dapat langsung diselesaikan menggunakan rumus anuitas dasar berjangka $N$ kali pembayaran:
+\begin{equation}
+    PV = R \cdot a_{\overline{N}|j} = R \left( \frac{1 - (1+j)^{-N}}{j} \right)
+\end{equation}
+\begin{equation}
+    FV = R \cdot s_{\overline{N}|j} = R \left( \frac{(1+j)^N - 1}{j} \right)
+\end{equation}
+Untuk anuitas di muka (\textit{annuity-due}), kalikan dengan faktor $(1+j)$ atau gunakan penyebut tingkat diskon $d_j = \frac{j}{1+j}$.
+
+---
+
+\subsection{Contoh Soal 1: Nilai Akumulasi Tabungan Bertahap}
+
+\begin{examplebox}[Contoh 1 (Slide Perkuliahan Hal. 3--5)]
+Cari nilai akumulasi dana investasi pada akhir tahun ke-4 di mana:
+\begin{itemize}
+    \item $\$100$ disimpan pada \textbf{awal dari setiap kuartal} untuk 2 tahun pertama.
+    \item $\$200$ disimpan pada \textbf{awal dari setiap kuartal} untuk 2 tahun berikutnya.
+    \item Tingkat suku bunga nominal yang berlaku adalah $12\%$ \textit{convertible monthly} ($i^{(12)} = 12\%$).
+\end{itemize}
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian dengan Pendekatan Numerik:}]
+\textbf{Langkah 1: Identifikasi Data dan Satuan Waktu}
+\begin{itemize}
+    \item Total periode investasi: $4\text{ tahun}$.
+    \item Periode konversi bunga: Bulanan ($m=12$), sehingga suku bunga efektif per bulan adalah:
+    \begin{equation*}
+        i_{\text{bulan}} = \frac{i^{(12)}}{12} = \frac{12\%}{12} = 1\% = 0.01
+    \end{equation*}
+    \item Periode pembayaran: Kuartalan (setiap 3 bulan).
+    \item Banyaknya pembayaran total: $(4 \times 2) + (4 \times 2) = 8 + 8 = 16\text{ kali pembayaran}$.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung Suku Bunga Efektif per Kuartal ($j$)}
+Karena 1 kuartal terdiri dari 3 bulan, maka faktor akumulasi 1 kuartal harus sama dengan akumulasi 3 bulan:
+\begin{equation*}
+    1 + j = (1 + i_{\text{bulan}})^3 = (1 + 0.01)^3 = 1.030301
+\end{equation*}
+\begin{equation*}
+    j = 1.030301 - 1 = 0.030301 \quad (3.0301\%\text{ per kuartal})
+\end{equation*}
+Tingkat diskon efektif per kuartal ($d_j$) adalah:
+\begin{equation*}
+    d_j = \frac{j}{1+j} = \frac{0.030301}{1.030301} \approx 0.0294099
+\end{equation*}
+
+\textbf{Langkah 3: Dekomposisi Arus Kas}
+Penyetoran dilakukan di awal kuartal (\textit{annuity-due}). Kita dapat membagi aliran kas menjadi dua lapis anuitas:
+\begin{enumerate}
+    \item Anuitas A: Setoran $\$100$ per kuartal selama 4 tahun penuh (16 kuartal).
+    \item Anuitas B: Setoran tambahan $\$100$ per kuartal selama 2 tahun terakhir (8 kuartal).
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9, >=stealth]
+    \draw[->, thick] (0,0) -- (13,0) node[right] {Kuartal};
+    \foreach \x in {0,1,2,3,4,5,6,7,8,9,10,11,12} {
+        \draw[thick] (\x*0.9,0.1) -- (\x*0.9,-0.1);
+    }
+    \node[below] at (0, -0.15) {\small 0};
+    \node[below] at (7.2, -0.15) {\small 8 (Thn 2)};
+    \node[below] at (14.4*0.8, -0.15) {\small 16 (Thn 4)};
+    
+    % Layer 1: $100 for 16 quarters
+    \foreach \x in {0,1.8,3.6,5.4,7.2,9.0,10.8} {
+        \draw[->, thick, primaryblue] (\x, 0.2) -- (\x, 0.9) node[above] {\small $\$100$};
+    }
+    % Layer 2: $100 for last 8 quarters
+    \foreach \x in {7.2,9.0,10.8} {
+        \draw[->, thick, darkred] (\x, 1.2) -- (\x, 1.9) node[above] {\small $+\$100$};
+    }
+\end{tikzpicture}
+\end{center}
+
+\textbf{Langkah 4: Menghitung Nilai Akumulasi pada Akhir Tahun ke-4 ($t = 16$ kuartal)}
+\begin{align*}
+    FV &= 100 \cdot \ddot{s}_{\overline{16}|j} + 100 \cdot \ddot{s}_{\overline{8}|j} \\
+       &= 100 \left[ \frac{(1+j)^{16} - 1}{d_j} + \frac{(1+j)^8 - 1}{d_j} \right] \\
+       &= 100 \left[ \frac{(1.030301)^{16} - 1}{\frac{0.030301}{1.030301}} + \frac{(1.030301)^8 - 1}{\frac{0.030301}{1.030301}} \right] \\
+       &= 100 \left[ \frac{1.6122261 - 1}{0.0294099} + \frac{1.2697346 - 1}{0.0294099} \right] \\
+       &= 100 \left[ \frac{0.6122261}{0.0294099} + \frac{0.2697346}{0.0294099} \right] \\
+       &= 100 \left[ 20.81704 + 9.17157 \right] = 100 (29.98861) = \mathbf{2998.86149}
+\end{align*}
+Jadi, nilai akumulasi dana investasi tersebut adalah \textbf{\$2.998,86}.
+\end{proof}
+
+---
+
+\subsection{Contoh Soal 2: Menghitung Besarnya Angsuran Pinjaman}
+
+\begin{examplebox}[Contoh 2 (Slide Perkuliahan Hal. 6--7)]
+Suatu pinjaman sebesar $\$3.000$ dilunasi dengan angsuran berkala pada setiap \textbf{akhir kuartal} selama 5 tahun. Jika suku bunga pinjaman adalah $10\%$ \textit{convertible semiannually} ($i^{(2)} = 10\%$), hitunglah besarnya angsuran per kuartal ($R$).
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian dengan Pendekatan Numerik:}]
+\textbf{Langkah 1: Parameter Transaksi}
+\begin{itemize}
+    \item Pokok pinjaman ($PV$): $\$3.000$.
+    \item Jangka waktu: 5 tahun.
+    \item Frekuensi pembayaran: Kuartalan $\implies$ Total pembayaran $N = 5 \times 4 = 20\text{ kali}$.
+    \item Suku bunga konversi semesteran: $i_{\text{semester}} = \frac{i^{(2)}}{2} = \frac{10\%}{2} = 5\% = 0.05$.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung Suku Bunga Efektif per Kuartal ($j$)}
+Karena dalam 1 semester terdapat 2 kuartal:
+\begin{equation*}
+    (1 + j)^2 = 1 + i_{\text{semester}} = 1.05 \implies 1 + j = (1.05)^{1/2}
+\end{equation*}
+\begin{equation*}
+    j = (1.05)^{1/2} - 1 = 1.024695076 - 1 \approx 0.024695 \quad (2.4695\%\text{ per kuartal})
+\end{equation*}
+
+\textbf{Langkah 3: Persamaan Nilai Sekarang (\textit{Equation of Value})}
+Karena pembayaran dilakukan di akhir kuartal, berlaku formula \textit{annuity-immediate}:
+\begin{equation*}
+    PV = R \cdot a_{\overline{20}|j} \implies 3000 = R \cdot \left( \frac{1 - (1+j)^{-20}}{j} \right)
+\end{equation*}
+Hitung faktor diskonto:
+\begin{equation*}
+    (1+j)^{-20} = (1.05)^{-10} \approx 0.61391325
+\end{equation*}
+\begin{equation*}
+    a_{\overline{20}|j} = \frac{1 - 0.61391325}{0.024695076} = \frac{0.38608675}{0.024695076} \approx 15.63416
+\end{equation*}
+Maka besarnya angsuran per kuartal adalah:
+\begin{equation*}
+    R = \frac{3000}{a_{\overline{20}|j}} = \frac{3000}{15.63416} = \mathbf{191.8874} \approx \mathbf{\$191.89}
+\end{equation*}
+\end{proof}
+
+---
+
+\section{Kasus 1 Aljabar: Pembayaran Lebih Jarang daripada Pemajemukan Bunga (\texorpdfstring{$k > 1$}{k > 1})}
+
+\subsection{Definisi dan Notasi Parameter}
+Pada kasus ini, interval pembayaran lebih panjang daripada interval pemajemukan bunga. Misalkan:
+\begin{itemize}[leftmargin=1.5em]
+    \item $k$: Banyaknya periode konversi suku bunga dalam satu kali pembayaran ($k \in \mathbb{Z}^+, k > 1$).
+    \item $n$: Total jangka waktu anuitas yang diukur dalam \textbf{satuan periode konversi suku bunga}.
+    \item $m$: Total banyaknya pembayaran yang dilakukan sepanjang masa anuitas, di mana:
+    \begin{equation}
+        m = \frac{n}{k} \in \mathbb{Z}^+
+    \end{equation}
+    \item $i$: Suku bunga efektif per periode konversi suku bunga.
+    \item $v = (1+i)^{-1}$: Faktor diskonto per periode konversi suku bunga.
+\end{itemize}
+
+---
+
+\subsection{Anuitas Akhir (\textit{Annuity-Immediate}) untuk \texorpdfstring{$k > 1$}{k > 1}}
+
+Misalkan pembayaran sebesar $1$ dilakukan pada setiap akhir $k$ periode bunga, yaitu pada titik waktu:
+\begin{equation*}
+    t = k, 2k, 3k, \dots, mk = n
+\end{equation*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    % Time axis
+    \draw[->, thick] (-0.5,0) -- (11.5,0) node[right] {Periode Bunga ($t$)};
+    
+    % Ticks and sub-ticks
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {\small $0$};
+    \draw[thick] (1,0.08) -- (1,-0.08) node[below] {\tiny $1$};
+    \draw[thick] (2,0.08) -- (2,-0.08) node[below] {\tiny $2$};
+    \draw[dotted, thick] (2.2,0) -- (2.8,0);
+    \draw[thick] (3,0.15) -- (3,-0.15) node[below] {\small $k$};
+    
+    \draw[thick] (4,0.08) -- (4,-0.08);
+    \draw[dotted, thick] (4.2,0) -- (5.8,0);
+    \draw[thick] (6,0.15) -- (6,-0.15) node[below] {\small $2k$};
+    
+    \draw[dotted, thick] (6.5,0) -- (9.5,0);
+    \draw[thick] (10,0.15) -- (10,-0.15) node[below] {\small $mk=n$};
+    
+    % Cash flows at k, 2k, ..., n
+    \draw[->, thick, primaryblue] (3, 0.2) -- (3, 1.2) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (6, 0.2) -- (6, 1.2) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (10, 0.2) -- (10, 1.2) node[above] {\textbf{\$1}};
+    
+    % PV & FV
+    \draw[<-, thick, darkred] (0, -0.6) -- (0, -1.2) node[below] {\small $PV = \frac{a_{\overline{n}|i}}{s_{\overline{k}|i}}$};
+    \draw[<-, thick, darkgreen] (10, -0.6) -- (10, -1.2) node[below] {\small $FV = \frac{s_{\overline{n}|i}}{s_{\overline{k}|i}}$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Penurunan Matematis Nilai Sekarang (\textit{Present Value})}
+Nilai sekarang pada $t = 0$ adalah jumlahan deret diskonto:
+\begin{equation}
+    PV = v^k + v^{2k} + v^{3k} + \dots + v^{mk} = v^k + v^{2k} + \dots + v^n
+\end{equation}
+Deret di atas merupakan deret geometri dengan suku pertama $a_1 = v^k$, rasio $r = v^k$, dan banyak suku $m$:
+\begin{equation}
+    PV = v^k \left( \frac{1 - (v^k)^m}{1 - v^k} \right) = v^k \left( \frac{1 - v^n}{1 - v^k} \right)
+\end{equation}
+Kalikan pembilang dan penyebut dengan $v^{-k} = (1+i)^k$:
+\begin{equation}
+    PV = \frac{1 - v^n}{(1+i)^k - 1}
+\end{equation}
+Bagi pembilang dan penyebut dengan suku bunga $i$:
+\begin{equation}
+    PV = \frac{\frac{1 - v^n}{i}}{\frac{(1+i)^k - 1}{i}} = \mathbf{\frac{a_{\overline{n}|i}}{s_{\overline{k}|i}}}
+\end{equation}
+
+\subsubsection{Penurunan Nilai Terakumulasi (\textit{Accumulated Value})}
+Nilai akumulasi pada titik $t = n$ diperoleh dengan mengalikan $PV$ dengan $(1+i)^n$:
+\begin{equation}
+    FV = PV \cdot (1+i)^n = \frac{a_{\overline{n}|i} \cdot (1+i)^n}{s_{\overline{k}|i}} = \mathbf{\frac{s_{\overline{n}|i}}{s_{\overline{k}|i}}}
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok: Pembayaran 1 Setiap Akhir $k$ Periode Bunga]
+\begin{equation}
+    PV = \frac{a_{\overline{n}|i}}{s_{\overline{k}|i}} \qquad \text{dan} \qquad FV = \frac{s_{\overline{n}|i}}{s_{\overline{k}|i}}
+\end{equation}
+\textbf{Interpretasi Aktuarial yang Sangat Cantik:}\\
+Pembayaran sebesar $1$ pada akhir setiap $k$ periode bunga \textbf{ekuivalen secara nilai waktu} dengan serangkaian pembayaran sebesar $\frac{1}{s_{\overline{k}|i}}$ pada setiap akhir periode bunga tunggal selama $n$ periode. Oleh karena itu, $PV = \frac{1}{s_{\overline{k}|i}} \cdot a_{\overline{n}|i} = \frac{a_{\overline{n}|i}}{s_{\overline{k}|i}}$.
+\end{definitionbox}
+
+---
+
+\subsection{Anuitas Awal (\textit{Annuity-Due}) untuk \texorpdfstring{$k > 1$}{k > 1}}
+
+Misalkan pembayaran sebesar $1$ dilakukan pada setiap awal $k$ periode bunga, yaitu pada titik waktu:
+\begin{equation*}
+    t = 0, k, 2k, \dots, n-k
+\end{equation*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (11.5,0) node[right] {Periode Bunga ($t$)};
+    
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {\small $0$};
+    \draw[thick] (3,0.15) -- (3,-0.15) node[below] {\small $k$};
+    \draw[thick] (6,0.15) -- (6,-0.15) node[below] {\small $2k$};
+    \draw[thick] (8.5,0.15) -- (8.5,-0.15) node[below] {\small $n-k$};
+    \draw[thick] (10.5,0.15) -- (10.5,-0.15) node[below] {\small $n$};
+    
+    % Cash flows at 0, k, 2k, ..., n-k
+    \draw[->, thick, primaryblue] (0, 0.2) -- (0, 1.2) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (3, 0.2) -- (3, 1.2) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (6, 0.2) -- (6, 1.2) node[above] {\textbf{\$1}};
+    \draw[->, thick, primaryblue] (8.5, 0.2) -- (8.5, 1.2) node[above] {\textbf{\$1}};
+    
+    % PV & FV
+    \draw[<-, thick, darkred] (0, -0.6) -- (0, -1.2) node[below] {\small $PV = \frac{a_{\overline{n}|i}}{a_{\overline{k}|i}}$};
+    \draw[<-, thick, darkgreen] (10.5, -0.6) -- (10.5, -1.2) node[below] {\small $FV = \frac{s_{\overline{n}|i}}{a_{\overline{k}|i}}$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Penurunan Matematis Nilai Sekarang}
+Nilai sekarang pada $t = 0$:
+\begin{equation}
+    PV = 1 + v^k + v^{2k} + \dots + v^{n-k} = \frac{1 - (v^k)^m}{1 - v^k} = \frac{1 - v^n}{1 - v^k}
+\end{equation}
+Bagi pembilang dan penyebut dengan $i$:
+\begin{equation}
+    PV = \frac{\frac{1 - v^n}{i}}{\frac{1 - v^k}{i}} = \mathbf{\frac{a_{\overline{n}|i}}{a_{\overline{k}|i}}}
+\end{equation}
+
+\subsubsection{Penurunan Nilai Terakumulasi}
+Akumulasi pada $t = n$:
+\begin{equation}
+    FV = PV \cdot (1+i)^n = \frac{a_{\overline{n}|i}(1+i)^n}{a_{\overline{k}|i}} = \mathbf{\frac{s_{\overline{n}|i}}{a_{\overline{k}|i}}}
+\end{equation}
+
+\begin{definitionbox}[Rumus Pokok: Pembayaran 1 Setiap Awal $k$ Periode Bunga]
+\begin{equation}
+    PV = \frac{a_{\overline{n}|i}}{a_{\overline{k}|i}} \qquad \text{dan} \qquad FV = \frac{s_{\overline{n}|i}}{a_{\overline{k}|i}}
+\end{equation}
+\textbf{Interpretasi Aktuarial:}\\
+Pembayaran $1$ pada awal setiap interval sepanjang $k$ periode bunga dapat digantikan oleh pembayaran berkala sebesar $\frac{1}{a_{\overline{k}|i}}$ pada setiap akhir periode bunga tunggal. Oleh karena itu, $PV = \frac{1}{a_{\overline{k}|i}} \cdot a_{\overline{n}|i} = \frac{a_{\overline{n}|i}}{a_{\overline{k}|i}}$.
+\end{definitionbox}
+
+---
+
+\subsection{Perpetuitas untuk Kasus \texorpdfstring{$k > 1$}{k > 1}}
+
+Jika pembayaran berlangsung selamanya ($m \to \infty$ sehingga $n \to \infty$), kita peroleh nilai sekarang perpetuitas:
+
+\begin{equation}
+    PV_{\text{Perp-Immediate}} = \lim_{n \to \infty} \frac{a_{\overline{n}|i}}{s_{\overline{k}|i}} = \frac{\frac{1}{i}}{s_{\overline{k}|i}} = \mathbf{\frac{1}{i \cdot s_{\overline{k}|i}} = \frac{1}{(1+i)^k - 1}}
+\end{equation}
+
+\begin{equation}
+    PV_{\text{Perp-Due}} = \lim_{n \to \infty} \frac{a_{\overline{n}|i}}{a_{\overline{k}|i}} = \frac{\frac{1}{i}}{a_{\overline{k}|i}} = \mathbf{\frac{1}{i \cdot a_{\overline{k}|i}} = \frac{1}{1 - v^k}}
+\end{equation}
+
+---
+
+\subsection{Aplikasi: Menghitung Ulang Contoh 1 dengan Pendekatan Aljabar}
+
+\begin{examplebox}[Penyelesaian Aljabar Contoh 1 (Slide Perkuliahan Hal. 11)]
+Pada Contoh 1, suku bunga adalah $1\%$ per bulan ($i = 0.01$).
+\begin{itemize}
+    \item Interval pembayaran: 3 bulan ($k = 3$).
+    \item Lapisan 1: Setoran $\$100$ di awal kuartal selama 4 tahun ($n = 4 \times 12 = 48\text{ bulan}$).
+    \item Lapisan 2: Setoran tambahan $\$100$ di awal kuartal selama 2 tahun terakhir ($n = 2 \times 12 = 24\text{ bulan}$).
+\end{itemize}
+\end{examplebox}
+
+\begin{proof}[\textbf{Langkah Perhitungan:}]
+Menggunakan rumus akumulasi anuitas di muka untuk $k > 1$, yaitu $FV = \frac{s_{\overline{n}|i}}{a_{\overline{k}|i}}$:
+\begin{align*}
+    FV &= 100 \cdot \frac{s_{\overline{48}|0.01}}{a_{\overline{3}|0.01}} + 100 \cdot \frac{s_{\overline{24}|0.01}}{a_{\overline{3}|0.01}} \\
+       &= 100 \left( \frac{s_{\overline{48}|0.01} + s_{\overline{24}|0.01}}{a_{\overline{3}|0.01}} \right)
+\end{align*}
+Hitung masing-masing nilai aktuaria:
+\begin{align*}
+    s_{\overline{48}|0.01} &= \frac{(1.01)^{48} - 1}{0.01} = \frac{1.6122261 - 1}{0.01} = 61.22261 \\
+    s_{\overline{24}|0.01} &= \frac{(1.01)^{24} - 1}{0.01} = \frac{1.2697346 - 1}{0.01} = 26.97346 \\
+    a_{\overline{3}|0.01}  &= \frac{1 - (1.01)^{-3}}{0.01} = \frac{1 - 0.970590}{0.01} = 2.94099
+\end{align*}
+Substitusikan:
+\begin{equation*}
+    FV = 100 \left( \frac{61.22261 + 26.97346}{2.94099} \right) = 100 \left( \frac{88.19607}{2.94099} \right) = 100 (29.98857) = \mathbf{2998.86}
+\end{equation*}
+Hasil ini persis identik dengan Pendekatan Numerik sebelumnya!
+\end{proof}
+
+---
+
+\section{Kasus 2 Aljabar: Pembayaran Lebih Sering daripada Pemajemukan Bunga (\texorpdfstring{$m > 1$}{m > 1})}
+
+\subsection{Definisi dan Notasi Standar Aktuaria}
+Pada kasus ini, interval pembayaran lebih sering daripada interval konversi suku bunga.
+\begin{itemize}[leftmargin=1.5em]
+    \item Periode konversi suku bunga dijadikan sebagai \textbf{unit waktu acuan} ($t = 1, 2, \dots, n$).
+    \item $m$: Banyaknya frekuensi pembayaran dalam satu periode konversi suku bunga ($m \in \mathbb{Z}^+, m > 1$).
+    \item Total banyaknya pembayaran: $mn$ kali.
+    \item Total pembayaran dalam satu periode bunga bernilai $1$, sehingga besarnya setiap kali pembayaran adalah $\mathbf{\frac{1}{m}}$.
+    \item $i$: Suku bunga efektif per periode konversi bunga.
+    \item $i^{(m)}$: Suku bunga nominal yang dapat dikonversi $m$ kali per periode bunga, di mana:
+    \begin{equation}
+        i^{(m)} = m \left[ (1+i)^{1/m} - 1 \right] \iff 1 + \frac{i^{(m)}}{m} = (1+i)^{1/m}
+    \end{equation}
+    \item $d^{(m)}$: Tingkat diskonto nominal yang dapat dikonversi $m$ kali per periode bunga, di mana:
+    \begin{equation}
+        d^{(m)} = m \left[ 1 - (1-d)^{1/m} \right] = m \left[ 1 - v^{1/m} \right] \iff 1 - \frac{d^{(m)}}{m} = v^{1/m}
+    \end{equation}
+\end{itemize}
+
+---
+
+\subsection{Anuitas Akhir: Notasi \texorpdfstring{$a_{\overline{n}|}^{(m)}$}{a\_n\textasciicircum(m)} dan \texorpdfstring{$s_{\overline{n}|}^{(m)}$}{s\_n\textasciicircum(m)}}
+
+Misalkan pembayaran sebesar $\frac{1}{m}$ dilakukan pada setiap akhir sub-periode $\frac{1}{m}$, yaitu pada waktu:
+\begin{equation*}
+    t = \frac{1}{m}, \frac{2}{m}, \frac{3}{m}, \dots, n
+\end{equation*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (11.5,0) node[right] {Periode Bunga ($t$)};
+    
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {\small $0$};
+    \draw[thick] (1,0.08) -- (1,-0.08) node[below] {\tiny $1/m$};
+    \draw[thick] (2,0.08) -- (2,-0.08) node[below] {\tiny $2/m$};
+    \draw[dotted, thick] (2.2,0) -- (2.8,0);
+    \draw[thick] (3,0.15) -- (3,-0.15) node[below] {\small $1$};
+    \draw[thick] (6,0.15) -- (6,-0.15) node[below] {\small $2$};
+    \draw[dotted, thick] (6.5,0) -- (9.5,0);
+    \draw[thick] (10,0.15) -- (10,-0.15) node[below] {\small $n$};
+    
+    % Cash flows of 1/m
+    \draw[->, thick, primaryblue] (1, 0.2) -- (1, 1.0) node[above] {\small $\frac{1}{m}$};
+    \draw[->, thick, primaryblue] (2, 0.2) -- (2, 1.0) node[above] {\small $\frac{1}{m}$};
+    \draw[->, thick, primaryblue] (3, 0.2) -- (3, 1.0) node[above] {\small $\frac{1}{m}$};
+    \draw[->, thick, primaryblue] (10, 0.2) -- (10, 1.0) node[above] {\small $\frac{1}{m}$};
+    
+    % PV & FV
+    \draw[<-, thick, darkred] (0, -0.6) -- (0, -1.2) node[below] {\small $PV = a_{\overline{n}|}^{(m)}$};
+    \draw[<-, thick, darkgreen] (10, -0.6) -- (10, -1.2) node[below] {\small $FV = s_{\overline{n}|}^{(m)}$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Penurunan Matematis Nilai Sekarang \texorpdfstring{$a_{\overline{n}|}^{(m)}$}{a\_n\textasciicircum(m)}}
+\begin{align}
+    a_{\overline{n}|}^{(m)} &= \frac{1}{m} \left( v^{1/m} + v^{2/m} + v^{3/m} + \dots + v^{n - 1/m} + v^n \right) \nonumber\\[0.3em]
+    &= \frac{1}{m} \cdot v^{1/m} \left( \frac{1 - (v^{1/m})^{mn}}{1 - v^{1/m}} \right) = \frac{1}{m} \cdot v^{1/m} \left( \frac{1 - v^n}{1 - v^{1/m}} \right) \nonumber\\[0.3em]
+    &= \frac{1 - v^n}{m \left( v^{-1/m} - 1 \right)} = \frac{1 - v^n}{m \left[ (1+i)^{1/m} - 1 \right]}
+\end{align}
+Berdasarkan definisi suku bunga nominal $i^{(m)} = m[(1+i)^{1/m}-1]$, kita peroleh:
+\begin{equation}
+    \mathbf{a_{\overline{n}|}^{(m)} = \frac{1 - v^n}{i^{(m)}} = \frac{i}{i^{(m)}} \cdot a_{\overline{n}|i}}
+\end{equation}
+
+\subsubsection{Penurunan Nilai Terakumulasi \texorpdfstring{$s_{\overline{n}|}^{(m)}$}{s\_n\textasciicircum(m)}}
+\begin{equation}
+    \mathbf{s_{\overline{n}|}^{(m)} = a_{\overline{n}|}^{(m)} \cdot (1+i)^n = \frac{(1+i)^n - 1}{i^{(m)}} = \frac{i}{i^{(m)}} \cdot s_{\overline{n}|i}}
+\end{equation}
+
+---
+
+\subsection{Anuitas Awal: Notasi \texorpdfstring{$\ddot{a}_{\overline{n}|}^{(m)}$}{a\_ddot\_n\textasciicircum(m)} dan \texorpdfstring{$\ddot{s}_{\overline{n}|}^{(m)}$}{s\_ddot\_n\textasciicircum(m)}}
+
+Misalkan pembayaran sebesar $\frac{1}{m}$ dilakukan pada setiap awal sub-periode $\frac{1}{m}$, yaitu pada waktu:
+\begin{equation*}
+    t = 0, \frac{1}{m}, \frac{2}{m}, \dots, n - \frac{1}{m}
+\end{equation*}
+
+\subsubsection{Penurunan Matematis Nilai Sekarang \texorpdfstring{$\ddot{a}_{\overline{n}|}^{(m)}$}{a\_ddot\_n\textasciicircum(m)}}
+\begin{align}
+    \ddot{a}_{\overline{n}|}^{(m)} &= \frac{1}{m} \left( 1 + v^{1/m} + v^{2/m} + \dots + v^{n - 1/m} \right) \nonumber\\[0.3em]
+    &= \frac{1}{m} \left( \frac{1 - v^n}{1 - v^{1/m}} \right) = \frac{1 - v^n}{m \left( 1 - v^{1/m} \right)}
+\end{align}
+Berdasarkan definisi tingkat diskonto nominal $d^{(m)} = m[1 - v^{1/m}]$, kita peroleh:
+\begin{equation}
+    \mathbf{\ddot{a}_{\overline{n}|}^{(m)} = \frac{1 - v^n}{d^{(m)}} = \frac{i}{d^{(m)}} \cdot a_{\overline{n}|i} = \frac{d}{d^{(m)}} \cdot \ddot{a}_{\overline{n}|i}}
+\end{equation}
+
+\subsubsection{Penurunan Nilai Terakumulasi \texorpdfstring{$\ddot{s}_{\overline{n}|}^{(m)}$}{s\_ddot\_n\textasciicircum(m)}}
+\begin{equation}
+    \mathbf{\ddot{s}_{\overline{n}|}^{(m)} = \ddot{a}_{\overline{n}|}^{(m)} \cdot (1+i)^n = \frac{(1+i)^n - 1}{d^{(m)}} = \frac{i}{d^{(m)}} \cdot s_{\overline{n}|i} = \frac{d}{d^{(m)}} \cdot \ddot{s}_{\overline{n}|i}}
+\end{equation}
+
+---
+
+\subsection{Perpetuitas yang Dibayar \texorpdfstring{$m$}{m} Kali per Periode}
+
+Dengan mengambil limit $n \to \infty$ ($v^n \to 0$):
+\begin{equation}
+    a_{\overline{\infty}|}^{(m)} = \lim_{n \to \infty} a_{\overline{n}|}^{(m)} = \mathbf{\frac{1}{i^{(m)}}}
+\end{equation}
+\begin{equation}
+    \ddot{a}_{\overline{\infty}|}^{(m)} = \lim_{n \to \infty} \ddot{a}_{\overline{n}|}^{(m)} = \mathbf{\frac{1}{d^{(m)}}}
+\end{equation}
+
+\begin{notebox}[Hubungan Antar-Kuantitas dan Hirarki Bunga]
+Ingat kembali relasi ketaksamaan fundamental antara suku bunga nominal, suku bunga efektif, dan force of interest:
+\begin{equation}
+    d < d^{(m)} < \delta < i^{(m)} < i \quad (\text{untuk } m > 1)
+\end{equation}
+Oleh karena itu, faktor pengali selalu bernilai lebih besar dari satu:
+\begin{equation}
+    \frac{i}{d^{(m)}} > \frac{i}{i^{(m)}} > 1 \implies \ddot{a}_{\overline{n}|}^{(m)} > a_{\overline{n}|}^{(m)} > a_{\overline{n}|i}
+\end{equation}
+Selain itu, hubungan antara versi due dan immediate adalah:
+\begin{equation}
+    \ddot{a}_{\overline{n}|}^{(m)} = (1+i)^{1/m} \cdot a_{\overline{n}|}^{(m)} \qquad \text{dan} \qquad \ddot{s}_{\overline{n}|}^{(m)} = (1+i)^{1/m} \cdot s_{\overline{n}|}^{(m)}
+\end{equation}
+\end{notebox}
+
+---
+
+\subsection{Contoh Soal Pembahasan Kasus \texorpdfstring{$m > 1$}{m > 1}}
+
+\subsubsection{Contoh Soal Pinjaman dengan Notasi \texorpdfstring{$a_{\overline{n}|}^{(m)}$}{a\_n\textasciicircum(m)}}
+
+\begin{examplebox}[Contoh 2 Diselesaikan dengan Pendekatan Aljabar (Slide Hal. 17--18)]
+Pinjaman $\$3.000$ selama 5 tahun dengan bunga nominal $10\%$ \textit{convertible semiannually}. Angsuran $R$ dibayarkan setiap akhir kuartal. Hitung $R$.
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian Aljabar:}]
+\begin{itemize}
+    \item Periode konversi bunga dasar: Semesteran.
+    \item Jangka waktu dalam satuan semester: $n = 5 \times 2 = 10\text{ semester}$.
+    \item Suku bunga efektif per semester: $i = \frac{10\%}{2} = 5\% = 0.05$.
+    \item Frekuensi pembayaran per semester: $m = 2$ (karena 1 semester $= 2$ kuartal).
+    \item Total pembayaran per semester: Jika angsuran per kuartal $= R$, maka total aliran kas per 1 semester $= 2R$.
+\end{itemize}
+Persamaan nilai sekarang:
+\begin{equation*}
+    PV = (2R) \cdot a_{\overline{10}|0.05}^{(2)} = 3000 \implies R = \frac{1500}{a_{\overline{10}|0.05}^{(2)}}
+\end{equation*}
+Hitung suku bunga nominal per semester yang dikonversi 2 kali per semester ($i^{(2)}$):
+\begin{equation*}
+    i^{(2)} = 2 \left[ (1 + 0.05)^{1/2} - 1 \right] = 2 [1.024695076 - 1] = 0.04939015
+\end{equation*}
+Maka:
+\begin{align*}
+    a_{\overline{10}|0.05}^{(2)} &= \frac{i}{i^{(2)}} \cdot a_{\overline{10}|0.05} = \frac{0.05}{0.04939015} \cdot \left(\frac{1 - (1.05)^{-10}}{0.05}\right) \\
+    &= \frac{1 - 0.61391325}{0.04939015} = \frac{0.38608675}{0.04939015} \approx 7.81708
+\end{align*}
+Maka besar angsuran per kuartal adalah:
+\begin{equation*}
+    R = \frac{1500}{7.81708} = \mathbf{191.89}
+\end{equation*}
+\end{proof}
+
+---
+
+\subsubsection{Contoh Soal Suku Bunga Perpetuitas Due \texorpdfstring{$m$}{m}-thly}
+
+\begin{examplebox}[Contoh Perpetuitas (Slide Hal. 19--20)]
+Pada tingkat suku bunga efektif tahunan berapakah ($i$), nilai sekarang dari sederetan pembayaran $\$1$ pada setiap 6 bulan selamanya adalah $\$10$, di mana pembayaran pertama dimulai \textbf{segera saat ini} ($t=0$)?
+\end{examplebox}
+
+\begin{proof}[\textbf{Metode 1: Menggunakan Notasi Perpetuitas Due $\ddot{a}_{\overline{\infty}|}^{(m)}$}]
+\begin{itemize}
+    \item Periode konversi bunga dasar: 1 Tahun.
+    \item Frekuensi pembayaran per tahun: $m = 2$ kali per tahun.
+    \item Total pembayaran per tahun: $2 \times \$1 = \$2$.
+    \item Karena pembayaran pertama dimulai segera ($t=0$), ini adalah \textbf{perpetuitas-due}:
+\end{itemize}
+\begin{equation*}
+    PV = 2 \cdot \ddot{a}_{\overline{\infty}|}^{(2)} = 2 \cdot \frac{1}{d^{(2)}} = 10 \implies d^{(2)} = \frac{2}{10} = 0.20
+\end{equation*}
+Ingat definisi $d^{(2)} = 2 \left[ 1 - (1-d)^{1/2} \right]$:
+\begin{equation*}
+    2 \left[ 1 - (1-d)^{1/2} \right] = 0.20 \implies 1 - (1-d)^{1/2} = 0.10 \implies (1-d)^{1/2} = 0.90
+\end{equation*}
+Kuadratkan kedua ruas:
+\begin{equation*}
+    1 - d = 0.81 \implies d = 0.19
+\end{equation*}
+Hubungkan tingkat diskonto efektif $d$ dengan suku bunga efektif tahunan $i$:
+\begin{equation*}
+    i = \frac{d}{1-d} = \frac{0.19}{0.81} = \frac{19}{81} \approx \mathbf{0.2345679} = \mathbf{23.46\%}
+\end{equation*}
+
+\vspace{0.5em}
+\textbf{Metode 2: Deret Geometri Langsung (Nilai Waktu Uang)}
+Biarkan $v = (1+i)^{-1}$ menyatakan faktor diskonto tahunan. Pembayaran $\$1$ terjadi pada $t = 0, 0.5, 1.0, 1.5, \dots$:
+\begin{equation*}
+    PV = 1 + v^{0.5} + v^1 + v^{1.5} + \dots = \frac{1}{1 - v^{0.5}} = 10
+\end{equation*}
+\begin{equation*}
+    1 - v^{0.5} = \frac{1}{10} = 0.10 \implies v^{0.5} = 0.90 \implies (1+i)^{-0.5} = 0.90
+\end{equation*}
+\begin{equation*}
+    1 + i = (0.90)^{-2} = \frac{1}{0.81} \approx 1.2345679 \implies i = \mathbf{23.46\%}
+\end{equation*}
+\end{proof}
+
+---
+
+\subsubsection{Contoh Soal Komparasi Beasiswa (\textit{Mahpee Scholarship vs Fellowship})}
+
+\begin{examplebox}[Problem Beasiswa Mahpee (Slide Hal. 21)]
+Mahpee ditawari beasiswa (\textit{scholarship}) dengan pembayaran bulanan konstan selama 4 tahun. Pembayaran pertama dilakukan pada 30 September 2000, dan setiap tahun total pembayarannya adalah $\$5.904$. 
+
+Mahpee ingin membandingkan beasiswa ini dengan \textit{fellowship} dari perguruan tinggi lain yang menawarkan pembayaran $\$5.800$ pada 1 September untuk tahun 2000, 2001, 2002, dan 2003.
+
+Asumsikan suku bunga efektif tahunan adalah $i = 4\%$. Bandingkan nilai sekarang kedua tawaran tersebut pada \textbf{1 September 2000}.
+\end{examplebox}
+
+\begin{proof}[\textbf{Langkah Analisis \& Perhitungan:}]
+Titik evaluasi: \textbf{1 September 2000} ($t = 0$), dengan $i = 0.04$.
+
+\textbf{1. Valuasi Fellowship:}
+\begin{itemize}
+    \item Pembayaran dilakukan setiap 1 September (awal tahun) selama 4 tahun: 2000, 2001, 2002, 2003.
+    \item Ini adalah \textbf{annuity-due} tahunan sebesar $\$5.800$ per tahun selama $n = 4$ tahun.
+\end{itemize}
+\begin{align*}
+    PV_{\text{Fellowship}} &= 5800 \cdot \ddot{a}_{\overline{4}|0.04} = 5800 \cdot (1+i) \cdot a_{\overline{4}|0.04} \\
+    &= 5800 \cdot (1.04) \cdot \left( \frac{1 - (1.04)^{-4}}{0.04} \right) \\
+    &= 5800 \cdot (1.04) \cdot 3.6298952 = 5800 \cdot 3.775091 = \mathbf{\$21.895,53}
+\end{align*}
+
+\textbf{2. Valuasi Scholarship:}
+\begin{itemize}
+    \item Pembayaran bulanan dimulai 30 September 2000 (akhir bulan ke-1 dari titik evaluasi 1 September 2000).
+    \item Ini adalah \textbf{annuity-immediate} yang dibayarkan $m=12$ kali setahun selama $n=4$ tahun, dengan total pembayaran per tahun $\$5.904$ (yaitu $\frac{5904}{12} = \$492$ per bulan).
+\end{itemize}
+Hitung suku bunga nominal $i^{(12)}$:
+\begin{equation*}
+    i^{(12)} = 12 \left[ (1.04)^{1/12} - 1 \right] \approx 12 [1.00327374 - 1] = 0.03928488
+\end{equation*}
+Maka:
+\begin{align*}
+    PV_{\text{Scholarship}} &= 5904 \cdot a_{\overline{4}|0.04}^{(12)} = 5904 \cdot \frac{1 - (1.04)^{-4}}{i^{(12)}} \\
+    &= 5904 \cdot \frac{0.1451958}{0.03928488} = 5904 \cdot 3.695972 = \mathbf{\$21.820,83}
+\end{align*}
+
+\textbf{Kesimpulan Analisis Finansial:}
+\begin{itemize}
+    \item Nilai sekarang Fellowship: \textbf{\$21.895,53}
+    \item Nilai sekarang Scholarship: \textbf{\$21.820,83}
+    \item \textbf{Keputusan:} Meskipun total uang nominal dari scholarship lebih besar ($4 \times 5904 = \$23.616$) dibandingkan fellowship ($4 \times 5800 = \$23.200$), \textbf{Fellowship memiliki nilai ekonomi yang lebih tinggi} pada 1 September 2000 sebesar $\$74,70$ karena dana fellowship diterima di muka pada awal tahun.
+\end{itemize}
+\end{proof}
+
+---
+
+\section{Kasus 3 Aljabar: Anuitas Kontinu (\textit{Continuous Annuities})}
+
+\subsection{Motivasi dan Definisi Matematis}
+Ketika frekuensi pembayaran meningkat tanpa batas ($m \to \infty$), arus kas tidak lagi terjadi pada titik-titik diskret, melainkan mengalir secara kontinu sepanjang waktu (\textit{continuous cash flow}). 
+
+Konsep anuitas kontinu sangat penting dalam:
+\begin{itemize}
+    \item Teori aktuaria matematika asuransi jiwa (asuransi kematian kontinu, cadangan premi).
+    \item Aproksimasi yang sangat akurat untuk arus kas dengan frekuensi transaksi harian atau per jam.
+    \item Analisis teoritis menggunakan kalkulus dan persamaan diferensial.
+\end{itemize}
+
+\begin{definitionbox}[Simbol Standar Aktuaria untuk Anuitas Kontinu]
+\begin{itemize}[leftmargin=1.5em]
+    \item $\bar{a}_{\overline{n}|}$: Nilai sekarang dari anuitas yang dibayarkan secara kontinu dengan laju konstan $1$ per unit waktu selama $n$ periode.
+    \item $\bar{s}_{\overline{n}|}$: Nilai akumulasi pada $t = n$ dari anuitas kontinu dengan laju konstan $1$ per unit waktu selama $n$ periode.
+\end{itemize}
+\end{definitionbox}
+
+---
+
+\subsection{Penurunan Nilai Sekarang (\texorpdfstring{$\bar{a}_{\overline{n}|}$}{a\_bar\_n|})}
+
+Arus kas sebesar $dt$ dibayarkan pada saat $t$. Nilai sekarang dari pembayaran diferensial ini adalah $v^t \, dt$. Dengan mengintegrasikan seluruh arus kas dari $t = 0$ hingga $t = n$:
+\begin{equation}
+    \bar{a}_{\overline{n}|} = \int_{0}^{n} v^t \, dt
+\end{equation}
+Ingat bahwa $v^t = (1+i)^{-t} = e^{-t \ln(1+i)} = e^{-\delta t}$, di mana $\delta = \ln(1+i)$ adalah \textit{force of interest}:
+\begin{align}
+    \bar{a}_{\overline{n}|} &= \int_{0}^{n} e^{-\delta t} \, dt = \left[ -\frac{e^{-\delta t}}{\delta} \right]_{0}^{n} = -\frac{e^{-n\delta}}{\delta} - \left( -\frac{1}{\delta} \right) \nonumber\\[0.4em]
+    &= \mathbf{\frac{1 - e^{-n\delta}}{\delta} = \frac{1 - v^n}{\delta}}
+\end{align}
+
+\subsubsection{Konsistensi Melalui Pendekatan Limit}
+Kita juga dapat membuktikan rumus ini dengan mengambil limit $m \to \infty$ dari anuitas diskret $a_{\overline{n}|}^{(m)}$ dan $\ddot{a}_{\overline{n}|}^{(m)}$:
+\begin{equation}
+    \bar{a}_{\overline{n}|} = \lim_{m \to \infty} a_{\overline{n}|}^{(m)} = \lim_{m \to \infty} \frac{1 - v^n}{i^{(m)}} = \frac{1 - v^n}{\lim_{m \to \infty} i^{(m)}} = \frac{1 - v^n}{\delta}
+\end{equation}
+\begin{equation}
+    \bar{a}_{\overline{n}|} = \lim_{m \to \infty} \ddot{a}_{\overline{n}|}^{(m)} = \lim_{m \to \infty} \frac{1 - v^n}{d^{(m)}} = \frac{1 - v^n}{\lim_{m \to \infty} d^{(m)}} = \frac{1 - v^n}{\delta}
+\end{equation}
+Karena $\lim_{m \to \infty} i^{(m)} = \lim_{m \to \infty} d^{(m)} = \delta$.
+
+\begin{definitionbox}[Rumus Hubungan Antara $\bar{a}_{\overline{n}|}$, $a_{\overline{n}|}$, dan $\ddot{a}_{\overline{n}|}$]
+\begin{equation}
+    \mathbf{\bar{a}_{\overline{n}|} = \frac{i}{\delta} \cdot a_{\overline{n}|i} = \frac{d}{\delta} \cdot \ddot{a}_{\overline{n}|i}}
+\end{equation}
+\end{definitionbox}
+
+---
+
+\subsection{Penurunan Nilai Terakumulasi (\texorpdfstring{$\bar{s}_{\overline{n}|}$}{s\_bar\_n|})}
+
+Nilai akumulasi pada waktu $t = n$ diperoleh dengan mengintegrasikan arus kas yang telah diakumulasikan:
+\begin{align}
+    \bar{s}_{\overline{n}|} &= \int_{0}^{n} (1+i)^{n-t} \, dt = \int_{0}^{n} (1+i)^x \, dx = \int_{0}^{n} e^{\delta x} \, dx \nonumber\\[0.4em]
+    &= \left[ \frac{e^{\delta x}}{\delta} \right]_{0}^{n} = \mathbf{\frac{e^{n\delta} - 1}{\delta} = \frac{(1+i)^n - 1}{\delta}}
+\end{align}
+Hubungan dengan nilai sekarang:
+\begin{equation}
+    \bar{s}_{\overline{n}|} = \bar{a}_{\overline{n}|} \cdot (1+i)^n = \bar{a}_{\overline{n}|} \cdot e^{n\delta}
+\end{equation}
+\begin{equation}
+    \mathbf{\bar{s}_{\overline{n}|} = \frac{i}{\delta} \cdot s_{\overline{n}|i} = \frac{d}{\delta} \cdot \ddot{s}_{\overline{n}|i}}
+\end{equation}
+
+---
+
+\subsection{Perpetuitas Kontinu (\texorpdfstring{$\bar{a}_{\overline{\infty}|}$}{a\_bar\_infinity})}
+
+Jika aliran dana kontinu berlangsung selamanya ($n \to \infty$):
+\begin{equation}
+    \mathbf{\bar{a}_{\overline{\infty}|} = \lim_{n \to \infty} \frac{1 - e^{-n\delta}}{\delta} = \frac{1}{\delta}}
+\end{equation}
+
+---
+
+\subsection{Perspektif Kalkulus \& Persamaan Diferensial Biasa (PDB)}
+
+\subsubsection{1. Diferensiasi Terhadap Waktu untuk Nilai Akumulasi}
+Misalkan saldo dana tabungan kontinu pada saat $t$ dinotasikan dengan $\bar{s}_{\overline{t}|}$. Berdasarkan Teorema Dasar Kalkulus:
+\begin{equation}
+    \frac{d}{dt} \bar{s}_{\overline{t}|} = \frac{d}{dt} \int_{0}^{t} (1+i)^x \, dx = (1+i)^t
+\end{equation}
+Karena $(1+i)^t = 1 + \left((1+i)^t - 1\right) = 1 + \delta \left( \frac{(1+i)^t - 1}{\delta} \right) = 1 + \delta \bar{s}_{\overline{t}|}$, maka:
+\begin{equation}
+    \mathbf{\frac{d}{dt} \bar{s}_{\overline{t}|} = 1 + \delta \bar{s}_{\overline{t}|}}
+\end{equation}
+
+\begin{notebox}[Interpretasi Ekonomi Dinamis:]
+Persamaan diferensial di atas menunjukkan bahwa \textbf{laju pertumbuhan saldo tabungan} ($\frac{d}{dt}\bar{s}_{\overline{t}|}$) terdiri dari dua komponen:
+\begin{enumerate}
+    \item \textbf{Laju aliran dana masuk baru:} Sebesar $1$ per satuan waktu.
+    \item \textbf{Laju perolehan bunga berjalan:} Sebesar $\delta \cdot \bar{s}_{\overline{t}|}$ atas saldo yang telah terkumpul.
+\end{enumerate}
+\end{notebox}
+
+\subsubsection{2. Diferensiasi Terhadap Waktu untuk Nilai Sekarang}
+Untuk nilai sekarang anuitas kontinu $\bar{a}_{\overline{t}|}$:
+\begin{equation}
+    \frac{d}{dt} \bar{a}_{\overline{t}|} = \frac{d}{dt} \int_{0}^{t} v^x \, dx = v^t
+\end{equation}
+Karena $v^t = 1 - (1 - v^t) = 1 - \delta \left( \frac{1 - v^t}{\delta} \right) = 1 - \delta \bar{a}_{\overline{t}|}$, maka:
+\begin{equation}
+    \mathbf{\frac{d}{dt} \bar{a}_{\overline{t}|} = 1 - \delta \bar{a}_{\overline{t}|}}
+\end{equation}
+
+\subsubsection{3. Rekonstruksi Rumus melalui Solusi Persamaan Diferensial}
+Misalkan $y(t) = \bar{a}_{\overline{t}|}$. Maka persamaan diferensialnya adalah:
+\begin{equation*}
+    y' + \delta y = 1, \quad \text{dengan syarat awal } y(0) = 0
+\end{equation*}
+\begin{itemize}
+    \item Solusi homogen: $y_h' + \delta y_h = 0 \implies y_h(t) = C e^{-\delta t}$.
+    \item Solusi partikular: Tebak konstanta $y_p = A \implies 0 + \delta A = 1 \implies A = \frac{1}{\delta}$.
+    \item Solusi umum: $y(t) = C e^{-\delta t} + \frac{1}{\delta}$.
+    \item Syarat awal $y(0) = 0$: $C (1) + \frac{1}{\delta} = 0 \implies C = -\frac{1}{\delta}$.
+\end{itemize}
+Sehingga diperoleh:
+\begin{equation*}
+    y(t) = \bar{a}_{\overline{t}|} = -\frac{1}{\delta} e^{-\delta t} + \frac{1}{\delta} = \mathbf{\frac{1 - e^{-\delta t}}{\delta}} \quad \text{(Q.E.D.)}
+\end{equation*}
+
+---
+
+\subsection{Contoh Soal Anuitas Kontinu}
+
+\begin{examplebox}[Contoh Penentuan Force of Interest (Slide Hal. 26)]
+Hitung besarnya \textit{force of interest} $\delta$ jika diketahui hubungan:
+\begin{equation*}
+    \bar{s}_{\overline{20}|} = 3 \cdot \bar{s}_{\overline{10}|}
+\end{equation*}
+\end{examplebox}
+
+\begin{proof}[\textbf{Langkah Penyelesaian:}]
+Substitusikan rumus anuitas kontinu $\bar{s}_{\overline{n}|} = \frac{e^{n\delta} - 1}{\delta}$:
+\begin{equation*}
+    \frac{e^{20\delta} - 1}{\delta} = 3 \cdot \frac{e^{10\delta} - 1}{\delta}
+\end{equation*}
+Karena suku bunga $\delta > 0$, kita dapat mengalikan kedua ruas dengan $\delta$:
+\begin{equation*}
+    e^{20\delta} - 1 = 3 (e^{10\delta} - 1)
+\end{equation*}
+Faktorkan bentuk selisih kuadrat $e^{20\delta} - 1 = (e^{10\delta} - 1)(e^{10\delta} + 1)$:
+\begin{equation*}
+    (e^{10\delta} - 1)(e^{10\delta} + 1) = 3 (e^{10\delta} - 1)
+\end{equation*}
+Pindahkan semua suku ke ruas kiri:
+\begin{equation*}
+    (e^{10\delta} - 1)\left[ (e^{10\delta} + 1) - 3 \right] = 0
+\end{equation*}
+\begin{equation*}
+    (e^{10\delta} - 1)(e^{10\delta} - 2) = 0
+\end{equation*}
+Terdapat dua kemungkinan solusi:
+\begin{enumerate}
+    \item $e^{10\delta} - 1 = 0 \implies e^{10\delta} = 1 \implies \delta = 0$ (Ditolak, karena kasus trivial tanpa bunga).
+    \item $e^{10\delta} - 2 = 0 \implies e^{10\delta} = 2$.
+\end{enumerate}
+Ambil logaritma natural pada kedua ruas:
+\begin{equation*}
+    10\delta = \ln(2) \implies \delta = \frac{\ln(2)}{10} \approx \frac{0.693147}{10} = \mathbf{0.069315} = \mathbf{6.9315\%}
+\end{equation*}
+Jadi, \textit{force of interest} yang memenuhi adalah $\mathbf{6.9315\%}$.
+\end{proof}
+
+---
+
+\section{Rangkuman Komparatif \& Tabel Formula Lengkap}
+
+Berikut adalah tabel matriks perbandingan komprehensif seluruh rumus anuitas umum:
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.6}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Jenis Kasus Anuitas} & \textbf{Frekuensi Pembayaran} & \textbf{Nilai Sekarang ($PV$)} & \textbf{Nilai Akumulasi ($FV$)} & \textbf{Perpetuitas ($PV_{\infty}$)} \\
+\midrule
+\textbf{Kasus Standar} & 1 kali per periode bunga & $a_{\overline{n}|i} = \frac{1-v^n}{i}$ & $s_{\overline{n}|i} = \frac{(1+i)^n-1}{i}$ & $\frac{1}{i}$ \\
+\midrule
+\textbf{Pembayaran Lebih Jarang} & 1 kali per $k$ periode & \multirow{2}{*}{$\dfrac{a_{\overline{n}|i}}{s_{\overline{k}|i}}$} & \multirow{2}{*}{$\dfrac{s_{\overline{n}|i}}{s_{\overline{k}|i}}$} & \multirow{2}{*}{$\dfrac{1}{i \cdot s_{\overline{k}|i}} = \dfrac{1}{(1+i)^k-1}$} \\
+(\textit{Immediate}, $k > 1$) & (pada $t = k, 2k, \dots, n$) & & & \\
+\midrule
+\textbf{Pembayaran Lebih Jarang} & 1 kali per $k$ periode & \multirow{2}{*}{$\dfrac{a_{\overline{n}|i}}{a_{\overline{k}|i}}$} & \multirow{2}{*}{$\dfrac{s_{\overline{n}|i}}{a_{\overline{k}|i}}$} & \multirow{2}{*}{$\dfrac{1}{i \cdot a_{\overline{k}|i}} = \dfrac{1}{1 - v^k}$} \\
+(\textit{Due}, $k > 1$) & (pada $t = 0, k, \dots, n-k$) & & & \\
+\midrule
+\textbf{Pembayaran Lebih Sering} & $m$ kali per periode & \multirow{2}{*}{$a_{\overline{n}|}^{(m)} = \dfrac{1-v^n}{i^{(m)}} = \dfrac{i}{i^{(m)}} a_{\overline{n}|}$} & \multirow{2}{*}{$s_{\overline{n}|}^{(m)} = \dfrac{(1+i)^n-1}{i^{(m)}} = \dfrac{i}{i^{(m)}} s_{\overline{n}|}$} & \multirow{2}{*}{$\dfrac{1}{i^{(m)}}$} \\
+(\textit{Immediate}, $m > 1$) & (sebesar $1/m$ di akhir) & & & \\
+\midrule
+\textbf{Pembayaran Lebih Sering} & $m$ kali per periode & \multirow{2}{*}{$\ddot{a}_{\overline{n}|}^{(m)} = \dfrac{1-v^n}{d^{(m)}} = \dfrac{i}{d^{(m)}} a_{\overline{n}|}$} & \multirow{2}{*}{$\ddot{s}_{\overline{n}|}^{(m)} = \dfrac{(1+i)^n-1}{d^{(m)}} = \dfrac{i}{d^{(m)}} s_{\overline{n}|}$} & \multirow{2}{*}{$\dfrac{1}{d^{(m)}}$} \\
+(\textit{Due}, $m > 1$) & (sebesar $1/m$ di awal) & & & \\
+\midrule
+\textbf{Pembayaran Kontinu} & Kontinu ($m \to \infty$) & \multirow{2}{*}{$\bar{a}_{\overline{n}|} = \dfrac{1-v^n}{\delta} = \dfrac{i}{\delta} a_{\overline{n}|}$} & \multirow{2}{*}{$\bar{s}_{\overline{n}|} = \dfrac{(1+i)^n-1}{\delta} = \dfrac{i}{\delta} s_{\overline{n}|}$} & \multirow{2}{*}{$\dfrac{1}{\delta}$} \\
+(\textit{Continuous}) & (laju 1 per periode) & & & \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Matriks Komparasi Formula Anuitas Umum dan Hubungan Simbol Aktuaria}
+\end{table}
+
+---
+
+\section{Latihan Soal Mandiri Bergradasi \& Pembahasan Lengkap}
+
+\begin{examplebox}[Latihan Soal 1: Nilai Sekarang Anuitas Pembayaran Jarang]
+Sebuah warisan memberikan hak pembayaran sebesar $\$5.000$ yang dibayarkan \textbf{setiap 2 tahun sekali} selama 20 tahun (total 10 kali pembayaran), dengan pembayaran pertama dilakukan 2 tahun dari sekarang. Jika suku bunga efektif tahunan adalah $6\%$, hitunglah nilai sekarang ($PV$) dari warisan tersebut.
+\end{examplebox}
+
+\begin{proof}[\textbf{Pembahasan:}]
+\textbf{Metode Aljabar ($k > 1$):}
+\begin{itemize}
+    \item Unit waktu: Tahunan, $i = 0.06$.
+    \item Interval pembayaran: $k = 2\text{ tahun}$.
+    \item Total durasi: $n = 20\text{ tahun}$.
+    \item Besar pembayaran per interval: $\$5.000$.
+\end{itemize}
+\begin{equation*}
+    PV = 5000 \cdot \frac{a_{\overline{20}|0.06}}{s_{\overline{2}|0.06}}
+\end{equation*}
+Hitung masing-masing kuantitas:
+\begin{equation*}
+    a_{\overline{20}|0.06} = \frac{1 - (1.06)^{-20}}{0.06} = \frac{1 - 0.3118047}{0.06} = 11.469921
+\end{equation*}
+\begin{equation*}
+    s_{\overline{2}|0.06} = \frac{(1.06)^2 - 1}{0.06} = \frac{1.1236 - 1}{0.06} = 2.06
+\end{equation*}
+Maka:
+\begin{equation*}
+    PV = 5000 \cdot \frac{11.469921}{2.06} = 5000 \cdot 5.567923 = \mathbf{\$27.839,61}
+\end{equation*}
+
+\textbf{Verifikasi Metode Numerik ($j$):}
+Suku bunga efektif per 2 tahun: $j = (1.06)^2 - 1 = 0.1236$.
+\begin{equation*}
+    PV = 5000 \cdot a_{\overline{10}|0.1236} = 5000 \cdot \left( \frac{1 - (1.1236)^{-10}}{0.1236} \right) = 5000 \cdot 5.567923 = \mathbf{\$27.839,61} \quad \checkmark
+\end{equation*}
+\end{proof}
+
+\vspace{1em}
+
+\begin{examplebox}[Latihan Soal 2: Penentuan Suku Bunga Nominal dari Nilai Sekarang]
+Diketahui bahwa nilai sekarang dari anuitas akhir 10 tahun yang membayar $\$100$ pada setiap akhir bulan adalah $\$8.000$. Hitunglah suku bunga nominal tahunan $i^{(12)}$ yang mendasari transaksi ini!
+\end{examplebox}
+
+\begin{proof}[\textbf{Pembahasan:}]
+\begin{itemize}
+    \item Jangka waktu: $n = 10\text{ tahun}$.
+    \item Total pembayaran per tahun: $12 \times 100 = \$1.200$.
+    \item $PV = 1200 \cdot a_{\overline{10}|}^{(12)} = 8000 \implies a_{\overline{10}|}^{(12)} = \frac{8000}{1200} = \frac{20}{3} \approx 6.6667$.
+\end{itemize}
+Secara ekuivalen dalam tingkat suku bunga bulanan $j = \frac{i^{(12)}}{12}$ dengan $N = 120$ bulan:
+\begin{equation*}
+    8000 = 100 \cdot a_{\overline{120}|j} \implies a_{\overline{120}|j} = 80.0
+\end{equation*}
+Menggunakan aproksimasi numerik (atau kalkulator finansial):
+Untuk $j = 0.007$ ($0.7\%$ per bulan): $a_{\overline{120}|0.007} = \frac{1 - (1.007)^{-120}}{0.007} \approx 80.99$.
+Untuk $j = 0.0072$ ($0.72\%$ per bulan): $a_{\overline{120}|0.0072} \approx 79.91$.
+Melalui interpolasi linier presisi didapat $j \approx 0.007183 = 0.7183\%$ per bulan.
+Maka suku bunga nominal tahunan adalah:
+\begin{equation*}
+    i^{(12)} = 12 \times j = 12 \times 0.7183\% = \mathbf{8.62\%}
+\end{equation*}
+\end{proof}
+
+\vspace{1em}
+
+\begin{examplebox}[Latihan Soal 3: Persamaan Anuitas Kontinu \& Suku Bunga]
+Jika diketahui bahwa $\bar{a}_{\overline{n}|} = 10$ dan $\bar{s}_{\overline{n}|} = 15$, tentukan:
+\begin{enumerate}[label=\alph*.]
+    \item Besarnya \textit{force of interest} $\delta$.
+    \item Lamanya periode $n$.
+\end{enumerate}
+\end{examplebox}
+
+\begin{proof}[\textbf{Pembahasan:}]
+\textbf{Bagian (a): Menentukan $\delta$}
+Ingat hubungan resiprokal dasar antara nilai sekarang dan nilai akumulasi:
+\begin{equation*}
+    \frac{1}{\bar{a}_{\overline{n}|}} - \frac{1}{\bar{s}_{\overline{n}|}} = \frac{\delta}{1 - v^n} - \frac{\delta}{(1+i)^n - 1} = \frac{\delta}{1 - v^n} - \frac{\delta v^n}{1 - v^n} = \frac{\delta (1 - v^n)}{1 - v^n} = \delta
+\end{equation*}
+Substitusikan nilai yang diketahui:
+\begin{equation*}
+    \delta = \frac{1}{10} - \frac{1}{15} = \frac{3 - 2}{30} = \mathbf{\frac{1}{30}} \approx \mathbf{0.03333} \quad (3.33\%)
+\end{equation*}
+
+\textbf{Bagian (b): Menentukan $n$}
+Hubungkan $\bar{s}_{\overline{n}|}$ dan $\bar{a}_{\overline{n}|}$:
+\begin{equation*}
+    \bar{s}_{\overline{n}|} = \bar{a}_{\overline{n}|} \cdot e^{n\delta} \implies 15 = 10 \cdot e^{n \cdot (1/30)}
+\end{equation*}
+\begin{equation*}
+    e^{n/30} = \frac{15}{10} = 1.5 \implies \frac{n}{30} = \ln(1.5)
+\end{equation*}
+\begin{equation*}
+    n = 30 \cdot \ln(1.5) = 30 \cdot 0.405465 = \mathbf{12.164}\text{ periode}
+\end{equation*}
+\end{proof}
+
+\end{document}

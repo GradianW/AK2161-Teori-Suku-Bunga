@@ -1,0 +1,142 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+
+\tcbset{
+    colback=gray!5,
+    colframe=black!75,
+    boxrule=0.6pt,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+
+\title{\vspace{-1.5cm}\textbf{Solusi Tugas Latihan PTSB}\\\large Pengantar Teori Suku Bunga --- 7 Oktober 2026\vspace{-0.8cm}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-0.5em}
+\hrule
+\vspace{0.8em}
+
+% =============================================================
+% NOMOR 1
+% =============================================================
+\begin{tcolorbox}
+\textbf{1.} Bila diketahui $i^{(m)} = a$ dan $d^{(m)} = b$, tentukan $m$ dalam $a$ dan $b$.
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+Berdasarkan definisi suku bunga nominal dan tingkat diskonto nominal:
+\begin{align*}
+    1 + i &= \left(1 + \frac{a}{m}\right)^m \\
+    1 - d &= \left(1 - \frac{b}{m}\right)^m
+\end{align*}
+
+Dari hubungan $(1 + i)(1 - d) = 1$:
+\begin{align*}
+    \left(1 + \frac{a}{m}\right)^m \left(1 - \frac{b}{m}\right)^m &= 1 \\[0.3em]
+    \left(1 + \frac{a}{m}\right)\left(1 - \frac{b}{m}\right) &= 1 \\[0.3em]
+    1 - \frac{b}{m} + \frac{a}{m} - \frac{ab}{m^2} &= 1 \\[0.3em]
+    \frac{a - b}{m} - \frac{ab}{m^2} &= 0
+\end{align*}
+
+Kalikan kedua ruas dengan $m^2$:
+\begin{align*}
+    (a - b)m - ab &= 0 \\[0.3em]
+    (a - b)m &= ab \\[0.3em]
+    \mathbf{m} &= \mathbf{\frac{ab}{a - b}}
+\end{align*}
+
+\vspace{0.5em}
+
+% =============================================================
+% NOMOR 3
+% =============================================================
+\begin{tcolorbox}
+\textbf{3.} Irfan memiliki modal sebesar 1 juta Rupiah. Ia memiliki 2 opsi untuk melakukan investasi yaitu ikut dalam Projek A atau Projek B. Kedua projek tersebut memerlukan modal yang sama yaitu 1 juta Rupiah. Jika berinvestasi pada Projek A, Irfan akan mendapatkan 1.5 juta Rupiah di akhir tahun pertama. Sedangkan projek B akan memberikan cashflow sebesar 750 ribu Rupiah di akhir tahun pertama dan 1 juta Rupiah di akhir tahun kedua. Tentukan IRR Projek A dan Projek B, kemudian beri keputusan sebaiknya Irfan melakukan investasi pada Projek A atau B!
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+\textbf{A. IRR Projek A ($r_A$):}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item $C_0 = -1\text{ juta}$, $C_1 = +1.5\text{ juta}$.
+\end{itemize}
+\begin{equation*}
+    NPV_A(r_A) = -1 + \frac{1.5}{1 + r_A} = 0 \implies 1 + r_A = 1.5 \implies \mathbf{r_A = 50\%}
+\end{equation*}
+
+\textbf{B. IRR Projek B ($r_B$):}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item $C_0 = -1\text{ juta}$, $C_1 = +0.75\text{ juta}$, $C_2 = +1\text{ juta}$.
+\end{itemize}
+\begin{equation*}
+    NPV_B(r_B) = -1 + \frac{0.75}{1 + r_B} + \frac{1}{(1 + r_B)^2} = 0
+\end{equation*}
+Misalkan $v = \frac{1}{1 + r_B}$:
+\begin{align*}
+    -1 + 0.75v + v^2 &= 0 \iff 4v^2 + 3v - 4 = 0 \\[0.3em]
+    v_{1,2} &= \frac{-3 \pm \sqrt{3^2 - 4(4)(-4)}}{2(4)} = \frac{-3 \pm \sqrt{73}}{8}
+\end{align*}
+Dua kemungkinan nilai $v$:
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item $v_1 = \dfrac{-3 + \sqrt{73}}{8} \approx \mathbf{0.6930005}$ (valid, $v > 0$) $\implies 1 + r_B = \dfrac{1}{v_1} = \dfrac{\sqrt{73} + 3}{8} \approx 1.4430005 \implies \mathbf{r_B = 44.30\%}$.
+    \item $v_2 = \dfrac{-3 - \sqrt{73}}{8} \approx \mathbf{-1.4430005}$ (tidak valid secara finansial karena $v < 0$, ditolak).
+\end{itemize}
+
+\textbf{C. Keputusan:}
+\begin{equation*}
+    IRR_A \, (50\%) > IRR_B \, (44.30\%)
+\end{equation*}
+Karena modal awal kedua proyek bernilai sama dan $IRR_A > IRR_B$, maka sebaiknya Irfan memilih \textbf{Projek A}.
+
+\vspace{0.5em}
+
+% =============================================================
+% NOMOR 5
+% =============================================================
+\begin{tcolorbox}
+\textbf{5.} Tentukan present value dari 10-year annuity due dari pembayaran \$1 per tahun, jika suku bunga efektif 4\% untuk 5 tahun pertama dan 5\% untuk 5 tahun berikutnya!
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+Pembayaran $\$1$ terjadi pada $t = 0, 1, 2, \dots, 9$:
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item 5 tahun pertama ($t = 0, 1, 2, 3, 4$): $i_1 = 4\%$, $v_1 = (1.04)^{-1}$.
+    \item 5 tahun kedua ($t = 5, 6, 7, 8, 9$): $i_2 = 5\%$, $v_2 = (1.05)^{-1}$.
+\end{itemize}
+
+Persamaan Nilai Sekarang ($PV$) pada $t = 0$:
+\begin{align*}
+    PV &= \sum_{t=0}^4 v_1^t + v_1^5 \sum_{k=0}^4 v_2^k \\
+    &= \ddot{a}_{\overline{5}|0.04} + v_1^5 \cdot \ddot{a}_{\overline{5}|0.05}
+\end{align*}
+
+Perhitungan nilai komponen:
+\begin{align*}
+    \ddot{a}_{\overline{5}|0.04} &= (1.04) \left[ \frac{1 - (1.04)^{-5}}{0.04} \right] = (1.04)(4.451822) = 4.629895 \\[0.3em]
+    \ddot{a}_{\overline{5}|0.05} &= (1.05) \left[ \frac{1 - (1.05)^{-5}}{0.05} \right] = (1.05)(4.329477) = 4.545951 \\[0.3em]
+    v_1^5 \cdot \ddot{a}_{\overline{5}|0.05} &= (1.04)^{-5} \times 4.545951 = (0.821927) \times 4.545951 = 3.736440
+\end{align*}
+
+Maka:
+\begin{equation*}
+    PV = 4.629895 + 3.736440 = \mathbf{8.366335 \approx \$8.37}
+\end{equation*}
+
+\end{document}

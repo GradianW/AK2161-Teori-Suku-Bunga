@@ -1,0 +1,239 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{array}
+
+\tcbset{
+    colback=gray!5,
+    colframe=black!75,
+    boxrule=0.6pt,
+    arc=1.5mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.35em}
+
+\title{\vspace{-1.5cm}\textbf{Tugas Teori Suku Bunga: Yield Rate dengan Metode Numerik}\\\large Gulit Radian Wiyarno (10123033)\vspace{-0.8cm}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-0.5em}
+\hrule
+\vspace{0.8em}
+
+% =============================================================
+% SOAL
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal (Slide 4 -- Yield Rates, Halaman 2):}
+
+Misalkan suatu investasi dengan periode 10 tahun:
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item Investor membayar $\$10.000$ di awal tahun pertama ($t = 0$).
+    \item Membayar $\$5.000$ di awal tahun kedua ($t = 1$).
+    \item Membayar biaya perawatan sebesar $\$1.000$ setiap awal tahun dimulai dari awal tahun kedua ($t = 1$ hingga $t = 9$).
+    \item Projek ini menghasilkan keuntungan investasi sebesar $\$8.000$ di akhir tahun ke-6 ($t = 6$) dan keuntungan meningkat $\$1.000$ di setiap akhir tahunnya hingga akhir tahun ke-10 ($t = 10$).
+\end{itemize}
+Tentukan \textit{yield rate} (IRR) dari projek investasi tersebut dengan mengaplikasikan 4 metode numerik sebanyak 13 iterasi dan membandingkan hasil akhirnya!
+\end{tcolorbox}
+
+% =============================================================
+% MODEL MATEMATIKA DAN POLINOMIAL
+% =============================================================
+\section*{1. Tabel Arus Kas dan Pembentukan Polinomial Nilai Waktu}
+
+Tabel arus kas bersih (\textit{net cash flow}) untuk setiap periode waktu $t = 0, 1, \dots, 10$ adalah:
+
+\begin{center}
+\small
+\begin{tabular}{cccc}
+\toprule
+\textbf{Waktu ($t$)} & \textbf{Kontribusi Modal ($C_{\text{out}}$)} & \textbf{Keuntungan ($C_{\text{in}}$)} & \textbf{Net Cash Flow ($C_t$)} \\
+\midrule
+0 & $\$10.000$ & $\$0$ & $-\$10.000$ \\
+1 & $\$5.000$ & $\$0$ & $-\$5.000$ \\
+2 & $\$1.000$ & $\$0$ & $-\$1.000$ \\
+3 & $\$1.000$ & $\$0$ & $-\$1.000$ \\
+4 & $\$1.000$ & $\$0$ & $-\$1.000$ \\
+5 & $\$1.000$ & $\$0$ & $-\$1.000$ \\
+6 & $\$1.000$ & $\$8.000$ & $+\$7.000$ \\
+7 & $\$1.000$ & $\$9.000$ & $+\$8.000$ \\
+8 & $\$1.000$ & $\$10.000$ & $+\$9.000$ \\
+9 & $\$1.000$ & $\$11.000$ & $+\$10.000$ \\
+10 & $\$0$ & $\$12.000$ & $+\$12.000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Definisikan faktor diskonto $v = (1 + i)^{-1}$. Persamaan nilai sekarang bersih ($NPV = 0$) adalah:
+\begin{equation*}
+    1.000 \left( -10 - 5v - v^2 - v^3 - v^4 - v^5 + 7v^6 + 8v^7 + 9v^8 + 10v^9 + 12v^{10} \right) = 0
+\end{equation*}
+
+Bagi kedua ruas dengan $1.000$, diperoleh fungsi polinomial $P(v)$ berderajat 10:
+\begin{equation}
+    P(v) = 12v^{10} + 10v^9 + 9v^8 + 8v^7 + 7v^6 - v^5 - v^4 - v^3 - v^2 - 5v - 10 = 0
+    \label{eq:poly}
+\end{equation}
+atau dalam variabel suku bunga tahunan $i$, fungsi nilai sekarang $f(i) = P\left(\frac{1}{1+i}\right) = 0$.
+
+\vspace{0.3em}
+
+% =============================================================
+% METODE NUMERIK (13 ITERASI LENGKAP - PRESISI .15f)
+% =============================================================
+\section*{2. Perhitungan Metode Numerik}
+
+Akan digunakan perhitungan 13 iterasi.
+
+\subsection*{A. Metode Newton-Raphson}
+Turunan pertama: $P'(v) = 120v^9 + 90v^8 + 72v^7 + 56v^6 + 42v^5 - 5v^4 - 4v^3 - 3v^2 - 2v - 5$.  
+Rumus iterasi: $v_{k+1} = v_k - \frac{P(v_k)}{P'(v_k)}$ dengan tebakan awal $v_0 = 0.90$.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Iterasi ($k$)} & \textbf{$v_k$} & \textbf{$P(v_k)$} & \textbf{$P'(v_k)$} & \textbf{Estimasi $i_k$} \\
+\midrule
+1 & $0.900000000000000$ & $+2.193423261200010$ & $158.804660380000001$ & $12.842883727840126\%$ \\
+2 & $0.886187916299488$ & $+0.127392200756550$ & $140.669290184894606$ & $12.958318310867757\%$ \\
+3 & $0.885282301430819$ & $+0.000509973111818$ & $139.544317025387414$ & $12.958784619390640\%$ \\
+4 & $0.885278646870585$ & $+0.000000008267198$ & $139.539792727383571$ & $12.958784626950258\%$ \\
+5 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+6 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+7 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+8 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+9 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+10 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+11 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+12 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $12.958784626950258\%$ \\
+13 & $0.885278646811339$ & $-0.000000000000002$ & $139.539792654038649$ & $\mathbf{12.958784626950258\%}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{B. Metode Secant (Tali Busur)}
+Rumus iterasi: $i_{k+1} = i_k - f(i_k) \cdot \frac{i_k - i_{k-1}}{f(i_k) - f(i_{k-1})}$ dengan tebakan awal $i_0 = 10.0\%$ dan $i_1 = 15.0\%$.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Iterasi ($k$)} & \textbf{$i_{k-1}$} & \textbf{$i_k$} & \textbf{$f(i_k)$} & \textbf{Estimasi $i_{k+1}$} \\
+\midrule
+1 & $0.100000000000000$ & $0.150000000000000$ & $-2.045669918331625$ & $13.218418859494923\%$ \\
+2 & $0.150000000000000$ & $0.132184188594949$ & $-0.280746378334465$ & $12.935022756734242\%$ \\
+3 & $0.132184188594949$ & $0.129350227567342$ & $+0.026012907405143$ & $12.959054487549878\%$ \\
+4 & $0.129350227567342$ & $0.129590544875499$ & $-0.000295115772101$ & $12.958784906565143\%$ \\
+5 & $0.129590544875499$ & $0.129587849065651$ & $-0.000000305786518$ & $12.958784626946967\%$ \\
+6 & $0.129587849065651$ & $0.129587846269470$ & $+0.000000000003592$ & $12.958784626950251\%$ \\
+7 & $0.129587846269470$ & $0.129587846269503$ & $-0.000000000000002$ & $12.958784626950248\%$ \\
+8 & $0.129587846269503$ & $0.129587846269502$ & $+0.000000000000014$ & $12.958784626950251\%$ \\
+9 & $0.129587846269502$ & $0.129587846269503$ & $-0.000000000000002$ & $12.958784626950251\%$ \\
+10 & $0.129587846269503$ & $0.129587846269503$ & $-0.000000000000002$ & $12.958784626950251\%$ \\
+11 & $0.129587846269503$ & $0.129587846269503$ & $-0.000000000000002$ & $12.958784626950251\%$ \\
+12 & $0.129587846269503$ & $0.129587846269503$ & $-0.000000000000002$ & $12.958784626950251\%$ \\
+13 & $0.129587846269503$ & $0.129587846269503$ & $-0.000000000000002$ & $\mathbf{12.958784626950251\%}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{C. Metode Regula Falsi (\textit{False Position})}
+Rumus iterasi: $c_k = \frac{a_k f(b_k) - b_k f(a_k)}{f(b_k) - f(a_k)}$ dengan interval awal $[a_0, b_0] = [0.10, 0.15]$.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Iterasi ($k$)} & \textbf{Batas Kiri ($a_k$)} & \textbf{Batas Kanan ($b_k$)} & \textbf{Estimasi $c_k$} & \textbf{$f(c_k)$} \\
+\midrule
+1 & $0.100000000000000$ & $0.150000000000000$ & $13.218418859494923\%$ & $-0.280746378334465$ \\
+2 & $0.100000000000000$ & $0.132184188594949$ & $12.991179225209578\%$ & $-0.035376689814960$ \\
+3 & $0.100000000000000$ & $0.129911792252096$ & $12.962816404633912\%$ & $-0.004408372222848$ \\
+4 & $0.100000000000000$ & $0.129628164046339$ & $12.959286258222081\%$ & $-0.000548571387389$ \\
+5 & $0.100000000000000$ & $0.129592862582221$ & $12.958847037168686\%$ & $-0.000068251558343$ \\
+6 & $0.100000000000000$ & $0.129588470371687$ & $12.958792391650528\%$ & $-0.000008491464527$ \\
+7 & $0.100000000000000$ & $0.129587923916505$ & $12.958785592986526\%$ & $-0.000001056456128$ \\
+8 & $0.100000000000000$ & $0.129587855929865$ & $12.958784747138537\%$ & $-0.000000131437766$ \\
+9 & $0.100000000000000$ & $0.129587847471385$ & $12.958784641903346\%$ & $-0.000000016352674$ \\
+10 & $0.100000000000000$ & $0.129587846419033$ & $12.958784628810632\%$ & $-0.000000002034508$ \\
+11 & $0.100000000000000$ & $0.129587846288106$ & $12.958784627181711\%$ & $-0.000000000253127$ \\
+12 & $0.100000000000000$ & $0.129587846271817$ & $12.958784626979044\%$ & $-0.000000000031481$ \\
+13 & $0.100000000000000$ & $0.129587846269790$ & $\mathbf{12.958784626953840\%}$ & $-0.000000000003903$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{D. Metode Bisection (Bagi Dua)}
+Rumus iterasi: $c_k = \frac{a_k + b_k}{2}$ dengan interval awal $[a_0, b_0] = [0.10, 0.15]$.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Iterasi ($k$)} & \textbf{Batas Kiri ($a_k$)} & \textbf{Batas Kanan ($b_k$)} & \textbf{Titik Tengah ($c_k$)} & \textbf{$f(c_k)$} \\
+\midrule
+1 & $0.100000000000000$ & $0.150000000000000$ & $12.500000000000000\%$ & $+0.511913502162065$ \\
+2 & $0.125000000000000$ & $0.150000000000000$ & $13.750000000000002\%$ & $-0.836140868427012$ \\
+3 & $0.125000000000000$ & $0.137500000000000$ & $13.125000000000000\%$ & $-0.180461978505063$ \\
+4 & $0.125000000000000$ & $0.131250000000000$ & $12.812499999999998\%$ & $+0.161002178335686$ \\
+5 & $0.128125000000000$ & $0.131250000000000$ & $12.968750000000002\%$ & $-0.010893385101552$ \\
+6 & $0.128125000000000$ & $0.129687500000000$ & $12.890625000000000\%$ & $+0.074761371128094$ \\
+7 & $0.128906250000000$ & $0.129687500000000$ & $12.929687500000000\%$ & $+0.031861007289480$ \\
+8 & $0.129296875000000$ & $0.129687500000000$ & $12.949218750000002\%$ & $+0.010465598373807$ \\
+9 & $0.129492187500000$ & $0.129687500000000$ & $12.958984375000002\%$ & $-0.000218442337570$ \\
+10 & $0.129492187500000$ & $0.129589843750000$ & $12.954101562500004\%$ & $+0.005122440249227$ \\
+11 & $0.129541015625000$ & $0.129589843750000$ & $12.956542968750002\%$ & $+0.002451714579321$ \\
+12 & $0.129565429687500$ & $0.129589843750000$ & $12.957763671875000\%$ & $+0.001116565034957$ \\
+13 & $0.129577636718750$ & $0.129589843750000$ & $\mathbf{12.958374023437502\%}$ & $+0.000449043578254$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+
+% =============================================================
+% TABEL PERBANDINGAN DAN EVALUASI
+% =============================================================
+\section*{3. Tabel Perbandingan Hasil Iterasi Terakhir}
+
+Berikut adalah perbandingan hasil estimasi suku bunga (\textit{yield rate}) pada iterasi ke-13 untuk setiap metode:
+
+\begin{center}
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Nama Metode Numerik} & \textbf{Hasil Iterasi Terakhir ($i_{13}$)} \\
+\midrule
+Metode Newton-Raphson & $\mathbf{12.958784626950258\% \approx 12.96\%}$ \\
+Metode Secant & $\mathbf{12.958784626950251\% \approx 12.96\%}$ \\
+Metode Regula Falsi & $\mathbf{12.958784626953840\% \approx 12.96\%}$ \\
+Metode Bisection & $\mathbf{12.958374023437502\% \approx 12.96\%}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Kesimpulan Akhir:}
+Nilai \textit{yield rate} (IRR) dari projek investasi 10 tahun tersebut adalah:
+\begin{equation*}
+    \mathbf{IRR = 12.96\%}
+\end{equation*}
+
+\end{document}

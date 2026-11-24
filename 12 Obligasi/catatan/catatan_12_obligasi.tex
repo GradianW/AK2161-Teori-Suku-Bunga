@@ -1,0 +1,768 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Skema Warna Harmonis (Konsisten dengan modul perkuliahan sebelumnya)
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{greenbg}{RGB}{245, 252, 245}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Lingkungan Kotak Khusus (Custom Environments)
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{theorembox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 12: Obligasi (\textit{Bonds and Other Securities})\\[0.2em]
+\large Penentuan Harga Obligasi, Premium \& Diskon, Jadwal Amortisasi Nilai Buku (\textit{Writing Down/Up}), dan Pendekatan Sinking Fund}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 7) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\section{Pendahuluan, Terminologi, \& Klasifikasi Obligasi}
+
+\subsection{Tiga Pertanyaan Fundamental Valuasi Sekuritas (Slide Hal. 2)}
+
+Dalam analisis instrumen pasar modal dan sekuritas pendapatan tetap (\textit{fixed-income securities}), terdapat tiga permasalahan utama yang dikaji secara matematis:
+
+\begin{notebox}[Tiga Pertanyaan Besar dalam Bab Obligasi]
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Penentuan Harga (\textit{Pricing}):} Diberikan laju pengembalian (\textit{yield rate}) yang diinginkan oleh investor, berapakah harga jual atau harga beli wajar ($P$) dari suatu sekuritas?
+    \item \textbf{Penentuan Laju Imbal Hasil (\textit{Yield Rate Determination}):} Diberikan harga pasar (jual/beli) dari suatu sekuritas, berapakah \textit{yield rate} ($i$) yang diperoleh oleh investor?
+    \item \textbf{Valuasi pada Tanggal Interim / Nilai Buku (\textit{Book Value \& Interim Valuation}):} Berapakah nilai sekuritas ($B_t$) pada suatu titik waktu tertentu setelah tanggal pembelian awal?
+\end{enumerate}
+\end{notebox}
+
+\subsection{Definisi \& Istilah Waktu pada Obligasi (Slide Hal. 2--3)}
+
+\begin{definitionbox}[Definisi Obligasi (\textit{Bond})]
+\textbf{Obligasi (\textit{bond})} adalah sekuritas berpenghasilan bunga yang diterbitkan oleh peminjam (\textit{issuer}, biasanya korporasi atau pemerintah) dalam rangka menghimpun modal, yang menjanjikan pembayaran sejumlah uang tertentu pada satu atau beberapa titik waktu di masa depan kepada pemegang obligasi (\textit{bondholder} / pemberi pinjaman).
+\end{definitionbox}
+
+Beberapa terminologi kunci terkait jangka waktu obligasi:
+\begin{itemize}
+    \item \textbf{Term dari Obligasi:} Jangka waktu tertentu yang telah ditetapkan sejak obligasi diterbitkan hingga dilunasi kembali.
+    \item \textbf{Maturity Date (Tanggal Jatuh Tempo):} Akhir dari \textit{term} obligasi di mana penerbit wajib menebus pokok obligasi secara penuh.
+    \item \textbf{Perpetual Bond (Obligasi Abadi):} Obligasi dengan jangka waktu tak berhingga (tidak memiliki \textit{maturity date}), sehingga hanya membayarkan kupon selamanya (contoh klasik: \textit{British Consols}).
+    \item \textbf{Callable Bond:} Obligasi yang memberikan hak opsi kepada \textbf{peminjam (penerbit)} untuk menebus/melunasi obligasi lebih awal sebelum tanggal jatuh tempo.
+    \item \textbf{Putable Bond:} Obligasi yang memberikan hak opsi kepada \textbf{pemberi pinjaman (investor)} untuk meminta penebusan lebih awal sebelum tanggal jatuh tempo.
+    \item \textbf{Redemption Date (Tanggal Penebusan):} Setiap tanggal (baik sebelum maupun tepat pada \textit{maturity date}) di mana obligasi ditebus atau dibayar kembali.
+\end{itemize}
+
+\subsection{Tiga Klasifikasi Utama Obligasi (Slide Hal. 4--6)}
+
+Obligasi dapat diklasifikasikan berdasarkan tiga sudut pandang utama:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Berdasarkan Cara Pembayaran Bunga (\textit{Accumulation Bond vs. Coupon Bond}):}
+    \begin{itemize}
+        \item \textbf{Coupon Bond (Obligasi Kupon):} Obligasi yang memberikan pembayaran bunga periodik (\textit{coupon}) secara teratur oleh penerbit sebelum hingga pada \textit{redemption date}. Mayoritas obligasi di pasar adalah obligasi kupon (dan menjadi asumsi standar pada pembahasan selanjutnya).
+        \item \textbf{Accumulation Bond / Zero-Coupon Bond:} Obligasi yang tidak membayarkan kupon berkala; bunga yang terakumulasi dibayarkan sekaligus bersama pokok pada harga tebusannya saat jatuh tempo (contoh: \textit{US Treasury Series E Savings Bonds}). Karena tidak ada kupon antara, obligasi ini dijual pada harga diskon yang dalam (\textit{deep discount}) dari nilai nominalnya.
+    \end{itemize}
+
+    \item \textbf{Berdasarkan Pencatatan Kepemilikan (\textit{Registered Bond vs. Unregistered/Bearer Bond}):}
+    \begin{itemize}
+        \item \textbf{Registered Bond (Obligasi Atas Nama):} Obligasi yang nama pemiliknya tercatat secara resmi dalam pembukuan penerbit. Apabila terjadi jual-beli, perubahan kepemilikan wajib dilaporkan kepada penerbit agar pembayaran kupon dikirimkan ke pemilik baru.
+        \item \textbf{Unregistered Bond / Bearer Bond (Obligasi Atas Unjuk):} Obligasi yang pemiliknya tidak tercatat pada daftar peminjam. Siapa pun yang memegang fisik sertifikat obligasi tersebut secara sah diakui sebagai pemilik dan berhak mencairkan kupon yang melekat padanya.
+    \end{itemize}
+
+    \item \textbf{Berdasarkan Jaminan / Agunan di Belakangnya (\textit{Mortgage Bond vs. Debenture Bond}):}
+    \begin{itemize}
+        \item \textbf{Mortgage Bond (Obligasi Beragunan):} Obligasi yang dilindungi oleh aset fisik atau kredit properti tertentu sebagai agunan (\textit{collateral}). Memiliki tingkat keamanan yang lebih tinggi karena investor berhak menyita agunan apabila penerbit mengalami gagal bayar (\textit{default}).
+        \item \textbf{Debenture Bond (Obligasi Tanpa Agunan Khusus):} Obligasi yang hanya dilindungi oleh kelayakan kredit umum (\textit{general creditworthiness}) dan reputasi dari penerbitnya tanpa agunan aset spesifik.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Contoh Pengantar: Zero-Coupon Bond (Slide Hal. 7)}
+
+\begin{examplebox}[Contoh Valuasi Imbal Hasil Zero-Coupon Bond (Slide Hal. 7)]
+Suatu \textit{zero-coupon bond} akan membayar $\$1.000$ pada akhir dari periode 10 tahun. Harga jualnya saat ini adalah $\$400$. Tentukan \textit{yield rate} (suku bunga) \textit{convertible semiannually} yang akan didapat oleh pembeli!
+\end{examplebox}
+
+\begin{proof}[Penyelesaian]
+Misalkan $j = \frac{i^{(2)}}{2}$ adalah suku bunga efektif per setengah tahun (semester). Dalam kurun waktu 10 tahun terdapat $n = 10 \times 2 = 20$ periode setengah tahunan. Persamaan nilai pada saat jatuh tempo adalah:
+\begin{align*}
+    400(1 + j)^{20} &= 1.000 \\
+    (1 + j)^{20} &= \frac{1.000}{400} = 2{,}5 \\
+    1 + j &= (2{,}5)^{1/20} \approx 1{,}04688 \\
+    j &\approx 0{,}0469 \quad (4{,}69\% \text{ per semester})
+\end{align*}
+Dengan demikian, \textit{nominal yield rate convertible semiannually} dari obligasi ini adalah:
+\begin{equation*}
+    i^{(2)} = 2 \times j = 2 \times 0{,}0469 = \mathbf{0{,}0938 \text{ atau } 9{,}38\%}
+\end{equation*}
+\end{proof}
+
+---
+
+\section{Notasi Standar \& Empat Rumus Harga Obligasi}
+
+\subsection{Asumsi Dasar Penentuan Harga (Slide Hal. 8)}
+
+Dalam membangun model matematis harga obligasi, digunakan tiga asumsi dasar:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Bebas Risiko Gagal Bayar (\textit{No Default Risk}):} Seluruh kewajiban kupon dan nilai tebusan diasumsikan pasti dibayar tepat waktu oleh penerbit obligasi.
+    \item \textbf{Tanggal Jatuh Tempo Pasti (\textit{Fixed Maturity}):} Obligasi memiliki tanggal jatuh tempo (\textit{maturity/redemption date}) yang telah ditetapkan secara pasti.
+    \item \textbf{Valuasi Tepat Setelah Kupon:} Harga obligasi dihitung pada awal penerbitan atau tepat segera setelah suatu tanggal pembayaran kupon (sehingga jumlah sisa periode kupon $n$ merupakan bilangan bulat).
+\end{enumerate}
+
+\subsection{Simbol dan Notasi Fundamental Obligasi (Slide Hal. 9--10)}
+
+\begin{definitionbox}[Kamus Simbol Standar Obligasi]
+\begin{itemize}[leftmargin=2em, itemsep=0.4em]
+    \item[$P$] : \textbf{Harga obligasi (\textit{Price of the bond})} yang dibayarkan oleh pembeli/investor.
+    \item[$F$] : \textbf{Nilai Par / Nilai Nominal (\textit{Par Value / Face Amount})}, yaitu nilai pokok yang tercetak pada muka sertifikat obligasi. Fungsi utamanya adalah sebagai dasar pengali untuk menentukan besar kupon periodik. Nilai ini \textbf{tidak} mengukur harga pasar obligasi sebelum jatuh tempo.
+    \item[$C$] : \textbf{Nilai Tebusan (\textit{Redemption Value})}, yaitu nominal uang pokok yang dibayarkan kepada pemegang obligasi pada saat \textit{redemption date}. Pada umumnya obligasi ditebus sebesar nilai par-nya (\textit{redeemable at par}, sehingga $C = F$), namun sangat dimungkinkan $C \neq F$ (misalnya ditebus pada $105\%$ dari par).
+    \item[$r$] : \textbf{Laju Kupon (\textit{Coupon Rate})} per periode pembayaran kupon. Sebagai contoh, obligasi dengan kupon tahunan $8\%$ yang dibayarkan setiap setengah tahun (\textit{semiannually}) memiliki $r = \frac{8\%}{2} = 0{,}04$ per semester.
+    \item[$Fr$] : \textbf{Besar Kupon Periodik (\textit{Amount of Each Coupon})}, yakni arus kas bunga tetap yang diterima investor setiap akhir periode.
+    \item[$g$] : \textbf{Laju Kupon Termodifikasi (\textit{Modified Coupon Rate})}, yaitu besarnya kupon yang dinyatakan per unit dari \textbf{nilai tebusan $C$} (bukan per unit dari nilai par $F$):
+    \begin{equation}
+        Fr = Cg \iff \mathbf{g = \frac{Fr}{C}}
+    \end{equation}
+    Nilai $g$ selalu memiliki frekuensi yang sama dengan $r$. Apabila obligasi ditebus pada nilai par ($C = F$), maka otomatis $\mathbf{g = r}$.
+    \item[$i$] : \textbf{Laju Imbal Hasil (\textit{Yield Rate / Yield to Maturity})} per periode kupon, yaitu suku bunga efektif sesungguhnya yang diperoleh investor apabila obligasi dipegang hingga tanggal penebusan.
+    \item[$n$] : \textbf{Jumlah periode pembayaran kupon} dari tanggal valuasi/pembelian hingga \textit{redemption date}.
+    \item[$K$] : \textbf{Nilai sekarang dari nilai tebusan (\textit{Present Value of Redemption Value})} yang dievaluasi pada \textit{yield rate} $i$:
+    \begin{equation}
+        \mathbf{K = C v^n = C (1+i)^{-n}}
+    \end{equation}
+    \item[$G$] : \textbf{Besar Dasar (\textit{Base Amount})} dari obligasi, yaitu jumlah pokok hipotetis yang apabila diinvestasikan pada suku bunga yield $i$ akan menghasilkan bunga periodik yang persis sama dengan kupon obligasi $Fr$:
+    \begin{equation}
+        G i = Fr \iff \mathbf{G = \frac{Fr}{i} = \frac{Cg}{i}}
+    \end{equation}
+\end{itemize}
+\end{definitionbox}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {Periode Kupon};
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (2,0.1) -- (2,-0.1) node[below] {$1$};
+    \draw[thick] (4,0.1) -- (4,-0.1) node[below] {$2$};
+    \draw[dotted, thick] (4.5,0) -- (6.5,0);
+    \draw[thick] (7,0.1) -- (7,-0.1) node[below] {$n-1$};
+    \draw[thick] (9.5,0.15) -- (9.5,-0.15) node[below] {$n$};
+
+    % Harga Beli P
+    \draw[->, thick, darkred] (0, 0.2) -- (0, 1.1) node[above, font=\bfseries] {Beli: $P$};
+
+    % Arus Kas Kupon
+    \foreach \x in {2,4,7} {
+        \draw[->, thick, darkgreen] (\x, -0.2) -- (\x, -1.0) node[below] {$Fr = Cg$};
+    }
+    \draw[->, thick, darkgreen] (9.5, -0.2) -- (9.5, -1.3) node[below, align=center] {$Fr + C$\\(Kupon Akhir $+$ Tebusan)};
+
+    \node[above, primaryblue] at (5, 0.3) {Diskonto dengan \textit{Yield Rate} $i$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Empat Formula Fundamental Harga Obligasi (Slide Hal. 11--12)}
+
+Semua arus kas masa depan dari obligasi terdiri atas dua bagian: anuitas dari $n$ kali kupon sebesar $Fr$, dan pembayaran tunggal (\textit{lump-sum}) sebesar $C$ pada akhir periode ke-$n$. Dari prinsip nilai sekarang ini, diturunkan **empat rumus ekuivalen** untuk menghitung harga obligasi $P$:
+
+\begin{theorembox}[Empat Rumus Penentuan Harga Obligasi]
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Rumus Dasar (\textit{Basic Formula}):}
+    Harga obligasi sama dengan nilai sekarang dari seluruh kupon masa depan ditambah nilai sekarang dari nilai tebusan:
+    \begin{equation}
+        \mathbf{P = Fr \, a_{\overline{n}|i} + C v^n = Fr \, a_{\overline{n}|i} + K}
+    \end{equation}
+
+    \item \textbf{Rumus Premium/Diskon (\textit{Premium/Discount Formula}):}
+    Mensubstitusikan identitas anuitas $v^n = 1 - i \, a_{\overline{n}|i}$ ke dalam rumus dasar:
+    \begin{align}
+        P &= Fr \, a_{\overline{n}|i} + C(1 - i \, a_{\overline{n}|i}) \nonumber \\
+        \mathbf{P} &= \mathbf{C + (Fr - Ci) a_{\overline{n}|i} = C + C(g - i) a_{\overline{n}|i}}
+    \end{align}
+
+    \item \textbf{Rumus Jumlah Dasar (\textit{Base Amount Formula}):}
+    Mensubstitusikan $Fr = Gi$ dan $i \, a_{\overline{n}|i} = 1 - v^n$ ke dalam rumus dasar:
+    \begin{align}
+        P &= Gi \, a_{\overline{n}|i} + C v^n = G(1 - v^n) + C v^n \nonumber \\
+        \mathbf{P} &= \mathbf{G + (C - G) v^n}
+    \end{align}
+    \textit{Keunggulan komputasi:} Sangat cepat dihitung karena hanya memuat satu fungsi suku bunga tunggal, yakni faktor diskonto $v^n$.
+
+    \item \textbf{Rumus Makeham (\textit{Makeham's Formula}):}
+    Mensubstitusikan $Fr = Cg$ dan $a_{\overline{n}|i} = \frac{1 - v^n}{i}$ serta $K = C v^n$:
+    \begin{align}
+        P &= C v^n + Cg \left( \frac{1 - v^n}{i} \right) = C v^n + \frac{g}{i} (C - C v^n) \nonumber \\
+        \mathbf{P} &= \mathbf{K + \frac{g}{i}(C - K)}
+    \end{align}
+    \textit{Interpretasi Verbal Rumus Makeham:} Jika $g = i$, maka harga obligasi tepat sama dengan nilai tebusan $C = K + (C - K)$, sehingga $(C - K)$ adalah nilai sekarang dari kupon-kupon pada suku bunga $g=i$. Namun jika $g \neq i$, nilai sekarang dari kupon-kupon tersebut disesuaikan secara proporsional dengan rasio $\frac{g}{i}$, menjadi $\frac{g}{i}(C - K)$.
+\end{enumerate}
+\end{theorembox}
+
+\subsection{Contoh Komprehensif: Perhitungan dengan Keempat Rumus (Slide Hal. 13--14)}
+
+\begin{examplebox}[Contoh Perhitungan Harga Obligasi dengan 4 Rumus (Slide Hal. 13--14)]
+Hitung harga dari obligasi dengan \textit{par value} $\$1.000$ berjangka waktu 10 tahun dengan kupon $8{,}4\%$ \textit{payable semiannually}, yang akan ditebus seharga $\$1.050$. Obligasi tersebut dibeli untuk menghasilkan (\textit{yield}) $10\%$ \textit{convertible semiannually}. Gunakan keempat rumus untuk memverifikasi hasilnya!
+\end{examplebox}
+
+\begin{proof}[Penyelesaian Lengkap]
+Pertama, kita identifikasi seluruh parameter dasar dalam satuan periode setengah tahunan (semester):
+\begin{itemize}
+    \item Nilai par: $F = \$1.000$
+    \item Nilai tebusan: $C = \$1.050$
+    \item Jumlah periode kupon: $n = 10 \times 2 = 20$ semester
+    \item Laju kupon per semester: $r = \frac{0{,}084}{2} = 0{,}042 \implies$ Besar kupon $Fr = 1.000 \times 0{,}042 = \$42$
+    \item Laju kupon termodifikasi:
+    \begin{equation*}
+        g = \frac{Fr}{C} = \frac{42}{1.050} = 0{,}04
+    \end{equation*}
+    \item Laju imbal hasil (\textit{yield rate}) per semester:
+    \begin{equation*}
+        i = \frac{0{,}10}{2} = 0{,}05
+    \end{equation*}
+    \item Nilai sekarang dari nilai tebusan ($K$):
+    \begin{equation*}
+        K = C v^{20} = 1.050 (1{,}05)^{-20} = 1.050 \times 0{,}37688948 \approx 395{,}7340
+    \end{equation*}
+    \item Besar dasar (\textit{Base amount}, $G$):
+    \begin{equation*}
+        G = \frac{Fr}{i} = \frac{42}{0{,}05} = 840
+    \end{equation*}
+    \item Faktor anuitas $a_{\overline{20}|0{,}05}$:
+    \begin{equation*}
+        a_{\overline{20}|0{,}05} = \frac{1 - (1{,}05)^{-20}}{0{,}05} = \frac{1 - 0{,}37688948}{0{,}05} \approx 12{,}462210
+    \end{equation*}
+\end{itemize}
+
+Sekarang kita hitung harga obligasi $P$ dengan keempat rumus:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Rumus Dasar:}
+    \begin{equation*}
+        P = Fr \, a_{\overline{20}|0{,}05} + K = 42(12{,}462210) + 395{,}7340 = 523{,}4128 + 395{,}7340 = \mathbf{\$919{,}15}
+    \end{equation*}
+    \item \textbf{Rumus Premium/Diskon:}
+    \begin{equation*}
+        P = C + (Fr - Ci) a_{\overline{20}|0{,}05} = 1.050 + (42 - 1.050 \times 0{,}05)(12{,}462210) = 1.050 - 10{,}5(12{,}462210) = 1.050 - 130{,}8532 = \mathbf{\$919{,}15}
+    \end{equation*}
+    \item \textbf{Rumus Base Amount:}
+    \begin{equation*}
+        P = G + (C - G) v^{20} = 840 + (1.050 - 840)(0{,}37688948) = 840 + 210(0{,}37688948) = 840 + 79{,}1468 = \mathbf{\$919{,}15}
+    \end{equation*}
+    \item \textbf{Rumus Makeham:}
+    \begin{equation*}
+        P = K + \frac{g}{i}(C - K) = 395{,}7340 + \frac{0{,}04}{0{,}05}(1.050 - 395{,}7340) = 395{,}7340 + 0{,}8(654{,}2660) = 395{,}7340 + 523{,}4128 = \mathbf{\$919{,}15}
+    \end{equation*}
+\end{enumerate}
+Keempat rumus menghasilkan nilai yang identik sempurna, yaitu $\mathbf{\$919{,}15}$.
+\end{proof}
+
+---
+
+\section{Premium dan Diskon pada Obligasi}
+
+\subsection{Konsep \& Formula Premium dan Diskon (Slide Hal. 15--16)}
+
+Perbandingan antara harga beli obligasi $P$ dan nilai tebusannya $C$ menentukan apakah obligasi diperdagangkan pada kondisi \textbf{Premium}, \textbf{Par}, atau \textbf{Diskon}:
+
+\begin{definitionbox}[Definisi Premium dan Diskon Obligasi]
+\begin{itemize}
+    \item \textbf{Obligasi Premium (\textit{Bought at a Premium}):} Terjadi apabila harga beli melebihi nilai tebusannya ($\mathbf{P > C}$). Hal ini terjadi ketika laju kupon termodifikasi lebih besar daripada \textit{yield rate} yang diminta pasar ($\mathbf{g > i}$, atau $r > i$ jika $C = F$).
+    \begin{equation}
+        \textbf{Premium} = P - C = (Fr - Ci) a_{\overline{n}|i} = \mathbf{C(g - i) a_{\overline{n}|i}} \quad (\text{untuk } g > i)
+    \end{equation}
+
+    \item \textbf{Obligasi Diskon (\textit{Bought at a Discount}):} Terjadi apabila harga beli lebih rendah daripada nilai tebusannya ($\mathbf{P < C}$). Hal ini terjadi ketika laju kupon termodifikasi lebih kecil daripada \textit{yield rate} pasar ($\mathbf{g < i}$, atau $r < i$ jika $C = F$).
+    \begin{equation}
+        \textbf{Diskon} = C - P = (Ci - Fr) a_{\overline{n}|i} = \mathbf{C(i - g) a_{\overline{n}|i}} \quad (\text{untuk } g < i)
+    \end{equation}
+\end{itemize}
+\textit{Catatan Konseptual:} Premium dan diskon memiliki konsep matematis yang sama; diskon tidak lain adalah premium yang bernilai negatif ($p = P - C < 0$).
+\end{definitionbox}
+
+\subsection{Interpretasi Ekonomi dari Sudut Pandang Pemegang Obligasi (Slide Hal. 16)}
+
+Mengapa investor bersedia membeli obligasi dengan harga di atas atau di bawah nilai tebusannya?
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Kasus Diskon ($P < C \iff g < i$):}
+    Kupon periodik yang dibayarkan obligasi ($Fr = Cg$) lebih rendah daripada imbal hasil pasar yang diharapkan investor ($Ci$). Sebagai kompensasi atas kupon yang kecil tersebut, investor membayar harga awal $P$ yang lebih murah daripada $C$, sehingga pada saat jatuh tempo investor memperoleh \textbf{keuntungan modal (\textit{capital gain/profit})} sebesar $C - P$.
+    \item \textbf{Kasus Premium ($P > C \iff g > i$):}
+    Kupon periodik yang dibayarkan obligasi ($Fr = Cg$) lebih tinggi daripada bunga pasar ($Ci$). Karena kuponnya sangat menarik, investor bersedia membayar harga awal $P$ di atas nilai tebusan $C$, meskipun pada saat jatuh tempo investor akan mengalami \textbf{penyusutan/kerugian modal (\textit{capital loss})} sebesar $P - C$.
+\end{enumerate}
+
+Oleh karena itu, \textbf{besarnya setiap kupon tidak seluruhnya dianggap sebagai pendapatan bunga (\textit{interest income}) murni bagi investor}. Setiap kupon harus dibagi menjadi dua komponen: **pendapatan bunga murni** (berdasarkan \textit{yield rate} $i$) dan **penyesuaian pokok/nilai buku obligasi**.
+
+---
+
+\section{Nilai Buku (\textit{Book Value}) \& Jadwal Amortisasi Obligasi}
+
+\subsection{Perbedaan Book Value vs. Market Value (Slide Hal. 16--17)}
+
+\begin{notebox}[Perbedaan Nilai Buku (\textit{Book Value}) dan Nilai Pasar (\textit{Market Value})]
+\begin{itemize}
+    \item \textbf{Nilai Pasar (\textit{Market Value}):} Harga obligasi di pasar terbuka yang berfluktuasi secara dinamis setiap saat mengikuti naik-turunnya suku bunga pasar yang berlaku.
+    \item \textbf{Nilai Buku (\textit{Book Value}, $B_t$):} Nilai aset obligasi dalam catatan akuntansi (digunakan oleh perusahaan asuransi, dana pensiun, dan perbankan untuk laporan keuangan). Nilai buku \textbf{mengikuti lintasan perubahan yang mulus dan terprediksi} dari harga beli awal $B_0 = P$ menuju nilai tebusan akhir $B_n = C$, karena dihitung secara konsisten menggunakan \textbf{yield rate awal $i$ pada saat obligasi pertama kali dibeli}.
+\end{itemize}
+\end{notebox}
+
+\subsection{Mekanisme Dekomposisi Kupon dan Konstruksi Tabel (Slide Hal. 17--20)}
+
+Misalkan:
+\begin{itemize}
+    \item $B_t$ : Nilai buku (\textit{book value}) obligasi tepat setelah kupon ke-$t$ dibayarkan (dengan $B_0 = P$ dan $B_n = C$).
+    \item $I_t$ : Porsi pendapatan bunga di dalam kupon ke-$t$, yaitu bunga atas nilai buku periode sebelumnya: $\mathbf{I_t = i \cdot B_{t-1}}$.
+    \item $P_t$ : Porsi penyesuaian pokok (\textit{principal adjustment}) di dalam kupon ke-$t$, sehingga berlaku identitas:
+    \begin{equation}
+        I_t + P_t = Fr = Cg \iff \mathbf{P_t = Fr - I_t}
+    \end{equation}
+    \item Pembaruan nilai buku pada akhir periode ke-$t$:
+    \begin{equation}
+        \mathbf{B_t = B_{t-1} - P_t}
+    \end{equation}
+\end{itemize}
+
+Untuk penurunan rumus umum (Slide Hal. 18--20), tinjau obligasi dengan nilai tebusan unit $\mathbf{C = 1}$ (untuk nilai tebusan umum $C$, seluruh rumus cukup dikalikan dengan $C$). Maka kupon periodik adalah $Fr = Cg = g$, dan harga beli obligasi adalah:
+\begin{equation}
+    B_0 = P = 1 + p = 1 + (g - i) a_{\overline{n}|i}, \quad \text{dengan } p = P - C = (g - i)a_{\overline{n}|i}
+\end{equation}
+Pada periode pertama ($t=1$):
+\begin{itemize}
+    \item Bunga periode pertama:
+    \begin{equation*}
+        I_1 = i \cdot B_0 = i \left[ 1 + (g - i) a_{\overline{n}|i} \right]
+    \end{equation*}
+    \item Sisa dari kupon yang menjadi porsi penyesuaian pokok:
+    \begin{equation*}
+        P_1 = g - I_1 = g - i \left[ 1 + (g - i) a_{\overline{n}|i} \right] = (g - i)(1 - i \, a_{\overline{n}|i}) = \mathbf{(g - i) v^n}
+    \end{equation*}
+    \item Nilai buku pada akhir periode pertama:
+    \begin{equation*}
+        B_1 = B_0 - P_1 = 1 + (g - i) a_{\overline{n}|i} - (g - i) v^n = \mathbf{1 + (g - i) a_{\overline{n-1}|i}}
+    \end{equation*}
+\end{itemize}
+
+Dengan induksi matematis untuk sembarang periode $t \in \{1, 2, \dots, n\}$ (dikalikan dengan $C$ untuk kasus umum), kita memperoleh tabel dan rumus umum jadwal amortisasi obligasi:
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Jadwal Amortisasi Obligasi Standar (Untuk Unit Redemption $C = 1$, Kupon $g$)}
+\label{tab:bond_amort_unit}
+\vspace{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Periode} & \textbf{Kupon} & \textbf{Pendapatan Bunga ($I_t$)} & \textbf{Penyesuaian Pokok ($P_t$)} & \textbf{Nilai Buku Akhir ($B_t$)} \\
+$t$ & $g$ & $I_t = i \cdot B_{t-1}$ & $P_t = g - I_t$ & $B_t = B_{t-1} - P_t$ \\
+\midrule
+$0$ & --- & --- & --- & $1 + p = 1 + (g - i)a_{\overline{n}|i}$ \\
+$1$ & $g$ & $i[1 + (g - i)a_{\overline{n}|i}]$ & $(g - i)v^n$ & $1 + (g - i)a_{\overline{n-1}|i}$ \\
+$2$ & $g$ & $i[1 + (g - i)a_{\overline{n-1}|i}]$ & $(g - i)v^{n-1}$ & $1 + (g - i)a_{\overline{n-2}|i}$ \\
+$3$ & $g$ & $i[1 + (g - i)a_{\overline{n-2}|i}]$ & $(g - i)v^{n-2}$ & $1 + (g - i)a_{\overline{n-3}|i}$ \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+$t$ & $g$ & $i[1 + (g - i)a_{\overline{n-t+1}|i}]$ & $(g - i)v^{n-t+1}$ & $1 + (g - i)a_{\overline{n-t}|i}$ \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+$n-1$ & $g$ & $i[1 + (g - i)a_{\overline{2}|i}]$ & $(g - i)v^2$ & $1 + (g - i)a_{\overline{1}|i}$ \\
+$n$ & $g$ & $i[1 + (g - i)a_{\overline{1}|i}]$ & $(g - i)v$ & $1 + (g - i)a_{\overline{0}|i} = 1$ \\
+\midrule
+\textbf{Total} & $\mathbf{ng}$ & $\mathbf{ng - p}$ & $\mathbf{(g - i)a_{\overline{n}|i} = p}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Sifat-Sifat Struktural \& Writing Down vs. Writing Up (Slide Hal. 21--22, 26)}
+
+\begin{theorembox}[Sifat-Sifat Penting Jadwal Amortisasi Obligasi (Untuk $C$ Umum)]
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Rumus Langsung Nilai Buku pada Periode $t$:}
+    Nilai buku $B_t$ pada setiap baris tepat sama dengan rumus harga obligasi dengan sisa periode $(n-t)$ yang dihitung pada \textit{yield rate} awal $i$:
+    \begin{equation}
+        \mathbf{B_t = Fr \, a_{\overline{n-t}|i} + C v^{n-t} = C + (Fr - Ci) a_{\overline{n-t}|i} = C + C(g - i) a_{\overline{n-t}|i}}
+    \end{equation}
+    \item \textbf{Rumus Langsung Bunga dan Pokok Tanpa Membangun Tabel dari Awal:}
+    \begin{align}
+        \mathbf{I_t} &= \mathbf{C \cdot i \left[ 1 + (g - i) a_{\overline{n-t+1}|i} \right] = Ci + (Fr - Ci)(1 - v^{n-t+1})} \\
+        \mathbf{P_t} &= \mathbf{C(g - i) v^{n-t+1} = (Fr - Ci) v^{n-t+1}}
+    \end{align}
+    \item \textbf{Kolom Pokok Mengikuti Deret Geometri dengan Rasio $(1+i)$:}
+    \begin{equation}
+        \mathbf{P_{t+1} = P_t (1+i)} \iff \mathbf{P_t = P_k (1+i)^{t-k}}
+    \end{equation}
+    Sifat ini sangat memudahkan pencarian porsi amortisasi premium/akumulasi diskon pada periode mana pun jika diketahui satu nilai pokok pada periode lain.
+    \item \textbf{Jumlah Kolom Pokok dan Kolom Bunga:}
+    \begin{equation}
+        \sum_{t=1}^n P_t = P - C \quad (\text{Total Premium/Diskon}), \qquad \sum_{t=1}^n I_t = n(Fr) - (P - C)
+    \end{equation}
+\end{enumerate}
+\end{theorembox}
+
+\subsubsection{Terminologi Akuntansi: Amortisasi Premium vs. Akumulasi Diskon (Slide Hal. 22)}
+
+\begin{itemize}
+    \item \textbf{Saat Obligasi Dibeli dengan Premium ($P > C \iff g > i$):}
+    Porsi pokok bernilai positif ($P_t > 0$), sehingga nilai buku $B_t = B_{t-1} - P_t$ akan \textbf{menurun secara bertahap} dari $P$ menuju $C$. Proses penurunan nilai buku ini disebut \textbf{Amortisasi dari Premium (\textit{Amortization of Premium})} atau \textbf{\textit{Writing Down}}. Besarnya $P_t$ disebut \textit{besar untuk amortisasi premium}.
+    \item \textbf{Saat Obligasi Dibeli dengan Diskon ($P < C \iff g < i$):}
+    Kupon lebih kecil daripada bunga ($Fr < I_t$), sehingga $P_t = Fr - I_t < 0$ bernilai negatif. Akibatnya, nilai buku $B_t = B_{t-1} - P_t = B_{t-1} + |P_t|$ akan \textbf{naik secara bertahap} dari $P$ menuju $C$. Proses kenaikan nilai buku ini disebut \textbf{Akumulasi dari Diskon (\textit{Accumulation of Discount})} atau \textbf{\textit{Writing Up}}. Besarnya $|P_t| = (Ci - Fr)v^{n-t+1}$ disebut \textit{besar untuk akumulasi diskon}.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    \begin{axis}[
+        width=11.5cm, height=6.5cm,
+        xlabel={Periode Kupon ($t$)},
+        ylabel={Nilai Buku Obligasi ($B_t$)},
+        xmin=0, xmax=20,
+        ymin=850, ymax=1180,
+        xtick={0, 5, 10, 15, 20},
+        legend pos=north east,
+        legend style={font=\footnotesize},
+        grid=both,
+        grid style={line width=.1pt, draw=gray!20},
+        major grid style={line width=.2pt,draw=gray!50}
+    ]
+        % Obligasi Premium: F=C=1000, r=5%, i=4%, n=20 -> B_t = 1000 + 10 * a_{20-t|0.04}
+        \addplot[domain=0:20, samples=40, very thick, primaryblue] {1000 + 10 * (1 - (1.04)^(-(20 - x))) / 0.04};
+        \addlegendentry{Obligasi Premium ($g > i$): \textit{Writing Down}}
+
+        % Obligasi Par: B_t = 1000
+        \addplot[domain=0:20, samples=2, thick, black, dashed] {1000};
+        \addlegendentry{Nilai Tebusan $C = \$1.000$ (\textit{Par})}
+
+        % Obligasi Diskon: F=C=1000, r=3%, i=4%, n=20 -> B_t = 1000 - 10 * a_{20-t|0.04}
+        \addplot[domain=0:20, samples=40, very thick, darkred] {1000 - 10 * (1 - (1.04)^(-(20 - x))) / 0.04};
+        \addlegendentry{Obligasi Diskon ($g < i$): \textit{Writing Up}}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{notebox}[Perbedaan Konseptual: Amortisasi Obligasi vs. Amortisasi Hutang (Slide Hal. 26)]
+\begin{itemize}
+    \item Pada \textbf{Jadwal Amortisasi Hutang (Bab 09)}, nilai pertengahan (saldo hutang berjalan) diamortisasi menuju nilai akhir yang sama dengan $\mathbf{0}$.
+    \item Pada \textbf{Jadwal Amortisasi Obligasi (Bab 12)}, nilai pertengahan (\textit{book value}) diamortisasi (atau diakumulasi) menuju nilai akhir yang sama dengan \textbf{nilai tebusan $\mathbf{C}$}.
+\end{itemize}
+\end{notebox}
+
+---
+
+\subsection{Contoh Lengkap Jadwal Amortisasi Premium \& Diskon (Slide Hal. 23--25)}
+
+\subsubsection{Contoh 1: Obligasi Dibeli dengan Premium (Slide Hal. 23--24)}
+
+\begin{examplebox}[Contoh Jadwal Amortisasi Obligasi Premium]
+Obligasi dengan $\$1.000$ \textit{par value} berjangka 2 tahun dengan kupon $8\%$ \textit{semiannual} ($C = F = 1.000$), dibeli untuk menghasilkan (\textit{yield}) $6\%$ \textit{convertible semiannually}. Susun jadwal amortisasi obligasi tersebut!
+\end{examplebox}
+
+\begin{proof}[Penyelesaian]
+Parameter per setengah tahun (semester):
+\begin{itemize}
+    \item $F = C = \$1.000$, $n = 2 \times 2 = 4$ semester.
+    \item Laju kupon per semester: $r = g = \frac{0{,}08}{2} = 0{,}04 \implies$ Kupon $Fr = \$40$.
+    \item Yield rate per semester: $i = \frac{0{,}06}{2} = 0{,}03$.
+    \item Harga beli obligasi ($B_0 = P$):
+    \begin{equation*}
+        B_0 = P = 1.000 + 1.000(0{,}04 - 0{,}03) a_{\overline{4}|0{,}03} = 1.000 + 10(3{,}717098) = \mathbf{\$1.037{,}17}
+    \end{equation*}
+\end{itemize}
+
+Perhitungan baris demi baris:
+\begin{itemize}
+    \item \textbf{Semester 1 ($t=1$):}
+    \begin{align*}
+        I_1 &= i \cdot B_0 = 0{,}03 \times 1.037{,}17 = \$31{,}12 \\
+        P_1 &= Fr - I_1 = 40 - 31{,}12 = \$8{,}88 \\
+        B_1 &= B_0 - P_1 = 1.037{,}17 - 8{,}88 = \$1.028{,}29
+    \end{align*}
+    \item \textbf{Semester 2 ($t=2$):}
+    \begin{equation*}
+        I_2 = 0{,}03 \times 1.028{,}29 = \$30{,}85, \quad P_2 = 40 - 30{,}85 = \$9{,}15, \quad B_2 = 1.028{,}29 - 9{,}15 = \$1.019{,}14
+    \end{equation*}
+    \item \textbf{Semester 3 ($t=3$):}
+    \begin{equation*}
+        I_3 = 0{,}03 \times 1.019{,}14 = \$30{,}57, \quad P_3 = 40 - 30{,}57 = \$9{,}43, \quad B_3 = 1.019{,}14 - 9{,}43 = \$1.009{,}71
+    \end{equation*}
+    \item \textbf{Semester 4 ($t=4$):}
+    \begin{equation*}
+        I_4 = 0{,}03 \times 1.009{,}71 = \$30{,}29, \quad P_4 = 40 - 30{,}29 = \$9{,}71, \quad B_4 = 1.009{,}71 - 9{,}71 = \mathbf{\$1.000{,}00}
+    \end{equation*}
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Jadwal Amortisasi Obligasi Premium ($F = C = \$1.000$, $r = 4\%$, $i = 3\%$, $n = 4$)}
+\vspace{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Semester ($t$)} & \textbf{Kupon ($Fr$)} & \textbf{Bunga ($I_t$)} & \textbf{Amortisasi Premium ($P_t$)} & \textbf{Book Value ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$1.037{,}17$ \\
+$1$ & $\$40{,}00$ & $\$31{,}12$ & $\$8{,}88$ & $\$1.028{,}29$ \\
+$2$ & $\$40{,}00$ & $\$30{,}85$ & $\$9{,}15$ & $\$1.019{,}14$ \\
+$3$ & $\$40{,}00$ & $\$30{,}57$ & $\$9{,}43$ & $\$1.009{,}71$ \\
+$4$ & $\$40{,}00$ & $\$30{,}29$ & $\$9{,}71$ & $\$1.000{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$160{,}00}$ & $\mathbf{\$122{,}83}$ & $\mathbf{\$37{,}17}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+Perhatikan bahwa total kolom amortisasi premium adalah $\$37{,}17$, yang tepat sama dengan besarnya premium awal $P - C = 1.037{,}17 - 1.000 = \$37{,}17$.
+\end{proof}
+
+\subsubsection{Contoh 2: Obligasi Dibeli dengan Diskon (Slide Hal. 25)}
+
+\begin{examplebox}[Contoh Jadwal Akumulasi Obligasi Diskon]
+Obligasi yang sama ($\$1.000$ \textit{par value}, 2 tahun, kupon $8\%$ \textit{semiannual}), kini dibeli untuk menghasilkan (\textit{yield}) $10\%$ \textit{convertible semiannually}. Susun jadwal akumulasi diskonnya!
+\end{examplebox}
+
+\begin{proof}[Penyelesaian]
+Dengan $r = g = 0{,}04$ dan \textit{yield rate} per semester $i = \frac{0{,}10}{2} = 0{,}05$, harga belinya adalah:
+\begin{equation*}
+    B_0 = P = 1.000 + 1.000(0{,}04 - 0{,}05) a_{\overline{4}|0{,}05} = 1.000 - 10(3{,}54595) = \mathbf{\$964{,}54}
+\end{equation*}
+Diskon awal adalah $C - P = 1.000 - 964{,}54 = \$35{,}46$. Pada semester pertama ($t=1$):
+\begin{itemize}
+    \item Bunga yang seharusnya diperoleh investor: $I_1 = 0{,}05 \times 964{,}54 = \$48{,}23$.
+    \item Karena kupon hanya $\$40{,}00$, pokok mengalami penyesuaian negatif: $P_1 = 40 - 48{,}23 = -\$8{,}23$ (ditulis $(8{,}23)$ dalam kurung akuntansi, yang berarti akumulasi diskon sebesar $\$8{,}23$).
+    \item Nilai buku naik menjadi: $B_1 = 964{,}54 - (-8{,}23) = 964{,}54 + 8{,}23 = \$972{,}77$. \textit{(Catatan: Pada Slide Hal. 25 tertulis salah ketik ringan $965{,}54 - (-8{,}23) = 973{,}77$, namun segera terkoreksi kembali pada baris ke-2 yaitu $981{,}41 = 972{,}77 + 8{,}64$)}.
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Jadwal Akumulasi Obligasi Diskon ($F = C = \$1.000$, $r = 4\%$, $i = 5\%$, $n = 4$)}
+\vspace{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Semester ($t$)} & \textbf{Kupon ($Fr$)} & \textbf{Bunga ($I_t$)} & \textbf{Akumulasi Diskon ($P_t$)} & \textbf{Book Value ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$964{,}54$ \\
+$1$ & $\$40{,}00$ & $\$48{,}23$ & $(\$8{,}23)$ & $\$972{,}77$ \\
+$2$ & $\$40{,}00$ & $\$48{,}64$ & $(\$8{,}64)$ & $\$981{,}41$ \\
+$3$ & $\$40{,}00$ & $\$49{,}07$ & $(\$9{,}07)$ & $\$990{,}48$ \\
+$4$ & $\$40{,}00$ & $\$49{,}52$ & $(\$9{,}52)$ & $\$1.000{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$160{,}00}$ & $\mathbf{\$195{,}46}$ & $\mathbf{(\$35{,}46)}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{proof}
+
+---
+
+\section{Metode Garis Lurus (\textit{Straight Line Method}) (Slide Hal. 30)}
+
+Selain metode amortisasi suku bunga majemuk yang eksak di atas, di lapangan kadang-kadang dijumpai metode aproksimasi sederhana untuk melakukan \textit{writing down} atau \textit{writing up} nilai buku obligasi, yaitu \textbf{Metode Garis Lurus (\textit{Straight Line Method})}.
+
+\begin{definitionbox}[Metode Garis Lurus (\textit{Straight Line Method})]
+Metode ini mengasumsikan bahwa nilai buku obligasi berubah secara \textbf{linier} dari harga awal $B_0 = P$ menuju nilai tebusan $B_n = C$ sepanjang $n$ periode.
+\begin{itemize}
+    \item \textbf{Kolom Penyesuaian Pokok Konstan:}
+    \begin{equation}
+        \mathbf{P_t = \frac{P - C}{n}}, \quad \text{untuk } t = 1, 2, \dots, n
+    \end{equation}
+    Jika $P_t > 0$ maka obligasi premium; jika $P_t < 0$ maka obligasi diskon.
+    \item \textbf{Kolom Pendapatan Bunga Konstan:}
+    \begin{equation}
+        \mathbf{I_t = Fr - P_t = Fr - \frac{P - C}{n}}, \quad \text{untuk } t = 1, 2, \dots, n
+    \end{equation}
+    \item \textbf{Nilai Buku pada Periode $t$:}
+    \begin{equation}
+        \mathbf{B_t = P - t \left( \frac{P - C}{n} \right)}
+    \end{equation}
+\end{itemize}
+\textit{Catatan Kritis:} Metode garis lurus \textbf{tidak konsisten} dengan teori suku bunga majemuk. Semakin panjang jangka waktu (\textit{term}) dari obligasi, semakin besar galat (\textit{error}) penyimpangan nilai bukunya terhadap nilai buku aktuaria yang sebenarnya.
+\end{definitionbox}
+
+---
+
+\section{Pendekatan Sinking Fund pada Obligasi (Slide Hal. 27--29, 31--32)}
+
+\subsection{Sudut Pandang Sinking Fund saat Suku Bunga Reinvestasi Sama (\texorpdfstring{$j = i$}{j = i}) (Slide Hal. 27--29)}
+
+Jadwal amortisasi obligasi juga dapat dipahami secara intuitif menggunakan kacamata \textbf{Metode Dana Pelunasan (\textit{Sinking Fund})}:
+\begin{itemize}
+    \item Pada contoh obligasi premium sebelumnya ($P = \$1.037{,}17$, $C = \$1.000$, kupon $\$40$, $i = 3\%$), investor mengeluarkan modal awal sebesar $\$1.037{,}17$.
+    \item Agar memperoleh imbal hasil efektif $i = 3\%$ setiap semester atas modal awalnya, investor membutuhkan hasil bunga tetap sebesar:
+    \begin{equation*}
+        i \cdot P = 0{,}03 \times 1.037{,}17 = \$31{,}12 \text{ setiap semester}
+    \end{equation*}
+    \item Karena kupon yang diterima adalah $\$40{,}00$, terdapat kelebihan kas sebesar:
+    \begin{equation*}
+        Fr - iP = 40{,}00 - 31{,}12 = \$8{,}88 \text{ setiap semester}
+    \end{equation*}
+    \item Mengingat pada saat jatuh tempo ($t=4$) obligasi hanya ditebus sebesar $C = \$1.000$ (investor kehilangan nilai premium sebesar $P - C = \$37{,}17$), kelebihan kupon sebesar $\$8{,}88$ tiap periode tersebut dapat dianggap dimasukkan ke dalam rekening tabungan \textbf{\textit{sinking fund}} untuk memulihkan kehilangan premium pada saat \textit{redemption date}.
+    \item Jika \textit{sinking fund} tersebut terakumulasi dengan suku bunga yang sama dengan \textit{yield rate} ($j = i = 3\%$), maka saldo akhir \textit{sinking fund} pada akhir tahun ke-2 ($n = 4$ semester) adalah:
+    \begin{equation*}
+        8{,}88 \, s_{\overline{4}|0{,}03} = 8{,}88 \times 4{,}183627 = \$37{,}15 \approx P - C = \$37{,}17
+    \end{equation*}
+    (selisih $\$0{,}02$ murni disebabkan oleh pembulatan desimal).
+    \item Hal yang sama berlaku untuk obligasi diskon ($P = \$964{,}54$, $i = 5\%$): kekurangan kupon sebesar $8{,}23$ per semester apabila diakumulasikan pada $5\%$ menghasilkan:
+    \begin{equation*}
+        8{,}23 \, s_{\overline{4}|0{,}05} = 8{,}23 \times 4{,}310125 = \$35{,}47 \approx C - P = \$35{,}46
+    \end{equation*}
+    di mana pada kasus diskon ini, \textit{sinking fund} dipandang sebagai \textit{sinking fund} yang bernilai negatif.
+\end{itemize}
+
+\subsection{Valuasi Obligasi dengan Suku Bunga Sinking Fund Berbeda (\texorpdfstring{$j \neq i$}{j != i}) (Slide Hal. 31--32)}
+
+Bagaimana jika investor yang membeli obligasi pada harga premium ($P > C$) hanya dapat menabung porsi pemulihan premiumnya di dalam \textit{sinking fund} yang memberikan suku bunga reinvestasi $\mathbf{j}$ yang berbeda dengan \textit{yield rate} $\mathbf{i}$ ($j \neq i$)?
+
+\begin{theorembox}[Formula Harga Obligasi dengan Reinvestasi Sinking Fund ($i$ dan $j$)]
+Misalkan investor menginginkan imbal hasil bunga periodik sebesar $i \cdot P$ dari modal awal $P$ yang diinvestasikannya, sementara selisih kupon $(Cg - iP)$ disetorkan setiap akhir periode ke dalam \textit{sinking fund} bersuku bunga $j$ untuk mengakumulasikan kembali kehilangan premium $(P - C)$ pada akhir $n$ periode.
+
+Persamaan nilai fundamentalnya adalah:
+\begin{equation}
+    \mathbf{(Cg - iP) s_{\overline{n}|j} = P - C} \quad \text{atau} \quad \mathbf{(Fr - iP) s_{\overline{n}|j} = P - C}
+\end{equation}
+Dengan menyelesaikan persamaan linier tersebut terhadap $P$, diperoleh rumus umum harga obligasi:
+\begin{equation}
+    \mathbf{P = \frac{C(1 + g \, s_{\overline{n}|j})}{1 + i \, s_{\overline{n}|j}} = \frac{C + Fr \, s_{\overline{n}|j}}{1 + i \, s_{\overline{n}|j}}}
+\end{equation}
+\textit{Konsistensi Khusus:} Apabila suku bunga \textit{sinking fund} sama dengan \textit{yield rate} ($j = i$), maka karena $1 + i \, s_{\overline{n}|i} = (1+i)^n$, persamaan di atas otomatis tereduksi kembali menjadi rumus dasar obligasi:
+\begin{equation*}
+    P = \frac{C + Fr \, s_{\overline{n}|i}}{(1+i)^n} = C v^n + Fr \, a_{\overline{n}|i}
+\end{equation*}
+\end{theorembox}
+
+\begin{examplebox}[Contoh Valuasi Obligasi dengan Sinking Fund Berbeda Suku Bunga (Slide Hal. 31--32)]
+Hitung harga obligasi dengan $\$1.000$ \textit{par value} berjangka 2 tahun dengan kupon $8\%$ \textit{semiannual} yang dibeli untuk menghasilkan \textit{yield} $6\%$ \textit{convertible semiannually}, jika investor hanya dapat menyimpan porsi amortisasi premium di dalam \textit{sinking fund} dengan suku bunga $5\%$ \textit{convertible semiannually}!
+\end{examplebox}
+
+\begin{proof}[Penyelesaian]
+Identifikasi parameter per semester ($n = 4$ semester):
+\begin{itemize}
+    \item Nilai tebusan dan kupon: $C = F = \$1.000$, $r = g = 0{,}04 \implies Fr = Cg = \$40$.
+    \item Yield rate atas harga beli: $i = \frac{0{,}06}{2} = 0{,}03$ per semester.
+    \item Suku bunga \textit{sinking fund}: $j = \frac{0{,}05}{2} = 0{,}025$ per semester.
+    \item Faktor akumulasi \textit{sinking fund}:
+    \begin{equation*}
+        s_{\overline{4}|0{,}025} = \frac{(1{,}025)^4 - 1}{0{,}025} \approx 4{,}1525156
+    \end{equation*}
+\end{itemize}
+Setiap semester, kupon adalah $\$40$ dan bunga investasi yang diambil investor adalah $0{,}03 P$. Sisanya sebesar $(40 - 0{,}03 P)$ ditabung ke dalam \textit{sinking fund} pada suku bunga $2{,}5\%$ per semester untuk menutup kehilangan premium $(P - 1.000)$:
+\begin{align*}
+    (40 - 0{,}03 P) s_{\overline{4}|0{,}025} &= P - 1.000 \\
+    P &= \frac{1.000 + 40 \, s_{\overline{4}|0{,}025}}{1 + 0{,}03 \, s_{\overline{4}|0{,}025}} \\
+    &= \frac{1.000 + 40(4{,}1525156)}{1 + 0{,}03(4{,}1525156)} \\
+    &= \frac{1.000 + 166{,}1006}{1 + 0{,}1245755} = \frac{1.166{,}1006}{1{,}1245755} \approx \mathbf{\$1.036{,}93}
+\end{align*}
+\textbf{Analisis Perbandingan:} Harga obligasi ini ($\$1.036{,}93$) lebih kecil daripada harga pada contoh sebelumnya ketika $j = i = 3\%$ ($\$1.037{,}17$). Hal ini sangat logis secara finansial: karena dana pemulihan premium hanya bertumbuh pada bunga tabungan yang lebih rendah ($2{,}5\% < 3\%$), investor membutuhkan setoran \textit{sinking fund} yang sedikit lebih besar setiap semester, sehingga harga maksimal yang bersedia dibayar investor di awal menjadi lebih rendah.
+\end{proof}
+
+---
+
+\section{Rangkuman Formula Cepat \& Peta Konsep Ujian}
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.35}
+\caption{Ringkasan Rumus Kunci Materi 12: Obligasi}
+\vspace{0.5em}
+\begin{tabular}{lll}
+\toprule
+\textbf{Konsep / Komponen} & \textbf{Formula Matematika} & \textbf{Keterangan / Kondisi} \\
+\midrule
+Modified Coupon Rate & $g = \dfrac{Fr}{C}$ & Jika $C = F$ (tebus par), maka $g = r$ \\
+Nilai Sekarang Tebusan & $K = C v^n$ & Dievaluasi pada \textit{yield rate} $i$ \\
+Base Amount & $G = \dfrac{Fr}{i} = \dfrac{Cg}{i}$ & Pokok yang menghasilkan bunga $Fr$ \\
+1. Rumus Dasar & $P = Fr \, a_{\overline{n}|i} + C v^n$ & PV Kupon $+$ PV Redemption \\
+2. Rumus Premium/Diskon & $P = C + (Fr - Ci)a_{\overline{n}|i} = C + C(g - i)a_{\overline{n}|i}$ & Paling berguna untuk analisis $P - C$ \\
+3. Rumus Base Amount & $P = G + (C - G)v^n$ & Hanya satu fungsi suku bunga ($v^n$) \\
+4. Rumus Makeham & $P = K + \dfrac{g}{i}(C - K)$ & Berguna jika $K$ sudah diketahui \\
+Besar Premium ($g > i$) & $P - C = C(g - i)a_{\overline{n}|i}$ & Mengalami \textit{Writing Down} menuju $C$ \\
+Besar Diskon ($g < i$) & $C - P = C(i - g)a_{\overline{n}|i}$ & Mengalami \textit{Writing Up} menuju $C$ \\
+Nilai Buku Periode $t$ & $B_t = C + C(g - i)a_{\overline{n-t}|i}$ & Metode prospektif sisa $(n-t)$ kupon \\
+Bunga dalam Kupon ke-$t$ & $I_t = i \cdot B_{t-1} = C i [1 + (g - i)a_{\overline{n-t+1}|i}]$ & Pendapatan bunga murni periode $t$ \\
+Pokok dalam Kupon ke-$t$ & $P_t = Fr - I_t = C(g - i)v^{n-t+1}$ & Barisan geometri: $P_{t+1} = P_t(1+i)$ \\
+Metode Garis Lurus & $P_t = \dfrac{P - C}{n}, \quad I_t = Fr - P_t$ & Aproksimasi linier nilai buku \\
+Obligasi dengan SF ($j \neq i$) & $P = \dfrac{C(1 + g \, s_{\overline{n}|j})}{1 + i \, s_{\overline{n}|j}}$ & Reinvestasi amortisasi premium di rate $j$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

@@ -1,0 +1,341 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+% Margin ultra-efisien untuk tepat 1 lembar bolak-balik (2 halaman A4)
+\geometry{
+    top=0.8cm,
+    bottom=0.8cm,
+    left=0.85cm,
+    right=0.85cm
+}
+\setlength{\columnsep}{4.2mm}
+\pagestyle{empty}
+
+\tcbuselibrary{skins}
+
+% Warna konsisten & kontras tinggi untuk dicetak/disalin tangan
+\definecolor{primaryblue}{RGB}{20, 60, 110}
+\definecolor{secondaryblue}{RGB}{41, 128, 185}
+\definecolor{boxbg}{RGB}{246, 249, 253}
+\definecolor{darkgreen}{RGB}{24, 120, 64}
+\definecolor{greenbg}{RGB}{243, 250, 245}
+\definecolor{darkred}{RGB}{175, 30, 30}
+\definecolor{redbg}{RGB}{253, 245, 245}
+\definecolor{darkamber}{RGB}{185, 100, 10}
+\definecolor{amberbg}{RGB}{254, 250, 242}
+
+\newcommand{\angl}[1]{\overline{#1|}}
+
+\newtcolorbox{cbox}[2][primaryblue]{
+    enhanced,
+    colback=boxbg,
+    colframe=#1,
+    fonttitle=\bfseries\sffamily\footnotesize,
+    title={#2},
+    boxrule=0.6pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=#1,
+    arc=1mm,
+    left=1.8mm,
+    right=1.8mm,
+    top=1.1mm,
+    bottom=1.1mm,
+    before skip=1.2mm,
+    after skip=1.5mm
+}
+
+\newtcolorbox{gbox}[1]{
+    enhanced,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily\footnotesize,
+    title={#1},
+    boxrule=0.6pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    arc=1mm,
+    left=1.8mm,
+    right=1.8mm,
+    top=1.1mm,
+    bottom=1.1mm,
+    before skip=1.2mm,
+    after skip=1.5mm
+}
+
+\newtcolorbox{rbox}[1]{
+    enhanced,
+    colback=redbg,
+    colframe=darkred,
+    fonttitle=\bfseries\sffamily\footnotesize,
+    title={#1},
+    boxrule=0.6pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkred,
+    arc=1mm,
+    left=1.8mm,
+    right=1.8mm,
+    top=1.1mm,
+    bottom=1.1mm,
+    before skip=1.2mm,
+    after skip=1.5mm
+}
+
+\newtcolorbox{abox}[1]{
+    enhanced,
+    colback=amberbg,
+    colframe=darkamber,
+    fonttitle=\bfseries\sffamily\footnotesize,
+    title={#1},
+    boxrule=0.6pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkamber,
+    arc=1mm,
+    left=1.8mm,
+    right=1.8mm,
+    top=1.1mm,
+    bottom=1.1mm,
+    before skip=1.2mm,
+    after skip=1.5mm
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.2pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    pdftitle={AK2161 - Cheatsheet 1 Lembar Bolak-Balik Kuis Obligasi}
+}
+
+\begin{document}
+\footnotesize
+
+% ==============================================================================
+% HALAMAN 1: SISI DEPAN (TIER 1 — RUMUS INTI & PALING SERING KELUAR)
+% ==============================================================================
+\twocolumn[{
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue,
+    arc=1.2mm,
+    boxrule=0pt,
+    left=3mm, right=3mm, top=1.6mm, bottom=1.6mm,
+    after skip=2mm
+]
+\begin{center}
+    {\color{white}\normalsize\textbf{\textsf{CHEATSHEET 1 LEMBAR BOLAK-BALIK --- SISI DEPAN (TIER 1: WAJIB \& SERING KELUAR)}}}\\[0.15em]
+    {\color{amberbg}\scriptsize\textsf{AK2161 Teori Suku Bunga (Bab 12--14) $\bullet$ Urutan Prioritas Berdasarkan Arsip Kuis \& UAS ITB (2013--2026)}}
+\end{center}
+\end{tcolorbox}
+}]
+
+% KOTAK 1
+\begin{cbox}{1. Kamus Simbol, Faktor Anuitas \& Konversi Frekuensi}
+\textbf{Semua $r, i, n$ WAJIB dalam satuan periode kupon ($m$ kali/tahun)!}\\[0.8pt]
+$\bullet$ $F$ = par value;\quad $C$ = redemption value;\quad $P = B_0$ = harga awal\\
+$\bullet$ $r = \frac{\text{kupon nominal}}{m}$;\quad Kupon $= Fr$;\quad $g = \dfrac{Fr}{C}$ ($g = r$ jika $C = F$)\\
+$\bullet$ $i$ = yield per periode kupon;\quad $v = (1+i)^{-1}$;\quad $K = Cv^n$;\quad $G = \dfrac{Fr}{i}$\\
+$\bullet$ $a_{\angl{n}i} = \dfrac{1 - (1+i)^{-n}}{i}$, \qquad $s_{\angl{n}i} = \dfrac{(1+i)^n - 1}{i}$\\[1.5pt]
+\textbf{Konversi Frekuensi Berbeda} (kupon $m$/thn, yield $i^{(p)}$):
+\begin{align*}
+    \mathbf{i_{\text{kupon}}} &= \left(1 + \frac{i^{(p)}}{p}\right)^{p/m} - 1 \quad\Big(\text{sem vs } i^{(4)} \Rightarrow \big(1+\tfrac{i^{(4)}}{4}\big)^2 - 1\Big)
+\end{align*}
+\end{cbox}
+
+% KOTAK 2
+\begin{cbox}{2. Empat Rumus Harga Obligasi \& Status Premium/Diskon}
+\begin{enumerate}[leftmargin=3.5mm, topsep=0.5pt, itemsep=1.2pt]
+    \item \textbf{Dasar:} $\mathbf{P = Fr\,a_{\angl{n}i} + C v^n = Fr\,a_{\angl{n}i} + K}$
+    \item \textbf{Prem/Diskon:} $\mathbf{P = C + (Fr - Ci)a_{\angl{n}i} = C + C(g - i)a_{\angl{n}i}}$
+    \item \textbf{Base Amount:} $\mathbf{P = G + (C - G)v^n}$ \quad (paling cepat di kalkulator!)
+    \item \textbf{Makeham:} $\mathbf{P = K + \dfrac{g}{i}(C - K)}$ \quad (pakai jika $n$ tak diketahui / serial)
+\end{enumerate}
+\textbf{Zero-Coupon:} $P = Cv^n \Rightarrow i = (C/P)^{1/n} - 1$. \quad \textbf{Perpetual:} $P = \dfrac{Fr}{i}$.\\[1.2pt]
+\textbf{Kriteria Status (Cek $g$ vs $i$, BUKAN $r$ vs $i$ saat $C \neq F$!):}\\
+$\bullet$ \textbf{Premium ($P > C$):} $g > i$ ($Fr > Ci$), \quad Prem $= P - C = C(g - i)a_{\angl{n}i}$\\
+$\bullet$ \textbf{Diskon ($P < C$):} $g < i$ ($Fr < Ci$), \quad Disk $= C - P = C(i - g)a_{\angl{n}i}$
+\end{cbox}
+
+% KOTAK 3
+\begin{gbox}{3. Jadwal Amortisasi Obligasi \& Rumus Langsung}
+Nilai buku bergerak dari $B_0 = P$ menuju $B_n = C$.\\[1pt]
+\textbf{Relasi Rekursif (isi tabel periode ke-$t$):}
+\begin{align*}
+    I_t &= i B_{t-1}, \qquad P_t = Fr - I_t, \\
+    B_t &= B_{t-1} - P_t, \qquad B_{t+1} = B_t(1+i) - Fr
+\end{align*}
+$\bullet$ \textbf{Premium ($g > i$):} $P_t > 0 \Rightarrow B_t$ turun (\textit{Writing Down}).\\
+$\bullet$ \textbf{Diskon ($g < i$):} $P_t < 0 \Rightarrow B_t = B_{t-1} + |P_t|$ naik (\textit{Writing Up}).\\[1.2pt]
+\textbf{Rumus Langsung ke-$t$ (tanpa buat tabel dari awal!):}
+\begin{align*}
+    \mathbf{B_t} &= C + (Fr - Ci)a_{\angl{n-t}i}, \qquad \mathbf{P_t} = (Fr - Ci)v^{n-t+1} \\
+    \mathbf{I_t} &= Fr - P_t = Fr - (Fr - Ci)v^{n-t+1}
+\end{align*}
+\textbf{Sifat Barisan Geometri Kolom Pokok ($P_t$):}\\
+$\bullet$ $\mathbf{P_t = P_k(1+i)^{t-k}}$ \quad(cari $i$ dari dua pokok, misal $P_7/P_4 = (1+i)^3$)\\
+$\bullet$ $\sum_{t=1}^n P_t = P - C = P_1 s_{\angl{n}i}$, \qquad $\sum_{t=1}^n I_t = nFr - (P - C)$\\
+$\bullet$ Selisih book value: $\mathbf{B_{a-1} - B_b = \sum_{t=a}^b P_t = P_a \, s_{\angl{b-a+1}i}}$
+\end{gbox}
+
+% KOTAK 4
+\begin{rbox}{4. Valuasi Antar 2 Tanggal Kupon (PALING SERING KELUAR!)}
+Transaksi di waktu $t + k$ dengan $0 < k < 1$. Selalu berlaku:
+\[
+    \mathbf{B_{t+k}^f = B_{t+k}^m + Fr_k} \quad (\text{Flat/Dirty = Market/Clean + Accrued})
+\]
+\begin{center}
+\scriptsize
+\renewcommand{\arraystretch}{1.28}
+\begin{tabular}{@{}p{1.75cm}@{\hspace{1.8mm}}p{2.05cm}@{\hspace{1.8mm}}p{1.85cm}@{\hspace{1.8mm}}p{1.95cm}@{}}
+\toprule
+\textbf{Komponen} & \textbf{Teoritis} & \textbf{Praktis} & \textbf{Semi-teoritis} \\
+\midrule
+Flat ($B_{t+k}^f$) & $B_t(1+i)^k$ & $B_t(1+ik)$ & $B_t(1+i)^k$ \\
+Accrued ($Fr_k$) & $Fr\frac{(1+i)^k - 1}{i}$ & $k \cdot Fr$ & $k \cdot Fr$ \\
+Market ($B_{t+k}^m$) & $B_{t+k}^f - Fr_k$ & $(1-k)B_t + kB_{t+1}$ & $B_t(1+i)^k - kFr$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+$\bullet$ \textbf{Konvensi $k$:} \textit{30/360} (1 bln = 30 hr, 1 sem = 180 hr) atau \textit{Actual/Actual}.\\
+$\bullet$ \textbf{Cek Premium/Diskon:} Gunakan $\mathbf{B_{t+k}^m - C}$ (BUKAN $B_{t+k}^f - C$!).
+\end{rbox}
+
+% KOTAK 5
+\begin{abox}{5. Callable \& Putable Bond (Termasuk Call Bertingkat)}
+\begin{center}
+\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}p{1.8cm}@{\hspace{2mm}}p{2.95cm}@{\hspace{2mm}}p{2.95cm}@{}}
+\toprule
+\textbf{Kriteria} & \textbf{Callable ($\min_n P_n$)} & \textbf{Putable ($\max_n P_n$)} \\
+\midrule
+Pemegang Opsi & Penerbit (skenario terburuk) & Investor (skenario terbaik) \\
+$C$ tetap, $g > i$ & \textbf{Call terawal} (pasca \textit{lockout}) & \textbf{Maturity} (paling akhir) \\
+$C$ tetap, $g < i$ & \textbf{Maturity} (paling akhir) & \textbf{Put terawal} (pasca \textit{lockout}) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Resep Call Premium Bertingkat} (saat $C_n$ berubah antar segmen):\\
+1. Di tiap segmen hitung $g_{\text{seg}} = Fr / C_{\text{seg}}$.\\
+2. Jika $g_{\text{seg}} > i$ (prem) $\to$ ambil $n$ \textbf{terkecil} segmen; jika $g_{\text{seg}} < i$ (disk) $\to$ ambil $n$ \textbf{terbesar} segmen.\\
+3. Hitung $P_n$ tiap kandidat (+ maturity) $\to$ ambil \textbf{nilai terkecil} ($\min$).\\[1pt]
+\textbf{Soal Invers \& Cek Realisasi Yield:} Jika harga beli $P$ menjamin yield min $i^*$ di $n^*$, lalu realisasi di-\textit{call} pada $n_{\text{real}}$, bandingkan $P_{n_{\text{real}}}(i^*)$ vs $P$: jika $P_{n_{\text{real}}}(i^*) > P \Rightarrow i_{\text{aktual}} > i^*$.
+\end{abox}
+
+\clearpage
+
+% ==============================================================================
+% HALAMAN 2: SISI BELAKANG (TIER 2 & 3 — VARIASI, RUMUS LANJUTAN & JEBAKAN)
+% ==============================================================================
+\twocolumn[{
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue,
+    arc=1.2mm,
+    boxrule=0pt,
+    left=3mm, right=3mm, top=1.6mm, bottom=1.6mm,
+    after skip=2mm
+]
+\begin{center}
+    {\color{white}\normalsize\textbf{\textsf{CHEATSHEET 1 LEMBAR BOLAK-BALIK --- SISI BELAKANG (TIER 2 \& 3: VARIASI \& JEBAKAN)}}}\\[0.15em]
+    {\color{amberbg}\scriptsize\textsf{Aproksimasi YTM $\bullet$ Reinvestasi $\bullet$ Kupon/Yield Tidak Konstan $\bullet$ Serial Bonds $\bullet$ Garis Lurus \& SF $\bullet$ Jebakan Maut}}
+\end{center}
+\end{tcolorbox}
+}]
+
+% KOTAK 6
+\begin{cbox}{6. Aproksimasi YTM \& Dampak Perubahan Yield}
+Diketahui harga $P$, nilai tebus $C$, tenor $n$ periode kupon, $g = Fr/C$:
+\[
+    \mathbf{k = \frac{P - C}{C}}, \qquad \mathbf{i \approx \frac{g - \dfrac{k}{n}}{1 + \dfrac{n+1}{2n}k}}, \qquad \text{(jika } n \text{ besar: } i \approx \frac{g - k/n}{1 + k/2}\text{)}
+\]
+$\bullet$ Hasil $i$ adalah yield \textbf{per periode kupon}; nominal tahunan $\mathbf{i^{(m)} = m \cdot i}$.\\
+$\bullet$ \textbf{Dampak perubahan yield:} Hitung $P_{\text{baru}}$ di $i_{\text{baru}}$, lalu $\%\Delta P = \frac{P_{\text{baru}} - P}{P} \times 100\%$.
+\end{cbox}
+
+% KOTAK 7
+\begin{cbox}{7. Reinvestasi Kupon (Overall Effective Yield)}
+Setiap kupon $Fr$ ($n$ kali) ditabung pada suku bunga $j_{\text{tab}}$ per periode kupon hingga jatuh tempo (akhir tahun ke-$T$). Saldo akhir:
+\[
+    \mathbf{FV = Fr \, s_{\angl{n}j_{\text{tab}}} + C}, \qquad \mathbf{y_{\text{eff tahunan}} = \left(\frac{FV}{P}\right)^{1/T} - 1}
+\]
+\end{cbox}
+
+% KOTAK 8
+\begin{gbox}{8. Kupon Tidak Konstan \& Yield Rate Tidak Konstan}
+\textbf{A. Kupon Bertahap (\textit{Step-Up / Step-Down}):} Pecah per blok anuitas:\\
+Kupon $Q_1$ ($n_1$ per.), $Q_2$ ($n_2$ per.), $Q_3$ ($n_3$ per.), total $N = n_1+n_2+n_3$:
+\[
+    \mathbf{P_0 = Q_1 a_{\angl{n_1}i} + Q_2 v^{n_1} a_{\angl{n_2}i} + Q_3 v^{n_1+n_2} a_{\angl{n_3}i} + C v^N}
+\]
+(\textit{Book value} $B_t$ di tengah = PV sisa kupon ke depan + PV dari $C$).\\[1.5pt]
+\textbf{B. Kupon Geometrik (\textit{Inflation-Adjusted}):} Kupon ke-$t$ = $Fr_1(1+k)^{t-1}$:
+\begin{align*}
+    \mathbf{P} &= Fr_1 \left[\frac{1 - \left(\tfrac{1+k}{1+i}\right)^n}{i - k}\right] + C(1+i)^{-n} \quad (k \neq i) \\
+    \text{jika } k &= i:\quad \mathbf{P = n\,Fr_1 v + C v^n}
+\end{align*}
+\textbf{C. Yield Berubah ($i_1$ selama $n_1$ per., lalu $i_2$ selama $n_2$ per.):}
+\[
+    \mathbf{P = Fr \left[a_{\angl{n_1}i_1} + (1+i_1)^{-n_1} a_{\angl{n_2}i_2}\right] + C(1+i_1)^{-n_1}(1+i_2)^{-n_2}}
+\]
+\end{gbox}
+
+% KOTAK 9
+\begin{gbox}{9. Serial Bonds dengan Rumus Makeham (Slide 14 Hal. 10--12)}
+Untuk $m$ obligasi berseri dengan $g = Fr_j/C_j$ seragam dan jatuh tempo $n_1,\dots,n_m$:
+\[
+    \mathbf{P' = K' + \frac{g}{i}(C' - K')}, \qquad C' = \sum_{j=1}^m C_j, \qquad K' = \sum_{j=1}^m C_j v^{n_j}
+\]
+\textbf{Trik Cepat Penebusan Merata} ($m$ angsuran $C_{\text{unit}}$ pada akhir tahun $a+1$ s.d. $a+m$):
+\[
+    \mathbf{C' = m \cdot C_{\text{unit}}}, \qquad \mathbf{K' = C_{\text{unit}} \, v^a \, a_{\angl{m}i}}
+\]
+\end{gbox}
+
+% KOTAK 10
+\begin{cbox}{10. Metode Garis Lurus \& Sinking Fund Obligasi ($j \neq i$)}
+$\bullet$ \textbf{Garis Lurus (\textit{Straight Line}):} $P_t = \dfrac{P - C}{n}$ (konstan), $I_t = Fr - P_t$, $B_t = P - t P_t$.\\
+$\bullet$ \textbf{Sinking Fund Obligasi ($j \neq i$):} Penyisihan premium ditabung di SF berbunga $j$ per periode kupon:
+\[
+    (Fr - iP_{\text{SF}})s_{\angl{n}j} = P_{\text{SF}} - C \implies \mathbf{P_{\text{SF}} = \frac{C\left(1 + g\,s_{\angl{n}j}\right)}{1 + i\,s_{\angl{n}j}}}
+\]
+(Jika $j < i$, maka $P_{\text{SF}} < P_{\text{standar}}$; jika $j = i$, kembali ke rumus standar).
+\end{cbox}
+
+% KOTAK 11
+\begin{abox}{11. Ringkasan Klasifikasi Teori Singkat (Slide 12 Hal. 3--6)}
+$\bullet$ \textbf{Accumulation Bond:} $C = F(1+r_a)^n$;\quad \textbf{Coupon Bond:} bayar kupon berkala.\\
+$\bullet$ \textbf{Registered Bond:} pemilik tercatat resmi;\quad \textbf{Bearer Bond:} tidak tercatat (pemegang fisik = pemilik legal).\\
+$\bullet$ \textbf{Mortgage Bond:} dijamin agunan (\textit{collateral}), lebih aman saat gagal bayar;\quad \textbf{Debenture Bond:} dijamin kredit umum tanpa agunan khusus.
+\end{abox}
+
+% KOTAK 12
+\begin{rbox}{12. Checklist 4 Langkah \& 7 Jebakan Maut (WAJIB CEK!)}
+\textbf{Checklist Kerja:} (1) Samakan $n, r, i$ ke satuan kupon $\to$ (2) Hitung $g = Fr/C$ \& cek $g$ vs $i$ $\to$ (3) Pilih rumus/metode $\to$ (4) Cek satuan jawaban ($i$ vs $i^{(2)}$; market vs flat).
+\begin{enumerate}[leftmargin=3.5mm, topsep=0.5pt, itemsep=0.8pt]
+    \item \textbf{$C \neq F$:} Status pakai \textbf{$g$ vs $i$}, JANGAN $r$ vs $i$!
+    \item \textbf{Beda Frekuensi:} Kupon $m=2$, yield $i^{(4)} \Rightarrow$ konversi dulu ke semester.
+    \item \textbf{Antar Kupon:} Premium/diskon = $\mathbf{B_{t+k}^m - C}$, BUKAN $B_{t+k}^f - C$.
+    \item \textbf{Tanda $P_t$ Diskon:} $P_t < 0 \Rightarrow B_t = B_{t-1} - P_t$ harus \textbf{NAIK} ke $C$.
+    \item \textbf{Pangkat $P_t$:} Pangkatnya $\mathbf{-(n - t + 1)}$, bukan $-(n - t)$!
+    \item \textbf{Callable Bertingkat:} Uji tiap segmen $C_{\text{seg}}$ pakai $g_{\text{seg}}$, jangan tebak ujung!
+    \item \textbf{Dua Arti $k$:} Di Bab 13 awal $k \in (0,1)$ (fraksi hari); di YTM $k = \frac{P-C}{C}$.
+\end{enumerate}
+\end{rbox}
+
+\end{document}

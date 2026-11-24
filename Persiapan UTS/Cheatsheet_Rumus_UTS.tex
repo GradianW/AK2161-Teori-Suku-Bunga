@@ -1,0 +1,1028 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% Page Geometry - Optimal margin for formulas, density, and professional layout
+\geometry{
+    top=1.5cm,
+    bottom=1.5cm,
+    left=1.4cm,
+    right=1.4cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Professional Color Palette
+\definecolor{primaryblue}{RGB}{20, 60, 110}     % Main Navy
+\definecolor{secondaryblue}{RGB}{41, 128, 185}  % Bright Blue
+\definecolor{boxbg}{RGB}{246, 249, 253}         % Soft Ice Blue tint
+\definecolor{darkgreen}{RGB}{24, 120, 64}       % Emerald Green
+\definecolor{greenbg}{RGB}{243, 250, 245}       % Soft Mint tint
+\definecolor{darkred}{RGB}{175, 30, 30}         % Deep Red
+\definecolor{redbg}{RGB}{253, 245, 245}         % Soft Rose tint
+\definecolor{darkamber}{RGB}{195, 110, 10}      % Rich Amber
+\definecolor{amberbg}{RGB}{254, 250, 242}       % Soft Amber tint
+
+% Actuarial custom notation shortcuts
+\newcommand{\angl}[1]{\overline{#1|}}
+\newcommand{\ia}{(Ia)}
+\newcommand{\da}{(Da)}
+\newcommand{\is}{(Is)}
+\newcommand{\ds}{(Ds)}
+\newcommand{\iad}{(I\ddot{a})}
+\newcommand{\dad}{(D\ddot{a})}
+\newcommand{\isd}{(I\ddot{s})}
+\newcommand{\dsd}{(D\ddot{s})}
+\newcommand{\iba}{(\bar{I}\bar{a})}
+\newcommand{\dba}{(\bar{D}\bar{a})}
+\newcommand{\ibs}{(\bar{I}\bar{s})}
+\newcommand{\dbs}{(\bar{D}\bar{s})}
+
+% Custom Box Styles (Full Width, completely stable layout, no equation clipping)
+\newtcolorbox{rumusbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+\newtcolorbox{teoremabox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+\newtcolorbox{jebakanbox}[1][]{
+    enhanced,
+    breakable,
+    colback=redbg,
+    colframe=darkred,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkred,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+\newtcolorbox{perhatianbox}[1][]{
+    enhanced,
+    breakable,
+    colback=amberbg,
+    colframe=darkamber,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkamber,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+% Paragraph formatting
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=primaryblue
+}
+
+\begin{document}
+
+% ==============================================================================
+% HEADER TITLE BLOCK
+% ==============================================================================
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue!80!black,
+    arc=2mm,
+    boxrule=1pt,
+    left=4mm, right=4mm, top=3mm, bottom=3mm
+]
+\begin{center}
+    {\color{white}\LARGE\textbf{\textsf{CHEATSHEET \& RANGKUMAN RUMUS LENGKAP UTS}}}\\[0.25em]
+    {\color{white}\large\textbf{\textsf{AK2161 Teori Suku Bunga (Theory of Interest) --- Fondasi Matematika Keuangan}}}\\[0.25em]
+    {\color{white!85}\small\textsf{Cakupan Materi Ujian Tengah Semester: Bab 01 s.d. Bab 10 (Suku Bunga Dasar, Nominal, Diskonto, Force of Interest, Unknowns, IRR/DWRR/TWRR, Anuitas \& Perpetuitas Standar, Frekuensi Umum, Anuitas Bervariasi, Jadwal Amortisasi, hingga Sinking Fund)}}
+\end{center}
+\end{tcolorbox}
+
+\vspace{0.1em}
+
+% ==============================================================================
+% BAGIAN 0: THE INTEREST RATE ROSETTA STONE
+% ==============================================================================
+\section*{\large $\bigstar$ Bagian 0: Peta Konsep \& Rantai Konversi Suku Bunga (\textit{The Rosetta Stone})}
+
+\begin{teoremabox}[Prinsip Ekuivalensi Fundamental Finansial]
+Satu kesatuan nilai waktu uang yang menghubungkan seluruh parameter suku bunga dalam 1 periode acuan:
+\begin{equation*}
+    \mathbf{1 + i = \frac{1}{v} = (1 - d)^{-1} = \left( 1 + \frac{i^{(m)}}{m} \right)^m = \left( 1 - \frac{d^{(p)}}{p} \right)^{-p} = e^{\delta}}
+\end{equation*}
+\end{teoremabox}
+
+\begin{rumusbox}[Identitas Aljabar $i, d, v, \delta$ \& Konversi Antar Variabel]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Hubungan Dasar}: $d = \dfrac{i}{1+i} = iv = 1 - v \qquad\iff\qquad i = \dfrac{d}{1-d} = \dfrac{1 - v}{v}$
+    \item \textbf{Faktor Diskon}: $v = \dfrac{1}{1+i} = 1 - d = e^{-\delta}$
+    \item \textbf{Selisih Bunga dan Diskonto}: $i - d = id = i(1-v) = d(e^\delta - 1)$
+    \item \textbf{Identitas Resiprokal}: $\dfrac{1}{d} - \dfrac{1}{i} = 1 \iff \dfrac{1}{d} = 1 + \dfrac{1}{i}$
+    \item \textbf{Force of Interest}: $\delta = \ln(1+i) = -\ln(1-d) = -\ln v$
+\end{itemize}
+\end{rumusbox}
+
+\begin{jebakanbox}[Rantai Ketaksamaan Standar ($i > 0, m > 1$)]
+Untuk setiap tingkat bunga positif $i > 0$ dan frekuensi pemajemukan/konversi $m > 1$:
+\begin{equation*}
+    \mathbf{i > i^{(2)} > i^{(3)} > \dots > i^{(m)} > \delta > d^{(m)} > \dots > d^{(3)} > d^{(2)} > d}
+\end{equation*}
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=1.5pt]
+    \item \textbf{Limit Frekuensi Tak Hingga (Pemajemukan Kontinu)}: $\lim\limits_{m \to \infty} i^{(m)} = \lim\limits_{m \to \infty} d^{(m)} = \delta$
+    \item \textbf{Hubungan Selisih Resiprokal Nominal}: $\dfrac{1}{d^{(m)}} - \dfrac{1}{i^{(m)}} = \dfrac{1}{m}$
+\end{itemize}
+\end{jebakanbox}
+
+% ==============================================================================
+% BAB 01: PENDAHULUAN - SUKU BUNGA DASAR & FUNGSI AKUMULASI
+% ==============================================================================
+\section*{\large 01. Pendahuluan, Fungsi Akumulasi, \& Suku Bunga Efektif}
+
+\begin{rumusbox}[Fungsi Akumulasi \& Nilai Bunga]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Fungsi Akumulasi $a(t)$}: Nilai terakumulasi pada waktu $t$ dari investasi awal $\$1$ pada $t=0$. Syarat: $a(0)=1$, umumnya tidak turun ($a'(t) \ge 0$).
+    \item \textbf{Fungsi Jumlah $A(t)$}: Nilai terakumulasi dari investasi pokok $k = A(0)$ pada $t=0$:
+    \begin{equation*}
+        A(t) = k \cdot a(t) = A(0) \cdot a(t)
+    \end{equation*}
+    \item \textbf{Bunga Periode ke-$n$ ($I_n$)}: Jumlah rupiah bunga yang dihasilkan selama periode ke-$n$ (antara waktu $n-1$ hingga $n$):
+    \begin{equation*}
+        I_n = A(n) - A(n-1) = k \left[ a(n) - a(n-1) \right]
+    \end{equation*}
+    \item \textbf{Suku Bunga Efektif Periode ke-$n$ ($i_n$)}: Rasio pertambahan bunga terhadap saldo awal periode:
+    \begin{equation*}
+        i_n = \frac{A(n) - A(n-1)}{A(n-1)} = \frac{a(n) - a(n-1)}{a(n-1)} = \frac{I_n}{A(n-1)}
+    \end{equation*}
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Bunga Tunggal (\textit{Simple Interest}) vs Bunga Majemuk (\textit{Compound Interest})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Suku Bunga Tunggal (\textit{Simple Interest})}: Bunga hanya dihitung dari pokok awal:
+    \begin{align*}
+        a(t) &= 1 + it \quad (t \ge 0) \\
+        I_n &= k \cdot i \quad (\textbf{konstan untuk setiap periode } n) \\
+        i_n &= \frac{i}{1 + (n-1)i} \quad (\textbf{laju efektif menurun seiring membesarnya } n)
+    \end{align*}
+    \item \textbf{Suku Bunga Majemuk (\textit{Compound Interest})}: Bunga menghasilkan bunga kembali:
+    \begin{align*}
+        a(t) &= (1+i)^t \quad (t \ge 0) \\
+        I_n &= k(1+i)^{n-1} i \quad (\textbf{meningkat secara eksponensial}) \\
+        i_n &= i \quad (\textbf{laju efektif konstan untuk seluruh periode } n)
+    \end{align*}
+    \item \textbf{Sifat Multiplikatif Konsistensi Waktu}: $a(t_1 + t_2) = a(t_1) a(t_2)$ (hanya berlaku pada bunga majemuk).
+\end{itemize}
+\end{teoremabox}
+
+\begin{perhatianbox}[Perbandingan Perilaku Nilai Waktu \& Periode Fraksional (\textit{Fractional Periods})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Perbandingan Nilai Akumulasi Berdasarkan Rentang Waktu}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item Jangka Pendek ($0 < t < 1$): $\mathbf{1 + it > (1+i)^t}$ (Bunga tunggal menghasilkan akumulasi lebih besar!).
+        \item Tepat 1 Periode ($t = 1$): $\mathbf{1 + it = (1+i)^t}$ (Kedua metode menghasilkan akumulasi tepat sama).
+        \item Jangka Panjang ($t > 1$): $\mathbf{(1+i)^t > 1 + it}$ (Bunga majemuk mendominasi secara eksponensial).
+    \end{itemize}
+    \item \textbf{Perhitungan Periode Pecahan ($t = n + f$ dengan $n \in \mathbb{Z}, 0 < f < 1$)}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item \textbf{Metode Eksak (Bunga Majemuk Sepenuhnya)}: $a(n+f) = (1+i)^{n+f}$.
+        \item \textbf{Metode Praktis (Konvensi Perbankan)}: Bunga majemuk untuk periode penuh $n$, bunga tunggal untuk fraksi sisa $f$:
+        \begin{equation*}
+            a(n+f) \approx (1+i)^n (1 + fi) > (1+i)^{n+f}
+        \end{equation*}
+    \end{itemize}
+\end{itemize}
+\end{perhatianbox}
+
+% ==============================================================================
+% BAB 02: SUKU BUNGA NOMINAL, TINGKAT DISKONTO, FORCE OF INTEREST
+% ==============================================================================
+\section*{\large 02. Suku Bunga Nominal, Tingkat Diskonto, \& Force of Interest ($\delta$)}
+
+\begin{rumusbox}[Tingkat Diskonto Efektif ($d$) \& Diskonto Tunggal]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Faktor Diskon Finansial}: $v = \dfrac{1}{1+i} = 1 - d = (1+i)^{-1}$
+    \item \textbf{Fungsi Diskon}: $a^{-1}(t) = \dfrac{1}{a(t)} = v^t = (1+i)^{-t}$
+    \item \textbf{Tingkat Diskonto Efektif Periode ke-$n$ ($d_n$)}: Rasio bunga terhadap saldo akhir periode:
+    \begin{equation*}
+        d_n = \frac{A(n) - A(n-1)}{A(n)} = \frac{I_n}{A(n)} = \frac{a(n) - a(n-1)}{a(n)}
+    \end{equation*}
+    \item \textbf{Diskonto Tunggal (\textit{Simple Discount})}:
+    \begin{align*}
+        a^{-1}(t) &= 1 - dt \quad (0 \le t < 1/d) \\
+        a(t) &= (1 - dt)^{-1} \\
+        d_n &= \frac{d}{1 - (n-1)d} \quad (\textbf{tingkat diskonto efektif meningkat seiring } n \uparrow)
+    \end{align*}
+\end{itemize}
+\end{rumusbox}
+
+\begin{rumusbox}[Suku Bunga Nominal $i^{(m)}$ \& Tingkat Diskonto Nominal $d^{(m)}$]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Suku Bunga Nominal $i^{(m)}$}: Dikonversi/dimajemukkan $m$ kali setahun (bunga per sub-periode = $i^{(m)}/m$):
+    \begin{equation*}
+        1 + i = \left( 1 + \frac{i^{(m)}}{m} \right)^m \implies \mathbf{i^{(m)} = m\left[ (1+i)^{1/m} - 1 \right]}
+    \end{equation*}
+    \item \textbf{Tingkat Diskonto Nominal $d^{(m)}$}: Didiskonkan $m$ kali setahun (diskon per sub-periode = $d^{(m)}/m$):
+    \begin{equation*}
+        1 - d = \left( 1 - \frac{d^{(m)}}{m} \right)^m \implies \mathbf{d^{(m)} = m\left[ 1 - (1-d)^{1/m} \right] = m\left[ 1 - v^{1/m} \right]}
+    \end{equation*}
+    \item \textbf{Hubungan Langsung Antara $i^{(m)}$ dan $d^{(m)}$}:
+    \begin{equation*}
+        \left( 1 + \frac{i^{(m)}}{m} \right) \left( 1 - \frac{d^{(m)}}{m} \right) = 1 \iff \frac{i^{(m)}}{m} - \frac{d^{(m)}}{m} = \frac{i^{(m)}}{m} \frac{d^{(m)}}{m}
+    \end{equation*}
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Force of Interest ($\delta_t$) \& Suku Bunga Bervariasi (\textit{Varying Interest})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Definisi Force of Interest $\delta_t$}: Intensitas pertumbuhan bunga sesaat kontinu pada waktu $t$:
+    \begin{equation*}
+        \mathbf{\delta_t = \frac{a'(t)}{a(t)} = \frac{d}{dt} \ln a(t) = \frac{A'(t)}{A(t)}} \iff \mathbf{a(t) = \exp\left( \int_0^t \delta_s \, ds \right)}
+    \end{equation*}
+    \item \textbf{Kasus $\delta$ Konstan}: $a(t) = e^{\delta t} = (1+i)^t \implies \mathbf{\delta = \ln(1+i) = -\ln(1-d) = -\ln v}$.
+    \item \textbf{Force of Discount ($\delta_t'$)}: Identik nilainya dengan force of interest: $\delta_t' = -\dfrac{\frac{d}{dt} a^{-1}(t)}{a^{-1}(t)} = \delta_t$.
+    \item \textbf{Nilai Sekarang Akumulasi Kontinu}: $PV = \exp\left( -\int_0^t \delta_s \, ds \right)$. Dari waktu $t_1$ ke $t_2$: $PV_{t_1} = A(t_2) \exp\left( -\int_{t_1}^{t_2} \delta_s \, ds \right)$.
+    \item \textbf{Kasus Diskrit Berubah per Periode}: $a(t) = (1+i_1)(1+i_2)\cdots(1+i_t)$. Suku bunga efektif rata-rata ekuivalen: $(1+i_{\text{eff}})^t = \prod_{k=1}^t (1+i_k)$.
+\end{itemize}
+\end{teoremabox}
+
+% ==============================================================================
+% BAB 03: PERSAMAAN NILAI, UNKNOWN TIME, UNKNOWN RATE, DAY COUNT
+% ==============================================================================
+\section*{\large 03. Masalah Mengenai Bunga, Persamaan Nilai, Unknown Time \& Rate}
+
+\begin{rumusbox}[Persamaan Nilai (\textit{Equation of Value})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Prinsip Persamaan Nilai}: Pada sembarang tanggal perbandingan (\textit{focal date}) $T$:
+    \begin{equation*}
+        \mathbf{\sum_{k} C_k (1+i)^{T - t_k} = 0} \iff \mathbf{\sum \text{Nilai Inflow}_T = \sum \text{Nilai Outflow}_T}
+    \end{equation*}
+    \item \textbf{Teorema Independensi Titik Perbandingan}:
+    Pada suku bunga majemuk, pilihan titik perbandingan $T$ TIDAK mengubah solusi tingkat bunga $i$ maupun nilai arus kas yang dicari.
+    \item \textbf{Peringatan Penting (Bunga Tunggal)}: Teorema independensi TIDAK berlaku pada bunga tunggal! Pada bunga tunggal, hasil perhitungan bergantung pada tanggal perbandingan yang disepakati.
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Menentukan Waktu yang Belum Diketahui (\textit{Unknown Time}) \& Aturan Penggandaan]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Pembayaran Tunggal}: $(1+i)^t = \dfrac{S}{K} \implies \mathbf{t = \frac{\ln(S/K)}{\ln(1+i)}}$.
+    \item \textbf{Waktu Penggandaan Modal Eksak (\textit{Doubling Time})}: $(1+i)^n = 2 \implies \mathbf{n = \frac{\ln 2}{\ln(1+i)}}$.
+    \item \textbf{Aturan Praktis Penggandaan Modal}:
+    \begin{align*}
+        \text{Rule of 72:} \quad n &\approx \frac{72}{100i} \quad (\text{sangat akurat pada rentang } i \approx 7\% - 9\%) \\[0.2em]
+        \text{Rule of 70:} \quad n &\approx \frac{70}{100i} \quad (\text{didasarkan pada } \ln 2 \approx 0{,}6931) \\[0.2em]
+        \text{Rule of 69{,}3:} \quad n &\approx \frac{69{,}3}{100i} + 0{,}35 \quad (\text{aproksimasi analitik linear})
+    \end{align*}
+\end{itemize}
+\end{teoremabox}
+
+\begin{teoremabox}[Penyatuan Pembayaran (\textit{Consolidation}) \& Metode Waktu Terimbang (\textit{Method of Equated Time})]
+Misalkan pembayaran $C_1, C_2, \dots, C_k$ pada waktu $t_1, t_2, \dots, t_k$ disatukan menjadi pembayaran tunggal $\sum C_j$ pada waktu $t$:
+\begin{enumerate}[leftmargin=1.5em, topsep=1.5pt, itemsep=2.5pt]
+    \item \textbf{Waktu Eksak ($t$)}:
+    \begin{equation*}
+        \left(\sum C_j\right) v^t = \sum C_j v^{t_j} \implies \mathbf{t = \frac{-\ln\left( \dfrac{\sum C_j v^{t_j}}{\sum C_j} \right)}{\delta} = \frac{-\ln\left( \dfrac{\sum C_j (1+i)^{-t_j}}{\sum C_j} \right)}{\ln(1+i)}}
+    \end{equation*}
+    \item \textbf{Metode Waktu Terimbang (\textit{Equated Time}) $\bar{t}$}: Rata-rata tertimbang sederhana:
+    \begin{equation*}
+        \mathbf{\bar{t} = \frac{\sum_{j=1}^k C_j t_j}{\sum_{j=1}^k C_j}}
+    \end{equation*}
+    \item \textbf{Ketaksamaan Jensen \& Selisih Aproksimasi}: Karena fungsi diskon $f(x) = v^x$ adalah fungsi cembung murni ($f''(x) > 0$), maka:
+    \begin{equation*}
+        \mathbf{\bar{t} > t \quad (\text{Waktu terimbang selalu lebih besar daripada waktu eksak!})}
+    \end{equation*}
+    Aproksimasi analitik orde-2: $\mathbf{t \approx \bar{t} - \frac{d}{2} \sigma_t^2}$, di mana $\sigma_t^2 = \dfrac{\sum C_j (t_j - \bar{t})^2}{\sum C_j}$ adalah variansi waktu pembayaran.
+\end{enumerate}
+\end{teoremabox}
+
+\begin{jebakanbox}[Konvensi Penghitungan Hari \& Penentuan Suku Bunga Tak Diketahui (\textit{Unknown Rate})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Tiga Konvensi Penghitungan Hari Pasar Finansial}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item \textbf{Exact / Actual-Actual}: Hari kalender aktual dibagi 365 (atau 366 pada tahun kabisat). Digunakan pada obligasi pemerintah.
+        \item \textbf{Banker's Rule / Actual-360}: Hari kalender aktual dibagi 360. \textbf{Menghasilkan bunga terbesar bagi kreditor/pemberi pinjaman!}
+        \item \textbf{Ordinary / 30-360}: Setiap bulan dianggap 30 hari, setahun 360 hari: $\text{Hari} = 360(Y_2-Y_1) + 30(M_2-M_1) + (D_2-D_1)$.
+    \end{itemize}
+    \item \textbf{Metode Penentuan Unknown Rate ($i$)}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item \textbf{Interpolasi Linier}: Diberikan $f(i_1) < 0 < f(i_2)$:
+        \begin{equation*}
+            \mathbf{i \approx i_1 + (i_2 - i_1) \frac{-f(i_1)}{f(i_2) - f(i_1)}}
+        \end{equation*}
+        \item \textbf{Metode Iterasi Newton-Raphson}: $\mathbf{i_{k+1} = i_k - \frac{f(i_k)}{f'(i_k)}}$.
+    \end{itemize}
+\end{itemize}
+\end{jebakanbox}
+
+% ==============================================================================
+% BAB 04: YIELD RATES, DWRR, TWRR, ALOKASI PORTOFOLIO
+% ==============================================================================
+\section*{\large 04. Tingkat Imbal Hasil (\textit{Yield Rates}), IRR, DWRR, \& TWRR}
+
+\begin{rumusbox}[Definisi Net Present Value (NPV) \& Internal Rate of Return (IRR)]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Net Present Value (NPV)}: Nilai sekarang bersih dari seluruh aliran kas proyek:
+    \begin{equation*}
+        \mathbf{NPV(i) = \sum_{t=0}^n C_t (1+i)^{-t} = C_0 + \frac{C_1}{1+i} + \frac{C_2}{(1+i)^2} + \dots + \frac{C_n}{(1+i)^n}}
+    \end{equation*}
+    dengan konvensi tanda: $C_t > 0$ (arus kas masuk / keuntungan), $C_t < 0$ (arus kas keluar / investasi modal).
+    \item \textbf{Yield Rate / IRR ($i^*$)}: Suku bunga yang menyebabkan nilai sekarang bersih sama dengan nol: $\mathbf{NPV(i^*) = 0}$.
+    \item \textbf{Aturan Keputusan Finansial}: Terima proyek jika $NPV(k) > 0$ atau $IRR > k$ (di mana $k$ adalah *hurdle rate* / biaya modal).
+    \item \textbf{Syarat Keunikan Nilai IRR}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item \textbf{Aturan Tanda Descartes}: Jumlah akar riil positif dari $NPV(i)=0$ tidak melebihi jumlah pergantian tanda dari barisan $C_0, C_1, \dots, C_n$.
+        \item \textbf{Proyek Murni (\textit{Pure Investment})}: Jika saldo proyek belum terlunasi memenuhi $B_t(i^*) \le 0$ untuk setiap $t < n$, maka nilai $i^* > -1$ dijamin \textbf{unik tunggal}.
+    \end{itemize}
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Dollar-Weighted Rate of Return (DWRR / Money-Weighted)]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Parameter Portofolio}: Saldo awal tahun: $A$, Saldo akhir tahun: $B$.
+    \item \textbf{Arus Kas Masuk Bersih}: $C = \sum C_t$ di mana $C_t$ disetor pada waktu $t \in (0, 1)$ ($C_t > 0$ setoran, $C_t < 0$ penarikan).
+    \item \textbf{Total Bunga / Pendapatan Investasi Riil}: $\mathbf{I = B - A - C}$.
+    \item \textbf{Formulasi Standar DWRR (Pendekatan Bunga Tunggal)}:
+    \begin{equation*}
+        \mathbf{i_{\text{DWRR}} = \frac{I}{A + \sum_{t} C_t (1 - t)}}
+    \end{equation*}
+    Penyebut mewakili \textbf{modal rata-rata tertimbang terhadap lama waktu eksposur paparan investasi} (\textit{exposure}).
+    \item \textbf{Kasus Khusus: Arus Kas di Pertengahan Tahun ($t = 0{,}5$)}:
+    \begin{equation*}
+        \mathbf{i \approx \frac{I}{A + 0{,}5 C} = \frac{2I}{A + B - I}}
+    \end{equation*}
+\end{itemize}
+\end{teoremabox}
+
+\begin{teoremabox}[Time-Weighted Rate of Return (TWRR)]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Tujuan \& Filosofi}: Mengisolasi pengaruh keputusan nasabah (setoran/penarikan dana) sehingga murni mengukur keahlian kinerja manajer investasi.
+    \item \textbf{Mekanisme Perhitungan Sub-Periode}: Portofolio dinilai tepat sebelum setiap ada arus kas $C_k$ pada waktu $t_k$:
+    \begin{equation*}
+        \mathbf{1 + i_{\text{TWRR}} = \left( \frac{B_1}{B_0} \right) \left( \frac{B_2}{B_1 + C_1} \right) \left( \frac{B_3}{B_2 + C_2} \right) \dots \left( \frac{B_m}{B_{m-1} + C_{m-1}} \right)}
+    \end{equation*}
+    di mana $B_k$ adalah nilai portofolio \textbf{tepat sebelum} terjadinya arus kas $C_k$ pada waktu $t_k$.
+\end{itemize}
+\end{teoremabox}
+
+\begin{jebakanbox}[Komparasi Kinerja DWRR vs TWRR \& Metode Alokasi Pendapatan Investasi]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Analisis Perbedaan Hasil DWRR vs TWRR}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item Jika investor menyetor modal besar sesaat sebelum pasar naik pesat $\implies \mathbf{DWRR > TWRR}$.
+        \item Jika investor menyetor modal besar sesaat sebelum pasar anjlok turun $\implies \mathbf{DWRR < TWRR}$.
+        \item Jika tidak ada setoran/penarikan dana selama periode berjalan ($C=0$) $\implies \mathbf{DWRR = TWRR}$.
+    \end{itemize}
+    \item \textbf{Metode Alokasi Pendapatan Investasi Perusahaan Asuransi}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt, itemsep=1.5pt]
+        \item \textbf{Metode Portofolio (\textit{Portfolio Method})}: Seluruh dana dari semua tahun penempatan memperoleh satu tingkat suku bunga rata-rata tertimbang agregat yang sama.
+        \item \textbf{Metode Tahun Investasi (\textit{Investment Year / New Money Method})}: Dana baru memperoleh tingkat bunga spesifik tahun penempatan selama $r$ tahun awal, lalu berpindah ke suku bunga portofolio umum.
+    \end{itemize}
+\end{itemize}
+\end{jebakanbox}
+
+% ==============================================================================
+% BAB 05: ANNUITAS & PERPETUITAS 1 (STANDAR)
+% ==============================================================================
+\section*{\large 05. Annuitas \& Perpetuitas Dasar (\textit{Annuity-Immediate, Annuity-Due, Perpetuity})}
+
+\begin{rumusbox}[Anuitas Akhir (\textit{Annuity-Immediate}) \& Anuitas Awal (\textit{Annuity-Due})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2.5pt]
+    \item \textbf{Anuitas Akhir (\textit{Annuity-Immediate})}: Pembayaran $\$1$ di setiap \textbf{akhir} periode selama $n$ periode:
+    \begin{equation*}
+        \mathbf{a_{\angl{n}|i} = \frac{1 - v^n}{i} = v + v^2 + \dots + v^n} \qquad\text{dan}\qquad \mathbf{s_{\angl{n}|i} = \frac{(1+i)^n - 1}{i} = a_{\angl{n}|i} (1+i)^n}
+    \end{equation*}
+    \item \textbf{Identitas Resiprokal Fundamental}:
+    \begin{equation*}
+        \mathbf{\frac{1}{a_{\angl{n}|i}} - \frac{1}{s_{\angl{n}|i}} = i} \iff \mathbf{\frac{1}{a_{\angl{n}|i}} = \frac{1}{s_{\angl{n}|i}} + i}
+    \end{equation*}
+    (Angsuran pelunasan hutang = Pembentukan dana sinking fund cadangan pelunasan + Bunga periodik).
+    \item \textbf{Anuitas Awal (\textit{Annuity-Due})}: Pembayaran $\$1$ di setiap \textbf{awal} periode selama $n$ periode:
+    \begin{equation*}
+        \mathbf{\ddot{a}_{\angl{n}|i} = \frac{1 - v^n}{d} = (1+i) a_{\angl{n}|i} = 1 + a_{\angl{n-1}|i}} \qquad\text{dan}\qquad \mathbf{\ddot{s}_{\angl{n}|i} = \frac{(1+i)^n - 1}{d} = (1+i) s_{\angl{n}|i} = s_{\angl{n+1}|i} - 1}
+    \end{equation*}
+    \item \textbf{Identitas Resiprokal Anuitas Awal}: $\mathbf{\dfrac{1}{\ddot{a}_{\angl{n}|i}} - \dfrac{1}{\ddot{s}_{\angl{n}|i}} = d}$.
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Anuitas Ditunda (\textit{Deferred Annuities}) \& Perpetuitas (\textit{Perpetuities})]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Anuitas Ditunda $m$ Periode}: Pembayaran baru dimulai setelah masa penundaan $m$ periode:
+    \begin{equation*}
+        \mathbf{_{m|}a_{\angl{n}|} = v^m a_{\angl{n}|} = a_{\angl{m+n}|} - a_{\angl{m}|}} \qquad\text{dan}\qquad \mathbf{_{m|}\ddot{a}_{\angl{n}|} = v^m \ddot{a}_{\angl{n}|} = \ddot{a}_{\angl{m+n}|} - \ddot{a}_{\angl{m}|}}
+    \end{equation*}
+    \item \textbf{Perpetuitas (Aliran Pembayaran Abadi, $n \to \infty$)}:
+    \begin{align*}
+        \text{Perpetuitas Akhir:} \quad a_{\angl{\infty}|i} &= \lim_{n \to \infty} \frac{1 - v^n}{i} = \mathbf{\frac{1}{i}} \\[0.2em]
+        \text{Perpetuitas Awal:} \quad \ddot{a}_{\angl{\infty}|i} &= \lim_{n \to \infty} \frac{1 - v^n}{d} = \mathbf{\frac{1}{d} = 1 + \frac{1}{i}} \\[0.2em]
+        \text{Perpetuitas Ditunda:} \quad _{m|}a_{\angl{\infty}|i} &= v^m \left( \frac{1}{i} \right) = \mathbf{\frac{v^m}{i}}
+    \end{align*}
+    \item \textbf{Dekomposisi Finansial}: Suatu anuitas berhingga $n$ periode adalah selisih dua perpetuitas:
+    \begin{equation*}
+        \mathbf{a_{\angl{n}|i} = a_{\angl{\infty}|} - v^n a_{\angl{\infty}|} = \frac{1}{i} - \frac{v^n}{i}}
+    \end{equation*}
+\end{itemize}
+\end{teoremabox}
+
+% ==============================================================================
+% BAB 06: ANNUITAS & PERPETUITAS 2 (TOPIK PERLUASAN)
+% ==============================================================================
+\section*{\large 06. Annuitas \& Perpetuitas Lanjutan (Term Tak Bulat, Balon/Drop, Bunga Bervariasi)}
+
+\begin{jebakanbox}[Durasi Belum Diketahui ($t$) \& 3 Opsi Penyelesaian Sisa Pembayaran]
+Jika pinjaman $L$ dicicil dengan angsuran tetap $R$ per periode, jangka waktu teoritis memenuhi:
+\begin{equation*}
+    1 - \frac{iL}{R} = (1+i)^{-t} \implies \mathbf{t = \frac{-\ln(1 - iL/R)}{\ln(1+i)}}
+\end{equation*}
+Biarkan $n = \lfloor t \rfloor$ (pembulatan ke bawah bilangan bulat). Tiga metode penyelesaian sisa hutang:
+\begin{enumerate}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Pembayaran Balon (\textit{Balloon Payment}) pada waktu $t = n$}:
+    Pembayaran terakhir di $t=n$ dinaikkan menjadi $R + B$:
+    \begin{equation*}
+        \mathbf{R + B = L(1+i)^n - R s_{\angl{n-1}|} = \frac{L - R a_{\angl{n}|}}{v^n} + R}
+    \end{equation*}
+    \item \textbf{Pembayaran Sisa (\textit{Drop Payment}) pada waktu $t = n+1$}:
+    Membayar angsuran normal $R$ sebanyak $n$ kali, lalu sisa $D < R$ di $t=n+1$:
+    \begin{equation*}
+        \mathbf{D = \left[ L(1+i)^n - R s_{\angl{n}|} \right](1+i) = \frac{L - R a_{\angl{n}|}}{v^{n+1}}}
+    \end{equation*}
+    \item \textbf{Pembayaran Fraksional pada waktu $t = n+k$ ($0 < k < 1$)}:
+    \begin{equation*}
+        \mathbf{F = R \frac{(1+i)^k - 1}{i}}
+    \end{equation*}
+\end{enumerate}
+\end{jebakanbox}
+
+\begin{rumusbox}[Aproksimasi Suku Bunga Anuitas, Bunga Tunggal, \& Kurva Imbal Hasil]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Aproksimasi Aljabar Orde-2 (Deret Maclaurin)}: Diberikan $a_{\angl{n}|}$ dan $n$, suku bunga $i$ dapat diestimasi:
+    \begin{equation*}
+        \mathbf{i \approx \frac{2(n - a_{\angl{n}|})}{(n+1) a_{\angl{n}|}}}
+    \end{equation*}
+    \item \textbf{Anuitas pada Suku Bunga Tunggal (\textit{Simple Interest})}:
+    \begin{equation*}
+        \mathbf{PV = \sum_{t=1}^n \frac{1}{1 + it}} \qquad\text{dan}\qquad \mathbf{AV = \sum_{t=1}^n \left[ 1 + i(n-t) \right] = n + i \frac{n(n-1)}{2}}
+    \end{equation*}
+    \item \textbf{Valuasi Kurva Imbal Hasil (\textit{Spot Rates Curve})}:
+    \begin{equation*}
+        \mathbf{PV = \sum_{t=1}^n C_t (1 + s_t)^{-t}}
+    \end{equation*}
+\end{itemize}
+\end{rumusbox}
+
+% ==============================================================================
+% BAB 07: ANNUITAS YANG LEBIH UMUM 1 (KETIDAKSAMAAN FREKUENSI)
+% ==============================================================================
+\section*{\large 07. Annuitas yang Lebih Umum 1 (Ketidaksamaan Frekuensi Pembayaran \& Bunga)}
+
+\begin{teoremabox}[Aturan Emas Dua Pendekatan Penyelesaian Soal Frekuensi Berbeda]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Pendekatan 1 (Tingkat Suku Bunga Ekuivalen)}: Cari suku bunga per periode pembayaran $j = (1+i)^{\text{periode pembayaran}} - 1$. Kemudian langsung gunakan rumus baku $R \cdot a_{\angl{N}|j}$. \textbf{Sangat direkomendasikan untuk komputasi cepat saat ujian!}
+    \item \textbf{Pendekatan 2 (Formula Aljabar Aktuaria)}: Menjaga suku bunga per periode konversi acuan tetap $i$, lalu membagi dengan simbol aktuaria yang sesuai ($s_{\angl{k}|}, a_{\angl{k}|}, i^{(m)}, d^{(m)}, \delta$).
+\end{itemize}
+\end{teoremabox}
+
+\begin{rumusbox}[Kasus 1: Pembayaran Lebih Jarang daripada Konversi Bunga ($k > 1$)]
+Bunga dimajemukkan tiap sub-periode, pembayaran $\$1$ dilakukan tiap $k$ sub-periode selama total durasi $n$ sub-periode bunga:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Annuity-Immediate ($k > 1$)}:
+    \begin{equation*}
+        \mathbf{PV = \frac{a_{\angl{n}|i}}{s_{\angl{k}|i}} = \frac{1 - v^n}{(1+i)^k - 1}} \qquad\text{dan}\qquad \mathbf{AV = \frac{s_{\angl{n}|i}}{s_{\angl{k}|i}} = \frac{(1+i)^n - 1}{(1+i)^k - 1}}
+    \end{equation*}
+    \item \textbf{Annuity-Due ($k > 1$)}:
+    \begin{equation*}
+        \mathbf{PV = \frac{a_{\angl{n}|i}}{a_{\angl{k}|i}} = \frac{1 - v^n}{1 - v^k}} \qquad\text{dan}\qquad \mathbf{AV = \frac{s_{\angl{n}|i}}{a_{\angl{k}|i}} = \frac{(1+i)^n - 1}{1 - v^k}}
+    \end{equation*}
+    \item \textbf{Perpetuitas ($k > 1$)}: $\mathbf{PV_{\text{imm}} = \dfrac{1}{(1+i)^k - 1}}$ \qquad dan \qquad $\mathbf{PV_{\text{due}} = \dfrac{1}{1 - v^k}}$.
+\end{itemize}
+\end{rumusbox}
+
+\begin{rumusbox}[Kasus 2: Pembayaran Lebih Sering daripada Konversi Bunga ($m > 1$)]
+Total $\$1$ per tahun, dicicil $m$ kali setahun sebesar $\$1/m$ tiap $1/m$ tahun selama $n$ tahun:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Annuity-Immediate ($m > 1$)}:
+    \begin{equation*}
+        \mathbf{a_{\angl{n}|i}^{(m)} = \frac{1 - v^n}{i^{(m)}} = \frac{i}{i^{(m)}} a_{\angl{n}|i}} \qquad\text{dan}\qquad \mathbf{s_{\angl{n}|i}^{(m)} = \frac{(1+i)^n - 1}{i^{(m)}} = \frac{i}{i^{(m)}} s_{\angl{n}|i}}
+    \end{equation*}
+    \item \textbf{Annuity-Due ($m > 1$)}:
+    \begin{equation*}
+        \mathbf{\ddot{a}_{\angl{n}|i}^{(m)} = \frac{1 - v^n}{d^{(m)}} = \frac{i}{d^{(m)}} a_{\angl{n}|i} = (1+i)^{1/m} a_{\angl{n}|i}^{(m)}} \qquad\text{dan}\qquad \mathbf{\ddot{s}_{\angl{n}|i}^{(m)} = \frac{(1+i)^n - 1}{d^{(m)}} = (1+i)^{1/m} s_{\angl{n}|i}^{(m)}}
+    \end{equation*}
+    \item \textbf{Perpetuitas ($m > 1$)}: $\mathbf{a_{\angl{\infty}|}^{(m)} = \frac{1}{i^{(m)}}}$ \qquad dan \qquad $\mathbf{\ddot{a}_{\angl{\infty}|}^{(m)} = \frac{1}{d^{(m)}}}$.
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Kasus 3: Anuitas Kontinu Sederhana (\textit{Continuous Annuities})]
+Aliran pembayaran dilakukan secara kontinu dengan laju konstan $\$1$ per tahun selama $n$ tahun:
+\begin{equation*}
+    \mathbf{\bar{a}_{\angl{n}|i} = \int_0^n v^t \, dt = \frac{1 - v^n}{\delta} = \frac{i}{\delta} a_{\angl{n}|i}} \qquad\text{dan}\qquad \mathbf{\bar{s}_{\angl{n}|i} = \int_0^n (1+i)^t \, dt = \frac{(1+i)^n - 1}{\delta} = \frac{i}{\delta} s_{\angl{n}|i}}
+\end{equation*}
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=1.5pt]
+    \item \textbf{Perpetuitas Kontinu}: $\mathbf{\bar{a}_{\angl{\infty}|} = \frac{1}{\delta}}$ \qquad\textbf{Hubungan Resiprokal Kontinu}: $\mathbf{\frac{1}{\bar{a}_{\angl{n}|}} - \frac{1}{\bar{s}_{\angl{n}|}} = \delta}$
+    \item \textbf{Dinamika Diferensial Pertumbuhan Saldo}: $\mathbf{\frac{d}{dt} \bar{a}_{\angl{t}|} = v^t = 1 - \delta \bar{a}_{\angl{t}|}}$ \quad dan \quad $\mathbf{\frac{d}{dt} \bar{s}_{\angl{t}|} = (1+i)^t = 1 + \delta \bar{s}_{\angl{t}|}}$.
+\end{itemize}
+\end{teoremabox}
+
+% ==============================================================================
+% BAB 08: ANNUITAS YANG LEBIH UMUM 2 (ANNUITAS BERVARIASI)
+% ==============================================================================
+\section*{\large 08. Annuitas yang Lebih Umum 2 (Anuitas Bervariasi Aritmatika, Geometri, \& Kontinu)}
+
+\begin{rumusbox}[Anuitas Bervariasi secara Aritmatika Umum ($P, Q$)]
+Arus kas pada waktu $t = 1, 2, \dots, n$ adalah barisan aritmatika: $P, P+Q, P+2Q, \dots, P+(n-1)Q$:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Nilai Sekarang ($PV$)}:
+    \begin{equation*}
+        \mathbf{PV = P \, a_{\angl{n}|} + Q \left( \frac{a_{\angl{n}|} - n v^n}{i} \right)}
+    \end{equation*}
+    \item \textbf{Nilai Terakumulasi ($AV$)}:
+    \begin{equation*}
+        \mathbf{AV = P \, s_{\angl{n}|} + Q \left( \frac{s_{\angl{n}|} - n}{i} \right)}
+    \end{equation*}
+    \item \textbf{Perpetuitas Aritmatika ($n \to \infty$)}:
+    \begin{equation*}
+        \mathbf{PV_{\text{imm}} = \frac{P}{i} + \frac{Q}{i^2}} \qquad\text{dan}\qquad \mathbf{PV_{\text{due}} = \frac{P}{d} + \frac{Q}{id} = (1+i) \left( \frac{P}{i} + \frac{Q}{i^2} \right)}
+    \end{equation*}
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Anuitas Meningkat Standar $(Ia)$ \& Menurun Standar $(Da)$]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Anuitas Meningkat Standar $\ia_{\angl{n}|}$}: Aliran kas $1, 2, 3, \dots, n$:
+    \begin{equation*}
+        \mathbf{\ia_{\angl{n}|} = \frac{\ddot{a}_{\angl{n}|} - n v^n}{i}} \qquad\text{dan}\qquad \mathbf{\is_{\angl{n}|} = \frac{\ddot{s}_{\angl{n}|} - n}{i}}
+    \end{equation*}
+    \item \textbf{Anuitas Menurun Standar $\da_{\angl{n}|}$}: Aliran kas $n, n-1, \dots, 2, 1$:
+    \begin{equation*}
+        \mathbf{\da_{\angl{n}|} = \frac{n - a_{\angl{n}|}}{i}} \qquad\text{dan}\qquad \mathbf{\ds_{\angl{n}|} = \frac{n(1+i)^n - s_{\angl{n}|}}{i}}
+    \end{equation*}
+    \item \textbf{Versi Annuity-Due (Di Muka)}: Ganti penyebut menjadi $d$:
+    \begin{equation*}
+        \mathbf{\iad_{\angl{n}|} = \frac{\ddot{a}_{\angl{n}|} - n v^n}{d}} \qquad\text{dan}\qquad \mathbf{\dad_{\angl{n}|} = \frac{n - a_{\angl{n}|}}{d}}
+    \end{equation*}
+    \item \textbf{Identitas Komplementer Kunci}: $\mathbf{\ia_{\angl{n}|} + \da_{\angl{n}|} = (n+1) \, a_{\angl{n}|}}$.
+    \item \textbf{Perpetuitas Meningkat Standar}: $\mathbf{\ia_{\angl{\infty}|} = \frac{1}{i} + \frac{1}{i^2} = \frac{1}{id}}$ \quad dan \quad $\mathbf{\iad_{\angl{\infty}|} = \frac{1}{d^2}}$.
+\end{itemize}
+\end{teoremabox}
+
+\begin{rumusbox}[Anuitas Geometri Bertumbuh (\textit{Geometric Varying Annuity})]
+Arus kas pada waktu $t = 1, 2, \dots, n$ membesar dengan rasio pertumbuhan $1+k$: $1, 1+k, (1+k)^2, \dots, (1+k)^{n-1}$:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Jika Laju Tumbuh Tidak Sama dengan Suku Bunga ($k \ne i$)}:
+    \begin{equation*}
+        \mathbf{PV = \frac{1 - \left( \frac{1+k}{1+i} \right)^n}{i - k}} \qquad\text{dan}\qquad \mathbf{AV = \frac{(1+i)^n - (1+k)^n}{i - k}}
+    \end{equation*}
+    \item \textbf{Kasus Khusus: Laju Tumbuh Sama dengan Suku Bunga ($k = i$)}:
+    \begin{equation*}
+        \mathbf{PV = n \cdot v = \frac{n}{1+i}} \qquad\text{dan}\qquad \mathbf{AV = n(1+i)^{n-1}}
+    \end{equation*}
+    \item \textbf{Metode Suku Bunga Pengganti Ekuivalen ($\tilde{i}$)}:
+    \begin{equation*}
+        \mathbf{1 + \tilde{i} = \frac{1+i}{1+k} \iff \tilde{i} = \frac{i - k}{1 + k}} \implies \mathbf{PV_{\text{due}} = \ddot{a}_{\angl{n}|\tilde{i}}}
+    \end{equation*}
+    \item \textbf{Perpetuitas Geometri ($k < i$)}: $\mathbf{PV_{\text{perp-geo}} = \frac{1}{i - k}}$.
+\end{itemize}
+\end{rumusbox}
+
+\begin{jebakanbox}[Anuitas Bervariasi $m > 1$ \& Kontinu Bervariasi]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Kasus A ($m > 1$, Pembayaran Konstan Tiap Tahun, Naik Sekali Setahun)}:
+    \begin{equation*}
+        \mathbf{\ia_{\angl{n}|}^{(m)} = \frac{\ddot{a}_{\angl{n}|} - n v^n}{i^{(m)}}}
+    \end{equation*}
+    \item \textbf{Kasus B ($m > 1$, Laju Pembayaran Naik di Setiap Sub-Periode)}:
+    \begin{equation*}
+        \mathbf{(I^{(m)} a)_{\angl{n}|}^{(m)} = \frac{\ddot{a}_{\angl{n}|}^{(m)} - n v^n}{i^{(m)}}}
+    \end{equation*}
+    \item \textbf{Anuitas Meningkat Kontinu Standar $\iba_{\angl{n}|}$ ($f(t) = t$)}:
+    \begin{equation*}
+        \mathbf{\iba_{\angl{n}|} = \int_0^n t v^t \, dt = \frac{\bar{a}_{\angl{n}|} - n v^n}{\delta}} \qquad\text{dan}\qquad \mathbf{\ibs_{\angl{n}|} = \frac{\bar{s}_{\angl{n}|} - n}{\delta}}
+    \end{equation*}
+    \item \textbf{Anuitas Menurun Kontinu Standar $\dba_{\angl{n}|}$ ($f(t) = n - t$)}:
+    \begin{equation*}
+        \mathbf{\dba_{\angl{n}|} = \int_0^n (n - t) v^t \, dt = \frac{n - \bar{a}_{\angl{n}|}}{\delta}}
+    \end{equation*}
+    \item \textbf{Aliran Pembayaran Kontinu Laju Kuadratik $f(t) = t^2$}:
+    \begin{equation*}
+        \mathbf{PV = \int_0^n t^2 e^{-\delta t} \, dt = \frac{2\iba_{\angl{n}|} - n^2 v^n}{\delta} = \frac{2}{\delta^3} - e^{-n\delta} \left[ \frac{n^2}{\delta} + \frac{2n}{\delta^2} + \frac{2}{\delta^3} \right]}
+    \end{equation*}
+\end{itemize}
+\end{jebakanbox}
+
+% ==============================================================================
+% BAB 09: JADWAL AMORTISASI (AMORTIZATION SCHEDULES)
+% ==============================================================================
+\section*{\large 09. Jadwal Amortisasi (\textit{Amortization Schedules})}
+
+\begin{rumusbox}[Prinsip Dasar Dekomposisi Angsuran \& Aturan Pembebanan Bunga]
+Pada setiap tanggal pembayaran angsuran, bunga yang timbul atas saldo periode sebelumnya wajib dilunasi terlebih dahulu (\textit{interest paid first}). Sisa pembayaran barulah digunakan untuk melunasi pokok pinjaman.
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Dekomposisi Pembayaran Angsuran $R_t$}:
+    \begin{equation*}
+        \mathbf{R_t = I_t + P_t} \qquad\text{dengan}\qquad \mathbf{I_t = i \cdot B_{t-1}} \quad\text{dan}\quad \mathbf{P_t = R_t - I_t = R_t - i \cdot B_{t-1}}
+    \end{equation*}
+    \item \textbf{Evolusi Saldo Pinjaman Berjalan Rekursif}:
+    \begin{equation*}
+        \mathbf{B_t = B_{t-1} - P_t = B_{t-1}(1+i) - R_t} \qquad (B_0 = L, \quad B_n = 0)
+    \end{equation*}
+    \item \textbf{Akumulasi Saldo Sebelum Pembayaran}: Nilai total kewajiban tepat sebelum cicilan ke-$t$ diserahkan adalah $B_{t-1}(1+i) = B_t + R_t$.
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Dua Metode Penentuan Saldo Pinjaman Berjalan ($B_t$)]
+Untuk pinjaman awal $L$ yang dilunasi dengan $n$ angsuran tetap $R = \dfrac{L}{a_{\angl{n}|i}}$ pada suku bunga efektif $i$:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{1. Metode Prospektif ($B_t^p$) --- ``Melihat ke Depan'' (\textit{Looking Forward})}:
+    Saldo hutang pada waktu $t$ sama dengan nilai sekarang ($PV$) pada waktu $t$ dari seluruh sisa pembayaran angsuran masa depan yang belum jatuh tempo:
+    \begin{equation*}
+        \mathbf{B_t^p = R \, a_{\angl{n-t}|i}} = \sum_{k=1}^{n-t} R \cdot v^k
+    \end{equation*}
+    \textit{Gunakan bila}: Sisa jangka waktu $(n-t)$ diketahui secara pasti, angsuran ke depan konstan, dan suku bunga masa depan tetap.
+    \item \textbf{2. Metode Retrospektif ($B_t^r$) --- ``Melihat ke Belakang'' (\textit{Looking Backward})}:
+    Saldo hutang pada waktu $t$ sama dengan nilai akumulasi pinjaman awal dikurangi nilai akumulasi seluruh pembayaran yang telah dilakukan:
+    \begin{equation*}
+        \mathbf{B_t^r = L(1+i)^t - R \, s_{\angl{t}|i}} = B_0(1+i)^t - \sum_{k=1}^t R_k (1+i)^{t-k}
+    \end{equation*}
+    \textit{Gunakan bila}: Tenor total $n$ belum bulat/pasti (kasus balloon/drop payment), ada pembayaran ekstra/tidak teratur di masa lampau, atau terjadi restrukturisasi/perubahan suku bunga.
+    \item \textbf{Teorema Kesamaan}: Pada suku bunga konstan dan angsuran teratur, kedua metode menghasilkan nilai yang identik secara mutlak: $\mathbf{B_t^p \equiv B_t^r}$ untuk setiap $t \in \{0, 1, \dots, n\}$.
+\end{itemize}
+\end{teoremabox}
+
+\begin{rumusbox}[Formula Komponen \& Sifat Matematika Fundamental Jadwal Amortisasi]
+Untuk pinjaman umum $L$ dengan angsuran berkala tetap $R = \dfrac{L}{a_{\angl{n}|i}}$:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Komponen Pokok \& Bunga pada Periode ke-$t$}:
+    \begin{equation*}
+        \mathbf{P_t = R \cdot v^{n-t+1}} \qquad\text{dan}\qquad \mathbf{I_t = R \left( 1 - v^{n-t+1} \right)}
+    \end{equation*}
+    \textit{(Untuk pinjaman satuan $L = a_{\angl{n}|i}$ dengan $R = 1$: $P_t = v^{n-t+1}$, $I_t = 1 - v^{n-t+1}$, $B_t = a_{\angl{n-t}|i}$)}.
+    \item \textbf{Sifat Geometrik Pokok (\textit{The Geometric Ratio Law})}:
+    Porsi pokok bertumbuh secara eksponensial mengikuti deret geometri naik dengan rasio $(1+i)$:
+    \begin{equation*}
+        \mathbf{P_{t+1} = P_t(1+i)} \implies \mathbf{P_t = P_1(1+i)^{t-1}} \implies \mathbf{P_t = P_k(1+i)^{t-k}}
+    \end{equation*}
+    \item \textbf{Dinamika Penurunan Bunga}: Porsi bunga selalu menurun secara monoton murni dengan pengurangan tetap:
+    \begin{equation*}
+        \mathbf{I_t - I_{t+1} = i \cdot P_t}
+    \end{equation*}
+    \item \textbf{Total Pelunasan Pokok}: $\sum\limits_{t=1}^n P_t = P_1 \, s_{\angl{n}|i} = L$ (menghabiskan tepat seluruh pokok pinjaman awal).
+    \item \textbf{Total Akumulasi Bunga Terbayar}: $\sum\limits_{t=1}^n I_t = nR - L = R(n - a_{\angl{n}|i})$ (total arus kas keluar minus pokok).
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Valuasi Piutang Pinjaman di Pasar Sekunder (\textit{Sale of Loan Rights})]
+Kreditur asal $B$ menjual hak penerimaan sisa $(n-t)$ angsuran sebesar $R$ dari debitur $A$ kepada investor $C$ pada waktu $t$:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Nilai Buku Sisa Pinjaman bagi Kreditur $B$ ($S_b$)}: Dihitung dengan suku bunga kontrak awal $i_1$:
+    \begin{equation*}
+        \mathbf{S_b = B_t = R \, a_{\angl{n-t}|i_1}}
+    \end{equation*}
+    \item \textbf{Harga Pasar / Nilai Beli Investor $C$ ($S_c$)}: Dihitung dengan tingkat hasil yang disyaratkan investor $i_2$:
+    \begin{equation*}
+        \mathbf{S_c = R \, a_{\angl{n-t}|i_2}}
+    \end{equation*}
+    \item \textbf{Diskon Harga / Kerugian Modal bagi Kreditur $B$}: $\mathbf{\Delta S = S_b - S_c}$.
+    Jika $i_2 > i_1 \implies S_c < S_b$, kreditur $B$ menderita kerugian modal (\textit{capital loss}) akibat kenaikan suku bunga pasar.
+    \item \textbf{Konsistensi Rekonsiliasi Bunga Bersih}:
+    \begin{equation*}
+        \mathbf{I_B^{\text{net}} + I_C = I_A} \qquad\text{dengan}\qquad I_B^{\text{net}} = I_B^{\text{kontrak}} - (S_b - S_c)
+    \end{equation*}
+    Diskon harga yang dikorbankan kreditur $B$ beralih secara utuh menjadi tambahan keuntungan bunga bagi investor $C$.
+\end{itemize}
+\end{teoremabox}
+
+\begin{jebakanbox}[Restrukturisasi Bunga, Amortisasi Negatif, \& Pembayaran Khusus]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Perubahan Suku Bunga Pinjaman (\textit{Floating Rates})}:
+    Tentukan saldo sisa $B_k$ pada akhir periode ke-$k$ via metode retrospektif:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt]
+        \item \textbf{Kenaikan Bunga 1 Periode (ke $j$ lalu kembali ke $i$)}: Angsuran baru $\mathbf{X = \dfrac{1+j}{1+i} \cdot R}$.
+        \item \textbf{Kenaikan Bunga Permanen (ke $j$ untuk seterusnya)}: Angsuran baru $\mathbf{X = \dfrac{a_{\angl{n-k}|i}}{a_{\angl{n-k}|j}} \cdot R = \dfrac{B_k}{a_{\angl{n-k}|j}}}$.
+    \end{itemize}
+    \item \textbf{Amortisasi Negatif (\textit{Negative Amortization})}: Terjadi jika angsuran $R_t < I_t = i \cdot B_{t-1}$.
+    Akibatnya $P_t = R_t - I_t < 0 \implies B_t = B_{t-1} + |P_t| > B_{t-1}$. Saldo pokok pinjaman bertambah besar karena kekurangan bunga dikapitalisasi ke dalam pokok!
+    \item \textbf{Pelunasan Non-Bulat (Tenor $n = k + f$)}:
+    \begin{itemize}[leftmargin=1.2em, topsep=1pt]
+        \item \textit{Balloon Payment}: Angsuran terakhir ke-$k$ diperbesar melunasi seluruh sisa: $\mathbf{R_k^{\text{balloon}} = R + B_k}$.
+        \item \textit{Drop Payment}: Pembayaran ekstra yang lebih kecil pada periode $k+1$: $\mathbf{R_{k+1}^{\text{drop}} = B_k(1+i) < R}$.
+    \end{itemize}
+    \item \textbf{Amortisasi Kontinu}: Laju saldo memenuhi $\dfrac{dB(t)}{dt} = \delta B(t) - R \implies \mathbf{B(t) = R \, \bar{a}_{\angl{n-t}|\delta}}$ dan laju pelunasan pokok $\mathbf{P(t) = R e^{-\delta(n-t)}}$.
+\end{itemize}
+\end{jebakanbox}
+
+% ==============================================================================
+% BAB 10: METODE DANA PELUNASAN (SINKING FUND METHOD)
+% ==============================================================================
+\section*{\large 10. Metode Dana Pelunasan (\textit{Sinking Fund Method})}
+
+\begin{rumusbox}[Mekanisme Dasar \& Prinsip Kerja Sinking Fund]
+Pokok hutang $L$ tidak dicicil ke kreditur, melainkan dipertahankan utuh dan dilunasi secara sekaligus (\textit{lump-sum}) pada akhir masa pinjaman $t = n$.
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{1. Pembayaran Bunga ke Kreditur (\textit{Service on the Loan})}:
+    Peminjam membayar bunga secara periodik pada suku bunga pinjaman $i$:
+    \begin{equation*}
+        \mathbf{I_t^{\text{kred}} = i \cdot L \quad (\text{konstan setiap periode})}
+    \end{equation*}
+    \item \textbf{2. Setoran Tabungan Sinking Fund ($D$)}:
+    Peminjam menyisihkan tabungan berkala $D$ ke rekening sinking fund berbunga $j$ per periode agar terakumulasi menjadi $L$ pada waktu $n$:
+    \begin{equation*}
+        D \cdot s_{\angl{n}|j} = L \implies \mathbf{D = \frac{L}{s_{\angl{n}|j}}}
+    \end{equation*}
+    \item \textbf{Total Beban Pembayaran Periodik Peminjam ($R$)}:
+    \begin{equation*}
+        \mathbf{R = i \cdot L + D = L \left( i + \frac{1}{s_{\angl{n}|j}} \right)}
+    \end{equation*}
+    \item \textbf{Akumulasi Saldo Sinking Fund ($SF_t$)}:
+    \begin{equation*}
+        \mathbf{SF_t = D \cdot s_{\angl{t}|j} = L \, \frac{s_{\angl{t}|j}}{s_{\angl{n}|j}}}
+    \end{equation*}
+    \item \textbf{Jumlah Bersih Hutang (\textit{Net Amount of Loan}, $B_t^{\text{net}}$)}:
+    Pokok hutang awal dikurangi akumulasi dana yang telah terkumpul di rekening sinking fund:
+    \begin{equation*}
+        \mathbf{B_t^{\text{net}} = L - SF_t = L \left( 1 - \frac{s_{\angl{t}|j}}{s_{\angl{n}|j}} \right)}
+    \end{equation*}
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Kasus 1: Suku Bunga Sinking Fund Sama dengan Bunga Hutang ($j = i$)]
+Jika suku bunga tabungan sinking fund sama dengan suku bunga pinjaman ($j = i$):
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Identitas Aktuaria Resiprokal}:
+    \begin{equation*}
+        \mathbf{i + \frac{1}{s_{\angl{n}|i}} = \frac{1}{a_{\angl{n}|i}}} \implies \mathbf{R_{\text{SF}} = \frac{L}{a_{\angl{n}|i}} \equiv R_{\text{Amort}}}
+    \end{equation*}
+    \item \textbf{Teorema Ekuivalensi Sempurna Amortisasi \& Sinking Fund ($j = i$)}:
+    \begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1.5pt]
+        \item \textbf{Total Angsuran Sama}: $R_{\text{SF}} = R_{\text{Amort}} = \dfrac{L}{a_{\angl{n}|i}}$.
+        \item \textbf{Jumlah Bersih Hutang Tepat Sama dengan Saldo Amortisasi}:
+        \begin{equation*}
+            \mathbf{B_t^{\text{net}} = L \left( 1 - \frac{s_{\angl{t}|i}}{s_{\angl{n}|i}} \right) = L \frac{a_{\angl{n-t}|i}}{a_{\angl{n}|i}} = R \, a_{\angl{n-t}|i} \equiv B_t^{\text{Amort}}}
+        \end{equation*}
+        \item \textbf{Beban Bunga Bersih Sama dengan Bunga Amortisasi}:
+        Bunga dibayar ke kreditur dikurangi pendapatan bunga dari rekening SF:
+        \begin{equation*}
+            \mathbf{I_t^{\text{net}} = i \cdot L - i \cdot SF_{t-1} = i(L - SF_{t-1}) = i \cdot B_{t-1}^{\text{Amort}} \equiv I_t^{\text{Amort}}}
+        \end{equation*}
+        \item \textbf{Kenaikan Tahunan SF Sama dengan Porsi Pokok Amortisasi}:
+        Setoran tabungan ditambah pendapatan bunga SF periode tersebut:
+        \begin{equation*}
+            \mathbf{\Delta SF_t = D + i \cdot SF_{t-1} = P_t^{\text{Amort}} = R \cdot v^{n-t+1}}
+        \end{equation*}
+    \end{enumerate}
+\end{itemize}
+\end{teoremabox}
+
+\begin{rumusbox}[Kasus 2: Suku Bunga Sinking Fund Berbeda ($j \ne i$, Umumnya $j < i$)]
+Dalam praktik pasar keuangan nyata, tingkat bunga simpanan tabungan/investasi ($j$) hampir selalu lebih rendah daripada suku bunga pinjaman ($i$):
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Simbol Anuitas Khusus Dua Suku Bunga ($a_{\angl{n}|i \& j}$)}:
+    \begin{equation*}
+        \mathbf{\frac{1}{a_{\angl{n}|i \& j}} = i + \frac{1}{s_{\angl{n}|j}} = \frac{1}{a_{\angl{n}|j}} + (i - j)}
+    \end{equation*}
+    \item \textbf{Bentuk Eksplisit Anuitas Dua Suku Bunga}:
+    \begin{equation*}
+        \mathbf{a_{\angl{n}|i \& j} = \frac{a_{\angl{n}|j}}{1 + (i - j) a_{\angl{n}|j}} = \frac{s_{\angl{n}|j}}{1 + i \, s_{\angl{n}|j}}}
+    \end{equation*}
+    \textit{(Jika $j = i$, rumus menyederhanakan menjadi $a_{\angl{n}|i \& i} = a_{\angl{n}|i}$)}.
+    \item \textbf{Total Angsuran Periodik}:
+    \begin{equation*}
+        \mathbf{R = \frac{L}{a_{\angl{n}|i \& j}} = L \left( i + \frac{1}{s_{\angl{n}|j}} \right) = L \left[ \frac{1}{a_{\angl{n}|j}} + (i - j) \right]}
+    \end{equation*}
+    \item \textbf{Konsekuensi Biaya}: Karena $j < i \implies s_{\angl{n}|j} < s_{\angl{n}|i} \implies \dfrac{1}{s_{\angl{n}|j}} > \dfrac{1}{s_{\angl{n}|i}}$, peminjam menanggung beban angsuran yang \textbf{lebih mahal} dibandingkan amortisasi bersuku bunga $i$:
+    \begin{equation*}
+        \mathbf{R_{\text{SF}(j < i)} > R_{\text{Amort}(i)}}
+    \end{equation*}
+    \item \textbf{Penambahan Kolom Bunga}: Jadwal sinking fund dengan dua suku bunga identik dengan jadwal satu suku bunga $j$, kecuali penambahan beban bunga sebesar $(i - j)L$ pada kolom bunga yang dibayarkan.
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Suku Bunga Efektif Setara / Tingkat Pengembalian Ekuivalen ($\hat{i}$)]
+Tingkat suku bunga amortisasi tunggal $\hat{i}$ yang memberikan beban angsuran persis sama dengan metode sinking fund berparameter $(i, j)$:
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Persamaan Penentu Nilai Eksak $\hat{i}$}:
+    \begin{equation*}
+        \mathbf{a_{\angl{n}|\hat{i}} = a_{\angl{n}|i \& j}} \iff \mathbf{\frac{1}{a_{\angl{n}|\hat{i}}} = i + \frac{1}{s_{\angl{n}|j}}}
+    \end{equation*}
+    \item \textbf{Ketaksamaan Fundamental Ujian}:
+    \begin{equation*}
+        \mathbf{\text{Jika } j < i \implies \hat{i} > i > j}
+    \end{equation*}
+    \textit{Intensitas Finansial}: Nilai $\hat{i}$ \textbf{TIDAK BERADA DI ANTARA} $j$ dan $i$! Karena peminjam membayar bunga $i$ pada seluruh pokok, tetapi tabungannya berakumulasi pada laju lebih lambat $j < i$, biaya modal efektif pinjaman $(\hat{i})$ melambung melebihi $i$.
+    \item \textbf{Rumus Pendekatan / Aproksimasi Cepat Kellison}:
+    \begin{equation*}
+        \mathbf{\hat{i} \approx i + \frac{n-1}{2n} (i - j)} \qquad\text{atau}\qquad \mathbf{\hat{i} \approx i + \frac{1}{2}(i - j)}
+    \end{equation*}
+    \textit{(Justifikasi: Saldo rata-rata dalam sinking fund per unit hutang adalah $\approx 1/2$, sehingga biaya tambahan bunga adalah $\approx \frac{1}{2}(i - j)$)}.
+\end{itemize}
+\end{teoremabox}
+
+\begin{jebakanbox}[Sinking Fund Frekuensi Beragam \& Angsuran Bervariasi]
+\begin{itemize}[leftmargin=1.5em, topsep=1.5pt, itemsep=2pt]
+    \item \textbf{Frekuensi Bunga $\ne$ Frekuensi Setoran SF (Tiga Frekuensi Berbeda)}:
+    Jangan dicampur aduk! Lakukan pemisahan modular:
+    \begin{enumerate}[leftmargin=1.2em, topsep=1pt]
+        \item \textit{Bunga ke Kreditur}: Hitung suku bunga efektif per periode pembayaran bunga $i_{\text{kred}}$, bayar bunga $I = i_{\text{kred}} \cdot L$.
+        \item \textit{Setoran Sinking Fund}: Konversikan suku bunga nominal tabungan SF ke suku bunga efektif per periode setoran $j_{\text{dep}}$. Hitung deposit:
+        \begin{equation*}
+            \mathbf{D = \frac{L}{s_{\angl{N}|j_{\text{dep}}}}} \qquad (N = \text{total frekuensi setoran})
+        \end{equation*}
+    \end{enumerate}
+    \item \textbf{Sinking Fund dengan Aliran Kas Bervariasi ($R_t$)}:
+    Bunga kreditur tetap $i L$ setiap periode. Setoran sinking fund periode ke-$t$ menjadi variabel sisa:
+    \begin{equation*}
+        \mathbf{D_t = R_t - i \cdot L} \qquad\text{dengan syarat akumulasi}\qquad \mathbf{\sum_{t=1}^n (R_t - i \cdot L)(1+j)^{n-t} = L}
+    \end{equation*}
+    Jika $R_t < i L \implies D_t < 0$, peminjam wajib \textbf{menarik dana (\textit{withdrawal})} dari sinking fund untuk menutupi kekurangan bunga ke kreditur.
+\end{itemize}
+\end{jebakanbox}
+
+% ==============================================================================
+% BAGIAN MASTER: TABEL KOMPARASI & STRUKTUR MNEMONIK
+% ==============================================================================
+\section*{\large $\bigstar$ Matriks Super: Pola Pembilang \& Penyebut Simbol Anuitas Aktuaria}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=white,
+    colframe=primaryblue,
+    boxrule=0.8pt,
+    arc=2mm,
+    top=1.5mm, bottom=1.5mm, left=1.5mm, right=1.5mm
+]
+\footnotesize
+\centering
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{l c c c p{4.6cm}}
+\toprule
+\textbf{Tipe Anuitas} & \textbf{Akhir (\textit{Immediate})} & \textbf{Awal (\textit{Due})} & \textbf{Kontinu (\textit{Continuous})} & \textbf{Pola Mnemonic Universal} \\
+\midrule
+\textbf{Konstan Standar ($PV$)} & $\dfrac{1 - v^n}{i}$ & $\dfrac{1 - v^n}{d}$ & $\dfrac{1 - v^n}{\delta}$ & Pembilang $1 - v^n$; Penyebut menyesuaikan timing ($i, d, \delta$). \\
+\addlinespace
+\textbf{Konstan Standar ($AV$)} & $\dfrac{(1+i)^n - 1}{i}$ & $\dfrac{(1+i)^n - 1}{d}$ & $\dfrac{(1+i)^n - 1}{\delta}$ & Pembilang $(1+i)^n - 1$; Penyebut menyesuaikan timing. \\
+\addlinespace
+\textbf{Perpetuitas ($n \to \infty$)} & $\dfrac{1}{i}$ & $\dfrac{1}{d}$ & $\dfrac{1}{\delta}$ & Limit nilai sekarang untuk $v^n \to 0$. \\
+\addlinespace
+\textbf{Frekuensi $m > 1$ ($PV$)} & $\dfrac{1 - v^n}{i^{(m)}}$ & $\dfrac{1 - v^n}{d^{(m)}}$ & $\dfrac{1 - v^n}{\delta}$ & Penyebut berubah ke nominal $i^{(m)}$ atau $d^{(m)}$. \\
+\addlinespace
+\textbf{Meningkat Standar ($Ia$)} & $\dfrac{\ddot{a}_{\angl{n}|} - n v^n}{i}$ & $\dfrac{\ddot{a}_{\angl{n}|} - n v^n}{d}$ & $\dfrac{\bar{a}_{\angl{n}|} - n v^n}{\delta}$ & Pembilang selalu \textbf{Anuitas di Muka} minus $n v^n$. \\
+\addlinespace
+\textbf{Menurun Standar ($Da$)} & $\dfrac{n - a_{\angl{n}|}}{i}$ & $\dfrac{n - a_{\angl{n}|}}{d}$ & $\dfrac{n - \bar{a}_{\angl{n}|}}{\delta}$ & Pembilang selalu $n$ minus \textbf{Anuitas di Akhir}. \\
+\addlinespace
+\textbf{Perpetuitas Meningkat} & $\dfrac{1}{i} + \dfrac{1}{i^2} = \dfrac{1}{id}$ & $\dfrac{1}{d^2}$ & $\dfrac{1}{\delta^2}$ & Untuk immediate: $1/(id)$; untuk due: $1/d^2$. \\
+\addlinespace
+\textbf{Geometrik ($k \ne i$)} & $\dfrac{1 - \left(\frac{1+k}{1+i}\right)^n}{i - k}$ & $(1+i) \times PV_{\text{imm}}$ & $\dfrac{1 - e^{-(\delta - g)n}}{\delta - g}$ & Deret geometri dengan selisih $(i - k)$ pada penyebut. \\
+\bottomrule
+\end{tabular}
+\end{tcolorbox}
+
+\section*{\large $\bigstar$ Matriks Komparasi Terpadu: Metode Amortisasi vs. Metode Sinking Fund}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=white,
+    colframe=primaryblue,
+    boxrule=0.8pt,
+    arc=2mm,
+    top=1.5mm, bottom=1.5mm, left=1.5mm, right=1.5mm
+]
+\footnotesize
+\centering
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{2.6cm} p{4.5cm} p{4.7cm} p{4.7cm}}
+\toprule
+\textbf{Dimensi / Parameter} & \textbf{Metode Amortisasi (Bab 09)} & \textbf{Sinking Fund Tunggal ($j = i$)} & \textbf{Sinking Fund 2 Bunga ($j < i$)} \\
+\midrule
+\textbf{Pelunasan Pokok Hutang} & Dicicil bertahap tiap periode ($P_t = R \cdot v^{n-t+1}$). & Utuh hingga akhir tenor $n$; dilunasi \textit{lump-sum} via akumulasi tabungan SF. & Utuh hingga akhir tenor $n$; dilunasi \textit{lump-sum} via akumulasi tabungan SF. \\
+\addlinespace
+\textbf{Pembayaran Bunga ke Kreditur} & Berkurang tiap periode ($I_t = i \cdot B_{t-1}$). & Konstan setiap periode ($i \cdot L$). & Konstan setiap periode ($i \cdot L$). \\
+\addlinespace
+\textbf{Setoran Tabungan Sinking Fund ($D$)} & Tidak ada setoran tabungan terpisah. & $D = \dfrac{L}{s_{\angl{n}|i}} = R - i L$. & $D = \dfrac{L}{s_{\angl{n}|j}} = \dfrac{L}{s_{\angl{n}|j}}$ (lebih besar karena $j < i$). \\
+\addlinespace
+\textbf{Total Beban Angsuran Periodik ($R$)} & $R = \dfrac{L}{a_{\angl{n}|i}}$ & $R = i L + \dfrac{L}{s_{\angl{n}|i}} = \dfrac{L}{a_{\angl{n}|i}}$ (\textbf{Identik!}) & $R = L\left(i + \dfrac{1}{s_{\angl{n}|j}}\right) = \dfrac{L}{a_{\angl{n}|i \& j}}$ (\textbf{Lebih Mahal!}) \\
+\addlinespace
+\textbf{Bunga Bersih Ditanggung Peminjam} & $I_t = R(1 - v^{n-t+1})$ & $i L - i \cdot SF_{t-1} \equiv I_t^{\text{Amort}}$ & $i L - j \cdot SF_{t-1} > I_t^{\text{Amort}}$ \\
+\addlinespace
+\textbf{Kenaikan Nilai Pokok / SF Periode $t$} & $P_t = R \cdot v^{n-t+1} = P_1(1+i)^{t-1}$ & $D + i \cdot SF_{t-1} \equiv P_t^{\text{Amort}}$ & $D + j \cdot SF_{t-1}$ \\
+\addlinespace
+\textbf{Sisa Pokok Bersih ($B_t^{\text{net}}$)} & $B_t = R \, a_{\angl{n-t}|i}$ & $B_t^{\text{net}} = L - SF_t \equiv R \, a_{\angl{n-t}|i}$ & $B_t^{\text{net}} = L - D \, s_{\angl{t}|j} > B_t^{\text{Amort}}$ \\
+\addlinespace
+\textbf{Suku Bunga Efektif Pinjaman} & $i$ & $i$ & $\hat{i} > i$ dengan $\hat{i} \approx i + \dfrac{n-1}{2n}(i - j)$ \\
+\bottomrule
+\end{tabular}
+\end{tcolorbox}
+
+\clearpage
+% ==============================================================================
+% BAGIAN PANDUAN: POHON KEPUTUSAN & STRATEGI UJIAN UTS
+% ==============================================================================
+\section*{\large $\bigstar$ Panduan Strategi \& Pohon Keputusan Ujian (\textit{UTS Decision Tree})}
+
+\begin{teoremabox}[Pohon Keputusan Memilih Rumus Soal Ujian (Anuitas, Amortisasi, \& Sinking Fund)]
+\begin{enumerate}[leftmargin=1.5em, topsep=1pt, itemsep=1pt]
+    \item \textbf{Langkah 1: Identifikasi Pola Aliran Kas}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=0.5pt]
+        \item Konstan $\implies a_{\angl{n}|}$ atau $s_{\angl{n}|}$.
+        \item Bertambah selisih tetap $Q \implies$ Aritmatika $(P, Q)$ atau $Ia$.
+        \item Bertambah persentase rasio $k \implies$ Geometrik ($1+k$).
+    \end{itemize}
+    \item \textbf{Langkah 2: Periksa Waktu Pembayaran}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=0.5pt]
+        \item Akhir periode / di belakang $\implies$ \textit{Immediate} (penyebut $i$).
+        \item Awal periode / di muka $\implies$ \textit{Due} (penyebut $d$).
+        \item Terus-menerus $\implies$ \textit{Continuous} (penyebut $\delta$).
+    \end{itemize}
+    \item \textbf{Langkah 3: Cek Frekuensi Pembayaran vs Bunga}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=0.5pt]
+        \item Sama $\implies$ gunakan rumus standar langsung.
+        \item Berbeda $\implies$ cari $j_{\text{ekuivalen}}$ per periode pembayaran (\textbf{Metode tercepat!}) ATAU gunakan notasi $m$-thly / $k$-periodik.
+    \end{itemize}
+    \item \textbf{Langkah 4: Periksa Penundaan \& Jangka Waktu}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=0.5pt]
+        \item Dimulai nanti $\implies$ kalikan faktor diskon $v^m$.
+        \item Berlangsung selamanya $\implies$ Perpetuitas ($n \to \infty$).
+    \end{itemize}
+    \item \textbf{Langkah 5: Tipe Masalah Pinjaman / Pelunasan Hutang}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=0.5pt]
+        \item \textbf{Metode Amortisasi}: Cari angsuran $R = L/a_{\angl{n}|i}$. Cari pokok periode $t$ dengan cepat via $P_t = P_1(1+i)^{t-1}$. Cari saldo sisa via prospektif $R \, a_{\angl{n-t}|i}$ atau retrospektif $L(1+i)^t - R \, s_{\angl{t}|i}$.
+        \item \textbf{Metode Sinking Fund}: Pisahkan bunga kreditur $i L$ dan setoran tabungan $D = L/s_{\angl{n}|j}$. Total cicilan $R = i L + D$.
+        \item \textbf{Yield Ekuivalen Sinking Fund $\hat{i}$}: Selesaikan persamaan $a_{\angl{n}|\hat{i}} = a_{\angl{n}|i \& j} \iff \dfrac{1}{a_{\angl{n}|\hat{i}}} = i + \dfrac{1}{s_{\angl{n}|j}}$. Ingat sifat $\mathbf{\hat{i} > i}$ jika $j < i$.
+        \item \textbf{Penjualan Piutang Pasar Sekunder}: Harga beli investor $C$ menggunakan tingkat diskon investor ($i_2$), sedangkan nilai buku kreditur lama $B$ memakai suku bunga kontrak ($i_1$).
+    \end{itemize}
+\end{enumerate}
+\end{teoremabox}
+
+\begin{jebakanbox}[8 Jebakan Klasik Ujian UTS yang Wajib Dihindari!]
+\begin{enumerate}[leftmargin=1.5em, topsep=1pt, itemsep=1pt]
+    \item \textbf{Jebakan $i^{(m)}$ vs $i^{(m)}/m$}: Ingat bahwa $i^{(m)}$ adalah tingkat suku bunga nominal tahunan! Besar bunga per sub-periode adalah $j = i^{(m)}/m$.
+    \item \textbf{Bunga Tunggal pada Persamaan Nilai}: Jangan pernah memindahkan titik perbandingan tanpa menghitung ulang bunga tunggal dari pokok awal! Teorema pemindahan titik focal HANYA berlaku pada bunga majemuk.
+    \item \textbf{Pembilang Anuitas Meningkat}: Rumus $\ia_{\angl{n}|}$ memiliki pembilang $\mathbf{\ddot{a}_{\angl{n}|} - n v^n}$, BUKAN $a_{\angl{n}|} - n v^n$.
+    \item \textbf{Kasus Geometrik $k = i$}: Jika rasio pertumbuhan sama dengan suku bunga, rumus pembagian $i - k$ menghasilkan bentuk tak tentu $0/0$. Nilai sebenarnya adalah $\mathbf{PV = n \cdot v = \frac{n}{1+i}}$.
+    \item \textbf{Perbedaan DWRR dan TWRR}: DWRR membagi total laba dengan paparan modal tertimbang; TWRR mengalikan rasio pertumbuhan sub-periode. Pastikan sub-periode dipecah tepat sebelum arus kas masuk/keluar.
+    \item \textbf{Pangkat Rasio Pokok Amortisasi}: Pokok pada periode ke-$t$ adalah $\mathbf{P_t = P_1 (1+i)^{t-1}}$, dengan pangkat $\mathbf{t-1}$ (BUKAN $t$). Pokok pertama $P_1 = R \cdot v^n$.
+    \item \textbf{Nilai Suku Bunga Ekuivalen $\hat{i}$ pada Sinking Fund}: Jika suku bunga SF $j < i$, maka $\mathbf{\hat{i} > i}$. Jangan pernah terjebak memilih jawaban di mana $\hat{i}$ berada di antara $j$ dan $i$, atau mengira $\hat{i}$ adalah rata-rata aritmatika!
+    \item \textbf{Suku Bunga Valuasi Penjualan Piutang}: Saat kreditur menjual hak tagih sisa angsuran ke pihak ketiga $C$, harga jual dihitung dengan mendiskontokan sisa angsuran memakai \textbf{yield yang diminta investor $C$} ($i_2$), BUKAN suku bunga pinjaman awal ($i_1$).
+\end{enumerate}
+\end{jebakanbox}
+
+\vspace{0.3em}
+\begin{center}
+    \textsf{\textbf{--- Selamat Belajar \& Sukses Ujian Tengah Semester (UTS) Teori Suku Bunga! ---}}
+\end{center}
+
+\end{document}

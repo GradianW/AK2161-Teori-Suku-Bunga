@@ -51,6 +51,10 @@ Struktur direktori disusun secara modular per topik perkuliahan:
   - `catatan/` & `tugas-dan-latihan/`: Valuasi obligasi dengan fitur opsi penebusan (callable & putable) serta yield to worst.
 - **`Past Problems/`**
   - Arsip soal latihan, ujian (UTS/UAS), dan soal ujian profesi/aktuarial sebelumnya.
+- **`Persiapan UTS/`**
+  - Modul persiapan Ujian Tengah Semester (UTS), berisi **Cheatsheet Rangkuman Rumus** komprehensif Bab 01 s.d. 08 ([`Cheatsheet_Rumus_UTS.pdf`](Persiapan%20UTS/Cheatsheet_Rumus_UTS.pdf)), **Kumpulan Soal Kasus Nyata** ([`Latihan_Soal_Kasus_Nyata.pdf`](Persiapan%20UTS/Latihan_Soal_Kasus_Nyata.pdf)), serta **Paket Simulasi Ujian Mandiri & Pembahasan** ([`latihan_uts_v1.pdf`](Persiapan%20UTS/latihan_uts_v1.pdf)). Disertai seluruh berkas sumber LaTeX (`.tex`).
+- **`Persiapan Kuis Obligasi/`**
+  - Modul persiapan kuis materi Obligasi (Bab 12 s.d. 14), berisi **Cheatsheet 1 Lembar Bolak-Balik** ([`Cheatsheet_1Lembar_BolakBalik.pdf`](Persiapan%20Kuis%20Obligasi/Cheatsheet_1Lembar_BolakBalik.pdf)) yang diprioritaskan berdasarkan arsip ujian, **Cheatsheet Rangkuman Rumus Lengkap** ([`Cheatsheet_Rumus_Obligasi.pdf`](Persiapan%20Kuis%20Obligasi/Cheatsheet_Rumus_Obligasi.pdf)), **Bank Soal Latihan & Pembahasan Lengkap** ([`Bank_Soal_Latihan_Obligasi.pdf`](Persiapan%20Kuis%20Obligasi/Bank_Soal_Latihan_Obligasi.pdf)) dengan 12 soal terstruktur, serta **Paket Simulasi Kuis 50 Menit** ([`Simulasi_Kuis_Obligasi.pdf`](Persiapan%20Kuis%20Obligasi/Simulasi_Kuis_Obligasi.pdf)) berisi Paket A dan Paket B beserta kunci pembahasan. Disertai seluruh berkas sumber LaTeX (`.tex`).
 
 ---
 

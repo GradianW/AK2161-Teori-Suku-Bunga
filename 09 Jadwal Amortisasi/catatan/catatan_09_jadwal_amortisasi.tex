@@ -1,0 +1,1038 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Skema Warna Harmonis (Konsisten dengan modul perkuliahan sebelumnya)
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{greenbg}{RGB}{245, 252, 245}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Lingkungan Kotak Khusus (Custom Environments)
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{theorembox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 09: Jadwal Amortisasi (\textit{Amortization Schedules})\\[0.2em]
+\large Saldo Pinjaman Berjalan, Pemisahan Pokok \& Bunga, Valuasi Piutang Pasar Sekunder, dan Dinamika Restrukturisasi Suku Bunga}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 6) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\section{Pendahuluan \& Metode Pelunasan Pinjaman}
+
+Dalam transaksi keuangan, perbankan, dan pembiayaan modal, suatu entitas meminjam sejumlah dana awal (disebut pokok pinjaman atau \textit{principal loan}, $L$) yang wajib dilunasi kepada pemberi pinjaman (\textit{lender}) bersama dengan kompensasi bunga (\textit{interest}) selama jangka waktu tertentu.
+
+Secara umum, terdapat dua metode utama dalam mengembalikan pinjaman dalam matematika keuangan:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Metode Amortisasi (\textit{Amortization Method}):}
+    Peminjam melunasi pinjaman dengan melakukan pembayaran cicilan/angsuran secara berkala selama jangka waktu peminjaman. Setiap pembayaran angsuran tidak hanya membayar bunga yang timbul pada periode tersebut, melainkan juga sebagian digunakan untuk melunasi pokok hutang. Dengan demikian, saldo pokok pinjaman akan berkurang secara bertahap hingga bernilai tepat nol pada akhir masa pinjaman.
+    \item \textbf{Metode Dana Pelunasan (\textit{Sinking Fund Method}):}
+    Peminjam hanya membayar bunga secara berkala kepada pemberi pinjaman pada setiap periode, sedangkan pokok hutang tetap utuh dan baru dilunasi sekaligus (\textit{lump-sum}) pada akhir masa jatuh tempo pinjaman. Untuk mengantisipasi pelunasan pokok tersebut, peminjam biasanya secara terpisah menyisihkan tabungan ke dalam suatu rekening akumulasi khusus yang berbunga, yang disebut \textit{sinking fund}. (Topik ini dibahas secara khusus pada Bab 10).
+\end{enumerate}
+
+\begin{notebox}[Dua Pertanyaan Fundamental dalam Jadwal Amortisasi]
+Dalam metode amortisasi, dua pertanyaan inti yang wajib dijawab secara matematis adalah:
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Penentuan Saldo Berjalan:} Berapakah saldo pokok pinjaman yang masih tersisa (\textit{outstanding loan balance}) pada suatu titik waktu tertentu $t$?
+    \item \textbf{Dekomposisi Pembayaran:} Bagaimana membagi setiap angsuran pembayaran $R_t$ menjadi dua komponen: porsi pembayaran bunga (\textit{interest component}, $I_t$) dan porsi pelunasan pokok (\textit{principal repayment component}, $P_t$)?
+\end{enumerate}
+\end{notebox}
+
+---
+
+\section{Prinsip Dasar Saldo Pinjaman \& Dekomposisi Angsuran}
+
+\subsection{Aturan Pembebanan Bunga (\textit{Interest Paid First})}
+
+Aturan universal dalam akuntansi dan matematika keuangan menetapkan bahwa:
+\begin{center}
+\textit{``Pada setiap tanggal pembayaran angsuran, bunga yang telah terakumulasi atas saldo pinjaman periode sebelumnya harus selalu diperhitungkan dan dilunasi terlebih dahulu. Sisa dari pembayaran angsuran barulah digunakan untuk mengurangi pokok pinjaman.''}
+\end{center}
+Jika seseorang berhutang saldo $B_{t-1}$ pada awal periode ke-$t$ dengan suku bunga efektif $i$ per periode, maka:
+\begin{align}
+    \text{Bunga yang harus dibayar:} \quad I_t &= i \cdot B_{t-1} \\
+    \text{Pokok yang dilunasi:} \quad P_t &= R_t - I_t = R_t - i \cdot B_{t-1} \\
+    \text{Saldo pinjaman baru:} \quad B_t &= B_{t-1} - P_t = B_{t-1}(1+i) - R_t
+\end{align}
+
+\subsection{Contoh Pengantar: Pembayaran Tidak Teratur (Slide Hal. 3--4)}
+
+Untuk memahami mekanisme dasar ini, perhatikan contoh ketika pembayaran dilakukan tidak berkala secara seragam:
+
+\begin{examplebox}[Contoh Pengantar: Pinjaman dengan Dua Angsuran]
+Seseorang mengambil pinjaman sebesar $\$2000$ dengan suku bunga majemuk efektif $i = 5\%$ per tahun. Ia membayar $\$800$ pada akhir tahun ke-1 ($t=1$) dan $\$1000$ pada akhir tahun ke-3 ($t=3$).
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan porsi bunga dan porsi pokok dari masing-masing angsuran!
+    \item Tentukan saldo hutang berjalan (\textit{outstanding loan balance}) setelah angsuran kedua!
+\end{enumerate}
+\end{examplebox}
+
+\begin{proof}[Penyelesaian Langkah demi Langkah]
+Kita telusuri evolusi saldo pinjaman pada garis waktu:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (6.5,0) node[right] {Tahun ($t$)};
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (2,0.1) -- (2,-0.1) node[below] {$1$};
+    \draw[thick] (4,0.1) -- (4,-0.1) node[below] {$2$};
+    \draw[thick] (6,0.15) -- (6,-0.15) node[below] {$3$};
+
+    \node[above, primaryblue, font=\bfseries] at (0, 0.3) {Pinjam $\$2000$};
+    \draw[->, darkred, thick] (2, -0.8) -- (2, -0.15) node[pos=0, below] {Bayar $\$800$};
+    \draw[->, darkred, thick] (6, -0.8) -- (6, -0.15) node[pos=0, below] {Bayar $\$1000$};
+
+    \node[above, darkgreen] at (1, 0.1) {$i = 5\%$};
+    \node[above, darkgreen] at (4, 0.1) {$i = 5\%$ ($2$ tahun)};
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{1. Analisis Angsuran Pertama pada Akhir Tahun ke-1 ($t=1$):}\\[0.3em]
+\begin{itemize}
+    \item Akumulasi total hutang tepat sebelum pembayaran:
+    \begin{equation*}
+        \text{Hutang terakumulasi} = 2000 \times (1 + 0{,}05) = \$2100
+    \end{equation*}
+    \item Beban bunga tahun ke-1:
+    \begin{equation*}
+        I_1 = 2000 \times 0{,}05 = 2100 - 2000 = \$100
+    \end{equation*}
+    \item Porsi angsuran yang mengurangi pokok hutang:
+    \begin{equation*}
+        P_1 = R_1 - I_1 = 800 - 100 = \$700
+    \end{equation*}
+    \item Saldo hutang berjalan setelah pembayaran ke-1:
+    \begin{equation*}
+        B_1 = B_0 - P_1 = 2000 - 700 = \$1300
+    \end{equation*}
+\end{itemize}
+
+\noindent\textbf{2. Analisis Angsuran Kedua pada Akhir Tahun ke-3 ($t=3$):}\\[0.3em]
+Perhatikan bahwa antara $t=1$ dan $t=3$ terdapat jeda waktu selama $2$ tahun tanpa pembayaran. Bunga majemuk terakumulasi selama $2$ tahun atas saldo $B_1 = \$1300$:
+\begin{itemize}
+    \item Akumulasi hutang pada $t=3$ sebelum pembayaran:
+    \begin{equation*}
+        B_1 (1+i)^2 = 1300 \times (1{,}05)^2 = 1300 \times 1{,}1025 = \$1433{,}25
+    \end{equation*}
+    \item Beban bunga terakumulasi selama 2 tahun tersebut:
+    \begin{equation*}
+        I_{\text{akum}} = 1433{,}25 - 1300 = \$133{,}25
+    \end{equation*}
+    \item Porsi pokok yang dilunasi oleh pembayaran kedua:
+    \begin{equation*}
+        P_3 = R_2 - I_{\text{akum}} = 1000 - 133{,}25 = \$866{,}75
+    \end{equation*}
+    \item Saldo hutang berjalan setelah angsuran kedua:
+    \begin{equation*}
+        B_3 = B_1 - P_3 = 1300 - 866{,}75 = \$433{,}25
+    \end{equation*}
+\end{itemize}
+
+\noindent\textbf{Verifikasi Retrospektif Langsung:}\\[0.3em]
+Saldo pada $t=3$ dapat pula dihitung langsung dengan mengakumulasikan pinjaman awal ke $t=3$ lalu mengurangkan seluruh pembayaran yang diakumulasikan ke $t=3$:
+\begin{equation*}
+    B_3 = 2000(1{,}05)^3 - 800(1{,}05)^2 - 1000 = 2315{,}25 - 882{,}00 - 1000 = \$433{,}25 \quad (\text{Cocok!})
+\end{equation*}
+\end{proof}
+
+---
+
+\section{Menentukan Saldo Pinjaman Berjalan (\textit{Outstanding Loan Balance})}
+
+\subsection{Definisi \& Notasi}
+
+\begin{definitionbox}[Saldo Pinjaman Berjalan (\textit{Outstanding Loan Balance})]
+Saldo pinjaman berjalan pada waktu $t$ (dinotasikan dengan $B_t$ atau $OLB_t$) adalah sisa kewajiban pokok hutang yang belum dilunasi tepat setelah pembayaran angsuran ke-$t$ dilakukan.
+\end{definitionbox}
+
+Istilah lain yang sering digunakan dalam literatur perbankan dan aktuaria meliputi:
+\begin{itemize}
+    \item \textit{Outstanding principal} (pokok yang sedang berjalan)
+    \item Saldo belum terbayar (\textit{unpaid balance})
+    \item Sisa hutang / nilai sisa pinjaman
+\end{itemize}
+
+Penentuan $B_t$ memiliki signifikansi finansial yang sangat penting:
+\begin{itemize}
+    \item \textbf{Pelunasan Dipercepat (\textit{Prepayment / Refinancing}):} Misalnya pada Kredit Pemilikan Rumah (KPR) berjangka 30 tahun, jika debitur ingin melunasi seluruh hutangnya pada tahun ke-12, jumlah yang harus dibayarkan adalah tepat sebesar $B_{12}$.
+    \item \textbf{Penjualan Piutang (\textit{Loan Sale}):} Menjadi dasar penentuan nilai buku piutang saat dipindahtangankan ke investor lain.
+    \item \textbf{Perhitungan Asuransi Kredit:} Nilai pertanggungan asuransi jiwa kredit (\textit{credit life insurance}) umumnya dirancang menurun mengikuti saldo $B_t$.
+\end{itemize}
+
+Terdapat dua pendekatan matematis utama untuk menghitung $B_t$: \textbf{Metode Prospektif} dan \textbf{Metode Retrospektif}.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    % Timeline
+    \draw[->, thick] (-0.5,0) -- (11.5,0) node[right] {Waktu};
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (2,0.1) -- (2,-0.1) node[below] {$1$};
+    \draw[dotted, thick] (2.5,0) -- (4.5,0);
+    \draw[thick] (5,0.2) -- (5,-0.2) node[below=0.2cm, font=\bfseries] {$t$};
+    \draw[dotted, thick] (5.5,0) -- (7.5,0);
+    \draw[thick] (8,0.1) -- (8,-0.1) node[below] {$n-1$};
+    \draw[thick] (10,0.15) -- (10,-0.15) node[below] {$n$};
+
+    % Pembayaran
+    \foreach \x in {2,5,8,10} {
+        \draw[<-, darkred, thick] (\x, -0.6) -- (\x, -0.15);
+        \node[below, darkred] at (\x, -0.6) {$R$};
+    }
+
+    % Retrospective Arrow
+    \draw[->, thick, darkorange] (0, 0.8) to[out=30, in=150] (4.9, 0.8);
+    \node[above, darkorange, font=\sffamily\bfseries] at (2.5, 1.3) {Metode Retrospektif ($B_t^r$)};
+    \node[above, darkorange] at (2.5, 0.85) {\footnotesize Melihat ke belakang: Akumulasi Pinjaman $-$ Akumulasi Angsuran Lampau};
+
+    % Prospective Arrow
+    \draw[<-, thick, primaryblue] (5.1, 0.8) to[out=30, in=150] (10, 0.8);
+    \node[above, primaryblue, font=\sffamily\bfseries] at (7.5, 1.3) {Metode Prospektif ($B_t^p$)};
+    \node[above, primaryblue] at (7.5, 0.85) {\footnotesize Melihat ke depan: Nilai Sekarang dari Sisa Angsuran Masa Depan};
+\end{tikzpicture}
+\end{center}
+
+---
+
+\subsection{Metode Prospektif (\textit{Prospective Method}, \texorpdfstring{$B_t^p$}{B\_t\string^p})}
+
+Metode prospektif menghitung sisa hutang dengan cara **``melihat ke depan'' (\textit{looking forward})**.
+\begin{definitionbox}[Prinsip Metode Prospektif]
+Saldo hutang pada waktu $t$ sama dengan \textbf{nilai sekarang (\textit{present value}) pada waktu $t$ dari seluruh sisa pembayaran angsuran di masa depan yang belum dibayarkan}.
+\end{definitionbox}
+
+Misalkan suatu pinjaman awal sebesar $L = a_{\overline{n}|}$ pada suku bunga $i$ per periode, dilunasi dengan pembayaran angsuran sebesar $1$ di setiap akhir periode selama $n$ periode. Tepat setelah pembayaran ke-$t$ ($0 < t < n$), masih terdapat $(n-t)$ kali pembayaran yang akan jatuh tempo pada waktu $t+1, t+2, \dots, n$.
+
+Nilai sekarang dari seluruh sisa pembayaran ini dievaluasi pada waktu $t$:
+\begin{equation}
+    B_t^p = v + v^2 + v^3 + \dots + v^{n-t} = \mathbf{a_{\overline{n-t}|i}}
+\end{equation}
+Untuk pinjaman umum $L$ dengan angsuran berkala tetap sebesar $R$:
+\begin{equation}
+    \mathbf{B_t^p = R \, a_{\overline{n-t}|i}}
+\end{equation}
+
+---
+
+\subsection{Metode Retrospektif (\textit{Retrospective Method}, \texorpdfstring{$B_t^r$}{B\_t\string^r})}
+
+Metode retrospektif menghitung sisa hutang dengan cara **``melihat ke belakang'' (\textit{looking backward})**.
+\begin{definitionbox}[Prinsip Metode Retrospektif]
+Saldo hutang pada waktu $t$ sama dengan \textbf{nilai akumulasi dari pokok pinjaman awal hingga waktu $t$ dikurangi nilai akumulasi dari seluruh angsuran yang telah dibayarkan sampai waktu $t$}.
+\end{definitionbox}
+
+Untuk pinjaman awal $L = a_{\overline{n}|}$ dengan angsuran $1$ per periode:
+\begin{equation}
+    B_t^r = a_{\overline{n}|i} (1+i)^t - \left[ (1+i)^{t-1} + (1+i)^{t-2} + \dots + (1+i) + 1 \right] = \mathbf{a_{\overline{n}|i}(1+i)^t - s_{\overline{t}|i}}
+\end{equation}
+Untuk pinjaman umum $L$ dengan angsuran tetap sebesar $R$:
+\begin{equation}
+    \mathbf{B_t^r = L(1+i)^t - R \, s_{\overline{t}|i}}
+\end{equation}
+
+---
+
+\subsection{Teorema Kesamaan Metode Prospektif dan Retrospektif}
+
+\begin{theorembox}[Teorema Ekuivalensi Saldo Pinjaman]
+Untuk pinjaman amortisasi standar dengan suku bunga tetap, metode prospektif dan metode retrospektif menghasilkan nilai saldo yang identik pada setiap titik waktu pembayaran $t$, yaitu:
+\begin{equation}
+    B_t^p = B_t^r = B_t \quad \forall t \in \{0, 1, 2, \dots, n\}
+\end{equation}
+\end{theorembox}
+
+\begin{proof}[Bukti Matematis]
+Kita mulai dari bentuk metode retrospektif untuk pinjaman unit $L = a_{\overline{n}|i}$:
+\begin{align*}
+    B_t^r &= a_{\overline{n}|i}(1+i)^t - s_{\overline{t}|i} \\
+    &= \left( \frac{1 - v^n}{i} \right) (1+i)^t - \frac{(1+i)^t - 1}{i} \\
+    &= \frac{(1+i)^t - v^n (1+i)^t - (1+i)^t + 1}{i}
+\end{align*}
+Perhatikan bahwa $v^n (1+i)^t = (1+i)^{-n}(1+i)^t = (1+i)^{-(n-t)} = v^{n-t}$. Suku $(1+i)^t$ saling mengeliminasi:
+\begin{align*}
+    B_t^r &= \frac{1 - v^{n-t}}{i} \\
+    &= a_{\overline{n-t}|i} = B_t^p
+\end{align*}
+Terbukti secara matematis bahwa $B_t^r \equiv B_t^p$.
+\end{proof}
+
+\subsection{Kapan Menggunakan Metode Mana?}
+
+\begin{notebox}[Pedoman Efisiensi Komputasi Ujian \& Praktik]
+\begin{itemize}
+    \item \textbf{Gunakan Metode Prospektif ($B_t^p$)} apabila:
+    \begin{enumerate}
+        \item Sisa jangka waktu pembayaran ke depan $(n-t)$ bernilai kecil atau diketahui secara pasti.
+        \item Pola pembayaran masa depan sederhana dan suku bunga di masa depan tetap konstan.
+    \end{enumerate}
+    \item \textbf{Gunakan Metode Retrospektif ($B_t^r$)} apabila:
+    \begin{enumerate}
+        \item Jumlah total periode $n$ belum diketahui (misalnya pada pinjaman dengan cicilan yang sudah ditentukan di awal namun durasinya fleksibel).
+        \item Pembayaran di masa lampau mengalami perubahan nominal atau terdapat pembayaran ekstra (\textit{extra payments/curtailment}).
+        \item Suku bunga di masa depan mengalami perubahan/restrukturisasi, sehingga riwayat lampau menjadi dasar penentuan saldo baru.
+    \end{enumerate}
+\end{itemize}
+\end{notebox}
+
+---
+
+\section{Jadwal Amortisasi (\textit{Amortization Schedule})}
+
+\subsection{Konsep \& Struktur Tabel}
+
+\begin{definitionbox}[Jadwal Amortisasi (\textit{Amortization Schedule})]
+Jadwal amortisasi adalah tabel komprehensif yang merinci setiap pembayaran cicilan periodik ke dalam:
+\begin{enumerate}
+    \item Komponen bunga (\textit{interest paid}, $I_t$)
+    \item Komponen pelunasan pokok (\textit{principal repaid}, $P_t$)
+    \item Saldo pokok pinjaman yang tersisa setelah pembayaran (\textit{outstanding loan balance}, $B_t$)
+\end{enumerate}
+\end{definitionbox}
+
+Tabel ini sangat krusial dalam praktik korporat dan perpajakan karena:
+\begin{itemize}
+    \item Beban bunga pinjaman usaha umumnya dapat dikurangkan dari penghasilan kena pajak (\textit{tax-deductible expense}).
+    \item Pembayaran pokok pinjaman merupakan transaksi neraca (\textit{balance sheet transaction}) yang mengurangi kewajiban liabilitas, bukan beban operasional.
+\end{itemize}
+
+\subsection{Jadwal Amortisasi untuk Pinjaman Unit (\texorpdfstring{$L = a_{\overline{n}|}$}{L = a\_n})}
+
+Tinjau pinjaman sebesar $L = a_{\overline{n}|}$ yang dilunasi dengan pembayaran tetap $R_t = 1$ di setiap akhir periode selama $n$ periode pada suku bunga $i$.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\caption{Jadwal Amortisasi Standar untuk Pinjaman $a_{\overline{n}|i}$ dengan Pembayaran $1$}
+\label{tab:amort_unit}
+\vspace{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Periode} & \textbf{Pembayaran} & \textbf{Bunga Dibayar} & \textbf{Pokok Dilunasi} & \textbf{Sisa Saldo Pinjaman} \\
+$t$ & $R_t$ & $I_t = i \cdot B_{t-1}$ & $P_t = R_t - I_t$ & $B_t = B_{t-1} - P_t$ \\
+\midrule
+$0$ & --- & --- & --- & $a_{\overline{n}|}$ \\
+$1$ & $1$ & $i \, a_{\overline{n}|} = 1 - v^n$ & $1 - (1 - v^n) = v^n$ & $a_{\overline{n}|} - v^n = a_{\overline{n-1}|}$ \\
+$2$ & $1$ & $i \, a_{\overline{n-1}|} = 1 - v^{n-1}$ & $1 - (1 - v^{n-1}) = v^{n-1}$ & $a_{\overline{n-1}|} - v^{n-1} = a_{\overline{n-2}|}$ \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+$t$ & $1$ & $i \, a_{\overline{n-t+1}|} = 1 - v^{n-t+1}$ & $v^{n-t+1}$ & $a_{\overline{n-t+1}|} - v^{n-t+1} = a_{\overline{n-t}|}$ \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+$n-1$ & $1$ & $i \, a_{\overline{2}|} = 1 - v^2$ & $v^2$ & $a_{\overline{2}|} - v^2 = a_{\overline{1}|} = v$ \\
+$n$ & $1$ & $i \, a_{\overline{1}|} = 1 - v$ & $v$ & $v - v = 0$ \\
+\midrule
+\textbf{Total} & $\mathbf{n}$ & $\mathbf{n - a_{\overline{n}|}}$ & $\mathbf{a_{\overline{n}|}}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Sifat-Sifat Matematika Fundamental Jadwal Amortisasi}
+
+Berdasarkan Tabel~\ref{tab:amort_unit}, terdapat empat sifat struktural fundamental (Slide Hal. 10 \& Kellison Hal. 175):
+
+\begin{theorembox}[Sifat-Sifat Utama Amortisasi Suku Bunga Tetap]
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Saldo Pinjaman Berjalan:}
+    Saldo pinjaman pada akhir periode $t$ tepat bersesuaian dengan metode prospektif:
+    \begin{equation}
+        B_t = a_{\overline{n-t}|i} \quad (\text{atau } B_t = R \, a_{\overline{n-t}|i} \text{ untuk pinjaman umum})
+    \end{equation}
+    
+    \item \textbf{Total Pelunasan Pokok Sama dengan Nilai Pinjaman Awal:}
+    Jumlah dari seluruh porsi pokok yang dibayarkan sepanjang masa pinjaman tepat melunasi hutang asli:
+    \begin{equation}
+        \sum_{t=1}^n P_t = v^n + v^{n-1} + \dots + v^{n-t+1} + \dots + v = a_{\overline{n}|i} = L
+    \end{equation}
+
+    \item \textbf{Total Bunga yang Dibayarkan:}
+    Total akumulasi bunga yang dibayarkan selama $n$ periode adalah selisih antara total arus kas keluar angsuran dan pokok pinjaman awal:
+    \begin{equation}
+        \sum_{t=1}^n I_t = \sum_{t=1}^n (R_t - P_t) = n R - L = n - a_{\overline{n}|i}
+    \end{equation}
+
+    \item \textbf{Pelunasan Pokok Membentuk Deret Geometri Naik dengan Rasio $(1+i)$:}
+    Porsi pokok pinjaman pada setiap periode bertumbuh secara eksponensial mengikuti barisan geometri:
+    \begin{equation}
+        P_{t+1} = P_t (1+i) \iff \mathbf{P_t = P_1 (1+i)^{t-1}}
+    \end{equation}
+    Secara umum, hubungan antara pokok pada periode $t$ dan pokok pada periode $k$ adalah:
+    \begin{equation}
+        P_t = P_k (1+i)^{t-k}
+    \end{equation}
+
+    \item \textbf{Relasi Rekursif Saldo Pinjaman:}
+    Saldo pinjaman berevolusi antar periode mengikuti persamaan linier berulang:
+    \begin{equation}
+        B_{t} = B_{t-1}(1+i) - R_t \quad \text{dan} \quad B_t = B_{t-1} - P_t
+    \end{equation}
+\end{enumerate}
+\end{theorembox}
+
+\begin{proof}[Bukti Rasio Geometri Pokok]
+Perhatikan bahwa $P_t = R \cdot v^{n-t+1}$. Maka untuk periode berikutnya:
+\begin{equation*}
+    P_{t+1} = R \cdot v^{n-(t+1)+1} = R \cdot v^{n-t} = R \cdot v^{n-t+1} \cdot v^{-1} = P_t \cdot (1+i)
+\end{equation*}
+Karena $(1+i) > 1$ untuk setiap suku bunga positif $i > 0$, maka porsi pokok $P_t$ **selalu meningkat secara monoton murni** seiring berjalannya waktu. Sebaliknya, karena $B_{t-1}$ menurun, maka porsi bunga $I_t = i B_{t-1}$ **selalu menurun secara monoton murni**.
+\end{proof}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    \begin{axis}[
+        width=11cm, height=6.5cm,
+        xlabel={Periode Pembayaran ($t$)},
+        ylabel={Nominal Alokasi Pembayaran},
+        xmin=1, xmax=20,
+        ymin=0, ymax=100,
+        xtick={1, 5, 10, 15, 20},
+        legend pos=north west,
+        legend style={font=\footnotesize},
+        grid=both,
+        grid style={line width=.1pt, draw=gray!20},
+        major grid style={line width=.2pt,draw=gray!50}
+    ]
+        % Total Pembayaran Tetap R = 80
+        \addplot[domain=1:20, samples=2, thick, black, dashed] {80};
+        \addlegendentry{Total Angsuran $R$ (Tetap)}
+
+        % Pokok P_t = 80 * v^(20 - t + 1) untuk i = 6%
+        % R * (1.06)^(-(21 - t))
+        \addplot[domain=1:20, samples=40, thick, darkgreen] {80 * (1.06)^(-(21 - x))};
+        \addlegendentry{Porsi Pokok $P_t$ (Geometri Naik)}
+
+        % Bunga I_t = R - P_t
+        \addplot[domain=1:20, samples=40, thick, darkred] {80 - 80 * (1.06)^(-(21 - x))};
+        \addlegendentry{Porsi Bunga $I_t$ (Menurun)}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+---
+
+\section{Contoh Komprehensif \& Latihan Konstruksi Tabel}
+
+\subsection{Contoh 1: Konstruksi Tabel 4 Periode (Slide Hal. 12--13)}
+
+\begin{examplebox}[Contoh Konstruksi Jadwal Amortisasi]
+Suatu hutang sebesar $\$1000$ akan dilunasi dengan 4 kali angsuran tahunan yang sama besar pada akhir setiap tahun dengan suku bunga efektif $i = 8\%$ per tahun.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung besar angsuran tahunan $R$!
+    \item Susun jadwal amortisasi lengkap dari periode 0 hingga 4!
+\end{enumerate}
+\end{examplebox}
+
+\begin{proof}[Penyelesaian]
+\noindent\textbf{(a) Menghitung Besar Angsuran $R$:}\\[0.3em]
+Persamaan nilai pada saat inception ($t=0$):
+\begin{equation*}
+    1000 = R \, a_{\overline{4}|0{,}08} = R \left( \frac{1 - (1{,}08)^{-4}}{0{,}08} \right)
+\end{equation*}
+Hitung faktor anuitas:
+\begin{equation*}
+    (1{,}08)^{-4} \approx 0{,}73502985 \implies a_{\overline{4}|0{,}08} = \frac{1 - 0{,}73502985}{0{,}08} = \frac{0{,}26497015}{0{,}08} \approx 3{,}3121268
+\end{equation*}
+Maka besar angsuran tahunan adalah:
+\begin{equation*}
+    R = \frac{1000}{3{,}3121268} \approx \mathbf{\$301{,}92}
+\end{equation*}
+
+\vspace{0.8em}
+\noindent\textbf{(b) Konstruksi Tabel Amortisasi Periode demi Periode:}\\[0.3em]
+\begin{itemize}
+    \item \textbf{Periode 1 ($t=1$):}
+    \begin{align*}
+        I_1 &= 0{,}08 \times B_0 = 0{,}08 \times 1000 = \$80{,}00 \\
+        P_1 &= R - I_1 = 301{,}92 - 80{,}00 = \$221{,}92 \\
+        B_1 &= B_0 - P_1 = 1000 - 221{,}92 = \$778{,}08
+    \end{align*}
+    \item \textbf{Periode 2 ($t=2$):}
+    \begin{align*}
+        I_2 &= 0{,}08 \times B_1 = 0{,}08 \times 778{,}08 = \$62{,}25 \\
+        P_2 &= R - I_2 = 301{,}92 - 62{,}25 = \$239{,}67 \quad (\text{Cek: } 221{,}92 \times 1{,}08 = 239{,}67) \\
+        B_2 &= B_1 - P_2 = 778{,}08 - 239{,}67 = \$538{,}41
+    \end{align*}
+    \item \textbf{Periode 3 ($t=3$):}
+    \begin{align*}
+        I_3 &= 0{,}08 \times B_2 = 0{,}08 \times 538{,}41 = \$43{,}07 \\
+        P_3 &= R - I_3 = 301{,}92 - 43{,}07 = \$258{,}85 \quad (\text{Cek: } 239{,}67 \times 1{,}08 = 258{,}85) \\
+        B_3 &= B_2 - P_3 = 538{,}41 - 258{,}85 = \$279{,}56
+    \end{align*}
+    \item \textbf{Periode 4 ($t=4$):}
+    \begin{align*}
+        I_4 &= 0{,}08 \times B_3 = 0{,}08 \times 279{,}56 = \$22{,}36 \\
+        P_4 &= R - I_4 = 301{,}92 - 22{,}36 = \$279{,}56 \\
+        B_4 &= B_3 - P_4 = 279{,}56 - 279{,}56 = \mathbf{\$0{,}00} \quad (\text{Lunas!})
+    \end{align*}
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Jadwal Amortisasi Pinjaman $\$1000$ ($i = 8\%$, $n = 4$)}
+\vspace{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Periode ($t$)} & \textbf{Angsuran ($R$)} & \textbf{Bunga ($I_t$)} & \textbf{Pokok ($P_t$)} & \textbf{Saldo Sisa ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$1000{,}00$ \\
+$1$ & $\$301{,}92$ & $\$80{,}00$ & $\$221{,}92$ & $\$778{,}08$ \\
+$2$ & $\$301{,}92$ & $\$62{,}25$ & $\$239{,}67$ & $\$538{,}41$ \\
+$3$ & $\$301{,}92$ & $\$43{,}07$ & $\$258{,}85$ & $\$279{,}56$ \\
+$4$ & $\$301{,}92$ & $\$22{,}36$ & $\$279{,}56$ & $\$0{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$1207{,}68}$ & $\mathbf{\$207{,}68}$ & $\mathbf{\$1000{,}00}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{proof}
+
+---
+
+\subsection{Latihan Mandiri: Pinjaman \$5000 (Slide Hal. 14)}
+
+\begin{examplebox}[Latihan Mandiri (Slide Hal. 14)]
+Hutang sebesar $\$5000$ dibayarkan per tahun sebanyak 4 kali dengan suku bunga $8\%$. Tuliskan jadwal amortisasinya secara lengkap!
+\end{examplebox}
+
+\begin{proof}[Penyelesaian Tuntas]
+Perhatikan bahwa pinjaman ini adalah kelipatan linear sebesar 5 kali dari Contoh 1 di atas ($5000 = 5 \times 1000$). Berdasarkan sifat linearitas anuitas:
+\begin{equation*}
+    R = \frac{5000}{a_{\overline{4}|0{,}08}} = 5 \times 301{,}9208 = \mathbf{\$1509{,}60}
+\end{equation*}
+
+Kita susun jadwal amortisasi lengkapnya:
+\begin{itemize}
+    \item \textbf{Periode 1:} $I_1 = 0{,}08 \times 5000 = \$400{,}00$; $P_1 = 1509{,}60 - 400{,}00 = \$1109{,}60$; $B_1 = 5000 - 1109{,}60 = \$3890{,}40$.
+    \item \textbf{Periode 2:} $I_2 = 0{,}08 \times 3890{,}40 = \$311{,}23$; $P_2 = 1509{,}60 - 311{,}23 = \$1198{,}37$; $B_2 = 3890{,}40 - 1198{,}37 = \$2692{,}03$.
+    \item \textbf{Periode 3:} $I_3 = 0{,}08 \times 2692{,}03 = \$215{,}36$; $P_3 = 1509{,}60 - 215{,}36 = \$1294{,}24$; $B_3 = 2692{,}03 - 1294{,}24 = \$1397{,}79$.
+    \item \textbf{Periode 4:} $I_4 = 0{,}08 \times 1397{,}79 = \$111{,}82$; $P_4 = 1509{,}60 - 111{,}82 = \$1397{,}78 \approx \$1397{,}79$; $B_4 = \$0{,}00$.
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Jadwal Amortisasi Lengkap Pinjaman $\$5000$ ($i = 8\%$, $n = 4$)}
+\vspace{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Periode ($t$)} & \textbf{Angsuran ($R$)} & \textbf{Bunga ($I_t$)} & \textbf{Pokok ($P_t$)} & \textbf{Saldo Sisa ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$5000{,}00$ \\
+$1$ & $\$1509{,}60$ & $\$400{,}00$ & $\$1109{,}60$ & $\$3890{,}40$ \\
+$2$ & $\$1509{,}60$ & $\$311{,}23$ & $\$1198{,}37$ & $\$2692{,}03$ \\
+$3$ & $\$1509{,}60$ & $\$215{,}36$ & $\$1294{,}24$ & $\$1397{,}79$ \\
+$4$ & $\$1509{,}60$ & $\$111{,}82$ & $\$1397{,}78$ & $\$0{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$6038{,}40}$ & $\mathbf{\$1038{,}40}$ & $\mathbf{\$5000{,}00}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Pemeriksaan Konsistensi:}
+\begin{enumerate}
+    \item Total pokok yang dilunasi: $\sum P_t = 1109{,}60 + 1198{,}37 + 1294{,}24 + 1397{,}79 = \$5000{,}00$ (tepat).
+    \item Total bunga yang dibayar: $\sum I_t = 400{,}00 + 311{,}23 + 215{,}36 + 111{,}82 = \$1038{,}40 = 4(1509{,}60) - 5000$ (tepat).
+    \item Rasio pertumbuhan pokok: $\frac{P_2}{P_1} = \frac{1198{,}37}{1109{,}60} \approx 1{,}08$, $\frac{P_3}{P_2} = \frac{1294{,}24}{1198{,}37} \approx 1{,}08$, $\frac{P_4}{P_3} = \frac{1397{,}79}{1294{,}24} \approx 1{,}08$.
+\end{enumerate}
+\end{proof}
+
+---
+
+\section{Valuasi Piutang Pinjaman di Pasar Sekunder (\textit{Sale of Loan Rights})}
+
+Dalam dunia perbankan modern dan sekuritisasi aset (misalnya sekuritisasi KPR menjadi \textit{Mortgage-Backed Securities} / MBS), pemberi pinjaman asal sering kali menjual hak atas sisa pembayaran pinjaman kepada pihak ketiga (investor institusi) sebelum pinjaman jatuh tempo.
+
+\subsection{Studi Kasus 3 Pihak: Peminjam A, Kreditur B, dan Investor C (Slide Hal. 15--19)}
+
+\begin{examplebox}[Kasus Penjualan Piutang Amortisasi]
+$A$ berhutang kepada $B$ sebesar $\$10.000$ yang akan dikembalikan dengan angsuran 4 kali setahun (kuartalan) dengan suku bunga nominal $8\%$ \textit{convertible quarterly} selama 6 tahun.
+
+Pada akhir tahun ke-2, karena kebutuhan uang yang mendesak, $B$ menjual hak untuk menerima seluruh sisa pembayaran pinjaman kepada pihak ketiga $C$. Investor $C$ mensyaratkan tingkat pengembalian (\textit{yield rate}) sebesar nominal $10\%$ \textit{convertible quarterly}.
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung harga yang harus dibayar $C$ atas hak tagih pinjaman tersebut!
+    \item Hitung besar bunga yang diterima masing-masing oleh pihak $C$ dan pihak $B$!
+    \item Lakukan analisis keuntungan modal dan perbandingan total bunga yang dibayarkan peminjam $A$ dengan yang diterima oleh kreditur!
+\end{enumerate}
+\end{examplebox}
+
+\begin{proof}[Penyelesaian Mendalam \& Komprehensif]
+Permasalahan ini melibatkan 3 pihak dengan parameter waktu:
+\begin{itemize}
+    \item Durasi total pinjaman: 6 tahun $\times$ 4 kuartal/tahun = 24 kuartal ($n = 24$).
+    \item Waktu penjualan piutang: akhir tahun ke-2 = 8 kuartal ($t = 8$).
+    \item Sisa periode angsuran yang diperjualbelikan: $24 - 8 = 16$ kuartal.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (11,0) node[right] {Kuartal};
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (4,0.15) -- (4,-0.15) node[below] {$8$ (Thn 2)};
+    \draw[thick] (10,0.15) -- (10,-0.15) node[below] {$24$ (Thn 6)};
+
+    % Segmen B
+    \draw[line width=1.5pt, primaryblue] (0,0.4) -- (4,0.4) node[midway, above] {\textbf{Fase B}: $A$ membayar ke $B$ ($8$ kali cicilan @ $R$)};
+    % Segmen C
+    \draw[line width=1.5pt, accentblue] (4,0.4) -- (10,0.4) node[midway, above] {\textbf{Fase C}: $A$ membayar ke $C$ ($16$ kali cicilan @ $R$)};
+
+    \node[draw, darkred, thick, rounded corners, fill=white] at (4, -1.2) {
+        \begin{tabular}{c}
+        \textbf{Transaksi Penjualan Piutang}\\
+        $B$ menjual hak 16 cicilan sisa ke $C$\\
+        Nilai Buku bagi $B$ ($i_1 = 2\%$): $S_b = \$7178{,}67$\\
+        Harga Beli bagi $C$ ($i_2 = 2{,}5\%$): $S_c = \$6902{,}31$
+        \end{tabular}
+    };
+    \draw[->, thick, darkred] (4, -0.4) -- (4, 0.2);
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{Langkah 1: Menentukan Angsuran Kuartalan yang Dibayar Peminjam A ($R$)}\\[0.3em]
+Peminjam $A$ terikat kontrak awal dengan suku bunga kuartalan:
+\begin{equation*}
+    i_1 = \frac{i^{(4)}}{4} = \frac{8\%}{4} = 2\% = 0{,}02 \text{ per kuartal}
+\end{equation*}
+Persamaan nilai pinjaman awal:
+\begin{equation*}
+    10.000 = R \, a_{\overline{24}|0{,}02} \implies a_{\overline{24}|0{,}02} = \frac{1 - (1{,}02)^{-24}}{0{,}02} = \frac{1 - 0{,}6217215}{0{,}02} \approx 18{,}9139256
+\end{equation*}
+Maka besar angsuran tetap kuartalan yang dibayar $A$ adalah:
+\begin{equation*}
+    R = \frac{10.000}{18{,}9139256} \approx \mathbf{\$528{,}71}
+\end{equation*}
+
+\noindent\textbf{Langkah 2: Menentukan Nilai Buku Sisa Pinjaman bagi Kreditur B ($S_b$)}\\[0.3em]
+Tepat setelah pembayaran ke-8 pada akhir tahun ke-2, sisa kewajiban pokok pinjaman pada buku $B$ dihitung secara prospektif dengan suku bunga kontrak awal $i_1 = 2\%$:
+\begin{align*}
+    S_b = B_8 &= R \, a_{\overline{16}|0{,}02} = 528{,}71 \times \left( \frac{1 - (1{,}02)^{-16}}{0{,}02} \right) \\
+    &= 528{,}71 \times \left( \frac{1 - 0{,}7284458}{0{,}02} \right) = 528{,}71 \times 13{,}577709 \approx \mathbf{\$7178{,}67}
+\end{align*}
+Jumlah $\$7178{,}67$ ini adalah sisa pokok hutang $A$ yang belum dilunasi. Dalam kondisi normal tanpa diskon, nilai inilah yang diharapkan diterima oleh $B$.
+
+\noindent\textbf{Langkah 3: Menentukan Harga yang Dibayar oleh Investor C ($S_c$)}\\[0.3em]
+Investor $C$ bersedia membeli 16 aliran kas sisa sebesar $\$528{,}71$ tersebut, namun ia mensyaratkan tingkat hasil investasi (\textit{yield rate}) yang lebih tinggi:
+\begin{equation*}
+    i_2 = \frac{i_C^{(4)}}{4} = \frac{10\%}{4} = 2{,}5\% = 0{,}025 \text{ per kuartal}
+\end{equation*}
+Maka harga wajar yang dibayar $C$ adalah nilai sekarang dari 16 angsuran tersebut yang didiskontokan pada suku bunga $i_2 = 2{,}5\%$:
+\begin{align*}
+    S_c &= R \, a_{\overline{16}|0{,}025} = 528{,}71 \times \left( \frac{1 - (1{,}025)^{-16}}{0{,}025} \right) \\
+    &= 528{,}71 \times \left( \frac{1 - 0{,}6736238}{0{,}025} \right) = 528{,}71 \times 13{,}055048 \approx \mathbf{\$6902{,}31}
+\end{align*}
+\textbf{Diskon Harga / Kerugian Modal bagi B:}
+\begin{equation*}
+    \Delta S = S_b - S_c = 7178{,}67 - 6902{,}31 = \mathbf{\$276{,}36}
+\end{equation*}
+Karena $B$ terdesak likuiditas dan suku bunga pasar naik dari $8\%$ menjadi $10\%$, $B$ terpaksa melepas piutangnya di bawah nilai buku dengan diskon sebesar $\$276{,}36$.
+
+\noindent\textbf{Langkah 4: Analisis Total Arus Kas dan Pembagian Bunga Antar Pihak}\\[0.3em]
+Mari kita hitung total uang yang berpindah tangan tanpa time value of money untuk melihat rekonsiliasi bunga:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Pihak A (Peminjam):}
+    \begin{itemize}
+        \item Total pembayaran angsuran selama 6 tahun:
+        \begin{equation*}
+            24 \times R = 24 \times 528{,}71 = \$12.689{,}04
+        \end{equation*}
+        \item Total bunga yang dibayarkan $A$:
+        \begin{equation*}
+            I_A = 12.689{,}04 - 10.000 = \mathbf{\$2689{,}04}
+        \end{equation*}
+        \item Pembayaran yang diserahkan ke $B$ (tahun 1--2): $8 \times 528{,}71 = \$4229{,}68$.
+        \item Pembayaran yang diserahkan ke $C$ (tahun 3--6): $16 \times 528{,}71 = \$8459{,}36$.
+    \end{itemize}
+
+    \item \textbf{Pihak B (Kreditur Asal):}
+    \begin{itemize}
+        \item Pokok pinjaman yang berhasil dikembalikan oleh $A$ selama 2 tahun:
+        \begin{equation*}
+            P_B = 10.000 - S_b = 10.000 - 7178{,}67 = \$2821{,}33
+        \end{equation*}
+        \item Bunga kontraktual yang diterima $B$ dari angsuran $A$ selama 2 tahun:
+        \begin{equation*}
+            I_B^{\text{kontrak}} = (\text{Total angsuran diterima}) - P_B = 4229{,}68 - 2821{,}33 = \mathbf{\$1408{,}35}
+        \end{equation*}
+        \item Namun, saat menjual piutang ke $C$, $B$ menderita kerugian diskon modal sebesar:
+        \begin{equation*}
+            S_b - S_c = \$276{,}36
+        \end{equation*}
+        \item Bunga riil/bersih (\textit{net investment return}) yang sesungguhnya dinikmati $B$:
+        \begin{equation*}
+            I_B^{\text{net}} = I_B^{\text{kontrak}} - (S_b - S_c) = 1408{,}35 - 276{,}36 = \mathbf{\$1131{,}99}
+        \end{equation*}
+    \end{itemize}
+
+    \item \textbf{Pihak C (Investor Pembeli Piutang):}
+    \begin{itemize}
+        \item Total uang angsuran yang akan diterima $C$ dari $A$:
+        \begin{equation*}
+            16 \times 528{,}71 = \$8459{,}36
+        \end{equation*}
+        \item Modal yang dikeluarkan $C$ untuk membeli piutang: $\$6902{,}31$.
+        \item Total bunga/keuntungan investasi yang diterima $C$:
+        \begin{equation*}
+            I_C = 8459{,}36 - 6902{,}31 = \mathbf{\$1557{,}05}
+        \end{equation*}
+    \end{itemize}
+\end{enumerate}
+
+\noindent\textbf{Rekonsiliasi Total Bunga:}\\[0.3em]
+Perhatikan fenomena menarik pada penjumlahan bunga:
+\begin{equation*}
+    I_B^{\text{kontrak}} + I_C = 1408{,}35 + 1557{,}05 = \$2965{,}40 > I_A (\$2689{,}04)
+\end{equation*}
+Selisih kelebihan bunga yang diterima oleh kreditur gabungan adalah:
+\begin{equation*}
+    2965{,}40 - 2689{,}04 = \$276{,}36 \equiv S_b - S_c
+\end{equation*}
+Hal ini terjadi karena diskon harga yang dikorbankan oleh $B$ beralih menjadi tambahan keuntungan bunga bagi investor $C$. Jika kita menggunakan bunga bersih $B$:
+\begin{equation*}
+    I_B^{\text{net}} + I_C = 1131{,}99 + 1557{,}05 = \mathbf{\$2689{,}04} \equiv I_A \quad (\text{Ekuilibrium Sempurna!})
+\end{equation*}
+\end{proof}
+
+---
+
+\section{Penyesuaian Angsuran Akibat Perubahan Suku Bunga (\textit{Variable Interest Rates})}
+
+Dalam dunia nyata, suku bunga pinjaman tidak selalu bersifat tetap (\textit{fixed rate}). Banyak produk pinjaman (seperti KPR mengambang / \textit{floating rate mortgage}) yang suku bunganya disesuaikan secara berkala mengikuti acuan suku bunga bank sentral.
+
+\subsection{Kerangka Teoretis Umum (Slide Hal. 20--24)}
+
+Misalkan suatu pinjaman awal sebesar $B_0 = a_{\overline{n}|i}$ diangsur dengan cicilan awal sebesar $1$ per tahun selama $n$ tahun pada suku bunga efektif $i$.
+\begin{itemize}
+    \item Pada akhir tahun ke-1, suku bunga yang berlaku adalah $i$, cicilan yang dibayar adalah $1$.
+    \item Saldo hutang pada akhir tahun ke-1 tepat bernilai:
+    \begin{equation}
+        B_1 = a_{\overline{n-1}|i}
+    \end{equation}
+    \item Pada tahun ke-2, suku bunga berubah menjadi $j > i$.
+    \item Misalkan angsuran direvisi menjadi $X$ yang dibayarkan pada akhir tahun ke-2 dan seterusnya hingga tahun ke-$n$.
+\end{itemize}
+
+Evolusi saldo pada akhir tahun ke-2 dihitung secara retrospektif dari $B_1$:
+\begin{align}
+    \text{Bunga tahun ke-2:} \quad I_2 &= j \cdot B_1 = j \, a_{\overline{n-1}|i} \\
+    \text{Pokok tahun ke-2:} \quad P_2 &= X - I_2 = X - j \, a_{\overline{n-1}|i} \\
+    \text{Saldo akhir tahun ke-2:} \quad B_2 &= B_1 - P_2 = a_{\overline{n-1}|i} - (X - j \, a_{\overline{n-1}|i}) = \mathbf{(1+j) a_{\overline{n-1}|i} - X}
+\end{align}
+
+Sekarang, kita tinjau dua skenario suku bunga untuk periode selanjutnya ($t \ge 3$):
+
+---
+
+\subsubsection{Kasus 1: Suku Bunga Kembali Menjadi \texorpdfstring{$i$}{i} pada Tahun ke-3 dan Seterusnya}
+
+Jika suku bunga hanya naik menjadi $j$ pada tahun ke-2, lalu **kembali normal menjadi $i$ mulai awal tahun ke-3 hingga akhir tahun ke-$n$**, maka sisa $(n-2)$ pembayaran angsuran sebesar $X$ dievaluasi dengan suku bunga $i$.
+
+Secara prospektif dari $t=2$:
+\begin{equation}
+    B_2 = X \, a_{\overline{n-2}|i}
+\end{equation}
+Samakan kedua ekspresi untuk $B_2$:
+\begin{align*}
+    (1+j) a_{\overline{n-1}|i} - X &= X \, a_{\overline{n-2}|i} \\
+    X \left( 1 + a_{\overline{n-2}|i} \right) &= (1+j) a_{\overline{n-1}|i}
+\end{align*}
+Perhatikan manipulasi aljabar anuitas berikut:
+\begin{align*}
+    1 + a_{\overline{n-2}|i} &= 1 + \frac{1 - v^{n-2}}{i} = \frac{i + 1 - v^{n-2}}{i} = \frac{(1+i) - (1+i)v^{n-1}}{i} \\
+    &= (1+i) \left( \frac{1 - v^{n-1}}{i} \right) = \mathbf{(1+i) a_{\overline{n-1}|i}}
+\end{align*}
+Substitusikan kembali ke persamaan:
+\begin{equation*}
+    X \cdot (1+i) a_{\overline{n-1}|i} = (1+j) a_{\overline{n-1}|i}
+\end{equation*}
+Karena $a_{\overline{n-1}|i} \neq 0$, kita dapat membaginya:
+\begin{equation}
+    \mathbf{X = \frac{1+j}{1+i}}
+\end{equation}
+
+\begin{theorembox}[Teorema Penyesuaian Angsuran Kejutan Satu Periode]
+Jika suku bunga pinjaman mengalami kenaikan dari $i$ ke $j$ hanya selama satu periode (periode ke-2), dan angsuran baru $X$ dinaikkan seragam untuk seluruh sisa $(n-1)$ periode berikutnya sementara suku bunga kembali ke $i$, maka rasio penyesuaian angsuran baru terhadap angsuran lama tepat bernilai faktor majemuk relatif:
+\begin{equation*}
+    X = \frac{1+j}{1+i}
+\end{equation*}
+\end{theorembox}
+
+---
+
+\subsubsection{Kasus 2: Suku Bunga Tetap Bertahan Sebesar \texorpdfstring{$j$}{j} untuk Seterusnya}
+
+Jika suku bunga berubah menjadi $j$ pada tahun ke-2 dan **tetap bertahan sebesar $j$ untuk seluruh periode sisanya**, maka sisa $(n-2)$ pembayaran angsuran sebesar $X$ didiskontokan dengan suku bunga baru $j$.
+
+Secara prospektif dari $t=2$:
+\begin{equation}
+    B_2 = X \, a_{\overline{n-2}|j}
+\end{equation}
+Samakan dengan saldo retrospektif:
+\begin{align*}
+    (1+j) a_{\overline{n-1}|i} - X &= X \, a_{\overline{n-2}|j} \\
+    X \left( 1 + a_{\overline{n-2}|j} \right) &= (1+j) a_{\overline{n-1}|i}
+\end{align*}
+Mengingat bahwa $1 + a_{\overline{n-2}|j} = \ddot{a}_{\overline{n-1}|j} = (1+j) a_{\overline{n-1}|j}$, maka:
+\begin{align*}
+    X \cdot (1+j) a_{\overline{n-1}|j} &= (1+j) a_{\overline{n-1}|i} \\
+    \mathbf{X} &= \mathbf{\frac{a_{\overline{n-1}|i}}{a_{\overline{n-1}|j}}}
+\end{align*}
+
+\begin{theorembox}[Teorema Penyesuaian Angsuran Kenaikan Permanen]
+Jika suku bunga pinjaman berubah secara permanen dari $i$ menjadi $j$ mulai tahun ke-2 hingga lunas, maka besar angsuran baru $X$ adalah perbandingan antara nilai anuitas pada suku bunga lama terhadap nilai anuitas pada suku bunga baru:
+\begin{equation*}
+    X = \frac{a_{\overline{n-1}|i}}{a_{\overline{n-1}|j}}
+\end{equation*}
+\end{theorembox}
+
+---
+
+\subsection{Contoh Aplikasi: Angsuran Bulanan dengan Bunga Nominal Triwulanan (Slide Hal. 25)}
+
+\begin{examplebox}[Contoh Kasus Restrukturisasi Suku Bunga Konvertibel Triwulanan]
+$A$ meminjam uang sebesar $\$10.000$ ke bank dan akan dikembalikan dengan angsuran setiap bulan selama 2 tahun ($n = 24$ bulan).
+\begin{itemize}
+    \item Suku bunga semula adalah nominal $12\%$ \textit{convertible quarterly} ($i^{(4)} = 12\%$).
+    \item Diketahui besar angsuran bulanan yang ditetapkan selama tahun pertama (bulan 1 s.d. 12) adalah $\$500$ per bulan.
+    \item Pada awal tahun kedua ($t = 12$ bulan), terjadi perubahan suku bunga menjadi nominal $12{,}4\%$ \textit{convertible quarterly} ($j^{(4)} = 12{,}4\%$).
+\end{itemize}
+Berapakah besar revisi angsuran bulanan untuk 1 tahun kemudian (bulan 13 s.d. 24) agar pinjaman lunas tepat waktu?
+\end{examplebox}
+
+\begin{proof}[Penyelesaian Langkah demi Langkah yang Presisi]
+Karena frekuensi pembayaran adalah bulanan sedangkan frekuensi pemajemukan bunga adalah kuartalan (triwulanan), kita harus terlebih dahulu mengonversikan suku bunga ke suku bunga efektif bulanan yang ekuivalen.
+
+\noindent\textbf{Langkah 1: Menentukan Suku Bunga Efektif Bulanan Tahun Pertama ($i_m$)}\\[0.3em]
+Suku bunga nominal kuartalan awal:
+\begin{equation*}
+    i_q = \frac{i^{(4)}}{4} = \frac{12\%}{4} = 3\% = 0{,}03 \text{ per kuartal}
+\end{equation*}
+Karena $1$ kuartal terdiri atas $3$ bulan, suku bunga efektif bulanan $i_m$ memenuhi relasi pemajemukan:
+\begin{align*}
+    (1 + i_m)^3 &= 1 + i_q = 1{,}03 \\
+    1 + i_m &= (1{,}03)^{1/3} \approx 1{,}009901634 \\
+    i_m &= 1{,}009901634 - 1 \approx 0{,}009901634 \quad (\approx 0{,}99016\% \text{ per bulan})
+\end{align*}
+
+\noindent\textbf{Langkah 2: Menghitung Saldo Pinjaman Berjalan pada Akhir Tahun Pertama ($B_{12}$)}\\[0.3em]
+Peminjam membayar $R_1 = \$500$ per bulan selama 12 bulan pertama. Kita gunakan \textbf{Metode Retrospektif}:
+\begin{equation*}
+    B_{12} = L(1 + i_m)^{12} - R_1 \, s_{\overline{12}|i_m}
+\end{equation*}
+Perhatikan penyederhanaan eksponen yang sangat rapi:
+\begin{equation*}
+    (1 + i_m)^{12} = \left[ (1 + i_m)^3 \right]^4 = (1{,}03)^4 = 1{,}12550881
+\end{equation*}
+Maka akumulasi pokok pinjaman adalah:
+\begin{equation*}
+    10.000 \times (1 + i_m)^{12} = 10.000 \times 1{,}12550881 = \$11.255{,}09
+\end{equation*}
+Nilai akumulasi dari 12 pembayaran angsuran sebesar $\$500$:
+\begin{align*}
+    s_{\overline{12}|i_m} &= \frac{(1 + i_m)^{12} - 1}{i_m} = \frac{(1{,}03)^4 - 1}{(1{,}03)^{1/3} - 1} = \frac{0{,}12550881}{0{,}009901634} \approx 12{,}675565 \\
+    500 \times s_{\overline{12}|i_m} &= 500 \times 12{,}675565 = \$6337{,}78
+\end{align*}
+Sehingga saldo sisa hutang pada akhir bulan ke-12 adalah:
+\begin{equation*}
+    B_{12} = 11.255{,}09 - 6337{,}78 = \mathbf{\$4917{,}31}
+\end{equation*}
+
+\noindent\textbf{Langkah 3: Menentukan Suku Bunga Efektif Bulanan Tahun Kedua ($j_m$)}\\[0.3em]
+Suku bunga nominal baru pada awal tahun kedua: $j^{(4)} = 12{,}4\%$. Suku bunga kuartalannya adalah:
+\begin{equation*}
+    j_q = \frac{12{,}4\%}{4} = 3{,}1\% = 0{,}031 \text{ per kuartal}
+\end{equation*}
+Suku bunga efektif bulanan baru $j_m$ memenuhi:
+\begin{align*}
+    (1 + j_m)^3 &= 1 + j_q = 1{,}031 \\
+    1 + j_m &= (1{,}031)^{1/3} \approx 1{,}01022836 \\
+    j_m &= 0{,}01022836 \quad (\approx 1{,}02284\% \text{ per bulan})
+\end{align*}
+
+\noindent\textbf{Langkah 4: Menghitung Besar Angsuran Bulanan Baru ($X$)}\\[0.3em]
+Saldo sebesar $B_{12} = \$4917{,}31$ harus dilunasi secara penuh dalam sisa 12 bulan berikutnya dengan angsuran bulanan baru $X$ pada suku bunga $j_m$:
+\begin{equation*}
+    B_{12} = X \, a_{\overline{12}|j_m} \implies X = \frac{B_{12}}{a_{\overline{12}|j_m}}
+\end{equation*}
+Hitung faktor anuitas $a_{\overline{12}|j_m}$:
+\begin{equation*}
+    v_j^{12} = (1 + j_m)^{-12} = \left[ (1 + j_m)^3 \right]^{-4} = (1{,}031)^{-4} \approx 0{,}88506169
+\end{equation*}
+\begin{equation*}
+    a_{\overline{12}|j_m} = \frac{1 - v_j^{12}}{j_m} = \frac{1 - 0{,}88506169}{0{,}01022836} = \frac{0{,}11493831}{0{,}01022836} \approx 11{,}237218
+\end{equation*}
+Maka besar revisi angsuran bulanan untuk tahun kedua adalah:
+\begin{equation*}
+    X = \frac{4917{,}31}{11{,}237218} \approx \mathbf{\$437{,}59}
+\end{equation*}
+\textit{(Catatan ketelitian desimal: menggunakan faktor anuitas presisi tanpa pembulatan menghasilkan $\$437{,}53$ hingga $\$437{,}59$).}
+\end{proof}
+
+---
+
+\section{Topik Pengayaan Ujian Profesi Aktuaria (Kellison Bab 6)}
+
+\subsection{Amortisasi Negatif (\textit{Negative Amortization})}
+
+Dalam beberapa skema kredit khusus (misalnya \textit{graduated payment mortgage}), pembayaran angsuran awal sengaja dirancang rendah agar terjangkau oleh debitur muda.
+
+\begin{definitionbox}[Amortisasi Negatif]
+Kondisi di mana pembayaran angsuran $R_t$ lebih kecil daripada bunga yang timbul pada periode tersebut:
+\begin{equation}
+    R_t < I_t \iff R_t < i \cdot B_{t-1}
+\end{equation}
+Akibatnya:
+\begin{equation}
+    P_t = R_t - I_t < 0 \implies B_t = B_{t-1} - P_t > B_{t-1}
+\end{equation}
+Saldo pinjaman pokok tidak berkurang, melainkan \textbf{bertambah besar} karena kekurangan bunga yang belum terbayar dikapitalisasi ke dalam pokok pinjaman.
+\end{definitionbox}
+
+---
+
+\subsection{Pembayaran Balon \& Pembayaran Terakhir (\textit{Balloon \& Drop Payments})}
+
+Ketika peminjam menyepakati besarnya cicilan bulat $R$ di muka, jangka waktu pinjaman $n$ yang dihitung dari $L = R \, a_{\overline{n}|}$ sering kali bukan bilangan bulat ($n = k + f$, di mana $k \in \mathbb{Z}^+$ dan $0 < f < 1$). Terdapat dua cara pelunasan akhir:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Pembayaran Balon (\textit{Balloon Payment}):}
+    Pelunasan dilakukan dalam tepat $k$ periode, di mana pembayaran ke-$k$ dinaikkan menjadi $R + B_k$, sehingga pembayaran terakhir bernilai lebih besar dari $R$.
+    \item \textbf{Pembayaran Jatuh / Tetes (\textit{Drop Payment}):}
+    Peminjam tetap membayar $R$ sebanyak $k$ kali, lalu pada periode ke-$(k+1)$ dilakukan satu kali pembayaran sisa yang bernilai lebih kecil dari $R$, yaitu:
+    \begin{equation}
+        R_{k+1} = B_k (1+i) = [L(1+i)^k - R \, s_{\overline{k}|i}](1+i)
+    \end{equation}
+\end{enumerate}
+
+---
+
+\subsection{Amortisasi Kontinu (\textit{Continuous Amortization})}
+
+Jika pembayaran angsuran dilakukan secara terus-menerus dengan laju kontinu $R(t)$ dan suku bunga kontinu $\delta(t)$, dinamika saldo pinjaman memenuhi \textbf{Persamaan Diferensial Biasa Orde Satu}:
+\begin{equation}
+    \frac{d B(t)}{dt} = \delta(t) B(t) - R(t)
+\end{equation}
+Untuk laju pembayaran konstan $R$ dan \textit{force of interest} konstan $\delta$, saldo prospektif kontinu adalah:
+\begin{equation}
+    B(t) = R \, \bar{a}_{\overline{n-t}|\delta} = R \left( \frac{1 - e^{-\delta(n-t)}}{\delta} \right)
+\end{equation}
+Laju pelunasan pokok kontinu pada waktu $t$ adalah:
+\begin{equation}
+    P(t) = R - \delta B(t) = R e^{-\delta(n-t)} = P(0) e^{\delta t}
+\end{equation}
+yang konsisten dengan analogi deret geometri diskrit $P_t = P_1(1+i)^{t-1}$.
+
+---
+
+\section{Rangkuman Formula Cepat \& Tip Ujian}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Ringkasan Rumus Kunci Jadwal Amortisasi}
+\vspace{0.5em}
+\begin{tabular}{lll}
+\toprule
+\textbf{Konsep / Variabel} & \textbf{Formula Matematika} & \textbf{Keterangan / Makna Finansial} \\
+\midrule
+Angsuran Tetap & $R = \dfrac{L}{a_{\overline{n}|i}}$ & Angsuran periodik untuk pinjaman $L$ \\
+Saldo Prospektif & $B_t^p = R \, a_{\overline{n-t}|i}$ & Nilai sekarang dari sisa $(n-t)$ angsuran \\
+Saldo Retrospektif & $B_t^r = L(1+i)^t - R \, s_{\overline{t}|i}$ & Akumulasi hutang $-$ akumulasi pembayaran \\
+Porsi Bunga Periode $t$ & $I_t = i \cdot B_{t-1} = R(1 - v^{n-t+1})$ & Menurun secara monoton murni \\
+Porsi Pokok Periode $t$ & $P_t = R - I_t = R \cdot v^{n-t+1}$ & Bertumbuh secara geometri rasio $(1+i)$ \\
+Relasi Antar Pokok & $P_t = P_1 (1+i)^{t-1} = P_k (1+i)^{t-k}$ & Trik tercepat mencari pokok periode $t$ \\
+Total Bunga Dibayar & $\sum I_t = nR - L$ & Total arus kas keluar $-$ pokok awal \\
+Total Pokok Dilunasi & $\sum P_t = L$ & Tepat sama dengan pokok pinjaman \\
+Revisi Bunga 1 Periode & $X = \dfrac{1+j}{1+i}$ & Bunga naik ke $j$ di thn 2 lalu kembali ke $i$ \\
+Revisi Bunga Permanen & $X = \dfrac{a_{\overline{n-1}|i}}{a_{\overline{n-1}|j}}$ & Bunga naik permanen ke $j$ mulai thn 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

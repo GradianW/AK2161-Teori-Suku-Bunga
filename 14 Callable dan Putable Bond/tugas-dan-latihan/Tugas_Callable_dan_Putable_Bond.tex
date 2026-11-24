@@ -1,0 +1,276 @@
+\documentclass[10.5pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[top=1.5cm,bottom=1.5cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+
+\tcbset{
+    colback=gray!5,
+    colframe=black!75,
+    boxrule=0.6pt,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Tugas Pengantar Teori Suku Bunga}}\\[0.2em]
+    {\normalsize Topik 14: \textit{Callable Bond}, \textit{Putable Bond}, dan Serangkaian \textit{Bond}}
+\end{center}
+\vspace{-0.3em}
+\hrule
+\vspace{0.5em}
+
+% =============================================================
+% SOAL 1: CALLABLE BOND - YIELD 5% (SLIDE HALAMAN 3-4)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 1 (Slide Hal. 3--4):} Suatu \textit{bond} $\$100$ \textit{par value} $4\%$ dengan \textit{semiannual coupon}, \textit{callable} pada: $\$109$ ($n = 10,\dots,19$), $\$104{,}5$ ($n = 20,\dots,29$), dan $\$100$ saat \textit{maturity} ($n = 30$). Hitung harga obligasi jika dijamin \textit{yield} \textbf{$5\%$ \textit{convertible semiannually}}!
+\end{tcolorbox}
+
+\textbf{Jawab:}
+\begin{align*}
+    F &= 100, \qquad r = \frac{0{,}04}{2} = 0{,}02 \implies Fr = 100 \times 0{,}02 = 2, \qquad i = \frac{5\%}{2} = 2{,}5\% = 0{,}025 \quad (i > r) \\[0.2em]
+    C_n &= \begin{cases}
+        109, & n = 10, 11, \dots, 19 \\
+        104{,}5, & n = 20, 21, \dots, 29 \\
+        100, & n = 30
+    \end{cases} \\[0.3em]
+    P_n &= Fr \, a_{\overline{n}|i} + C_n(1 + i)^{-n} = 2 \cdot \frac{1 - (1{,}025)^{-n}}{0{,}025} + C_n(1{,}025)^{-n}
+\end{align*}
+
+\begin{itemize}
+    \item \textbf{Untuk $n = 10, \dots, 19$ ($C_n = 109$):}
+    \begin{align*}
+        n = 10 &\implies P_{10} = 2 \cdot \frac{1 - (1{,}025)^{-10}}{0{,}025} + 109(1{,}025)^{-10} = 102{,}6548 \\
+        n = 11 &\implies P_{11} = 2 \cdot \frac{1 - (1{,}025)^{-11}}{0{,}025} + 109(1{,}025)^{-11} = 102{,}1022 \\
+        n = 19 &\implies P_{19} = 2 \cdot \frac{1 - (1{,}025)^{-19}}{0{,}025} + 109(1{,}025)^{-19} = \mathbf{98{,}1403} \quad (\text{minimum untuk } n = 10,\dots,19)
+    \end{align*}
+
+    \item \textbf{Untuk $n = 20, \dots, 29$ ($C_n = 104{,}5$):}
+    \begin{align*}
+        n = 20 &\implies P_{20} = 2 \cdot \frac{1 - (1{,}025)^{-20}}{0{,}025} + 104{,}5(1{,}025)^{-20} = 94{,}9516 \\
+        n = 21 &\implies P_{21} = 2 \cdot \frac{1 - (1{,}025)^{-21}}{0{,}025} + 104{,}5(1{,}025)^{-21} = 94{,}5869 \\
+        n = 29 &\implies P_{29} = 2 \cdot \frac{1 - (1{,}025)^{-29}}{0{,}025} + 104{,}5(1{,}025)^{-29} = \mathbf{91{,}9722} \quad (\text{minimum untuk } n = 20,\dots,29)
+    \end{align*}
+
+    \item \textbf{Untuk $n = 30$ ($C_{30} = 100$):}
+    \begin{align*}
+        n = 30 &\implies P_{30} = 2 \cdot \frac{1 - (1{,}025)^{-30}}{0{,}025} + 100(1{,}025)^{-30} = \mathbf{89{,}5349}
+    \end{align*}
+\end{itemize}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{ccc@{\hspace{1.8cm}}ccc@{\hspace{1.8cm}}ccc}
+\toprule
+$n$ & $C_n$ & $P_n$ & $n$ & $C_n$ & $P_n$ & $n$ & $C_n$ & $P_n$ \\
+\midrule
+$10$ & $109{,}0$ & $102{,}6548$ & $17$ & $109{,}0$ & $99{,}0587$ & $24$ & $104{,}5$ & $93{,}5454$ \\
+$11$ & $109{,}0$ & $102{,}1022$ & $18$ & $109{,}0$ & $98{,}5938$ & $25$ & $104{,}5$ & $93{,}2151$ \\
+$12$ & $109{,}0$ & $101{,}5631$ & $\mathbf{19}$ & $\mathbf{109{,}0}$ & $\mathbf{98{,}1403}$ & $26$ & $104{,}5$ & $92{,}8928$ \\
+$13$ & $109{,}0$ & $101{,}0372$ & $20$ & $104{,}5$ & $94{,}9516$ & $27$ & $104{,}5$ & $92{,}5783$ \\
+$14$ & $109{,}0$ & $100{,}5241$ & $21$ & $104{,}5$ & $94{,}5870$ & $28$ & $104{,}5$ & $92{,}2715$ \\
+$15$ & $109{,}0$ & $100{,}0235$ & $22$ & $104{,}5$ & $94{,}2312$ & $\mathbf{29}$ & $\mathbf{104{,}5}$ & $\mathbf{91{,}9722}$ \\
+$16$ & $109{,}0$ & $99{,}5351$  & $23$ & $104{,}5$ & $93{,}8841$ & $\mathbf{30}$ & $\mathbf{100{,}0}$ & $\mathbf{89{,}5349}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+    \therefore \quad P = \min_{10 \le n \le 30} P_n = \min\{98{,}1403;\ 91{,}9722;\ 89{,}5349\} = \mathbf{\$89{,}5349} \quad (\text{pada } n = 30)
+\]
+
+\newpage
+
+% =============================================================
+% SOAL 2: CALLABLE BOND - YIELD 3% (SLIDE HALAMAN 3 & 5)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 2 (Slide Hal. 3 \& 5):} Dengan data \textit{bond} yang sama seperti Soal 1, hitung harga obligasi jika dijamin \textit{yield} \textbf{$3\%$ \textit{convertible semiannually}}!
+\end{tcolorbox}
+
+\textbf{Jawab:}
+\begin{align*}
+    F &= 100, \qquad r = 0{,}02 \implies Fr = 2, \qquad i = \frac{0{,}03}{2} = 0{,}015 < r \\[0.2em]
+    P_n &= 2 \cdot \frac{1 - (1{,}015)^{-n}}{0{,}015} + C_n(1{,}015)^{-n}
+\end{align*}
+
+\begin{itemize}
+    \item \textbf{Untuk $n = 10, \dots, 19$ ($C_n = 109$):}
+    \begin{align*}
+        n = 10 &\implies P_{10} = 2 \cdot \frac{1 - (1{,}015)^{-10}}{0{,}015} + 109(1{,}015)^{-10} = \mathbf{112{,}3661} \quad (\text{minimum untuk } n = 10,\dots,19) \\
+        n = 11 &\implies P_{11} = 2 \cdot \frac{1 - (1{,}015)^{-11}}{0{,}015} + 109(1{,}015)^{-11} = 112{,}6759 \\
+        n = 19 &\implies P_{19} = 2 \cdot \frac{1 - (1{,}015)^{-19}}{0{,}015} + 109(1{,}015)^{-19} = 114{,}9956
+    \end{align*}
+
+    \item \textbf{Untuk $n = 20, \dots, 29$ ($C_n = 104{,}5$):}
+    \begin{align*}
+        n = 20 &\implies P_{20} = 2 \cdot \frac{1 - (1{,}015)^{-20}}{0{,}015} + 104{,}5(1{,}015)^{-20} = \mathbf{111{,}9254} \quad (\text{minimum untuk } n = 20,\dots,29) \\
+        n = 21 &\implies P_{21} = 2 \cdot \frac{1 - (1{,}015)^{-21}}{0{,}015} + 104{,}5(1{,}015)^{-21} = 112{,}2418 \\
+        n = 29 &\implies P_{29} = 2 \cdot \frac{1 - (1{,}015)^{-29}}{0{,}015} + 104{,}5(1{,}015)^{-29} = 114{,}6102
+    \end{align*}
+
+    \item \textbf{Untuk $n = 30$ ($C_{30} = 100$):}
+    \begin{align*}
+        n = 30 &\implies P_{30} = 2 \cdot \frac{1 - (1{,}015)^{-30}}{0{,}015} + 100(1{,}015)^{-30} = \mathbf{112{,}0079}
+    \end{align*}
+\end{itemize}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{ccc@{\hspace{1.8cm}}ccc@{\hspace{1.8cm}}ccc}
+\toprule
+$n$ & $C_n$ & $P_n$ & $n$ & $C_n$ & $P_n$ & $n$ & $C_n$ & $P_n$ \\
+\midrule
+$\mathbf{10}$ & $\mathbf{109{,}0}$ & $\mathbf{112{,}3661}$ & $17$ & $109{,}0$ & $114{,}4413$ & $24$ & $104{,}5$ & $113{,}1632$ \\
+$11$ & $109{,}0$ & $112{,}6760$ & $18$ & $109{,}0$ & $114{,}7205$ & $25$ & $104{,}5$ & $113{,}4612$ \\
+$12$ & $109{,}0$ & $112{,}9812$ & $19$ & $109{,}0$ & $114{,}9956$ & $26$ & $104{,}5$ & $113{,}7549$ \\
+$13$ & $109{,}0$ & $113{,}2820$ & $\mathbf{20}$ & $\mathbf{104{,}5}$ & $\mathbf{111{,}9254}$ & $27$ & $104{,}5$ & $114{,}0442$ \\
+$14$ & $109{,}0$ & $113{,}5783$ & $21$ & $104{,}5$ & $112{,}2418$ & $28$ & $104{,}5$ & $114{,}3293$ \\
+$15$ & $109{,}0$ & $113{,}8703$ & $22$ & $104{,}5$ & $112{,}5535$ & $29$ & $104{,}5$ & $114{,}6102$ \\
+$16$ & $109{,}0$ & $114{,}1579$ & $23$ & $104{,}5$ & $112{,}8606$ & $\mathbf{30}$ & $\mathbf{100{,}0}$ & $\mathbf{112{,}0079}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+    \therefore \quad P = \min_{10 \le n \le 30} P_n = \min\{112{,}3661;\ 111{,}9254;\ 112{,}0079\} = \mathbf{\$111{,}9254} \quad (\text{pada } n = 20)
+\]
+
+\newpage
+
+% =============================================================
+% SOAL 3: PUTABLE BOND DISKON (SLIDE HALAMAN 6-7)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 3 (Slide Hal. 6--7):} \textit{Bond} 10 tahun $\$100$ \textit{par value}, kupon $6\%$ \textit{payable semiannually}, dibeli dengan \textit{yield} $8\%$ \textit{convertible semiannually}, \textit{putable} mulai 5 tahun dari tanggal diterbitkan. Berapa harga \textit{bond} tersebut?
+\end{tcolorbox}
+
+\textbf{Jawab:}
+\begin{align*}
+    F &= C = 100, \qquad r = \frac{0{,}06}{2} = 0{,}03 \implies Fr = 100 \times 0{,}03 = 3 \\
+    i &= \frac{0{,}08}{2} = 0{,}04 \implies Ci = 100 \times 0{,}04 = 4, \qquad \text{\textit{put date}: } n \in \{10, 11, \dots, 20\} \\[0.2em]
+    P_n &= C + (Fr - Ci) \, a_{\overline{n}|i} = 100 + (3 - 4) \, a_{\overline{n}|0{,}04} = 100 - a_{\overline{n}|0{,}04}
+\end{align*}
+Karena $i > r$ (diskon), $P_n$ monoton turun terhadap $n$, sehingga harga maksimum (\textit{putable}) tercapai pada $n = 10$:
+\begin{align*}
+    P &= \max_{10 \le n \le 20} P_n = P_{10} = 100 + (3 - 4) \, a_{\overline{10}|0{,}04} = 100 - \frac{1 - (1{,}04)^{-10}}{0{,}04} = 100 - 8{,}11090 = \mathbf{\$91{,}8891 \approx \$91{,}89}
+\end{align*}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{cc@{\hspace{1.8cm}}cc@{\hspace{1.8cm}}cc@{\hspace{1.8cm}}cc}
+\toprule
+Waktu ($n$) & $P_n$ & Waktu ($n$) & $P_n$ & Waktu ($n$) & $P_n$ & Waktu ($n$) & $P_n$ \\
+\midrule
+$1$ & $99{,}03846$ & $6$ & $94{,}75786$ & $11$ & $91{,}23952$ & $16$ & $88{,}34770$ \\
+$2$ & $98{,}11391$ & $7$ & $93{,}99795$ & $12$ & $90{,}61493$ & $17$ & $87{,}83433$ \\
+$3$ & $97{,}22491$ & $8$ & $93{,}26726$ & $13$ & $90{,}01435$ & $18$ & $87{,}34070$ \\
+$4$ & $96{,}37010$ & $9$ & $92{,}56467$ & $14$ & $89{,}43688$ & $19$ & $86{,}86606$ \\
+$5$ & $95{,}54818$ & $\mathbf{10}$ & $\mathbf{91{,}88910}$ & $15$ & $88{,}88161$ & $20$ & $86{,}40967$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.4em}
+\hrule
+\vspace{0.5em}
+
+% =============================================================
+% SOAL 4: PUTABLE BOND PREMIUM (SLIDE HALAMAN 8-9)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 4 (Slide Hal. 8--9):} \textit{Bond} 10 tahun $\$100$ \textit{par value}, kupon $8\%$ \textit{payable semiannually}, dibeli dengan \textit{yield} $6\%$ \textit{convertible semiannually}, \textit{putable} mulai 5 tahun dari tanggal diterbitkan. Berapa harga \textit{bond} tersebut?
+\end{tcolorbox}
+
+\textbf{Jawab:}
+\begin{align*}
+    F &= C = 100, \qquad r = \frac{0{,}08}{2} = 0{,}04 \implies Fr = 100 \times 0{,}04 = 4 \\
+    i &= \frac{0{,}06}{2} = 0{,}03 \implies Ci = 100 \times 0{,}03 = 3, \qquad \text{\textit{put date}: } n \in \{10, 11, \dots, 20\} \\[0.2em]
+    P_n &= C + (Fr - Ci) \, a_{\overline{n}|i} = 100 + (4 - 3) \, a_{\overline{n}|0{,}03} = 100 + a_{\overline{n}|0{,}03}
+\end{align*}
+Karena $i < r$ (premium), $P_n$ monoton naik terhadap $n$, sehingga harga maksimum (\textit{putable}) tercapai pada $n = 20$:
+\begin{align*}
+    P &= \max_{10 \le n \le 20} P_n = P_{20} = 100 + (4 - 3) \, a_{\overline{20}|0{,}03} = 100 + \frac{1 - (1{,}03)^{-20}}{0{,}03} = 100 + 14{,}87747 = \mathbf{\$114{,}8775 \approx \$114{,}88}
+\end{align*}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{cc@{\hspace{1.8cm}}cc@{\hspace{1.8cm}}cc@{\hspace{1.8cm}}cc}
+\toprule
+Waktu ($n$) & $P_n$ & Waktu ($n$) & $P_n$ & Waktu ($n$) & $P_n$ & Waktu ($n$) & $P_n$ \\
+\midrule
+$1$ & $100{,}9709$ & $6$ & $105{,}4172$ & $11$ & $109{,}2526$ & $16$ & $112{,}5611$ \\
+$2$ & $101{,}9135$ & $7$ & $106{,}2303$ & $12$ & $109{,}9540$ & $17$ & $113{,}1661$ \\
+$3$ & $102{,}8286$ & $8$ & $107{,}0197$ & $13$ & $110{,}6350$ & $18$ & $113{,}7535$ \\
+$4$ & $103{,}7171$ & $9$ & $107{,}7861$ & $14$ & $111{,}2961$ & $19$ & $114{,}3238$ \\
+$5$ & $104{,}5797$ & $10$ & $108{,}5302$ & $15$ & $111{,}9379$ & $\mathbf{20}$ & $\mathbf{114{,}8775}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+
+% =============================================================
+% SOAL 5: SERANGKAIAN BONDS - RUMUS MAKEHAM (SLIDE HALAMAN 12)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 5 (Slide Hal. 12):} Suatu \textit{bond} $\$1.000$ \textit{par value} $5{,}25\%$ dengan \textit{annual} kupon, akan ditebus dengan 10 kali angsuran per tahun dengan besar sama pada akhir dari tahun ke-11 sampai ke-20 dari tanggal penerbitan dengan harga $105$. \textit{Bond} dibeli untuk menghasilkan \textit{yield rate} $7\%$ efektif. Hitung harga \textit{bond} keseluruhan!
+\end{tcolorbox}
+
+\textbf{Jawab:}
+\begin{align*}
+    m &= 10 \text{ bond} \quad (t = 11, 12, \dots, 20), \qquad F = \frac{1.000}{10} = 100, \qquad C = 105, \qquad r = 0{,}0525, \qquad i = 0{,}07 \\[0.3em]
+    g &= \frac{Fr}{C} = \frac{100 \times 0{,}0525}{105} = 0{,}05, \qquad C' = \sum_{k=1}^{10} C_k = 10 \times 105 = 1.050 \\[0.3em]
+    K' &= \sum_{k=1}^{10} K_k = 105\left(v^{11} + v^{12} + \dots + v^{20}\right) = 105 \cdot v^{10} \, a_{\overline{10}|0{,}07} \\
+       &= 105(1{,}07)^{-10}\left(\frac{1 - (1{,}07)^{-10}}{0{,}07}\right) = 105(0{,}508349)(7{,}023582) = 374{,}895 \\[0.3em]
+    P' &= K' + \frac{g}{i}\left(C' - K'\right) = 374{,}895 + \frac{0{,}05}{0{,}07}\left(1.050 - 374{,}895\right) = 374{,}895 + 482{,}218 = \mathbf{\$857{,}11}
+\end{align*}
+
+\vspace{0.5em}
+\hrule height 0.8pt
+\vspace{0.5em}
+\begin{center}
+    {\textbf{Bagian Pelengkap: Permasalahan \textit{Bond} yang Lebih Umum (Slide Hal. 13--15)}}
+\end{center}
+
+% SOAL PELENGKAP A (SLIDE HAL 13)
+\begin{tcolorbox}
+\textbf{Soal Pelengkap A (Slide Hal. 13 --- Frekuensi Berbeda):} \textit{Bond} $\$1.000$ \textit{par value}, \textit{maturity} 10 tahun, kupon $8{,}4\%$ \textit{semiannually}, \textit{redemption value} $\$1.050$, \textit{yield rate} efektif tahunan $7\%$. Tentukan harga \textit{bond}!
+\end{tcolorbox}
+\begin{align*}
+    F &= 1.000, \qquad C = 1.050, \qquad n = 10 \times 2 = 20, \qquad r = \frac{0{,}084}{2} = 0{,}042 \implies Fr = 42, \qquad i = 0{,}07 \\[0.2em]
+    &\left(1 + \frac{i^{(2)}}{2}\right)^2 = 1 + i = 1{,}07 \implies i^{(2)} = 2\left(1{,}07^{0{,}5} - 1\right) = 0{,}06882 \implies j = \frac{i^{(2)}}{2} = 0{,}03441 \\[0.2em]
+    P &= 1.050 + \left[42 - (1.050)(0{,}03441)\right] a_{\overline{20}|0{,}03441} = 1.050 + (5{,}8695)(14{,}289626) = \mathbf{\$1.133{,}87}
+\end{align*}
+
+% SOAL PELENGKAP B (SLIDE HAL 14)
+\begin{tcolorbox}
+\textbf{Soal Pelengkap B (Slide Hal. 14 --- Kupon Geometri):} \textit{Inflation-adjusted bond} $\$1.000$ \textit{par value}, kupon tahunan selama 10 tahun, kupon awal $7\%$ dan naik $3\%$ per tahun, $C = \$1.200$, \textit{yield} tahunan $9\%$. Tentukan harga \textit{bond}!
+\end{tcolorbox}
+\begin{align*}
+    F &= 1.000, \qquad C = 1.200, \qquad n = 10, \qquad Fr_1 = 1.000(0{,}07) = 70, \qquad k = 0{,}03, \qquad i = 0{,}09 \\[0.2em]
+    \text{PV}_{\text{kupon}} &= 70 \cdot \frac{1 - \left(\dfrac{1 + k}{1 + i}\right)^n}{i - k} = 70 \cdot \frac{1 - \left(\dfrac{1 + 0{,}03}{1 + 0{,}09}\right)^{10}}{0{,}09 - 0{,}03} = 504{,}368 \\[0.2em]
+    \text{PV}_{\text{redemption}} &= 1.200(1{,}09)^{-10} = 506{,}893 \implies P = 504{,}368 + 506{,}893 = \mathbf{\$1.011{,}26}
+\end{align*}
+
+% SOAL PELENGKAP C (SLIDE HAL 15)
+\begin{tcolorbox}
+\textbf{Soal Pelengkap C (Slide Hal. 15 --- \textit{Yield} Tidak Konstan):} \textit{Bond} $\$1.000$ \textit{par value}, \textit{maturity} 10 tahun, kupon $8{,}4\%$ \textit{semiannually}, $C = \$1.050$, \textit{yield} $10\%$ \textit{convertible semiannually} (5 tahun pertama) dan $9\%$ \textit{convertible semiannually} (5 tahun berikutnya). Tentukan harga \textit{bond}!
+\end{tcolorbox}
+\begin{align*}
+    F &= 1.000, \qquad C = 1.050, \qquad Fr = 42, \qquad n_1 = 10 \ \left(i_1 = \frac{0{,}10}{2} = 0{,}05\right), \qquad n_2 = 10 \ \left(i_2 = \frac{0{,}09}{2} = 0{,}045\right) \\[0.2em]
+    \text{PV}_{\text{kupon}} &= 42\left[a_{\overline{10}|0{,}05} + (1{,}05)^{-10} \, a_{\overline{10}|0{,}045}\right] = 42\left[7{,}721735 + (0{,}613913)(7{,}912718)\right] = 528{,}334 \\[0.2em]
+    \text{PV}_{\text{redemption}} &= 1.050(1{,}05)^{-10}(1{,}045)^{-10} = 415{,}082 \implies P = 528{,}334 + 415{,}082 = \mathbf{\$943{,}42}
+\end{align*}
+
+\end{document}

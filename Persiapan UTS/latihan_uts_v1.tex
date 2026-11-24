@@ -1,0 +1,538 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% Pengaturan Margin Kertas
+\geometry{
+    top=1.8cm,
+    bottom=1.8cm,
+    left=1.6cm,
+    right=1.6cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Skema Warna Elegan & Profesional
+\definecolor{primaryblue}{RGB}{20, 60, 110}     % Deep Navy
+\definecolor{secondaryblue}{RGB}{41, 128, 185}  % Bright Blue
+\definecolor{boxbg}{RGB}{248, 250, 254}         % Soft Ice Blue tint
+\definecolor{darkgreen}{RGB}{22, 115, 60}       % Forest Green
+\definecolor{greenbg}{RGB}{244, 251, 246}       % Soft Mint tint
+\definecolor{darkamber}{RGB}{185, 105, 10}      % Amber / Gold
+\definecolor{amberbg}{RGB}{254, 251, 243}       % Soft Amber tint
+\definecolor{darkpurple}{RGB}{95, 45, 130}      % Royal Purple
+\definecolor{purplebg}{RGB}{252, 248, 255}      % Soft Lavender tint
+
+% Notasi Aktuaria Standar
+\newcommand{\angl}[1]{\overline{#1|}}
+\newcommand{\ia}{(Ia)}
+\newcommand{\da}{(Da)}
+\newcommand{\is}{(Is)}
+\newcommand{\ds}{(Ds)}
+\newcommand{\iad}{(I\ddot{a})}
+\newcommand{\dad}{(D\ddot{a})}
+\newcommand{\isd}{(I\ddot{s})}
+\newcommand{\dsd}{(D\ddot{s})}
+\newcommand{\iba}{(\bar{I}\bar{a})}
+\newcommand{\dba}{(\bar{D}\bar{a})}
+\newcommand{\ibs}{(\bar{I}\bar{s})}
+\newcommand{\dbs}{(\bar{D}\bar{s})}
+
+% Kotak Khusus Soal & Pembahasan
+\newtcolorbox{naskahsoalbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily\small,
+    title={SOAL #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=1.5mm,
+    left=3.5mm,
+    right=3.5mm,
+    top=2.5mm,
+    bottom=2.5mm,
+    before skip=3mm,
+    after skip=3mm
+}
+
+\newtcolorbox{solusibox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily\small,
+    title={PEMBAHASAN LENGKAP: SOAL #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    arc=1.5mm,
+    left=3.5mm,
+    right=3.5mm,
+    top=2.5mm,
+    bottom=2.5mm,
+    before skip=3mm,
+    after skip=3.5mm
+}
+
+\newtcolorbox{konsepbox}[1][]{
+    enhanced,
+    breakable,
+    colback=amberbg,
+    colframe=darkamber,
+    fonttitle=\bfseries\sffamily\small,
+    title={KONSEP KUNCI \& STRATEGI: #1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkamber,
+    arc=1.5mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    before skip=2mm,
+    after skip=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=primaryblue,
+    pdftitle={AK2161 Teori Suku Bunga - Latihan UTS v1},
+    pdfauthor={Aktuaria ITB}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+% ==================== HEADER UTAMA ====================
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue,
+    arc=2mm,
+    left=4mm,right=4mm,top=3.5mm,bottom=3.5mm,
+    boxrule=0pt
+]
+\begin{center}
+    {\fontsize{15}{18}\selectfont\bfseries\color{white} INSTITUT TEKNOLOGI BANDUNG}\\[1mm]
+    {\fontsize{13}{16}\selectfont\bfseries\color{amberbg} PROGRAM STUDI SARJANA AKTUARIA}\\[1.5mm]
+    {\fontsize{12}{15}\selectfont\bfseries\color{white} SIMULASI UJIAN TENGAH SEMESTER (UTS) --- AK2161 TEORI SUKU BUNGA}\\[1mm]
+    {\fontsize{9.5}{12}\selectfont\color{white} Paket Latihan Mandiri Komprehensif (Kode Berkas: \texttt{latihan\_uts\_v1}) $\bullet$ Durasi: 120 Menit $\bullet$ Sifat: Tutup Buku}
+\end{center}
+\end{tcolorbox}
+
+\vspace{1.5mm}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=boxbg,
+    colframe=secondaryblue,
+    arc=1.5mm,
+    boxrule=0.6pt,
+    left=3mm,right=3mm,top=2mm,bottom=2mm
+]
+\small
+\textbf{Petunjuk Umum Simulasi Ujian:}
+\begin{enumerate}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item Paket latihan ini dirancang dengan tingkat kesulitan, gaya bahasa, dan tipologi soal yang identik dengan naskah asli UTS AK2161 ITB beberapa tahun terakhir.
+    \item Naskah terdiri atas dua bagian:
+    \begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+        \item \textbf{Bagian I (Halaman 1--3)}: Lembar Soal Ujian Murni (Soal 1 s.d. 6, Total 100 Poin). Kerjakan secara mandiri selama 120 menit menggunakan kalkulator saintifik sebelum membuka bagian pembahasan.
+        \item \textbf{Bagian II (Halaman 4--10)}: Pembahasan Lengkap Langkah demi Langkah (*Step-by-Step Solutions*) disertai analisis konsep, diagram garis waktu (*timeline*), dan interpretasi finansial.
+    \end{itemize}
+    \item Tuliskan setiap tahapan penurunan matematis secara terstruktur dan hindari pembulatan dini (*early rounding*) pada variabel perantara.
+\end{enumerate}
+\end{tcolorbox}
+
+\vspace{2mm}
+\begin{center}
+    {\fontsize{12}{14}\selectfont\bfseries\color{primaryblue} BAGIAN I: LEMBAR SOAL UJIAN (SIMULASI MANDIRI)}
+\end{center}
+\vspace{1mm}
+
+% ----------------- SOAL 1 -----------------
+\begin{naskahsoalbox}[1 \hfill \textnormal{(Bobot: 15 Poin)}]
+Suatu modal awal sebesar 2.000 diinvestasikan dengan skema tingkat bunga sederhana $i$ per tahun. Modal tersebut bertumbuh menjadi 2.600 setelah suatu periode waktu $t$ tahun.
+
+Tentukan nilai kini pada $t=0$ dari akumulasi uang sebesar 3.450 dengan ketentuan:
+\begin{enumerate}[label=(\alph*), topsep=2pt, itemsep=2pt]
+    \item Tingkat bunga sederhana yang besarnya $\frac{4}{3}$ kali semula, dengan periode akumulasi tetap $t$ tahun. \hfill [7 Poin]
+    \item Tingkat bunga sederhana semula $i$, namun periode akumulasi menjadi $\frac{5}{2}$ kali semula. \hfill [8 Poin]
+\end{enumerate}
+\end{naskahsoalbox}
+
+% ----------------- SOAL 2 -----------------
+\begin{naskahsoalbox}[2 \hfill \textnormal{(Bobot: 15 Poin)}]
+Dua alternatif investasi dimulai secara bersamaan pada waktu $t = 0$:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Investasi X} memberikan imbal hasil dengan fungsi gaya bunga (*force of interest*) yang bertambah secara linear:
+    $$\delta_t = 0{,}04 + 0{,}008t, \quad t \ge 0 \quad (t \text{ dalam tahun})$$
+    \item \textbf{Investasi Y} memberikan hasil investasi yang setara dengan tingkat diskonto nominal tahunan $d^{(4)} = 6\%$ yang dikonversikan secara kuartalan.
+\end{itemize}
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=2pt, itemsep=2pt]
+    \item Tentukan tingkat suku bunga efektif tahunan $i_Y$ dan gaya bunga konstan $\delta_Y$ dari Investasi Y. \hfill [5 Poin]
+    \item Pada waktu $t$ berapakah *force of interest* dari kedua investasi tersebut bernilai sama persis? \hfill [5 Poin]
+    \item Jika investor menyetorkan dana sebesar 10.000 pada Investasi X pada waktu $t=0$, hitung nilai akumulasi dana tersebut pada akhir tahun ke-2 ($t=2$). \hfill [5 Poin]
+\end{enumerate}
+\end{naskahsoalbox}
+
+% ----------------- SOAL 3 -----------------
+\begin{naskahsoalbox}[3 \hfill \textnormal{(Bobot: 15 Poin)}]
+Sebuah yayasan pendidikan menerima komitmen dana berupa perpetuitas-immediat yang membayar sebesar 25 pada setiap 4 tahun sekali, dengan pembayaran pertama terjadi tepat 4 tahun dari sekarang ($t=4$). Nilai kini (*present value*) dari perpetuitas tersebut pada $t=0$ adalah sebesar 50.
+
+Dengan menggunakan tingkat suku bunga efektif yang sama:
+\begin{enumerate}[label=(\alph*), topsep=2pt, itemsep=2pt]
+    \item Tentukan suku bunga efektif 4-tahunan ($j_4$) dan suku bunga efektif tahunan ($i$). \hfill [5 Poin]
+    \item Tentukan nilai kini dari suatu perpetuitas yang membayar sebesar 2 pada setiap 6 bulan sekali (semesteran), dengan pembayaran pertama terjadi 6 bulan dari sekarang ($t = 0{,}5$). \hfill [5 Poin]
+    \item Jika pembayaran pada bagian (b) diubah menjadi perpetuitas-due (pembayaran pertama terjadi hari ini, $t=0$), tentukan nilai kininya! \hfill [5 Poin]
+\end{enumerate}
+\end{naskahsoalbox}
+
+\newpage
+
+% ----------------- SOAL 4 -----------------
+\begin{naskahsoalbox}[4 \hfill \textnormal{(Bobot: 15 Poin)}]
+Budi mendepositokan dana awal sebesar \textbf{Rp 50.000.000} pada suatu bank komersial. Bank memberikan skema suku bunga berjenjang sebagai berikut:
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Tingkat bunga nominal tahunan $i^{(4)} = i$ dikonversi secara kuartalan untuk \textbf{6 tahun pertama} ($0 \le t \le 6$).
+    \item Tingkat bunga nominal tahunan $i^{(12)} = 3i$ dikonversi secara bulanan untuk \textbf{tahun-tahun setelahnya} ($t > 6$).
+\end{enumerate}
+Diketahui nilai akumulasi saldo tabungan Budi pada akhir tahun ke-4 adalah sebesar Rp $X$. Jika nilai akumulasi tabungan pada akhir tahun ke-9 tercatat tepat sebesar \textbf{Rp 110.000.000}:
+\begin{enumerate}[label=(\arabic*), topsep=2pt, itemsep=2pt]
+    \item Buktikan bahwa suku bunga efektif per periode konversi pada 6 tahun pertama ($j_1$) bernilai sama dengan suku bunga efektif per periode konversi setelah tahun ke-6 ($j_2$)! \hfill [4 Poin]
+    \item Tentukan nilai parameter $i$ serta suku bunga efektif tahunan pada periode pertama! \hfill [6 Poin]
+    \item Tentukan nilai akumulasi tabungan $X$ pada akhir tahun ke-4! \hfill [5 Poin]
+\end{enumerate}
+\end{naskahsoalbox}
+
+% ----------------- SOAL 5 -----------------
+\begin{naskahsoalbox}[5 \hfill \textnormal{(Bobot: 20 Poin)}]
+Suatu rangkaian aliran kas pembayaran tahunan memiliki jadwal penerimaan sebagai berikut:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Pembayaran sebesar 500 diterima pada setiap akhir tahun selama $n$ tahun pertama ($t = 1, 2, \dots, n$).
+    \item Pembayaran sebesar 1.500 diterima pada setiap akhir tahun selama $n$ tahun berikutnya ($t = n+1, n+2, \dots, 2n$).
+    \item Tidak ada pembayaran lagi setelah waktu $t = 2n$.
+\end{itemize}
+Diketahui bahwa nilai sekarang dari seluruh penerimaan pada $n$ tahun kedua ($t = n+1$ s.d. $2n$) bernilai sama dengan $\frac{3}{2}$ kali nilai sekarang dari seluruh penerimaan pada $n$ tahun pertama ($t = 1$ s.d. $n$).
+\begin{enumerate}[label=(\alph*), topsep=2pt, itemsep=2pt]
+    \item Gambarkan diagram garis waktu dari rangkaian aliran kas tersebut dan nyatakan persamaan nilai kininya pada $t=0$ dalam simbol aktuaria standar $a_{\angl{n}|i}$ dan faktor diskonto $v$. \hfill [6 Poin]
+    \item Tentukan nilai eksak dari faktor akumulasi $(1+i)^n$. \hfill [7 Poin]
+    \item Jika suku bunga efektif tahunan yang berlaku adalah $i = 6\%$, tentukan jangka waktu $n$ (dibulatkan ke bilangan bulat terdekat)! \hfill [7 Poin]
+\end{enumerate}
+\end{naskahsoalbox}
+
+% ----------------- SOAL 6 -----------------
+\begin{naskahsoalbox}[6 \hfill \textnormal{(Bobot: 20 Poin)}]
+Rian (usia 25 tahun) merencanakan kepemilikan tempat tinggal untuk 20 tahun ke depan hingga ia berusia 45 tahun ($t = 20$). Rian mempertimbangkan dua alternatif keputusan finansial berikut:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Opsi A (Membeli Rumah dengan Fasilitas KPR)}:
+    \begin{itemize}[leftmargin=4mm]
+        \item Harga tunai rumah saat ini ($t=0$) adalah \textbf{Rp 300.000.000}.
+        \item Rian membayar uang muka (*Down Payment*) sebesar \textbf{Rp 60.000.000} pada $t=0$. Sisa pokok sebesar Rp 240.000.000 dilunasi melalui cicilan KPR selama 10 tahun (120 bulan) dengan angsuran tetap setiap akhir bulan (*annuity-immediate*) pada suku bunga nominal $i^{(12)} = 9\%$ (dikonversi bulanan).
+        \item Tepat setelah KPR lunas di usia 35 tahun ($t=10$), Rian mengalokasikan dana sebesar cicilan bulanan KPR tersebut untuk diinvestasikan secara rutin ke reksadana saham setiap akhir bulan selama 10 tahun berikutnya (dari usia 35 hingga 45 tahun) dengan imbal hasil efektif \textbf{10\% per tahun}.
+        \item Harga pasar rumah mengalami apresiasi nilai sebesar \textbf{4\% per tahun} secara efektif selama 20 tahun.
+    \end{itemize}
+    \item \textbf{Opsi B (Menyewa Rumah \& Berinvestasi Penuh)}:
+    \begin{itemize}[leftmargin=4mm]
+        \item Rian menyewa rumah yang setara dengan biaya sewa sebesar \textbf{Rp 1.500.000 per bulan} yang dibayarkan di setiap akhir bulan selama 20 tahun penuh (240 bulan).
+        \item Dana uang muka sebesar \textbf{Rp 60.000.000} langsung diinvestasikan seluruhnya pada $t=0$ ke portofolio reksadana dengan imbal hasil efektif \textbf{10\% per tahun} selama 20 tahun.
+        \item Selisih pengeluaran antara angsuran KPR Opsi A dan biaya sewa rumah bulanan diinvestasikan pada setiap akhir bulan ke portofolio yang sama (imbal hasil efektif 10\% per tahun) selama 20 tahun penuh.
+    \end{itemize}
+\end{itemize}
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=2pt, itemsep=2pt]
+    \item Hitung besarnya angsuran KPR bulanan ($R$) yang harus dibayar Rian pada Opsi A! \hfill [5 Poin]
+    \item Pada Opsi A, hitung total kekayaan bersih (*net worth*) Rian pada usia 45 tahun (nilai pasar rumah + saldo akumulasi reksadana)! \hfill [5 Poin]
+    \item Pada Opsi B, hitung total saldo akumulasi seluruh investasi Rian pada usia 45 tahun! \hfill [6 Poin]
+    \item Berdasarkan kriteria nilai akumulasi kekayaan pada usia 45 tahun, tentukan opsi mana yang secara finansial lebih menguntungkan bagi Rian! \hfill [4 Poin]
+\end{enumerate}
+\end{naskahsoalbox}
+
+\vfill
+\begin{center}
+    \small\color{gray}
+    $\ast\ast\ast$ \textbf{Lembar Soal Berakhir di Sini --- Selamat Mengerjakan Simulasi} $\ast\ast\ast$
+\end{center}
+
+\newpage
+
+% ==================== BAGIAN II: PEMBAHASAN ====================
+\begin{center}
+    {\fontsize{13}{16}\selectfont\bfseries\color{darkgreen} BAGIAN II: PEMBAHASAN LENGKAP LANGKAH DEMI LANGKAH}\\[1mm]
+    {\fontsize{10}{12}\selectfont\color{darkgreen} Kunci Jawaban Resmi $\bullet$ Penurunan Rumus Simbolik $\bullet$ Analisis Solusi Numerik}
+\end{center}
+\vspace{2mm}
+
+% ----------------- SOLUSI 1 -----------------
+\begin{solusibox}[1]
+\begin{konsepbox}[Fungsi Akumulasi Bunga Sederhana]
+Pada skema bunga sederhana (*simple interest*), faktor akumulasi adalah fungsi linear terhadap waktu:
+$$A(t) = A(0) \cdot (1 + it) \iff 1 + it = \frac{A(t)}{A(0)}$$
+Nilai kini dari modal akumulasi $S$ pada waktu $t'$ dengan suku bunga $i'$ adalah $PV = \frac{S}{1 + i't'}$.
+\end{konsepbox}
+
+\textbf{Langkah 1: Menentukan Nilai Produk Parameter $it$ Semula}  
+Diketahui modal awal $A(0) = 2.000$ bertumbuh menjadi $A(t) = 2.600$.
+$$2.600 = 2.000 \cdot (1 + it) \implies 1 + it = \frac{2.600}{2.000} = 1{,}30 \implies \mathbf{it = 0{,}30}$$
+
+\textbf{Langkah 2: Menjawab Bagian (a) --- Perubahan Tingkat Bunga ($i' = \frac{4}{3}i$)}  
+Karena tingkat bunga menjadi $i' = \frac{4}{3}i$ dan durasi $t$ tetap:
+$$i't = \left(\frac{4}{3}i\right) t = \frac{4}{3}(it) = \frac{4}{3}(0{,}30) = 0{,}40$$
+Maka nilai kini $PV_a$ dari uang $S = 3.450$ adalah:
+$$PV_a = \frac{3.450}{1 + i't} = \frac{3.450}{1 + 0{,}40} = \frac{3.450}{1{,}40} = \mathbf{2.464{,}2857}$$
+
+\textbf{Langkah 3: Menjawab Bagian (b) --- Perubahan Periode Akumulasi ($t'' = \frac{5}{2}t$)}  
+Karena suku bunga tetap $i$ dan periode waktu menjadi $t'' = \frac{5}{2}t$:
+$$it'' = i \left(\frac{5}{2}t\right) = \frac{5}{2}(it) = \frac{5}{2}(0{,}30) = 0{,}75$$
+Maka nilai kini $PV_b$ dari uang $S = 3.450$ adalah:
+$$PV_b = \frac{3.450}{1 + it''} = \frac{3.450}{1 + 0{,}75} = \frac{3.450}{1{,}75} = \mathbf{1.971{,}4286}$$
+\end{solusibox}
+
+% ----------------- SOLUSI 2 -----------------
+\begin{solusibox}[2]
+\begin{konsepbox}[Gaya Bunga \& Hubungan Tingkat Diskonto Nominal]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Hubungan diskonto nominal dengan suku bunga efektif: $1 - d = \left(1 - \frac{d^{(m)}}{m}\right)^m$ dan $1 + i = (1 - d)^{-1}$.
+    \item Gaya bunga konstan: $\delta = \ln(1+i) = -m \ln\left(1 - \frac{d^{(m)}}{m}\right)$.
+    \item Akumulasi kontinu: $A(T) = A(0) \exp\left(\int_0^T \delta_t dt\right)$.
+\end{itemize}
+\end{konsepbox}
+
+\textbf{Langkah 1: Menghitung Suku Bunga \& Gaya Bunga Investasi Y}  
+Diketahui $d^{(4)} = 0{,}06$ dengan $m=4$.  
+Faktor diskonto kuartalan: $1 - \frac{d^{(4)}}{4} = 1 - \frac{0{,}06}{4} = 1 - 0{,}015 = 0{,}985$.  
+Faktor akumulasi tahunan efektif:
+$$1 + i_Y = \left(1 - \frac{d^{(4)}}{4}\right)^{-4} = (0{,}985)^{-4} \approx 1{,}062319 \implies \mathbf{i_Y = 6{,}2319\% \text{ per tahun}}$$
+\begin{align*}
+    \delta_Y &= \ln(1 + i_Y) = \ln\left[(0{,}985)^{-4}\right] = -4 \ln(0{,}985) \\
+    &\approx -4(-0{,}0151136) = \mathbf{0{,}060455 \text{ (atau } 6{,}0455\% \text{ per tahun)}}
+\end{align*}
+
+\textbf{Langkah 2: Menentukan Waktu $t$ saat $\delta_X(t) = \delta_Y$}  
+Gaya bunga Investasi X adalah $\delta_X(t) = 0{,}04 + 0{,}008t$. Samakan dengan $\delta_Y$:
+$$0{,}04 + 0{,}008t = 0{,}060455 \implies 0{,}008t = 0{,}020455$$
+$$t = \frac{0{,}020455}{0{,}008} \approx \mathbf{2{,}5568 \text{ tahun (sekitar 2 tahun 6,7 bulan)}}$$
+
+\textbf{Langkah 3: Nilai Akumulasi Investasi X pada $t=2$ Tahun}  
+Hitung integral dari gaya bunga:
+$$\int_0^2 \delta_t dt = \int_0^2 (0{,}04 + 0{,}008t) dt = \left[ 0{,}04t + 0{,}004t^2 \right]_0^2 = 0{,}04(2) + 0{,}004(4) = 0{,}08 + 0{,}016 = 0{,}096$$
+Nilai akumulasi pada $t=2$:
+$$A(2) = 10.000 \cdot e^{0{,}096} \approx 10.000 \times 1{,}100759 = \mathbf{11.007{,}59}$$
+\end{solusibox}
+
+\newpage
+
+% ----------------- SOLUSI 3 -----------------
+\begin{solusibox}[3]
+\begin{konsepbox}[Prinsip Ekuivalensi Suku Bunga pada Perpetuitas]
+Nilai sekarang perpetuitas-immediat dengan pembayaran berkala $R$ setiap periode dan suku bunga efektif per periode $j$ adalah:
+$$PV = \frac{R}{j} \iff j = \frac{R}{PV}$$
+Untuk mengonversi suku bunga $k$-tahunan ($j_k$) ke suku bunga per $\frac{1}{m}$ tahun ($j_{1/m}$), gunakan persamaan ekuivalensi:
+$$(1 + j_{1/m})^m = 1 + i = (1 + j_k)^{1/k}$$
+\end{konsepbox}
+
+\textbf{Langkah 1: Menentukan Suku Bunga 4-Tahunan ($j_4$) dan Tahunan ($i$)}  
+Pembayaran terjadi setiap 4 tahun sekali sebesar $R_1 = 25$ dengan $PV_1 = 50$:
+$$PV_1 = \frac{R_1}{j_4} \implies 50 = \frac{25}{j_4} \implies \mathbf{j_4 = \frac{25}{50} = 0{,}50 = 50\% \text{ per 4 tahun}}$$
+Hubungan suku bunga 4-tahunan dengan suku bunga efektif tahunan $i$:
+$$1 + j_4 = (1 + i)^4 \implies (1 + i)^4 = 1{,}50 \implies 1 + i = (1{,}50)^{1/4} \approx 1{,}106682$$
+$$\mathbf{i = 10{,}6682\% \text{ per tahun}}$$
+
+\textbf{Langkah 2: Menghitung Nilai Kini Perpetuitas Semesteran (Bagian b)}  
+Pembayaran terjadi setiap 6 bulan (setengah tahun, $m=2$) sebesar $R_2 = 2$.  
+Suku bunga efektif per semester ($j_{\text{sem}}$):
+$$1 + j_{\text{sem}} = (1 + i)^{1/2} = \left[(1 + i)^4\right]^{1/8} = (1{,}50)^{1/8} \approx 1{,}051990 \implies \mathbf{j_{\text{sem}} = 5{,}1990\% \text{ per semester}}$$
+Nilai kini perpetuitas-immediat semesteran pada $t=0$:
+$$PV_2 = \frac{R_2}{j_{\text{sem}}} = \frac{2}{0{,}051990} \approx \mathbf{38{,}4693}$$
+
+\textbf{Langkah 3: Menghitung Nilai Kini Perpetuitas-Due Semesteran (Bagian c)}  
+Pada perpetuitas-due, pembayaran pertama terjadi pada $t=0$:
+$$\ddot{PV}_2 = PV_2 \cdot (1 + j_{\text{sem}}) = 38{,}4693 \times 1{,}051990 \approx \mathbf{40{,}4693}$$
+\textit{Catatan Verifikasi}: Secara intuitif, $\ddot{PV}_2 = R_2 + PV_2 = 2 + 38{,}4693 = 40{,}4693$. Hasilnya identik dan terbukti tepat.
+\end{solusibox}
+
+% ----------------- SOLUSI 4 -----------------
+\begin{solusibox}[4]
+\begin{konsepbox}[Suku Bunga Berjenjang \& Ekuivalensi Periode Konversi]
+Jika tingkat bunga nominal berubah seiring waktu, akumulasi total adalah perkalian faktor majemuk dari masing-masing segmen waktu:
+$$A(t) = K \cdot (1 + j_1)^{n_1} \cdot (1 + j_2)^{n_2}$$
+dengan $j = \frac{i^{(m)}}{m}$ adalah suku bunga per periode konversi majemuk.
+\end{konsepbox}
+
+\textbf{Langkah 1: Pembuktian Kesamaan Suku Bunga per Periode Konversi ($j_1 = j_2$)}  
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Segmen 1 (Tahun 0 s.d. 6)}: Dikonversi kuartalan ($m_1 = 4$), suku bunga nominal $i^{(4)} = i$.
+    $$j_1 = \frac{i^{(4)}}{4} = \frac{i}{4}$$
+    \item \textbf{Segmen 2 (Setelah Tahun ke-6)}: Dikonversi bulanan ($m_2 = 12$), suku bunga nominal $i^{(12)} = 3i$.
+    $$j_2 = \frac{i^{(12)}}{12} = \frac{3i}{12} = \frac{i}{4}$$
+\end{itemize}
+Karena $j_1 = \frac{i}{4}$ dan $j_2 = \frac{i}{4}$, terbukti bahwa **suku bunga per periode konversinya persis sama**: $j_1 = j_2 = j = \frac{i}{4}$.
+
+\textbf{Langkah 2: Menentukan Nilai Parameter $i$ dan Suku Bunga Efektif Tahunan}  
+Total waktu hingga $t=9$ tahun terbagi atas:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Segmen 1 (6 tahun pertama): $n_1 = 6 \text{ tahun} \times 4 \text{ kuartal/tahun} = 24 \text{ periode}$.
+    \item Segmen 2 (3 tahun berikutnya, $t=6$ s.d. $9$): $n_2 = 3 \text{ tahun} \times 12 \text{ bulan/tahun} = 36 \text{ periode}$.
+\end{itemize}
+Total periode konversi: $N = n_1 + n_2 = 24 + 36 = 60 \text{ periode}$.  
+Persamaan nilai akumulasi pada $t=9$:
+\begin{align*}
+    A(9) &= 50.000.000 \cdot (1 + j)^{60} = 110.000.000 \\
+    (1 + j)^{60} &= \frac{110.000.000}{50.000.000} = 2{,}20 \\
+    1 + j &= (2{,}20)^{\frac{1}{60}} \approx 1{,}013228 \implies \mathbf{j \approx 0{,}013228 = 1{,}3228\% \text{ per periode konversi}}
+\end{align*}
+Karena $j = \frac{i}{4}$, maka:
+$$i = 4j = 4 \times 0{,}013228 = \mathbf{0{,}052911 = 5{,}2911\% \text{ per tahun}}$$
+Suku bunga efektif tahunan pada periode pertama (kuartalan):
+$$i_{\text{eff}} = (1 + j)^4 - 1 = (1{,}013228)^4 - 1 \approx 1{,}053970 - 1 = \mathbf{5{,}3970\% \text{ per tahun}}$$
+
+\textbf{Langkah 3: Menghitung Akumulasi Tabungan $X$ pada Akhir Tahun ke-4}  
+Waktu $t = 4$ tahun masih berada di dalam Segmen 1, sehingga telah berjalan $n = 4 \times 4 = 16$ kuartal:
+\begin{align*}
+    X = A(4) &= 50.000.000 \cdot (1 + j)^{16} = 50.000.000 \times \left[(2{,}20)^{\frac{1}{60}}\right]^{16} \\
+    &= 50.000.000 \times (2{,}20)^{\frac{4}{15}} \approx 50.000.000 \times 1{,}233993 = \mathbf{\text{Rp } 61.699.653}
+\end{align*}
+\end{solusibox}
+
+\newpage
+
+% ----------------- SOLUSI 5 -----------------
+\begin{solusibox}[5]
+\begin{konsepbox}[Dekomposisi Anuitas \& Notasi Simbolik]
+Arus kas yang berubah besaran pada segmen waktu berbeda dapat diuraikan menjadi kombinasi anuitas dasar yang didiskontokan dengan faktor $v^k$:
+$$PV = R_1 a_{\angl{n}|i} + R_2 \cdot v^n a_{\angl{n}|i}$$
+\end{konsepbox}
+
+\textbf{Langkah 1: Diagram Garis Waktu \& Persamaan Nilai Kini}  
+Visualisasi diagram waktu arus kas:
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+    \draw[thick,->] (0,0) -- (12,0) node[anchor=north] {$t$ (tahun)};
+    \foreach \x/\label in {0/0, 1.5/1, 3/2, 5.5/n, 7.5/n+1, 10/2n} {
+        \draw[thick] (\x,0.15) -- (\x,-0.15) node[anchor=north] {\small $\label$};
+    }
+    \node at (4.25, -0.1) {$\cdots$};
+    \node at (8.75, -0.1) {$\cdots$};
+    
+    % Panah Pembayaran
+    \draw[->, thick, primaryblue] (1.5,0) -- (1.5,0.9) node[above] {\small $500$};
+    \draw[->, thick, primaryblue] (3,0) -- (3,0.9) node[above] {\small $500$};
+    \draw[->, thick, primaryblue] (5.5,0) -- (5.5,0.9) node[above] {\small $500$};
+    \draw[->, thick, darkgreen] (7.5,0) -- (7.5,1.3) node[above] {\small $1.500$};
+    \draw[->, thick, darkgreen] (10,0) -- (10,1.3) node[above] {\small $1.500$};
+    
+    \draw[<->, dashed, primaryblue] (0.5, -0.8) -- (5.5, -0.8) node[midway, below] {\footnotesize Segmen 1: $PV_1 = 500 a_{\angl{n}|}$};
+    \draw[<->, dashed, darkgreen] (6.5, -0.8) -- (10.5, -0.8) node[midway, below] {\footnotesize Segmen 2: $PV_2 = 1.500 v^n a_{\angl{n}|}$};
+\end{tikzpicture}
+\end{center}
+
+Nilai sekarang masing-masing segmen dievaluasi pada titik waktu $t=0$:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Nilai sekarang Segmen 1 ($t = 1$ s.d. $n$): $PV_1 = 500 \cdot a_{\angl{n}|i}$.
+    \item Nilai sekarang Segmen 2 ($t = n+1$ s.d. $2n$): Pada waktu $t=n$, nilainya adalah anuitas biasa $1.500 a_{\angl{n}|i}$. Mendiskontokan ke $t=0$ menghasilkan:
+    $$PV_2 = 1.500 \cdot v^n \cdot a_{\angl{n}|i}$$
+\end{itemize}
+
+\textbf{Langkah 2: Menentukan Nilai Eksak Faktor Akumulasi $(1+i)^n$}  
+Diketahui kondisi pada soal: $PV_2 = \frac{3}{2} PV_1$. Substitusikan bentuk simboliknya:
+\begin{align*}
+    1.500 \cdot v^n \cdot a_{\angl{n}|i} &= \frac{3}{2} \cdot \left(500 \cdot a_{\angl{n}|i}\right) \\
+    1.500 \cdot v^n \cdot a_{\angl{n}|i} &= 750 \cdot a_{\angl{n}|i}
+\end{align*}
+Karena $a_{\angl{n}|i} > 0$, bagi kedua ruas dengan $1.500 a_{\angl{n}|i}$:
+$$v^n = \frac{750}{1.500} = \frac{1}{2} = 0{,}50$$
+Karena faktor diskonto adalah $v = \frac{1}{1+i}$, maka:
+$$(1+i)^{-n} = \frac{1}{2} \iff \mathbf{(1+i)^n = 2}$$
+
+\textbf{Langkah 3: Menentukan Nilai $n$ untuk Suku Bunga $i = 6\%$}  
+Substitusikan $i = 0{,}06$ ke dalam hubungan $(1{,}06)^n = 2$:
+\begin{align*}
+    \ln\left((1{,}06)^n\right) &= \ln(2) \\
+    n \cdot \ln(1{,}06) &= \ln(2) \\
+    n &= \frac{\ln(2)}{\ln(1{,}06)} = \frac{0{,}693147}{0{,}058269} \approx \mathbf{11{,}8957 \text{ tahun}}
+\end{align*}
+Dibulatkan ke bilangan bulat terdekat, diperoleh **$n = 12$ tahun**.
+\end{solusibox}
+
+\newpage
+
+% ----------------- SOLUSI 6 -----------------
+\begin{solusibox}[6]
+\begin{konsepbox}[Analisis Komparasi Keputusan Finansial Riil (*Rent vs. Buy*)]
+Untuk membandingkan dua opsi keuangan secara objektif, seluruh arus kas (nilai pasar aset, pengeluaran cicilan, sewa, dan hasil investasi) harus diakumulasikan ke satu titik waktu evaluasi masa depan (*Future Value*) yang sama, yaitu pada usia $t = 20$ tahun (usia 45 tahun).
+\end{konsepbox}
+
+\textbf{Langkah 1: Menghitung Angsuran KPR Bulanan ($R$) pada Opsi A}  
+Pokok pinjaman $L = \text{Rp } 300.000.000 - \text{Rp } 60.000.000 = \text{Rp } 240.000.000$.  
+Tenor $n = 10 \text{ tahun} \times 12 \text{ bulan} = 120 \text{ bulan}$. Suku bunga bulanan $j_{\text{kpr}} = \frac{9\%}{12} = 0{,}75\% = 0{,}0075$.
+\begin{align*}
+    a_{\angl{120}|0{,}0075} &= \frac{1 - (1{,}0075)^{-120}}{0{,}0075} = \frac{1 - 0{,}407886}{0{,}0075} = \frac{0{,}592114}{0{,}0075} \approx 78{,}948508 \\
+    R &= \frac{L}{a_{\angl{120}|j_{\text{kpr}}}} = \frac{240.000.000}{78{,}948508} = \mathbf{\text{Rp } 3.040.219 \text{ per bulan}}
+\end{align*}
+
+\textbf{Langkah 2: Menghitung Kekayaan Bersih Opsi A pada Usia 45 Tahun}  
+Kekayaan Opsi A terdiri atas dua komponen:
+\begin{enumerate}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Nilai Pasar Rumah}: Apresiasi 4\% per tahun selama 20 tahun:
+    $$H_{20} = 300.000.000 \cdot (1{,}04)^{20} = 300.000.000 \times 2{,}191123 = \text{Rp } 657.336.943$$
+    \item \textbf{Hasil Investasi Reksadana (Tahun 10 s.d. 20)}:  
+    Suku bunga investasi bulanan: $j_{\text{inv}} = (1{,}10)^{\frac{1}{12}} - 1 \approx 0{,}00797414$.  
+    Investasi rutin $R = 3.040.219$ selama 120 bulan diakumulasikan ke akhir tahun ke-20:
+    \begin{align*}
+        s_{\angl{120}|j_{\text{inv}}} &= \frac{(1 + j_{\text{inv}})^{120} - 1}{j_{\text{inv}}} = \frac{(1{,}10)^{10} - 1}{(1{,}10)^{\frac{1}{12}} - 1} = \frac{2{,}593742 - 1}{0{,}00797414} \approx 199{,}863901 \\
+        S_{A, \text{inv}} &= 3.040.219 \times 199{,}863901 = \text{Rp } 607.629.809
+    \end{align*}
+\end{enumerate}
+Total kekayaan bersih Opsi A pada usia 45 tahun:
+$$\text{Total Kekayaan Opsi A} = 657.336.943 + 607.629.809 = \mathbf{\text{Rp } 1.264.966.752}$$
+
+\textbf{Langkah 3: Menghitung Akumulasi Investasi Opsi B pada Usia 45 Tahun}  
+Pada Opsi B, seluruh dana yang tidak terpakai diinvestasikan pada imbal hasil 10\% per tahun:
+\begin{enumerate}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Akumulasi Uang Muka (DP Rp 60 jt)} selama 20 tahun:
+    $$S_{\text{DP}} = 60.000.000 \cdot (1{,}10)^{20} = 60.000.000 \times 6{,}727500 = \text{Rp } 403.650.000$$
+    \item \textbf{Investasi Selisih Bulanan Selama 20 Tahun Penuh}:  
+    Selisih pengeluaran bulanan yang diinvestasikan:
+    $$\Delta = R - \text{Sewa} = 3.040.219 - 1.500.000 = \text{Rp } 1.540.219 \text{ per bulan}$$
+    Akumulasi setoran $\Delta$ selama 10 tahun pertama pada $t=10$:
+    $$S_{B, 10} = 1.540.219 \times s_{\angl{120}|j_{\text{inv}}} = 1.540.219 \times 199{,}863901 = \text{Rp } 307.834.024$$
+    Nilai ini terus bertumbuh selama 10 tahun berikutnya hingga $t=20$:
+    $$S_{B, 10} \cdot (1{,}10)^{10} = 307.834.024 \times 2{,}593742 = \text{Rp } 798.442.178$$
+    Akumulasi setoran $\Delta$ pada 10 tahun kedua ($t=10$ s.d. $20$):
+    $$S_{B, \text{kedua}} = 1.540.219 \times s_{\angl{120}|j_{\text{inv}}} = \text{Rp } 307.834.024$$
+\end{enumerate}
+Total saldo investasi Opsi B pada usia 45 tahun:
+$$\text{Total Saldo Opsi B} = 403.650.000 + 798.442.178 + 307.834.024 = \mathbf{\text{Rp } 1.509.926.198}$$
+
+\textbf{Langkah 4: Kesimpulan Keputusan Finansial}  
+Membandingkan kedua hasil akhir pada usia 45 tahun:
+$$\Delta \text{Kekayaan} = \text{Total Opsi B} - \text{Total Opsi A} = 1.509.926.198 - 1.264.966.752 = \mathbf{\text{Rp } 244.959.446}$$
+\textbf{Rekomendasi}: **Opsi B (Menyewa Rumah \& Berinvestasi Penuh) lebih menguntungkan secara finansial** dengan surplus kekayaan sebesar kurang lebih **Rp 244,96 juta**. Hal ini terjadi karena tingkat pengembalian investasi (10\% per tahun) menghasilkan efek pemajemukan (*compounding*) yang lebih agresif dibandingkan kombinasi apresiasi rumah (4\% per tahun) dan beban bunga pinjaman KPR (9\% per tahun).
+\end{solusibox}
+
+\vfill
+\begin{center}
+    \small\color{gray}
+    $\ast\ast\ast$ \textbf{Akhir Dokumen Pembahasan Simulasi UTS AK2161 (latihan\_uts\_v1)} $\ast\ast\ast$
+\end{center}
+
+\end{document}

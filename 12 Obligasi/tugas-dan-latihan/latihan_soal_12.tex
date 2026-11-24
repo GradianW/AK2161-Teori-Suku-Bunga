@@ -1,0 +1,633 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors (Konsisten dengan latihan_soal modul sebelumnya)
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{solgreen}{RGB}{34, 112, 62}
+\definecolor{solbg}{RGB}{246, 252, 248}
+\definecolor{probblue}{RGB}{28, 70, 110}
+\definecolor{probbg}{RGB}{245, 248, 253}
+
+% Boxes for Problem and Solution
+\newtcolorbox{problembox}[2][]{
+    enhanced,
+    breakable,
+    colback=probbg,
+    colframe=probblue,
+    fonttitle=\bfseries\sffamily,
+    title={#2 \hfill \normalfont\sffamily\footnotesize #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=probblue,
+    arc=2.5mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{solutionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=solbg,
+    colframe=solgreen,
+    fonttitle=\bfseries\sffamily,
+    title={Pembahasan #1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=solgreen,
+    arc=2mm,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Kumpulan Soal \& Pembahasan Lengkap Teori Suku Bunga}\\[0.3em]
+\Large Modul 12: Obligasi (\textit{Bonds and Other Securities})\\
+\large (\textit{Bond Pricing Formulas, Premium/Discount, Book Value Amortization, Straight Line \& Sinking Fund Methods})}
+\author{\textbf{Standar:} SOA Exam FM / PAI A10 \& Perkuliahan Aktuaria ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.8em}
+
+\section*{Petunjuk Pengerjaan}
+Kumpulan soal latihan (\textit{grinding set}) ini disusun bertahap dari tingkat dasar hingga tingkat ujian profesi (SOA Exam FM / PAI A10) untuk menguji penguasaan seluruh materi pada \textbf{Bab 12 Obligasi}: valuasi \textit{zero-coupon bond}, keempat rumus harga obligasi (\textit{Basic, Premium/Discount, Base Amount, Makeham}), sifat barisan geometri pada jadwal amortisasi premium (\textit{writing down}) dan akumulasi diskon (\textit{writing up}), perbedaan \textit{Book Value} vs. \textit{Market Value}, metode garis lurus (\textit{Straight Line Method}), hingga valuasi obligasi dengan metode \textit{Sinking Fund}.
+
+\vspace{1em}
+
+% ------------------- SOAL 1 -------------------
+\begin{problembox}[Bobot: Dasar / Zero-Coupon \& Accumulation Bond]{Soal 1}
+Sebuah perusahaan menerbitkan dua jenis obligasi tanpa kupon berkala:
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Obligasi A (\textit{Zero-Coupon Bond}):} Memiliki nilai tebusan $\$1.000$ pada akhir tahun ke-8 dan saat ini dijual dengan harga $\$540$. Tentukan \textit{nominal yield rate convertible semiannually} ($i^{(2)}$) yang diperoleh investor!
+    \item \textbf{Obligasi B (\textit{Accumulation Bond}):} Memiliki nilai pokok awal $\$1.000$ yang mengakumulasikan bunga dengan laju nominal $7\%$ \textit{convertible semiannually} selama 12 tahun. Berapakah harga beli obligasi B saat diterbitkan jika investor mensyaratkan \textit{yield rate} nominal $9\%$ \textit{convertible semiannually}?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 1}
+\textbf{Bagian (a): Menentukan Yield Rate pada Zero-Coupon Bond}
+\begin{itemize}
+    \item Jumlah periode setengah tahunan: $n = 8 \times 2 = 16$ semester.
+    \item Misalkan $j = \frac{i^{(2)}}{2}$ adalah \textit{yield rate} efektif per semester. Persamaan nilai:
+    \begin{align*}
+        540(1 + j)^{16} &= 1.000 \\[0.3em]
+        (1 + j)^{16} &= \frac{1.000}{540} = 1{,}85185185 \\[0.3em]
+        1 + j &= (1{,}85185185)^{1/16} \approx 1{,}039258 \implies j \approx 0{,}039258 \ (3{,}9258\% \text{ per semester})
+    \end{align*}
+    \item Maka \textit{nominal yield rate convertible semiannually} adalah:
+    \begin{equation*}
+        i^{(2)} = 2 \times j = 2 \times 3{,}9258\% = \mathbf{7{,}85\%}
+    \end{equation*}
+\end{itemize}
+
+\textbf{Bagian (b): Menentukan Harga Beli Accumulation Bond}
+\begin{itemize}
+    \item Jumlah periode: $n = 12 \times 2 = 24$ semester.
+    \item Pada \textit{accumulation bond}, nilai tebusan $C$ pada saat jatuh tempo adalah pokok ditambah bunga yang terakumulasi pada laju $\frac{7\%}{2} = 3{,}5\%$ per semester:
+    \begin{equation*}
+        C = 1.000(1 + 0{,}035)^{24} = 1.000 \times 2{,}283328 = \$2.283{,}33
+    \end{equation*}
+    \item Investor mensyaratkan \textit{yield rate} $\frac{9\%}{2} = 4{,}5\%$ per semester. Maka harga beli $P$ adalah nilai sekarang dari $C$ pada suku bunga $4{,}5\%$:
+    \begin{equation*}
+        P = C(1 + 0{,}045)^{-24} = 1.000 \left(\frac{1{,}035}{1{,}045}\right)^{24} = 2.283{,}328 \times 0{,}347703 = \mathbf{\$793{,}92}
+    \end{equation*}
+\end{itemize}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 2 -------------------
+\begin{problembox}[Bobot: Dasar / Keempat Rumus Harga Obligasi ($C \neq F$)]{Soal 2}
+Suatu obligasi dengan nilai par (\textit{par value}) $\$2.000$ berjangka waktu 15 tahun membayarkan kupon dengan laju $9\%$ \textit{payable semiannually}. Obligasi ini akan ditebus pada saat jatuh tempo sebesar $105\%$ dari nilai par-nya. Seorang investor membeli obligasi tersebut untuk memperoleh \textit{yield} $8\%$ \textit{convertible semiannually}.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan nilai parameter $F, C, n, r, g, i, K,$ dan $G$!
+    \item Hitunglah harga obligasi $P$ menggunakan keempat rumus (\textit{Dasar, Premium/Diskon, Base Amount, dan Makeham}) serta tunjukkan bahwa keempatnya memberikan hasil yang sama!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 2}
+\textbf{Bagian (a): Identifikasi Parameter Obligasi (dalam satuan semester)}
+\begin{itemize}[itemsep=2pt]
+    \item Nilai par: $F = \mathbf{\$2.000}$
+    \item Nilai tebusan ($105\%$ dari par): $C = 1{,}05 \times 2.000 = \mathbf{\$2.100}$
+    \item Jumlah periode kupon: $n = 15 \times 2 = \mathbf{30 \text{ semester}}$
+    \item Laju kupon per semester: $r = \frac{0{,}09}{2} = \mathbf{0{,}045} \implies$ Besar kupon $Fr = 2.000 \times 0{,}045 = \mathbf{\$90{,}00}$
+    \item \textit{Modified coupon rate} ($g$):
+    \begin{equation*}
+        g = \frac{Fr}{C} = \frac{90}{2.100} = \frac{3}{70} \approx \mathbf{0{,}04285714}
+    \end{equation*}
+    \item \textit{Yield rate} per semester: $i = \frac{0{,}08}{2} = \mathbf{0{,}04}$
+    \item Nilai sekarang dari nilai tebusan ($K$):
+    \begin{equation*}
+        K = C v^{30} = 2.100(1{,}04)^{-30} = 2.100 \times 0{,}30831867 = \mathbf{\$647{,}4692}
+    \end{equation*}
+    \item \textit{Base amount} ($G$):
+    \begin{equation*}
+        G = \frac{Fr}{i} = \frac{90}{0{,}04} = \mathbf{\$2.250{,}00}
+    \end{equation*}
+    \item Faktor anuitas $a_{\overline{30}|0{,}04}$:
+    \begin{equation*}
+        a_{\overline{30}|0{,}04} = \frac{1 - (1{,}04)^{-30}}{0{,}04} = \frac{1 - 0{,}30831867}{0{,}04} = \mathbf{17{,}2920333}
+    \end{equation*}
+\end{itemize}
+
+\textbf{Bagian (b): Perhitungan Harga dengan Keempat Rumus}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Rumus Dasar:}
+    \begin{align*}
+        P &= Fr \, a_{\overline{30}|0{,}04} + K = 90(17{,}2920333) + 647{,}4692 \\
+          &= 1.556{,}2830 + 647{,}4692 = \mathbf{\$2.203{,}75}
+    \end{align*}
+    \item \textbf{Rumus Premium/Diskon:}
+    \begin{align*}
+        P &= C + (Fr - Ci)a_{\overline{30}|0{,}04} = 2.100 + (90 - 2.100 \times 0{,}04)(17{,}2920333) \\
+          &= 2.100 + 6(17{,}2920333) = \mathbf{\$2.203{,}75}
+    \end{align*}
+    \item \textbf{Rumus Base Amount:}
+    \begin{align*}
+        P &= G + (C - G)v^{30} = 2.250 + (2.100 - 2.250)(0{,}30831867) \\
+          &= 2.250 - 150(0{,}30831867) = 2.250 - 46{,}2478 = \mathbf{\$2.203{,}75}
+    \end{align*}
+    \item \textbf{Rumus Makeham:}
+    \begin{align*}
+        P &= K + \frac{g}{i}(C - K) = 647{,}4692 + \frac{3/70}{0{,}04}(2.100 - 647{,}4692) \\
+          &= 647{,}4692 + \frac{15}{14}(1.452{,}5308) = \mathbf{\$2.203{,}75}
+    \end{align*}
+\end{enumerate}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 3 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Aplikasi Rumus Makeham \& Premium-Diskon]{Soal 3}
+Suatu obligasi dengan nilai tebusan $\$1.000$ pada akhir $n$ tahun memiliki \textit{modified coupon rate} tahunan $g = 6\%$. Pada \textit{yield rate} efektif tahunan $i$, diketahui nilai sekarang dari nilai tebusannya adalah $K = \$450$ dan harga obligasi tersebut adalah $\$890$.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan \textit{yield rate} tahunan $i$!
+    \item Berapakah harga obligasi tersebut jika laju kuponnya dinaikkan menjadi $g^* = 9\%$ (dengan nilai tebusan, jangka waktu, dan \textit{yield rate} yang tetap sama)?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 3}
+\textbf{Bagian (a): Mencari Yield Rate $i$ dengan Rumus Makeham}
+Gunakan Rumus Makeham $P = K + \frac{g}{i}(C - K)$ dengan $C = 1.000, K = 450, g = 0{,}06,$ dan $P = 890$:
+\begin{align*}
+    890 &= 450 + \frac{0{,}06}{i}(1.000 - 450) \\[0.3em]
+    440 &= \frac{0{,}06}{i}(550) = \frac{33}{i} \\[0.3em]
+    i &= \frac{33}{440} = \frac{3}{40} = \mathbf{0{,}075 \ (7{,}5\%)}
+\end{align*}
+
+\textbf{Bagian (b): Harga Obligasi dengan Kupon Baru $g^* = 9\%$}
+Karena $C, n,$ dan $i$ tidak berubah, maka nilai $K = \$450$ tetap sama. Dengan Rumus Makeham:
+\begin{align*}
+    P^* &= K + \frac{g^*}{i}(C - K) \\[0.3em]
+        &= 450 + \frac{0{,}09}{0{,}075}(1.000 - 450) \\[0.3em]
+        &= 450 + 1{,}2(550) = 450 + 660 = \mathbf{\$1.110{,}00}
+\end{align*}
+\textit{(Perhatikan bagaimana Rumus Makeham memungkinkan kita menemukan $i$ dan $P^*$ dalam hitungan detik tanpa perlu mencari nilai $n$ terlebih dahulu!)}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 4 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Deret Geometri Pokok Amortisasi ($P_t$)]{Soal 4}
+Suatu obligasi 10 tahun dengan kupon tahunan dibeli pada harga \textit{premium} untuk menghasilkan \textit{yield rate} efektif tahunan $i$. Dari jadwal amortisasi obligasi tersebut, diketahui bahwa:
+\begin{itemize}
+    \item Besar amortisasi premium (pokok) pada kupon ke-3 adalah $P_3 = \$24{,}20$.
+    \item Besar amortisasi premium (pokok) pada kupon ke-5 adalah $P_5 = \$29{,}282$.
+\end{itemize}
+Hitunglah:
+\begin{enumerate}[label=(\alph*)]
+    \item \textit{Yield rate} tahunan $i$!
+    \item Besar amortisasi premium pada tahun pertama ($P_1$) dan tahun terakhir ($P_{10}$)!
+    \item Total premium awal ($P - C$) yang dibayarkan investor saat membeli obligasi tersebut!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 4}
+\textbf{Bagian (a): Mencari Yield Rate $i$ dari Rasio Geometri Pokok}
+Ingat sifat fundamental jadwal amortisasi obligasi: kolom pokok $P_t$ membentuk barisan geometri dengan rasio $(1+i)$, sehingga $P_t = P_k(1+i)^{t-k}$. Untuk $t = 5$ dan $k = 3$:
+\begin{align*}
+    P_5 &= P_3 (1 + i)^{5-3} \\[0.3em]
+    29{,}282 &= 24{,}20 (1 + i)^2 \\[0.3em]
+    (1 + i)^2 &= \frac{29{,}282}{24{,}20} = 1{,}21 \implies 1 + i = 1{,}10 \implies \mathbf{i = 0{,}10 \ (10\%)}
+\end{align*}
+
+\textbf{Bagian (b): Menghitung $P_1$ dan $P_{10}$}
+\begin{align*}
+    P_1 &= \frac{P_3}{(1 + i)^2} = \frac{24{,}20}{1{,}21} = \mathbf{\$20{,}00} \\[0.3em]
+    P_{10} &= P_1 (1 + i)^9 = 20{,}00 \times (1{,}10)^9 = 20{,}00 \times 2{,}3579477 = \mathbf{\$47{,}16}
+\end{align*}
+
+\textbf{Bagian (c): Menghitung Total Premium Awal ($P - C$)}
+Total premium awal sama dengan jumlah seluruh kolom pokok dari $t = 1$ hingga $t = 10$:
+\begin{align*}
+    \text{Premium} = \sum_{t=1}^{10} P_t &= P_1 \left[ 1 + (1+i) + (1+i)^2 + \dots + (1+i)^9 \right] \\[0.3em]
+    &= P_1 \cdot s_{\overline{10}|0{,}10} = 20{,}00 \times \left( \frac{(1{,}10)^{10} - 1}{0{,}10} \right) \\[0.3em]
+    &= 20{,}00 \times 15{,}9374246 = \mathbf{\$318{,}75}
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 5 -------------------
+\begin{problembox}[Bobot: Standar SOA FM / Rekonstruksi Jadwal dari Dua Nilai Buku]{Soal 5}
+Sebuah obligasi dengan kupon semesteran sebesar $\$35$ dibeli pada harga diskon. Dalam jadwal akumulasi diskonnya, tercatat bahwa:
+\begin{itemize}
+    \item Nilai buku setelah kupon ke-6 adalah $B_6 = \$912{,}40$.
+    \item Nilai buku setelah kupon ke-7 adalah $B_7 = \$923{,}02$.
+\end{itemize}
+Tentukan:
+\begin{enumerate}[label=(\alph*)]
+    \item Besar akumulasi diskon ($|P_7|$) dan pendapatan bunga ($I_7$) pada semester ke-7!
+    \item \textit{Yield rate} per semester ($i$) dan \textit{nominal yield rate convertible semiannually} ($i^{(2)}$)!
+    \item Nilai buku setelah kupon ke-8 ($B_8$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 5}
+\textbf{Bagian (a): Menghitung Akumulasi Diskon dan Bunga pada Semester ke-7}
+Hubungan antar nilai buku yang berurutan adalah $B_7 = B_6 - P_7$:
+\begin{align*}
+    P_7 &= B_6 - B_7 = 912{,}40 - 923{,}02 = \mathbf{-\$10{,}62} \quad (\text{akumulasi diskon sebesar } \mathbf{\$10{,}62})
+\end{align*}
+Karena $I_7 + P_7 = Fr = 35$, maka pendapatan bunga pada semester ke-7 adalah:
+\begin{align*}
+    I_7 &= Fr - P_7 = 35 - (-10{,}62) = \mathbf{\$45{,}62}
+\end{align*}
+
+\textbf{Bagian (b): Menentukan Yield Rate $i$}
+Pendapatan bunga $I_7$ dihitung dari $i \times B_6$:
+\begin{align*}
+    I_7 = i \cdot B_6 \implies i &= \frac{I_7}{B_6} = \frac{45{,}62}{912{,}40} = \mathbf{0{,}05 \ (5\% \text{ per semester})}
+\end{align*}
+Maka \textit{nominal yield rate convertible semiannually} adalah $i^{(2)} = 2 \times 5\% = \mathbf{10\%}$.
+
+\textbf{Bagian (c): Menghitung Nilai Buku $B_8$}
+\begin{itemize}
+    \item Bunga semester ke-8: $I_8 = i \cdot B_7 = 0{,}05 \times 923{,}02 = \$46{,}151 \approx \$46{,}15$.
+    \item Pokok semester ke-8: $P_8 = 35 - 46{,}151 = -\$11{,}151$ (cek geometri: $-10{,}62 \times 1{,}05 = -11{,}151$).
+    \item Nilai buku setelah kupon ke-8:
+    \begin{equation*}
+        B_8 = B_7 - P_8 = 923{,}02 - (-11{,}151) = \mathbf{\$934{,}17}
+    \end{equation*}
+\end{itemize}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 6 -------------------
+\begin{problembox}[Bobot: Menengah / Rumus Langsung Baris ke-$t$ Tanpa Membangun Tabel]{Soal 6}
+Suatu obligasi dengan nilai par $\$10.000$ (ditebus pada par) berjangka waktu 10 tahun membayarkan kupon $6\%$ \textit{payable semiannually}. Obligasi tersebut dibeli oleh dana pensiun untuk menghasilkan \textit{yield} $8\%$ \textit{convertible semiannually}. Tanpa membangun tabel dari semester 1, hitunglah secara langsung:
+\begin{enumerate}[label=(\alph*)]
+    \item Nilai buku obligasi tepat setelah kupon ke-12 dibayarkan ($B_{12}$)!
+    \item Porsi pendapatan bunga ($I_{13}$) dan porsi akumulasi diskon ($P_{13}$) di dalam kupon ke-13!
+    \item Total akumulasi diskon yang terjadi mulai dari kupon ke-13 hingga kupon ke-16 ($\sum_{t=13}^{16} |P_t|$)!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 6}
+\textbf{Parameter Dasar (per semester):}
+\begin{itemize}[itemsep=1pt]
+    \item $F = C = \$10.000$, total periode $n = 10 \times 2 = 20$ semester.
+    \item $r = g = \frac{0{,}06}{2} = 0{,}03 \implies$ Kupon per semester $Fr = \$300$.
+    \item \textit{Yield rate} per semester: $i = \frac{0{,}08}{2} = 0{,}04$.
+\end{itemize}
+
+\textbf{Bagian (a): Nilai Buku setelah Kupon ke-12 ($B_{12}$)}
+Pada $t = 12$, sisa periode kupon ke depan adalah $n - t = 20 - 12 = 8$ semester. Gunakan rumus prospektif Premium/Diskon:
+\begin{align*}
+    a_{\overline{8}|0{,}04} &= \frac{1 - (1{,}04)^{-8}}{0{,}04} = \frac{1 - 0{,}7306902}{0{,}04} = 6{,}7327449 \\[0.3em]
+    B_{12} &= C + (Fr - Ci) a_{\overline{8}|0{,}04} \\
+           &= 10.000 + (300 - 10.000 \times 0{,}04)(6{,}7327449) \\
+           &= 10.000 - 100(6{,}7327449) = \mathbf{\$9.326{,}73}
+\end{align*}
+
+\textbf{Bagian (b): Bunga ($I_{13}$) dan Pokok ($P_{13}$) pada Kupon ke-13}
+Dapat dihitung langsung dari $B_{12}$ atau menggunakan rumus eksplisit $P_t = (Fr - Ci)v^{n-t+1}$:
+\begin{align*}
+    I_{13} &= i \cdot B_{12} = 0{,}04 \times 9.326{,}7255 = \mathbf{\$373{,}07} \\[0.2em]
+    P_{13} &= Fr - I_{13} = 300 - 373{,}07 = \mathbf{-\$73{,}07} \quad (\text{Cek rumus: } -100(1{,}04)^{-8} = -\$73{,}07)
+\end{align*}
+
+\textbf{Bagian (c): Total Akumulasi Diskon dari Kupon ke-13 s.d. ke-16}
+Perhatikan bahwa jumlah pokok $\sum_{t=13}^{16} P_t$ sama dengan selisih nilai buku $B_{12} - B_{16}$:
+\begin{itemize}
+    \item Sisa periode pada $t = 16$ adalah $20 - 16 = 4$ semester ($a_{\overline{4}|0{,}04} = 3{,}6298952$).
+    \item Nilai buku $B_{16} = 10.000 - 100(3{,}6298952) = \$9.637{,}01$.
+    \item Maka total akumulasi diskon selama 4 semester tersebut (semester 13, 14, 15, 16) adalah:
+    \begin{equation*}
+        \sum_{t=13}^{16} |P_t| = B_{16} - B_{12} = 9.637{,}01 - 9.326{,}73 = \mathbf{\$310{,}28}
+    \end{equation*}
+\end{itemize}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 7 -------------------
+\begin{problembox}[Bobot: Menengah / Book Value vs. Market Value saat Obligasi Dijual]{Soal 7}
+Sebuah perusahaan asuransi membeli obligasi $\$1.000$ \textit{par value} (ditebus pada par) berjangka waktu 10 tahun dengan kupon $7\%$ \textit{payable semiannually} pada harga yang menghasilkan \textit{yield} $8\%$ \textit{convertible semiannually}.
+
+Tepat setelah menerima kupon ke-8 (pada akhir tahun ke-4), suku bunga pasar turun sehingga perusahaan asuransi tersebut menjual obligasinya kepada investor lain yang mensyaratkan \textit{yield} $6\%$ \textit{convertible semiannually}.
+\begin{enumerate}[label=(\alph*)]
+    \item Berapakah harga beli awal ($P = B_0$) obligasi tersebut?
+    \item Berapakah nilai buku (\textit{Book Value}, $B_8$) obligasi dalam laporan keuangan perusahaan asuransi tepat pada akhir tahun ke-4?
+    \item Berapakah nilai pasar (\textit{Market Value}, $P_{\text{jual}}$) yang diterima perusahaan asuransi saat menjual obligasi tersebut pada akhir tahun ke-4, dan berapakah laba/rugi modal atas nilai bukunya?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 7}
+\textbf{Parameter Awal:} $F = C = \$1.000$, $n = 20$ semester, $r = g = 3{,}5\%$ ($Fr = \$35$), \textit{yield} awal $i_0 = 4\%$ per semester.
+
+\textbf{Bagian (a): Harga Beli Awal ($B_0$)}
+\begin{align*}
+    B_0 &= 1.000 + (35 - 40) a_{\overline{20}|0{,}04} = 1.000 - 5(13{,}590326) = \mathbf{\$932{,}05}
+\end{align*}
+
+\textbf{Bagian (b): Nilai Buku pada Akhir Tahun ke-4 ($B_8$)}
+Nilai buku (\textit{Book Value}) \textbf{selalu dihitung menggunakan \textit{yield rate} awal saat dibeli ($i_0 = 4\%$)} untuk sisa periode $20 - 8 = 12$ semester:
+\begin{align*}
+    a_{\overline{12}|0{,}04} &= \frac{1 - (1{,}04)^{-12}}{0{,}04} = 9{,}3850738 \\[0.2em]
+    B_8 &= 1.000 + (35 - 40) a_{\overline{12}|0{,}04} = 1.000 - 5(9{,}3850738) = \mathbf{\$953{,}07}
+\end{align*}
+
+\textbf{Bagian (c): Nilai Pasar saat Dijual ($P_{\text{jual}}$) dan Capital Gain atas Book Value}
+Nilai pasar (\textit{Market Value}) dihitung menggunakan \textbf{\textit{yield rate} pasar yang baru ($i_{\text{pasar}} = \frac{6\%}{2} = 3\%$ per semester)} untuk sisa 12 semester:
+\begin{align*}
+    a_{\overline{12}|0{,}03} &= \frac{1 - (1{,}03)^{-12}}{0{,}03} = 9{,}9540040 \\[0.2em]
+    P_{\text{jual}} &= 1.000 + (35 - 1.000 \times 0{,}03) a_{\overline{12}|0{,}03} = 1.000 + 5(9{,}9540040) = \mathbf{\$1.049{,}77}
+\end{align*}
+Karena harga jual pasar melebihi nilai buku pada tanggal tersebut, perusahaan asuransi membukukan \textbf{keuntungan modal (\textit{accounting capital gain})} sebesar:
+\begin{equation*}
+    \text{Laba atas Nilai Buku} = P_{\text{jual}} - B_8 = 1.049{,}77 - 953{,}07 = \mathbf{\$96{,}70}
+\end{equation*}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 8 -------------------
+\begin{problembox}[Bobot: Menengah / Komparasi Metode Aktuaria vs. Straight Line Method]{Soal 8}
+Tinjau obligasi dengan nilai par dan nilai tebusan $\$1.000$, berjangka waktu 2 tahun (4 semester), kupon $10\%$ \textit{payable semiannually} ($r = 5\%$), yang dibeli untuk menghasilkan \textit{yield} $6\%$ \textit{convertible semiannually} ($i = 3\%$).
+\begin{enumerate}[label=(\alph*)]
+    \item Hitung harga beli obligasi $P$ dan besarnya premium!
+    \item Susunlah perbandingan nilai $I_t, P_t,$ dan $B_t$ antara \textbf{Metode Amortisasi Suku Bunga Majemuk} dan \textbf{Metode Garis Lurus (\textit{Straight Line Method}, Slide Hal. 30)}!
+    \item Berapakah selisih (\textit{error}) nilai buku antara kedua metode pada akhir tahun pertama ($t = 2$)?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 8}
+\textbf{Bagian (a): Harga Beli dan Premium}
+Dengan $F = C = 1.000, n = 4, Fr = 50,$ dan $i = 0{,}03$:
+\begin{align*}
+    P &= 1.000 + (50 - 30) a_{\overline{4}|0{,}03} = 1.000 + 20(3{,}7170984) = \mathbf{\$1.074{,}34} \\[0.2em]
+    \text{Premium} &= P - C = \mathbf{\$74{,}34}
+\end{align*}
+
+\textbf{Bagian (b): Perbandingan Kedua Metode}
+\begin{itemize}
+    \item \textbf{Metode Garis Lurus (\textit{Straight Line Method}):}
+    Penyesuaian pokok dan bunga bernilai konstan setiap semester:
+    \begin{align*}
+        P_t^{\text{SL}} &= \frac{P - C}{n} = \frac{74{,}34}{4} = \mathbf{\$18{,}585 \ (\approx \$18{,}59)} \quad \forall t = 1, 2, 3, 4 \\
+        I_t^{\text{SL}} &= Fr - P_t^{\text{SL}} = 50 - 18{,}585 = \mathbf{\$31{,}415 \ (\approx \$31{,}42)} \quad \forall t = 1, 2, 3, 4
+    \end{align*}
+    \item \textbf{Metode Amortisasi Majemuk (Eksak):}
+    $P_1 = 20(1{,}03)^{-4} = \$17{,}77$; $P_2 = \$18{,}30$; $P_3 = \$18{,}85$; $P_4 = \$19{,}42$.
+\end{itemize}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{ccccccc}
+\toprule
+& \multicolumn{3}{c}{\textbf{Metode Amortisasi Majemuk}} & \multicolumn{3}{c}{\textbf{Metode Garis Lurus (\textit{Straight Line})}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+\textbf{Semester ($t$)} & $I_t$ & $P_t$ & $B_t$ & $I_t^{\text{SL}}$ & $P_t^{\text{SL}}$ & $B_t^{\text{SL}}$ \\
+\midrule
+$0$ & --- & --- & $\$1.074{,}34$ & --- & --- & $\$1.074{,}34$ \\
+$1$ & $\$32{,}23$ & $\$17{,}77$ & $\$1.056{,}57$ & $\$31{,}415$ & $\$18{,}585$ & $\$1.055{,}755$ \\
+$2$ & $\$31{,}70$ & $\$18{,}30$ & $\$1.038{,}27$ & $\$31{,}415$ & $\$18{,}585$ & $\$1.037{,}170$ \\
+$3$ & $\$31{,}15$ & $\$18{,}85$ & $\$1.019{,}42$ & $\$31{,}415$ & $\$18{,}585$ & $\$1.018{,}585$ \\
+$4$ & $\$30{,}58$ & $\$19{,}42$ & $\$1.000{,}00$ & $\$31{,}415$ & $\$18{,}585$ & $\$1.000{,}000$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$125{,}66}$ & $\mathbf{\$74{,}34}$ & --- & $\mathbf{\$125{,}66}$ & $\mathbf{\$74{,}34}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Bagian (c): Galat (\textit{Error}) Nilai Buku pada $t = 2$}
+Pada akhir tahun pertama ($t=2$), metode garis lurus menilai terlalu rendah (\textit{understate}) nilai buku obligasi sebesar:
+\begin{equation*}
+    \text{Error}_{t=2} = B_2 - B_2^{\text{SL}} = 1.038{,}27 - 1.037{,}17 = \mathbf{\$1{,}10}
+\end{equation*}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 9 -------------------
+\begin{problembox}[Bobot: Standar Slide Hal. 27--29 / Pendekatan Sinking Fund ($j = i$)]{Soal 9}
+Tinjau kembali obligasi pada Soal 8 ($F = C = \$1.000$, $n = 4$ semester, kupon $\$50$ per semester, \textit{yield} $i = 3\%$ per semester, harga beli $P = \$1.074{,}34$).
+\begin{enumerate}[label=(\alph*)]
+    \item Jika dipandang menggunakan metode \textit{sinking fund} (Slide Hal. 27--28), berapakah pendapatan bunga tetap yang diambil investor setiap semester atas modal awalnya, dan berapakah setoran rutin ke dalam \textit{sinking fund} pemulihan premium?
+    \item Tunjukkan bahwa akumulasi \textit{sinking fund} tersebut pada suku bunga $3\%$ per semester selama 4 semester tepat memulihkan kehilangan premium $P - C = \$74{,}34$!
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 9}
+\textbf{Bagian (a): Bunga Tetap atas Modal Awal dan Setoran Sinking Fund}
+\begin{itemize}
+    \item Dalam sudut pandang \textit{sinking fund}, modal awal investor tetap sebesar $P = \$1.074{,}34$ sepanjang 4 semester.
+    \item Bunga periodik yang diambil investor untuk memenuhi target \textit{yield} $3\%$ per semester adalah:
+    \begin{equation*}
+        I_{\text{tetap}} = i \cdot P = 0{,}03 \times 1.074{,}34197 = \mathbf{\$32{,}23 \text{ per semester}}
+    \end{equation*}
+    \item Sisa dari kupon $\$50{,}00$ disetorkan setiap semester ke dalam rekening \textit{sinking fund} ($D$):
+    \begin{equation*}
+        D = Fr - iP = 50{,}00 - 32{,}23 = \mathbf{\$17{,}77 \text{ per semester}}
+    \end{equation*}
+    (Perhatikan bahwa nilai setoran $D = \$17{,}77$ ini persis sama dengan baris pertama kolom pokok $P_1$ pada jadwal amortisasi!).
+\end{itemize}
+
+\textbf{Bagian (b): Verifikasi Saldo Akhir Sinking Fund}
+Pada akhir semester ke-4, dana di dalam \textit{sinking fund} terakumulasi menjadi:
+\begin{align*}
+    D \cdot s_{\overline{4}|0{,}03} &= 17{,}76974 \times \left( \frac{(1{,}03)^4 - 1}{0{,}03} \right) \\[0.3em]
+    &= 17{,}76974 \times 4{,}183627 = \mathbf{\$74{,}34} \equiv P - C
+\end{align*}
+Saat jatuh tempo, investor menerima uang tebusan $\$1.000{,}00$ dari penerbit obligasi ditambah pencairan \textit{sinking fund} $\$74{,}34$, sehingga modal awalnya sebesar $\$1.074{,}34$ kembali utuh $100\%$.
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 10 -------------------
+\begin{problembox}[Bobot: Standar Slide Hal. 31--32 / Obligasi dengan Sinking Fund Rate Berbeda ($j \neq i$)]{Soal 10}
+Suatu obligasi dengan nilai par $\$5.000$ (ditebus pada par) berjangka waktu 5 tahun membayarkan kupon $10\%$ \textit{payable semiannually}. Seorang investor ingin memperoleh imbal hasil bunga $8\%$ \textit{convertible semiannually} atas investasi awalnya, namun ia hanya dapat menginvestasikan kembali porsi pemulihan premiumnya di dalam \textit{sinking fund} yang memberikan bunga $4\%$ \textit{convertible semiannually}.
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan harga maksimum $P$ yang bersedia dibayar oleh investor tersebut!
+    \item Berapakah besar setoran ke dalam \textit{sinking fund} setiap semester?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 10}
+\textbf{Parameter (per semester):}
+\begin{itemize}[itemsep=1pt]
+    \item $F = C = \$5.000$, $n = 5 \times 2 = 10$ semester.
+    \item Laju kupon per semester: $r = g = \frac{10\%}{2} = 5\% = 0{,}05 \implies$ Kupon $Fr = Cg = \$250$.
+    \item Laju bunga investasi yang diinginkan: $i = \frac{8\%}{2} = 4\% = 0{,}04$ per semester.
+    \item Laju bunga \textit{sinking fund}: $j = \frac{4\%}{2} = 2\% = 0{,}02$ per semester.
+\end{itemize}
+
+\textbf{Bagian (a): Menghitung Harga Obligasi $P$}
+Gunakan persamaan nilai fundamental \textit{sinking fund} obligasi (Slide Hal. 31--32):
+\begin{equation*}
+    (Cg - iP) s_{\overline{n}|j} = P - C \iff P = \frac{C(1 + g \, s_{\overline{n}|j})}{1 + i \, s_{\overline{n}|j}}
+\end{equation*}
+Hitung faktor akumulasi $s_{\overline{10}|0{,}02}$:
+\begin{equation*}
+    s_{\overline{10}|0{,}02} = \frac{(1{,}02)^{10} - 1}{0{,}02} = \frac{1{,}21899442 - 1}{0{,}02} = 10{,}949721
+\end{equation*}
+Substitusikan ke rumus harga $P$:
+\begin{align*}
+    P &= \frac{5.000 \left[ 1 + 0{,}05(10{,}949721) \right]}{1 + 0{,}04(10{,}949721)} \\[0.3em]
+      &= \frac{5.000(1 + 0{,}54748605)}{1 + 0{,}43798884} = \frac{7.737{,}43025}{1{,}43798884} = \mathbf{\$5.380{,}73}
+\end{align*}
+
+\textbf{Bagian (b): Setoran Sinking Fund per Semester ($D$)}
+\begin{align*}
+    D &= Cg - iP = 250 - 0{,}04(5.380{,}73) = 250 - 215{,}2292 = \mathbf{\$34{,}77 \text{ per semester}}
+\end{align*}
+\textit{Cek Konsistensi:} Akumulasi setoran $\$34{,}7708 \times 10{,}949721 = \$380{,}73 = P - C = 5.380{,}73 - 5.000{,}00$ (Cocok!).
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 11 -------------------
+\begin{problembox}[Bobot: Menantang / SOA Exam FM --- Perbandingan Dua Obligasi]{Soal 11}
+Dua buah obligasi 10 tahun dengan nilai par dan nilai tebusan yang sama, yaitu $\$1.000$, dibeli untuk menghasilkan \textit{yield rate} yang sama, yaitu nominal $i^{(2)}$ \textit{convertible semiannually}:
+\begin{itemize}
+    \item \textbf{Obligasi X} memiliki kupon $6\%$ \textit{payable semiannually} dan dijual pada harga diskon sebesar $\$851{,}23$ (diskon sebesar $\$148{,}77$).
+    \item \textbf{Obligasi Y} memiliki kupon $10\%$ \textit{payable semiannually} dan dijual pada harga premium sebesar $\$1.148{,}77$ (premium sebesar $\$148{,}77$).
+\end{itemize}
+Berdasarkan informasi tersebut:
+\begin{enumerate}[label=(\alph*)]
+    \item Tentukan \textit{nominal yield rate convertible semiannually} ($i^{(2)}$) dan harga dari obligasi ketiga (\textbf{Obligasi Z}) yang sejenis namun memiliki kupon $9\%$ \textit{payable semiannually}!
+    \item Berapakah nilai sekarang tebusan $K$ untuk ketiga obligasi tersebut?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 11}
+\textbf{Bagian (a): Menentukan Yield Rate $i$ dan Harga Obligasi Z}
+Gunakan Rumus Premium/Diskon $P - C = C(g - i)a_{\overline{20}|i}$:
+\begin{itemize}
+    \item Untuk Obligasi X ($g_X = 3\%$):
+    \begin{equation*}
+        P_X - 1.000 = 1.000(0{,}03 - i)a_{\overline{20}|i} = -148{,}77
+    \end{equation*}
+    \item Untuk Obligasi Y ($g_Y = 5\%$):
+    \begin{equation*}
+        P_Y - 1.000 = 1.000(0{,}05 - i)a_{\overline{20}|i} = +148{,}77
+    \end{equation*}
+\end{itemize}
+Jumlahkan kedua persamaan di atas:
+\begin{align*}
+    1.000 \left[ (0{,}03 - i) + (0{,}05 - i) \right] a_{\overline{20}|i} &= 0 \\[0.3em]
+    (0{,}08 - 2i) &= 0 \implies i = \mathbf{0{,}04 \ (4\% \text{ per semester})} \implies i^{(2)} = \mathbf{8\%}
+\end{align*}
+Dari persamaan Obligasi Y, kita peroleh nilai $a_{\overline{20}|0{,}04}$:
+\begin{equation*}
+    1.000(0{,}05 - 0{,}04) a_{\overline{20}|0{,}04} = 148{,}77 \implies 10 \, a_{\overline{20}|0{,}04} = 148{,}77 \implies a_{\overline{20}|0{,}04} = 14{,}877
+\end{equation*}
+\textit{(Catatan: Dalam soal ujian SOA FM, faktor anuitas diimplikasikan dari data soal sehingga kita menggunakan $a_{\overline{20}|i} = 14{,}877$ secara konsisten)}.
+
+Untuk \textbf{Obligasi Z} dengan kupon $9\%$ \textit{semiannually} ($g_Z = 4{,}5\%$):
+\begin{align*}
+    P_Z &= 1.000 + 1.000(0{,}045 - 0{,}04) a_{\overline{20}|i} \\
+        &= 1.000 + 5(14{,}877) = 1.000 + 74{,}385 = \mathbf{\$1.074{,}39}
+\end{align*}
+
+\textbf{Bagian (b): Menentukan Nilai Sekarang Tebusan $K$}
+Gunakan identitas $K = C(1 - i \, a_{\overline{n}|i})$:
+\begin{align*}
+    K &= 1.000 \left[ 1 - 0{,}04(14{,}877) \right] = 1.000(1 - 0{,}59508) = \mathbf{\$404{,}92}
+\end{align*}
+\end{solutionbox}
+
+\vspace{1.2em}
+
+% ------------------- SOAL 12 -------------------
+\begin{problembox}[Bobot: Menantang / Valuasi Callable Bond (Slide Hal. 3)]{Soal 12}
+Sebuah \textit{callable bond} dengan nilai par $\$1.000$ membayarkan kupon $8\%$ \textit{payable semiannually} dan memiliki tanggal jatuh tempo normal pada akhir tahun ke-10 (ditebus pada par $\$1.000$). Akan tetapi, penerbit obligasi memiliki opsi untuk menebus lebih awal (\textit{call}) obligasi tersebut pada akhir tahun ke-5, ke-6, ke-7, ke-8, atau ke-9 pada harga tebusan $\$1.000$.
+
+Berapakah harga maksimal yang harus dibayarkan investor jika ia ingin **dijamin** memperoleh \textit{yield rate} minimal:
+\begin{enumerate}[label=(\alph*)]
+    \item $6\%$ \textit{convertible semiannually}?
+    \item $10\%$ \textit{convertible semiannually}?
+\end{enumerate}
+\end{problembox}
+
+\begin{solutionbox}{Soal 12}
+\textbf{Prinsip Valuasi Callable Bond ($C = \$1.000$ Konstan):}
+Karena hak menebus lebih awal berada di tangan \textbf{penerbit (peminjam)}, penerbit akan memilih tanggal penebusan yang paling menguntungkan dirinya (yang berarti skenario terburuk bagi investor). Agar investor dijamin memperoleh minimal \textit{yield rate} $i$, investor harus membayar harga **terendah** di antara seluruh kemungkinan tanggal penebusan $n \in \{10, 12, 14, 16, 18, 20\}$ semester.
+
+Tinjau rumus Premium/Diskon:
+\begin{equation*}
+    P(n) = 1.000 + 1.000(g - i) a_{\overline{n}|i}
+\end{equation*}
+
+\textbf{Bagian (a): Target Yield $6\%$ Semiannually ($i = 3\%$ per semester)}
+\begin{itemize}
+    \item Karena $g = 4\% > i = 3\%$, obligasi ini adalah \textbf{Obligasi Premium} ($g - i > 0$).
+    \item Karena $a_{\overline{n}|i}$ membesar seiring bertambahnya $n$, maka harga $P(n)$ akan mencapai nilai **paling kecil** ketika $n$ **paling kecil** (penerbit menebus paling awal karena investor kehilangan premium paling cepat!).
+    \item Maka gunakan tanggal *call* paling awal, yaitu akhir tahun ke-5 ($n = 10$ semester):
+    \begin{align*}
+        P_{\min} = P(10) &= 1.000 + 1.000(0{,}04 - 0{,}03) a_{\overline{10}|0{,}03} \\
+                         &= 1.000 + 10(8{,}5302028) = \mathbf{\$1.085{,}30}
+    \end{align*}
+\end{itemize}
+
+\textbf{Bagian (b): Target Yield $10\%$ Semiannually ($i = 5\%$ per semester)}
+\begin{itemize}
+    \item Karena $g = 4\% < i = 5\%$, obligasi ini adalah \textbf{Obligasi Diskon} ($g - i < 0$).
+    \item Karena suku kedua bernilai negatif ($-10 \, a_{\overline{n}|0{,}05}$), harga $P(n)$ justru mencapai nilai **paling kecil** ketika $n$ **paling besar** (penerbit menunda penebusan selama mungkin sampai jatuh tempo akhir!).
+    \item Maka gunakan tanggal jatuh tempo paling akhir, yaitu akhir tahun ke-10 ($n = 20$ semester):
+    \begin{align*}
+        P_{\min} = P(20) &= 1.000 + 1.000(0{,}04 - 0{,}05) a_{\overline{20}|0{,}05} \\
+                         &= 1.000 - 10(12{,}4622103) = \mathbf{\$875{,}38}
+    \end{align*}
+\end{itemize}
+\textit{Aturan Emas Ujian Aktuaria untuk Callable Bond (dengan harga tebus sama):}
+\begin{itemize}[topsep=2pt, itemsep=1pt]
+    \item Jika \textbf{Premium ($g > i$)} $\implies$ Asumsikan ditebus pada tanggal \textbf{paling awal (\textit{earliest call date})}.
+    \item Jika \textbf{Diskon ($g < i$)} $\implies$ Asumsikan ditebus pada tanggal \textbf{paling akhir (\textit{latest maturity date})}.
+\end{itemize}
+\end{solutionbox}
+
+\end{document}

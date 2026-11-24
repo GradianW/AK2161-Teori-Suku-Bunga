@@ -1,0 +1,737 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Colors (sama persis dengan 06)
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Custom theorem/box styles
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 08: Anuitas yang Lebih Umum (Bagian 2)\\
+\large (\textit{Continuous Annuities, Varying Annuities: Arithmetic \& Geometric, More General Varying Annuities, and Continuous Varying Annuities})}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 4) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\section{Pendahuluan \& Ruang Lingkup Materi}
+
+Pada Bab 05 dan 06, kita telah mempelajari anuitas dasar di mana pembayaran dilakukan secara diskrit dengan jumlah pembayaran yang konstan (\textit{level annuity}). Kemudian pada Bab 07, kita memperluas analisis ke kasus di mana frekuensi pembayaran berbeda dari frekuensi pemajemukan suku bunga, namun pembayaran di setiap periode tetap sama.
+
+Dalam praktik industri keuangan, perbankan, dan aktuarial modern, terdapat dua kondisi lanjutan yang sering dijumpai:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Anuitas Kontinu (\textit{Continuous Annuities}):} Pembayaran angsuran atau penerimaan dana dilakukan secara terus-menerus sepanjang waktu (frekuensi pembayaran menuju tak hingga, $m \to \infty$). Hal ini sangat penting secara teoritis dan analitis, serta menjadi aproksimasi yang sangat baik untuk transaksi harian, klaim/premi asuransi jiwa kontinu, dan arus kas operasional korporasi.
+    \item \textbf{Anuitas Bervariasi (\textit{Non-Level / Varying Annuities}):} Pembayaran tidak tetap melainkan berubah dari waktu ke waktu:
+    \begin{itemize}
+        \item \textbf{Pola Aritmatika:} Pembayaran bertambah atau berkurang dengan nominal tetap ($Q$) setiap periode (anuitas meningkat $(Ia)$ dan menurun $(Da)$).
+        \item \textbf{Pola Geometri:} Pembayaran bertumbuh atau menyusut dengan persentase majemuk ($k$) setiap periode (penyesuaian inflasi COLA dan valuasi dividen bertumbuh).
+        \item \textbf{Variasi Lebih Umum:} Variasi pembayaran dengan frekuensi pembayaran yang berbeda dari frekuensi konversi bunga ($k > 1$ atau $m > 1$).
+        \item \textbf{Variasi Kontinu:} Pembayaran dilakukan secara kontinu dengan laju yang bervariasi mengikuti fungsi waktu $f(t)$ atau dengan \textit{force of interest} $\delta(t)$ yang dinamis.
+    \end{itemize}
+\end{enumerate}
+
+---
+
+\section{Anuitas Kontinu Sederhana (\textit{Continuous Annuities})}
+
+\subsection{Definisi \& Konsep Dasar}
+
+\begin{definitionbox}[Anuitas Kontinu Berjangka $n$ Periode]
+Suatu \textbf{anuitas kontinu} adalah anuitas di mana pembayaran dilakukan secara terus-menerus (\textit{continuously}) sepanjang waktu, sedemikian rupa sehingga jumlah total yang dibayarkan selama setiap satu periode konversi suku bunga tepat bernilai $1$.
+\end{definitionbox}
+
+Konsep ini diperoleh dari limit anuitas diskrit ketika frekuensi pembayaran $m$ menuju tak hingga ($m \to \infty$). Dalam interval waktu infinitesimal $[t, t+dt]$, besar pembayaran adalah $dt$.
+Karena pembayaran sebesar $dt$ terjadi pada waktu eksak $t$, nilai sekarang (\textit{present value}) dari pembayaran tersebut adalah:
+\begin{equation}
+    d(PV) = v^t \, dt = e^{-\delta t} \, dt
+\end{equation}
+di mana $\delta = \ln(1+i) = -\ln v$ adalah \textit{force of interest} konstan.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {Waktu ($t$)};
+    \draw[thick] (0,0.15) -- (0,-0.15) node[below] {$0$};
+    \draw[thick] (2,0.1) -- (2,-0.1) node[below] {$1$};
+    \draw[thick] (4,0.1) -- (4,-0.1) node[below] {$2$};
+    \draw[dotted, thick] (4.5,0) -- (7.5,0);
+    \draw[thick] (8,0.15) -- (8,-0.15) node[below] {$n$};
+
+    % Arsiran aliran kontinu
+    \fill[primaryblue!20] (0,0) rectangle (8,1.2);
+    \draw[thick, primaryblue] (0,1.2) -- (8,1.2) node[midway, above] {\small Laju aliran kas konstan: $1$ per periode waktu};
+    \draw[thick, primaryblue] (0,0) -- (0,1.2);
+    \draw[thick, primaryblue] (8,0) -- (8,1.2);
+
+    % Elemen infinitesimal dt
+    \fill[darkred!40] (3.2,0) rectangle (3.5,1.2);
+    \draw[darkred, thick] (3.35, 1.3) -- (3.35, 1.9) node[above] {\footnotesize Pembayaran $1 \cdot dt$ pada waktu $t$};
+    \draw[->, darkred, thick] (3.35, 0) -- (0, -0.6) node[below] {\footnotesize Didiskonto ke $t=0$: $v^t dt$};
+\end{tikzpicture}
+\end{center}
+
+---
+
+\subsection{Penurunan Nilai Sekarang (\texorpdfstring{$\bar{a}_{\overline{n}|}$}{a_bar_n})}
+
+Simbol nilai sekarang dari anuitas kontinu berjangka $n$ periode adalah $\mathbf{\bar{a}_{\overline{n}|}}$:
+\begin{equation}
+    \bar{a}_{\overline{n}|} = \int_0^n v^t \, dt = \int_0^n e^{t \ln v} \, dt = \left[ \frac{v^t}{\ln v} \right]_0^n = \frac{v^n - 1}{\ln v}
+\end{equation}
+Mengingat definisi \textit{force of interest}:
+\begin{equation}
+    \delta = \frac{a'(t)}{a(t)} = \frac{(1+i)^t \ln(1+i)}{(1+i)^t} = \ln(1+i) = -\ln\left(\frac{1}{1+i}\right) = -\ln v
+\end{equation}
+Maka $\ln v = -\delta$, sehingga diperoleh rumus utama:
+\begin{equation}
+    \mathbf{\bar{a}_{\overline{n}|} = \frac{1 - v^n}{\delta}}
+\end{equation}
+
+\subsubsection{Konsistensi dengan Anuitas Diskrit}
+Rumus ini menunjukkan kekonsistenan bentuk yang sangat harmonis dalam teori suku bunga:
+\begin{align}
+    \text{Anuitas Akhir Diskrit:} \quad a_{\overline{n}|} &= \frac{1 - v^n}{i} \\
+    \text{Anuitas Kontinu:} \quad \mathbf{\bar{a}_{\overline{n}|}} &= \mathbf{\frac{1 - v^n}{\delta}} \\
+    \text{Anuitas Awal Diskrit:} \quad \ddot{a}_{\overline{n}|} &= \frac{1 - v^n}{d}
+\end{align}
+Bentuk yang sama juga diperoleh dari limit anuitas diskrit saat $m \to \infty$:
+\begin{align}
+    \bar{a}_{\overline{n}|} &= \lim_{m \to \infty} a_{\overline{n}|}^{(m)} = \lim_{m \to \infty} \frac{1 - v^n}{i^{(m)}} = \frac{1 - v^n}{\delta} \\
+    \bar{a}_{\overline{n}|} &= \lim_{m \to \infty} \ddot{a}_{\overline{n}|}^{(m)} = \lim_{m \to \infty} \frac{1 - v^n}{d^{(m)}} = \frac{1 - v^n}{\delta}
+\end{align}
+
+---
+
+\subsection{Penurunan Nilai Akumulasi (\texorpdfstring{$\bar{s}_{\overline{n}|}$}{s_bar_n})}
+
+Nilai akumulasi pada akhir periode $t = n$ dinotasikan dengan $\mathbf{\bar{s}_{\overline{n}|}}$:
+\begin{equation}
+    \bar{s}_{\overline{n}|} = \int_0^n (1+i)^t \, dt = \int_0^n e^{t \ln(1+i)} \, dt = \left[ \frac{(1+i)^t}{\ln(1+i)} \right]_0^n = \mathbf{\frac{(1+i)^n - 1}{\delta} = \frac{e^{n\delta} - 1}{\delta}}
+\end{equation}
+Dapat juga diperoleh dari hubungan akumulasi dasar:
+\begin{equation}
+    \bar{s}_{\overline{n}|} = \bar{a}_{\overline{n}|} \cdot (1+i)^n = \bar{a}_{\overline{n}|} \cdot e^{n\delta}
+\end{equation}
+dan berlaku sifat limit:
+\begin{equation}
+    \bar{s}_{\overline{n}|} = \lim_{m \to \infty} s_{\overline{n}|}^{(m)} = \lim_{m \to \infty} \ddot{s}_{\overline{n}|}^{(m)}
+\end{equation}
+
+---
+
+\subsection{Interpretasi Dinamik \& Persamaan Diferensial (Slide Hal. 4--5)}
+
+\subsubsection{Diferensiasi Terhadap Nilai Akumulasi}
+Gunakan Teorema Dasar Kalkulus Pertama:
+\begin{equation}
+    \frac{d}{dt} \bar{s}_{\overline{t}|} = \frac{d}{dt} \int_0^t (1+i)^x \, dx = (1+i)^t = 1 + \delta \, \bar{s}_{\overline{t}|}
+\end{equation}
+
+\begin{notebox}[Interpretasi Finansial Dinamika Saldo Dana]
+Misalkan suatu dana investasi di mana uang disimpan secara kontinu dengan laju $1$ per periode konversi suku bunga. Saldo saat $t$ adalah $\bar{s}_{\overline{t}|}$. Laju perubahan saldo dana terdiri atas:
+\begin{enumerate}
+    \item Setoran baru masuk dengan laju $1$ per periode.
+    \item Bunga yang diperoleh dengan laju $\delta$ terhadap saldo yang ada ($\delta \bar{s}_{\overline{t}|}$).
+\end{enumerate}
+\end{notebox}
+
+\subsubsection{Diferensiasi Terhadap Nilai Sekarang \& Solusi PD Linier}
+Untuk nilai sekarang anuitas kontinu:
+\begin{equation}
+    \frac{d}{dt} \bar{a}_{\overline{t}|} = \frac{d}{dt} \int_0^t v^x \, dx = v^t = 1 - \delta \, \bar{a}_{\overline{t}|}
+\end{equation}
+Misalkan $y = \bar{a}_{\overline{t}|}$, maka persamaan menjadi:
+\begin{equation}
+    y' = 1 - \delta y \iff y' + \delta y = 1
+\end{equation}
+Ini adalah \textbf{Persamaan Diferensial Linier Orde Satu Tak Homogen}:
+\begin{itemize}
+    \item Persamaan homogen: $y' + \delta y = 0 \implies y_h = c e^{-\delta t}$.
+    \item Solusi partikular: Misalkan $y_p = a$ (konstanta), maka $0 + \delta a = 1 \implies a = \frac{1}{\delta}$.
+    \item Solusi umum: $y = y_h + y_p = c e^{-\delta t} + \frac{1}{\delta}$.
+    \item Syarat awal: Untuk $t = 0 \implies y(0) = \bar{a}_{\overline{0}|} = 0$:
+    \begin{equation*}
+        0 = c e^0 + \frac{1}{\delta} \implies c = -\frac{1}{\delta}
+    \end{equation*}
+\end{itemize}
+Maka solusi tunggalnya adalah:
+\begin{equation}
+    y = \bar{a}_{\overline{t}|} = -\frac{1}{\delta} e^{-\delta t} + \frac{1}{\delta} = \mathbf{\frac{1 - e^{-\delta t}}{\delta} = \frac{1 - v^t}{\delta}}
+\end{equation}
+
+---
+
+\subsection{Contoh Soal 1: Penentuan Tingkat Bunga Kontinu (Slide Hal. 6)}
+
+\begin{examplebox}[Contoh 1 (Slide Perkuliahan Hal. 6)]
+Hitung \textit{force of interest} $\delta$ dari persamaan:
+\begin{equation*}
+    \bar{s}_{\overline{20}|} = 3 \, \bar{s}_{\overline{10}|}
+\end{equation*}
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian:}]
+Substitusikan rumus $\bar{s}_{\overline{n}|} = \dfrac{e^{n\delta} - 1}{\delta}$:
+\begin{equation*}
+    \frac{e^{20\delta} - 1}{\delta} = 3 \left( \frac{e^{10\delta} - 1}{\delta} \right)
+\end{equation*}
+Kalikan kedua ruas dengan $\delta$:
+\begin{equation*}
+    e^{20\delta} - 1 = 3 e^{10\delta} - 3 \implies e^{20\delta} - 3 e^{10\delta} + 2 = 0
+\end{equation*}
+Faktorkan persamaan kuadrat terhadap $e^{10\delta}$:
+\begin{equation*}
+    (e^{10\delta} - 2)(e^{10\delta} - 1) = 0
+\end{equation*}
+\begin{itemize}
+    \item Jika $e^{10\delta} - 1 = 0 \implies e^{10\delta} = 1 \implies \delta = 0$. Solusi ini ditolak (suku bunga nol tidak berlaku dalam transaksi keuangan).
+    \item Jika $e^{10\delta} - 2 = 0 \implies e^{10\delta} = 2$.
+    Ambil logaritma natural:
+    \begin{equation*}
+        10\delta = \ln 2 \implies \delta = \frac{\ln 2}{10} \approx \frac{0.693147}{10} = \mathbf{0.0693} = \mathbf{6.93\%}
+    \end{equation*}
+\end{itemize}
+Jadi, \textit{force of interest} yang memenuhi adalah $\mathbf{\delta \approx 6.93\%}$.
+\end{proof}
+
+---
+
+\section{Anuitas Bervariasi secara Aritmatika (\textit{Arithmetic Varying Annuities})}
+
+\subsection{Definisi \& Penurunan Rumus Umum (\texorpdfstring{$P, Q$}{P, Q})}
+
+\begin{definitionbox}[Anuitas Bervariasi secara Aritmatika]
+Misalkan suatu annuity-immediate berjangka $n$ periode dengan suku bunga $i$ per periode:
+\begin{itemize}
+    \item Pembayaran pertama bernilai $P$ ($P > 0$).
+    \item Pembayaran bertambah (atau berkurang) sebesar $Q$ di setiap periode berikutnya.
+    \item Barisan pembayaran pada $t = 1, 2, \dots, n$ adalah:
+    \begin{equation*}
+        P, \quad P+Q, \quad P+2Q, \quad \dots, \quad P+(n-1)Q
+    \end{equation*}
+    dengan syarat kelayakan finansial $P + (n-1)Q > 0$.
+\end{itemize}
+\end{definitionbox}
+
+Misalkan $A$ adalah nilai sekarang:
+\begin{equation}
+    A = P v + (P+Q) v^2 + (P+2Q) v^3 + \dots + [P + (n-1)Q] v^n \label{eq:aritA}
+\end{equation}
+Kalikan kedua ruas dengan $(1+i)$:
+\begin{equation}
+    (1+i)A = P + (P+Q) v + (P+2Q) v^2 + \dots + [P + (n-1)Q] v^{n-1} \label{eq:aritB}
+\end{equation}
+Kurangkan Persamaan~(\ref{eq:aritA}) dari Persamaan~(\ref{eq:aritB}):
+\begin{align*}
+    i A &= P + Q v + Q v^2 + \dots + Q v^{n-1} - [P + (n-1)Q] v^n \\
+        &= P(1 - v^n) + Q(v + v^2 + \dots + v^{n-1}) - (n-1)Q v^n \\
+        &= P(1 - v^n) + Q(v + v^2 + \dots + v^n) - Q n v^n \\
+        &= P(1 - v^n) + Q \cdot a_{\overline{n}|} - Q n v^n
+\end{align*}
+Bagi kedua ruas dengan suku bunga $i$:
+\begin{equation}
+    \mathbf{A = P \left( \frac{1 - v^n}{i} \right) + Q \left( \frac{a_{\overline{n}|} - n v^n}{i} \right) = P \, a_{\overline{n}|} + Q \left( \frac{a_{\overline{n}|} - n v^n}{i} \right)}
+\end{equation}
+Nilai akumulasi ($AV$) pada akhir periode $n$:
+\begin{equation}
+    \mathbf{AV = A(1+i)^n = P \, s_{\overline{n}|} + Q \left( \frac{s_{\overline{n}|} - n}{i} \right)}
+\end{equation}
+
+---
+
+\subsection{Kasus Khusus 1: Anuitas Meningkat Standar (\texorpdfstring{$(Ia)_{\overline{n}|}$}{(Ia)_n})}
+
+Jika pembayaran bernilai $1, 2, 3, \dots, n$ pada akhir setiap periode (di mana $P = 1, Q = 1$):
+\begin{equation}
+    (Ia)_{\overline{n}|} = a_{\overline{n}|} + \frac{a_{\overline{n}|} - n v^n}{i} = \frac{i \, a_{\overline{n}|} + a_{\overline{n}|} - n v^n}{i}
+\end{equation}
+Karena $i \, a_{\overline{n}|} = 1 - v^n$, pembilang menjadi:
+\begin{equation*}
+    (1 - v^n) + a_{\overline{n}|} - n v^n = (1 + a_{\overline{n}|} - v^n) - n v^n = \ddot{a}_{\overline{n}|} - n v^n
+\end{equation*}
+Sehingga diperoleh rumus standar:
+\begin{equation}
+    \mathbf{(Ia)_{\overline{n}|} = \frac{\ddot{a}_{\overline{n}|} - n v^n}{i}}
+\end{equation}
+Nilai akumulasi pada akhir periode $n$:
+\begin{equation}
+    \mathbf{(Is)_{\overline{n}|} = (Ia)_{\overline{n}|} (1+i)^n = \frac{\ddot{s}_{\overline{n}|} - n}{i}}
+\end{equation}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, >=stealth]
+    \draw[->, thick] (-0.5,0) -- (10.5,0) node[right] {Waktu ($t$)};
+    \foreach \t in {0,1,2,3,4} {
+        \draw[thick] (\t*1.8, 0.1) -- (\t*1.8, -0.1) node[below] {\small $\t$};
+    }
+    \draw[dotted, thick] (7.6,0) -- (8.8,0);
+    \draw[thick] (9.5, 0.1) -- (9.5, -0.1) node[below] {\small $n$};
+
+    % Batang arus kas bertingkat
+    \draw[->, very thick, primaryblue] (1.8, 0.1) -- (1.8, 0.7) node[above] {\small $\$1$};
+    \draw[->, very thick, primaryblue] (3.6, 0.1) -- (3.6, 1.3) node[above] {\small $\$2$};
+    \draw[->, very thick, primaryblue] (5.4, 0.1) -- (5.4, 1.9) node[above] {\small $\$3$};
+    \draw[->, very thick, primaryblue] (7.2, 0.1) -- (7.2, 2.5) node[above] {\small $\$4$};
+    \draw[->, very thick, primaryblue] (9.5, 0.1) -- (9.5, 3.2) node[above] {\small $\$n$};
+\end{tikzpicture}
+\end{center}
+
+---
+
+\subsection{Kasus Khusus 2: Anuitas Menurun Standar (\texorpdfstring{$(Da)_{\overline{n}|}$}{(Da)_n})}
+
+Jika pembayaran bernilai $n, n-1, n-2, \dots, 2, 1$ pada akhir setiap periode (di mana $P = n, Q = -1$):
+\begin{align*}
+    (Da)_{\overline{n}|} &= n \, a_{\overline{n}|} - \frac{a_{\overline{n}|} - n v^n}{i} = \frac{n i a_{\overline{n}|} - a_{\overline{n}|} + n v^n}{i} \\
+                        &= \frac{n(1 - v^n) - a_{\overline{n}|} + n v^n}{i} = \frac{n - n v^n - a_{\overline{n}|} + n v^n}{i}
+\end{align*}
+Suku $n v^n$ saling menghilangkan, menghasilkan formula sederhana:
+\begin{equation}
+    \mathbf{(Da)_{\overline{n}|} = \frac{n - a_{\overline{n}|}}{i}}
+\end{equation}
+Nilai akumulasi pada akhir periode $n$:
+\begin{equation}
+    \mathbf{(Ds)_{\overline{n}|} = (Da)_{\overline{n}|} (1+i)^n = \frac{n(1+i)^n - s_{\overline{n}|}}{i}}
+\end{equation}
+
+\begin{notebox}[Aturan Anuitas di Muka (\textit{Annuity-Due}) \& Teorema Komplementer]
+\begin{enumerate}
+    \item Untuk \textbf{annuity-due}, penyebut $i$ diganti dengan tingkat diskon $d$:
+    \begin{equation}
+        (I\ddot{a})_{\overline{n}|} = \frac{\ddot{a}_{\overline{n}|} - n v^n}{d}, \qquad (D\ddot{a})_{\overline{n}|} = \frac{n - a_{\overline{n}|}}{d}
+    \end{equation}
+    \item \textbf{Relasi Komplementer:} Karena pada setiap periode $t$, $t + (n - t + 1) = n + 1$, maka:
+    \begin{equation}
+        \mathbf{(Ia)_{\overline{n}|} + (Da)_{\overline{n}|} = (n+1) \, a_{\overline{n}|}}
+    \end{equation}
+\end{enumerate}
+\end{notebox}
+
+---
+
+\subsection{Perpetuitas Bervariasi secara Aritmatika (Slide Hal. 11)}
+
+Dengan mengambil limit $n \to \infty$ dari rumus umum $(P, Q)$:
+\begin{equation}
+    \lim_{n \to \infty} \left[ P a_{\overline{n}|} + Q \left( \frac{a_{\overline{n}|} - n v^n}{i} \right) \right] = P \left(\frac{1}{i}\right) + Q \left(\frac{1/i - 0}{i}\right) = \mathbf{\frac{P}{i} + \frac{Q}{i^2}}
+\end{equation}
+karena $\lim\limits_{n \to \infty} a_{\overline{n}|} = \dfrac{1}{i}$ dan $\lim\limits_{n \to \infty} n v^n = \lim\limits_{n \to \infty} \dfrac{n}{(1+i)^n} = 0$.
+
+Untuk perpetuitas meningkat standar ($P=1, Q=1$):
+\begin{equation}
+    \mathbf{(Ia)_{\overline{\infty}|} = \frac{1}{i} + \frac{1}{i^2} = \frac{1}{i \, d}}
+\end{equation}
+
+---
+
+\section{Anuitas Bervariasi secara Geometrik (\textit{Geometric Varying Annuities})}
+
+\subsection{Definisi \& Penurunan Nilai Sekarang}
+
+\begin{definitionbox}[Anuitas Geometrik Berjangka $n$ Periode]
+Suatu anuitas di mana pembayaran pertama adalah $1$, dan setiap pembayaran berikutnya membesar secara geometri dengan rasio $1+k$ ($k > -1$).
+Aliran kas: $1, (1+k), (1+k)^2, \dots, (1+k)^{n-1}$.
+\end{definitionbox}
+
+Nilai sekarang anuitas akhir adalah deret geometri berjangka $n$:
+\begin{align*}
+    PV &= v + (1+k) v^2 + (1+k)^2 v^3 + \dots + (1+k)^{n-1} v^n \\
+       &= v \left[ 1 + (1+k)v + \dots + (1+k)^{n-1} v^{n-1} \right] \\
+       &= v \left[ \frac{1 - \left(\frac{1+k}{1+i}\right)^n}{1 - \frac{1+k}{1+i}} \right] = \frac{1}{1+i} \left[ \frac{1 - \left(\frac{1+k}{1+i}\right)^n}{\frac{(1+i) - (1+k)}{1+i}} \right]
+\end{align*}
+Sehingga:
+\begin{equation}
+    \mathbf{PV = \frac{1 - \left(\frac{1+k}{1+i}\right)^n}{i - k}} \qquad (k \ne i)
+\end{equation}
+\begin{notebox}[Kasus Khusus $k = i$]
+Jika $k = i$, maka pembagian $i - k$ bernilai nol. Namun dari deret awal:
+\begin{equation*}
+    PV = v + v + \dots + v = n \, v = \mathbf{\frac{n}{1+i}}
+\end{equation*}
+\end{notebox}
+
+Nilai akumulasi pada akhir periode $n$:
+\begin{equation}
+    \mathbf{AV = PV \cdot (1+i)^n = \frac{(1+i)^n - (1+k)^n}{i - k}} \qquad (k \ne i)
+\end{equation}
+
+---
+
+\subsection{Metode Suku Bunga Pengganti Ekuivalen (\texorpdfstring{$\tilde{i}$}{i_tilde}) (Slide Hal. 13)}
+
+Jika $k < i$, definisikan suku bunga baru $\tilde{i}$ sedemikian rupa sehingga:
+\begin{equation}
+    1 + \tilde{i} = \frac{1+i}{1+k} \iff \tilde{i} = \frac{1+i}{1+k} - 1 = \mathbf{\frac{i - k}{1 + k}}
+\end{equation}
+Maka untuk \textbf{annuity-due} dengan rasio bertumbuh:
+\begin{equation}
+    1 + \frac{1+k}{1+i} + \dots + \left(\frac{1+k}{1+i}\right)^{n-1} = 1 + \frac{1}{1+\tilde{i}} + \dots + \frac{1}{(1+\tilde{i})^{n-1}} = \mathbf{\ddot{a}_{\overline{n}|\tilde{i}}}
+\end{equation}
+Artinya: Nilai sekarang dari anuitas $n$ periode dengan pembayaran membesar secara geometrik rasio $1+k$ ($k < i$) adalah \textbf{sama dengan nilai sekarang anuitas pembayaran tetap yang dievaluasi pada suku bunga $\tilde{i}$}.
+
+Untuk \textbf{perpetuitas geometrik} ($n \to \infty$ dan $k < i$):
+\begin{equation}
+    \mathbf{PV_{\text{perp-geometrik}} = \frac{1}{i - k}}
+\end{equation}
+
+---
+
+\subsection{Contoh Soal 2: Valuasi Anuitas Bertumbuh Geometrik (Slide Hal. 15)}
+
+\begin{examplebox}[Contoh 2 (Slide Perkuliahan Hal. 15)]
+Suatu anuitas memiliki pembayaran per tahun sebanyak 20 kali. Pembayaran pertama adalah $\$1.000$. Pembayaran meningkat sedemikian rupa sehingga setiap pembayaran $4\%$ lebih besar daripada pembayaran sebelumnya. Hitung nilai sekarang dari anuitas ini jika suku bunga adalah $7\%$.
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian:}]
+Data: $n = 20$, $R_1 = 1000$, $k = 0.04$, $i = 0.07$.
+Nilai sekarang anuitasnya adalah:
+\begin{align*}
+    PV &= 1000 \left[ \frac{1}{1.07} + \frac{1.04}{(1.07)^2} + \dots + \frac{(1.04)^{19}}{(1.07)^{20}} \right] \\
+       &= 1000 \left[ \frac{1 - \left(\frac{1.04}{1.07}\right)^{20}}{0.07 - 0.04} \right] \\
+       &= 1000 \left[ \frac{1 - (0.9719626)^{20}}{0.03} \right] \\
+       &= 1000 \left[ \frac{1 - 0.566228}{0.03} \right] = 1000 \left[ \frac{0.433772}{0.03} \right] = 1000 \times 14.45907 = \mathbf{\$14.459,07}
+\end{align*}
+Jadi, nilai sekarang anuitas tersebut adalah \textbf{\$14.459} (sesuai slide).
+\end{proof}
+
+---
+
+\section{Anuitas Bervariasi yang Lebih Umum (\textit{More General Varying Annuities})}
+
+\subsection{Frekuensi Pembayaran Lebih Sedikit daripada Konversi Bunga (\texorpdfstring{$k > 1$}{k > 1})}
+
+Misalkan:
+\begin{itemize}
+    \item $k$: Banyaknya periode konversi bunga dalam 1 periode pembayaran ($k \in \mathbb{Z}^+$).
+    \item $n$: Total durasi anuitas diukur dalam periode konversi bunga.
+    \item Frekuensi pembayaran adalah $m = \dfrac{n}{k} \in \mathbb{Z}^+$.
+    \item Pembayaran dilakukan sebesar $1$ di $t=k$, $2$ di $t=2k$, ..., $n/k$ di $t=n$.
+\end{itemize}
+
+\subsubsection{Penurunan Matematis Nilai Sekarang (Slide Hal. 17)}
+Nilai sekarang $A$:
+\begin{equation}
+    A = v^k + 2 v^{2k} + \dots + \left(\frac{n}{k}-1\right) v^{n-k} + \left(\frac{n}{k}\right) v^n \label{eq:gen1}
+\end{equation}
+Kalikan dengan $(1+i)^k$:
+\begin{equation}
+    (1+i)^k A = 1 + 2 v^k + \dots + \left(\frac{n}{k}\right) v^{n-k} \label{eq:gen2}
+\end{equation}
+Kurangkan Persamaan~(\ref{eq:gen1}) dari Persamaan~(\ref{eq:gen2}):
+\begin{equation*}
+    A \left[ (1+i)^k - 1 \right] = 1 + v^k + v^{2k} + \dots + v^{n-k} - \frac{n}{k} v^n
+\end{equation*}
+Perhatikan bahwa $1 + v^k + \dots + v^{n-k} = \dfrac{a_{\overline{n}|}}{a_{\overline{k}|}}$, dan $(1+i)^k - 1 = i \cdot s_{\overline{k}|}$.
+Maka:
+\begin{equation}
+    \mathbf{A = \frac{\dfrac{a_{\overline{n}|}}{a_{\overline{k}|}} - \dfrac{n}{k} v^n}{i \, s_{\overline{k}|}}}
+\end{equation}
+Persamaan ini merupakan versi umum dari $(Ia)_{\overline{n}|} = \dfrac{\ddot{a}_{\overline{n}|} - n v^n}{i}$.
+
+---
+
+\subsection{Frekuensi Pembayaran Lebih Sering daripada Konversi Bunga (\texorpdfstring{$m > 1$}{m > 1})}
+
+Ketika pembayaran dilakukan $m$ kali per periode bunga, terdapat 2 kasus penting:
+
+\subsubsection{Kasus A: Pembayaran Konstan Tiap Periode, Kenaikan Sekali per Periode (Slide Hal. 18)}
+Pembayaran dilakukan sebesar $\frac{t}{m}$ di setiap $1/m$ periode pada tahun ke-$t$ (sehingga total pembayaran tahunan adalah $t$):
+\begin{equation}
+    \mathbf{(Ia)_{\overline{n}|}^{(m)} = \frac{\ddot{a}_{\overline{n}|} - n v^n}{i^{(m)}}}
+\end{equation}
+
+\subsubsection{Kasus B: Laju Pembayaran Meningkat pada Setiap Sub-Periode (Slide Hal. 19)}
+Pembayaran pada waktu $\frac{t}{m}$ bernilai $\frac{t}{m^2}$ (pembayaran pertama $\frac{1}{m^2}$, kedua $\frac{2}{m^2}$, dan seterusnya):
+\begin{equation}
+    (I^{(m)} a)_{\overline{n}|}^{(m)} = \frac{1}{m^2} v^{1/m} + \frac{2}{m^2} v^{2/m} + \dots + \frac{nm}{m^2} v^{nm/m}
+\end{equation}
+\begin{equation}
+    \mathbf{(I^{(m)} a)_{\overline{n}|}^{(m)} = \frac{\ddot{a}_{\overline{n}|}^{(m)} - n v^n}{i^{(m)}}}
+\end{equation}
+
+---
+
+\subsection{Contoh Soal 3: Perpetuitas Meningkat Multi-Tahun (Slide Hal. 20)}
+
+\begin{examplebox}[Contoh 3 (Slide Perkuliahan Hal. 20)]
+Cari nilai sekarang dari suatu perpetuitas yang membayar:
+\begin{itemize}
+    \item $\$1$ pada akhir tahun ke-3,
+    \item $\$2$ pada akhir tahun ke-6,
+    \item $\$3$ pada akhir tahun ke-9, dan seterusnya.
+\end{itemize}
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian:}]
+Nilai sekarang perpetuitas tersebut adalah:
+\begin{equation*}
+    A = v^3 + 2 v^6 + 3 v^9 + \dots
+\end{equation*}
+Kalikan kedua ruas dengan $v^3$:
+\begin{equation*}
+    v^3 A = v^6 + 2 v^9 + 3 v^{12} + \dots
+\end{equation*}
+Kurangkan persamaan kedua dari yang pertama:
+\begin{equation*}
+    (1 - v^3) A = v^3 + v^6 + v^9 + \dots
+\end{equation*}
+Ruas kanan adalah deret geometri tak hingga:
+\begin{equation*}
+    (1 - v^3) A = \frac{v^3}{1 - v^3}
+\end{equation*}
+Sehingga:
+\begin{equation*}
+    \mathbf{A = \frac{v^3}{(1 - v^3)^2}}
+\end{equation*}
+Secara alternatif, jika kita mendefinisikan suku bunga 3-tahunan $j = (1+i)^3 - 1$, maka $v_j = v^3$ dan $A = (Ia)_{\overline{\infty}|j} = \frac{1}{j} + \frac{1}{j^2} = \frac{1+j}{j^2} = \frac{v_j}{(1 - v_j)^2} = \frac{v^3}{(1 - v^3)^2}$.
+\end{proof}
+
+---
+
+\section{Anuitas Bervariasi secara Kontinu (\textit{Continuous Varying Annuities})}
+
+\subsection{Anuitas Meningkat Kontinu Standar (\texorpdfstring{$(\bar{I}\bar{a})_{\overline{n}|}$}{(I_bar a_bar)_n})}
+
+Misalkan anuitas dibayar kontinu selama $n$ periode konversi bunga dengan laju pembayaran pada waktu $t$ adalah $t$ ($f(t) = t$).
+Nilai sekarangnya adalah:
+\begin{equation}
+    (\bar{I}\bar{a})_{\overline{n}|} = \int_0^n t \, v^t \, dt = \mathbf{\frac{\bar{a}_{\overline{n}|} - n v^n}{\delta}}
+\end{equation}
+Rumus ini diperoleh dari limit anuitas diskrit:
+\begin{equation}
+    (\bar{I}\bar{a})_{\overline{n}|} = \lim_{m \to \infty} (I^{(m)} a)_{\overline{n}|}^{(m)} = \lim_{m \to \infty} \frac{\ddot{a}_{\overline{n}|}^{(m)} - n v^n}{i^{(m)}} = \frac{\bar{a}_{\overline{n}|} - n v^n}{\delta}
+\end{equation}
+Nilai akumulasinya adalah:
+\begin{equation}
+    (\bar{I}\bar{s})_{\overline{n}|} = (\bar{I}\bar{a})_{\overline{n}|} \cdot (1+i)^n = \mathbf{\frac{\bar{s}_{\overline{n}|} - n}{\delta}}
+\end{equation}
+
+Untuk anuitas menurun kontinu standar ($f(t) = n - t$):
+\begin{equation}
+    \mathbf{(\bar{D}\bar{a})_{\overline{n}|} = \int_0^n (n - t) v^t \, dt = \frac{n - \bar{a}_{\overline{n}|}}{\delta}}
+\end{equation}
+
+---
+
+\subsection{Laju Pembayaran Kontinu Umum \texorpdfstring{$f(t)$}{f(t)} \& \texorpdfstring{$\delta(t)$}{delta(t)}}
+
+\begin{definitionbox}[Present Value Aliran Pembayaran Kontinu Umum]
+\begin{enumerate}
+    \item Jika pembayaran pada waktu $t$ dilakukan dengan laju $f(t) dt$, maka nilai sekarang $n$-periode adalah:
+    \begin{equation}
+        \mathbf{PV = \int_0^n f(t) \, v^t \, dt = \int_0^n f(t) \, e^{-\delta t} \, dt}
+    \end{equation}
+    \item Jika suku bunga juga bervariasi dengan \textit{force of interest} $\delta(r)$, maka:
+    \begin{equation}
+        \mathbf{PV = \int_0^n f(t) \exp\left( -\int_0^t \delta(r) \, dr \right) dt}
+    \end{equation}
+\end{enumerate}
+\end{definitionbox}
+
+---
+
+\subsection{Contoh Soal 4: Anuitas Kontinu dengan Laju Kuadratik \texorpdfstring{$f(t) = t^2$}{f(t) = t^2} (Slide Hal. 22)}
+
+\begin{examplebox}[Contoh 4 (Slide Perkuliahan Hal. 22)]
+Tentukan \textit{present value} dari \textit{continuously increasing annuity} dengan term $n$ tahun, jika \textit{force of interest} adalah $\delta$ dan rate pembayaran saat waktu $t$ adalah $t^2$ per tahun.
+\end{examplebox}
+
+\begin{proof}[\textbf{Penyelesaian Lengkap via Integrasi Parsial:}]
+Integral nilai sekarang adalah:
+\begin{equation*}
+    PV = \int_0^n t^2 e^{-\delta t} \, dt
+\end{equation*}
+Gunakan integrasi parsial berulang:
+\begin{itemize}
+    \item Integrasi ke-1: Misal $u = t^2 \implies du = 2t dt$, $dv = e^{-\delta t} dt \implies v = -\frac{1}{\delta} e^{-\delta t}$:
+    \begin{equation*}
+        \int t^2 e^{-\delta t} dt = -\frac{t^2}{\delta} e^{-\delta t} + \frac{2}{\delta} \int t e^{-\delta t} dt
+    \end{equation*}
+    \item Integrasi ke-2: Dari rumus anuitas meningkat $(\bar{I}\bar{a})$: $\int t e^{-\delta t} dt = -\frac{t}{\delta} e^{-\delta t} - \frac{1}{\delta^2} e^{-\delta t}$.
+\end{itemize}
+Maka antiturunannya adalah:
+\begin{equation*}
+    \int t^2 e^{-\delta t} dt = -e^{-\delta t} \left[ \frac{t^2}{\delta} + \frac{2t}{\delta^2} + \frac{2}{\delta^3} \right]
+\end{equation*}
+Evaluasi pada batas $[0, n]$:
+\begin{align*}
+    PV &= \left( -e^{-\delta n} \left[ \frac{n^2}{\delta} + \frac{2n}{\delta^2} + \frac{2}{\delta^3} \right] \right) - \left( -e^0 \left[ 0 + 0 + \frac{2}{\delta^3} \right] \right) \\
+       &= \mathbf{\frac{2}{\delta^3} - e^{-n\delta} \left[ \frac{n^2}{\delta} + \frac{2n}{\delta^2} + \frac{2}{\delta^3} \right]}
+\end{align*}
+Dalam simbol aktuaria dapat disederhanakan menjadi:
+\begin{equation*}
+    PV = \frac{2(1 - v^n)}{\delta^3} - \frac{2n v^n}{\delta^2} - \frac{n^2 v^n}{\delta} = \frac{2\bar{a}_{\overline{n}|} - 2n v^n}{\delta^2} - \frac{n^2 v^n}{\delta} = \mathbf{\frac{2(\bar{I}\bar{a})_{\overline{n}|} - n^2 v^n}{\delta}}
+\end{equation*}
+\end{proof}
+
+---
+
+\section{Tabel Ringkasan Rumus Anuitas Bab 08}
+
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Jenis Anuitas} & \textbf{Aliran Kas pada Waktu $t$} & \textbf{Simbol PV} & \textbf{Rumus Nilai Sekarang (PV)} & \textbf{Rumus Akumulasi (AV)} \\
+\midrule
+\textbf{Kontinu Sederhana} & Laju $1$ kontinu & $\bar{a}_{\overline{n}|}$ & $\dfrac{1 - v^n}{\delta}$ & $\dfrac{(1+i)^n - 1}{\delta} = \bar{s}_{\overline{n}|}$ \\[1em]
+\textbf{Aritmatika Umum} & $P + (t-1)Q$ & $A$ & $P a_{\overline{n}|} + Q \left(\dfrac{a_{\overline{n}|} - n v^n}{i}\right)$ & $P s_{\overline{n}|} + Q \left(\dfrac{s_{\overline{n}|} - n}{i}\right)$ \\[1em]
+\textbf{Meningkat Diskrit (Akhir)} & $1, 2, 3, \dots, n$ & $(Ia)_{\overline{n}|}$ & $\dfrac{\ddot{a}_{\overline{n}|} - n v^n}{i}$ & $\dfrac{\ddot{s}_{\overline{n}|} - n}{i} = (Is)_{\overline{n}|}$ \\[1em]
+\textbf{Meningkat Diskrit (Awal)} & $1, 2, 3, \dots, n$ di muka & $(I\ddot{a})_{\overline{n}|}$ & $\dfrac{\ddot{a}_{\overline{n}|} - n v^n}{d}$ & $\dfrac{\ddot{s}_{\overline{n}|} - n}{d} = (I\ddot{s})_{\overline{n}|}$ \\[1em]
+\textbf{Menurun Diskrit (Akhir)} & $n, n-1, \dots, 2, 1$ & $(Da)_{\overline{n}|}$ & $\dfrac{n - a_{\overline{n}|}}{i}$ & $\dfrac{n(1+i)^n - s_{\overline{n}|}}{i} = (Ds)_{\overline{n}|}$ \\[1em]
+\textbf{Geometrik ($k \ne i$)} & $1, (1+k), \dots, (1+k)^{n-1}$ & $PV_{\text{geom}}$ & $\dfrac{1 - \left(\frac{1+k}{1+i}\right)^n}{i - k}$ & $\dfrac{(1+i)^n - (1+k)^n}{i - k}$ \\[1em]
+\textbf{Geometrik ($k = i$)} & $1, (1+i), \dots, (1+i)^{n-1}$ & $PV_{\text{geom}}$ & $n v = \dfrac{n}{1+i}$ & $n(1+i)^{n-1}$ \\[1em]
+\textbf{Bervariasi $k > 1$} & $1$ di $k, 2$ di $2k, \dots$ & $A$ & $\dfrac{\frac{a_{\overline{n}|}}{a_{\overline{k}|}} - \frac{n}{k} v^n}{i s_{\overline{k}|}}$ & $A(1+i)^n$ \\[1em]
+\textbf{Meningkat Tahunan ($m$-thly)} & $t/m$ tiap sub-periode & $(Ia)_{\overline{n}|}^{(m)}$ & $\dfrac{\ddot{a}_{\overline{n}|} - n v^n}{i^{(m)}}$ & $\dfrac{\ddot{s}_{\overline{n}|} - n}{i^{(m)}} = (Is)_{\overline{n}|}^{(m)}$ \\[1em]
+\textbf{Meningkat Tiap Sub-Periode} & $t/m^2$ tiap sub-periode & $(I^{(m)} a)_{\overline{n}|}^{(m)}$ & $\dfrac{\ddot{a}_{\overline{n}|}^{(m)} - n v^n}{i^{(m)}}$ & $\dfrac{\ddot{s}_{\overline{n}|}^{(m)} - n}{i^{(m)}} = (I^{(m)} s)_{\overline{n}|}^{(m)}$ \\[1em]
+\textbf{Meningkat Kontinu} & Laju $f(t) = t$ & $(\bar{I}\bar{a})_{\overline{n}|}$ & $\dfrac{\bar{a}_{\overline{n}|} - n v^n}{\delta}$ & $\dfrac{\bar{s}_{\overline{n}|} - n}{\delta} = (\bar{I}\bar{s})_{\overline{n}|}$ \\[1em]
+\textbf{Menurun Kontinu} & Laju $f(t) = n - t$ & $(\bar{D}\bar{a})_{\overline{n}|}$ & $\dfrac{n - \bar{a}_{\overline{n}|}}{\delta}$ & $\dfrac{n(1+i)^n - \bar{s}_{\overline{n}|}}{\delta} = (\bar{D}\bar{s})_{\overline{n}|}$ \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+---
+
+\section{Latihan Soal \& Pembahasan Mandiri Berstandar Ujian Aktuaria}
+
+\begin{examplebox}[Latihan Soal 1: Anuitas Tangga Bertingkat (\textit{Step-Up Annuity})]
+Suatu dana beasiswa memberikan tunjangan pada setiap akhir tahun selama 15 tahun:
+\begin{itemize}
+    \item Tahun 1 hingga 5: $\$1.000$ per tahun.
+    \item Tahun 6 hingga 10: $\$2.000$ per tahun.
+    \item Tahun 11 hingga 15: $\$3.000$ per tahun.
+\end{itemize}
+Jika suku bunga efektif tahunan adalah $6\%$, tentukan nilai sekarang ($PV$) dari program beasiswa tersebut!
+\end{examplebox}
+
+\begin{proof}[\textbf{Pembahasan:}]
+Aliran dana dapat dipecah menjadi 3 lapis anuitas:
+\begin{itemize}
+    \item Lapis 1: $\$1.000$ per tahun selama 15 tahun (tahun 1--15).
+    \item Lapis 2: Tambahan $\$1.000$ per tahun selama 10 tahun terakhir (tahun 6--15).
+    \item Lapis 3: Tambahan $\$1.000$ per tahun selama 5 tahun terakhir (tahun 11--15).
+\end{itemize}
+\begin{equation*}
+    PV = 1000 \, a_{\overline{15}|0.06} + 1000 \, v^5 \, a_{\overline{10}|0.06} + 1000 \, v^{10} \, a_{\overline{5}|0.06}
+\end{equation*}
+Pada $i = 0.06$:
+\begin{align*}
+    a_{\overline{15}|} &= \frac{1 - (1.06)^{-15}}{0.06} \approx 9.712249 \\
+    v^5 \, a_{\overline{10}|} &= (1.06)^{-5} \left( \frac{1 - (1.06)^{-10}}{0.06} \right) = 0.747258 \times 7.360087 \approx 5.500000 \\
+    v^{10} \, a_{\overline{5}|} &= (1.06)^{-10} \left( \frac{1 - (1.06)^{-5}}{0.06} \right) = 0.558395 \times 4.212364 \approx 2.352199
+\end{align*}
+\begin{equation*}
+    PV = 1000 [ 9.712249 + 5.500000 + 2.352199 ] = 1000 \times 17.564448 = \mathbf{\$17.564,45}
+\end{equation*}
+\end{proof}
+
+\vspace{1.5em}
+
+\begin{examplebox}[Latihan Soal 2: Ujian Aktuaria FM - Hubungan Anuitas Meningkat dan Menurun]
+Diketahui dua jenis anuitas 10 tahun dengan suku bunga efektif tahunan $i > 0$:
+\begin{itemize}
+    \item Anuitas A adalah anuitas meningkat standar $(Ia)_{\overline{10}|} = 32.687$.
+    \item Anuitas B adalah anuitas menurun standar $(Da)_{\overline{10}|} = 41.124$.
+\end{itemize}
+Tentukan suku bunga efektif tahunan $i$!
+\end{examplebox}
+
+\begin{proof}[\textbf{Pembahasan:}]
+Gunakan Teorema Relasi Komplementer untuk $n = 10$:
+\begin{equation*}
+    (Ia)_{\overline{10}|} + (Da)_{\overline{10}|} = 11 \, a_{\overline{10}|} \implies 32.687 + 41.124 = 11 \, a_{\overline{10}|}
+\end{equation*}
+\begin{equation*}
+    a_{\overline{10}|} = \frac{73.811}{11} \approx 6.71009
+\end{equation*}
+Gunakan formula anuitas menurun:
+\begin{equation*}
+    (Da)_{\overline{10}|} = \frac{10 - a_{\overline{10}|}}{i} \implies 41.124 = \frac{10 - 6.71009}{i} = \frac{3.28991}{i}
+\end{equation*}
+\begin{equation*}
+    i = \frac{3.28991}{41.124} = \mathbf{0.0800} = \mathbf{8.00\%}
+\end{equation*}
+\end{proof}
+
+\end{document}

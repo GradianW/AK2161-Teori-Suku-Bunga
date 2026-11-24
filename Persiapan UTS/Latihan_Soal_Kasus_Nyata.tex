@@ -1,0 +1,712 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% Pengaturan Margin Kertas
+\geometry{
+    top=1.8cm,
+    bottom=1.8cm,
+    left=1.6cm,
+    right=1.6cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Skema Warna Elegan & Profesional
+\definecolor{primaryblue}{RGB}{20, 60, 110}     % Deep Navy
+\definecolor{secondaryblue}{RGB}{41, 128, 185}  % Bright Blue
+\definecolor{boxbg}{RGB}{248, 250, 254}         % Soft Ice Blue tint
+\definecolor{darkgreen}{RGB}{22, 115, 60}       % Forest Green
+\definecolor{greenbg}{RGB}{244, 251, 246}       % Soft Mint tint
+\definecolor{darkamber}{RGB}{185, 105, 10}      % Amber / Gold
+\definecolor{amberbg}{RGB}{254, 251, 243}       % Soft Amber tint
+\definecolor{darkpurple}{RGB}{95, 45, 130}      % Royal Purple
+\definecolor{purplebg}{RGB}{252, 248, 255}      % Soft Lavender tint
+
+% Notasi Aktuaria Standar
+\newcommand{\angl}[1]{\overline{#1|}}
+\newcommand{\ia}{(Ia)}
+\newcommand{\da}{(Da)}
+\newcommand{\is}{(Is)}
+\newcommand{\ds}{(Ds)}
+\newcommand{\iad}{(I\ddot{a})}
+\newcommand{\dad}{(D\ddot{a})}
+\newcommand{\isd}{(I\ddot{s})}
+\newcommand{\dsd}{(D\ddot{s})}
+\newcommand{\iba}{(\bar{I}\bar{a})}
+\newcommand{\dba}{(\bar{D}\bar{a})}
+\newcommand{\ibs}{(\bar{I}\bar{s})}
+\newcommand{\dbs}{(\bar{D}\bar{s})}
+
+% Definisi Kotak TColorBox Khusus
+\newtcolorbox{kasusbox}[1][]{
+    enhanced,
+    breakable,
+    colback=amberbg,
+    colframe=darkamber,
+    fonttitle=\bfseries\sffamily\small,
+    title={\KASUSNYATA: #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkamber,
+    arc=1.5mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    before skip=2.5mm,
+    after skip=2.5mm
+}
+
+\newtcolorbox{soalbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily\small,
+    title={\SOALLATIHAN: #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=1.5mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    before skip=2.5mm,
+    after skip=2.5mm
+}
+
+\newtcolorbox{petunjukbox}[1][]{
+    enhanced,
+    breakable,
+    colback=purplebg,
+    colframe=darkpurple,
+    fonttitle=\bfseries\sffamily\small,
+    title={\PETUNJUKANALISIS: #1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkpurple,
+    arc=1.5mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    before skip=2mm,
+    after skip=2mm
+}
+
+\newtcolorbox{solusibox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily\small,
+    title={\SOLUSILENGKAP: #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    arc=1.5mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    before skip=2.5mm,
+    after skip=3mm
+}
+
+\newcommand{\KASUSNYATA}{Tinjauan Kasus Nyata di Industri Finansial \& Aktuaria}
+\newcommand{\SOALLATIHAN}{Soal Kasus Nyata}
+\newcommand{\PETUNJUKANALISIS}{Petunjuk Pengerjaan \& Rumus Kunci}
+\newcommand{\SOLUSILENGKAP}{Solusi Lengkap \& Pembahasan Langkah demi Langkah}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=primaryblue,
+    pdftitle={AK2161 Teori Suku Bunga - Kumpulan Soal Kasus Nyata UTS},
+    pdfauthor={Aktuaria ITB}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+% ==================== HEADER DOKUMEN ====================
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue,
+    arc=2mm,
+    left=4mm,right=4mm,top=3.5mm,bottom=3.5mm,
+    boxrule=0pt
+]
+\begin{center}
+    {\fontsize{15}{18}\selectfont\bfseries\color{white} AK2161 TEORI SUKU BUNGA (THEORY OF INTEREST)}\\[1.5mm]
+    {\fontsize{12}{15}\selectfont\bfseries\color{amberbg} KUMPULAN SOAL LATIHAN KONTEKSTUAL BERBASIS KASUS NYATA}\\[1mm]
+    {\fontsize{9.5}{12}\selectfont\color{white} Persiapan Ujian Tengah Semester (UTS) $\bullet$ Materi Bab 01 s.d. Bab 08 $\bullet$ Disertai Pembahasan Lengkap}
+\end{center}
+\end{tcolorbox}
+
+\vspace{2mm}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=boxbg,
+    colframe=secondaryblue,
+    arc=1.5mm,
+    boxrule=0.6pt,
+    left=3mm,right=3mm,top=2mm,bottom=2mm
+]
+\small
+\textbf{Panduan Belajar Mandiri:}\\[1mm]
+Dokumen ini disusun untuk menguji pemahaman intuitif dan analitis mahasiswa dalam mengaplikasikan konsep-konsep Teori Suku Bunga pada situasi riil di industri perbankan, pasar uang, pasar modal, pembiayaan korporasi, asuransi, dan dana pensiun. Setiap bab memuat:
+\begin{enumerate}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Tinjauan Kasus Nyata}: Penjelasan latar belakang praktik finansial di dunia nyata sebelum soal diberikan.
+    \item \textbf{Soal Kasus Nyata}: Kasus komputasional dengan parameter numerik realistis.
+    \item \textbf{Petunjuk Analisis}: Identifikasi formula aktuaria utama dan jebakan (*common pitfalls*).
+    \item \textbf{Solusi Lengkap}: Penurunan matematis langkah demi langkah beserta interpretasi hasil akhirnya.
+\end{enumerate}
+\end{tcolorbox}
+
+\vspace{1mm}
+
+% ==================== BAB 01 ====================
+\section*{Materi 01: Pendahuluan, Fungsi Akumulasi, \& Suku Bunga Dasar}
+
+\begin{kasusbox}[Deposito Perbankan vs Pinjaman Fintech \& Periode Fraksional]
+Dalam praktik pasar keuangan sehari-hari, terdapat perbedaan mendasar antara instrumen perbankan formal dan pembiayaan jangka pendek:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Bunga Majemuk (*Compound Interest*) vs Bunga Tunggal (*Simple Interest*)}: Perbankan modern menggunakan bunga majemuk untuk simpanan/deposito karena bunga yang diperoleh langsung menambah pokok (*reinvested*). Sebaliknya, lembaga pembiayaan mikro, gadai, atau *invoice financing* tenor pendek ($t < 1$ tahun) sering menggunakan suku bunga flat/tunggal. Secara matematis, untuk tenor $t \in (0,1)$, berlaku $1 + it > (1+i)^t$, sehingga bunga tunggal menghasilkan bunga lebih besar yang menguntungkan kreditor.
+    \item \textbf{Pencairan Periode Fraksional (*Merchant's Rule / Practical Method*)}: Ketika nasabah mencairkan deposito pada waktu pecahan (misalnya 2 tahun 7 bulan), bank umumnya menggunakan \textbf{metode praktis} (*practical method*): mengakumulasikan tahun penuh dengan bunga majemuk, lalu mengalikan sisa bulan fraksional dengan faktor bunga tunggal. Metode ini menghasilkan nilai akumulasi yang sedikit lebih tinggi dibandingkan metode eksak bunga majemuk penuh.
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Penempatan Kas Korporasi \& Penarikan Periode Pecahan]
+PT Finansia Sejahtera menempatkan dana kas menganggur (*idle cash*) sebesar \textbf{Rp 600.000.000} pada deposito berjangka di bank dengan suku bunga efektif tahunan $i = 6\%$. Karena kebutuhan modal kerja mendadak, bendahara perusahaan mencairkan seluruh dana tersebut tepat setelah berjalan \textbf{2 tahun 7 bulan} ($t = 2 + \frac{7}{12}$ tahun).
+
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Hitung total akumulasi dana yang diterima jika bank menghitung dengan \textbf{Metode Bunga Majemuk Eksak} (*Exact Compound Method*).
+    \item Hitung total akumulasi dana yang diterima jika bank menghitung dengan \textbf{Metode Praktis Perbankan} (*Practical Method / Merchant's Rule*).
+    \item Berapakah selisih nominal (keuntungan ekstra) yang diperoleh perusahaan berkat penggunaan metode praktis, dan jelaskan secara matematis mengapa metode praktis selalu menguntungkan nasabah pada $t$ non-bulat!
+\end{enumerate}
+\end{soalbox}
+
+\begin{petunjukbox}[Rumus Bunga Majemuk \& Metode Praktis]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Metode Eksak}: $A(t) = K \cdot (1+i)^t = K \cdot (1+i)^{n+f}$ dengan $n=2$ dan $f = \frac{7}{12}$.
+    \item \textbf{Metode Praktis}: $A_{\text{praktis}}(t) = K \cdot (1+i)^n \cdot (1 + f \cdot i)$.
+    \item Ingat sifat konveksitas: untuk $0 < f < 1$, kurva linear $1+fi$ selalu berada di atas kurva eksponensial $(1+i)^f$.
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 1]
+\textbf{Diketahui}: Pokok awal $K = \text{Rp } 600.000.000$, $i = 0{,}06$, durasi $t = 2 + \frac{7}{12} = \frac{31}{12} \approx 2{,}583333$ tahun.
+
+\textbf{Langkah (a) --- Perhitungan Bunga Majemuk Eksak:}
+\begin{align*}
+    A_{\text{eksak}} &= K \cdot (1 + i)^t = 600.000.000 \times (1{,}06)^{\frac{31}{12}} \\
+    (1{,}06)^{\frac{31}{12}} &= (1{,}06)^2 \times (1{,}06)^{\frac{7}{12}} = 1{,}123600 \times 1{,}034574 \approx 1{,}162448 \\
+    A_{\text{eksak}} &= 600.000.000 \times 1{,}16244787 = \mathbf{\text{Rp } 697.468.721}
+\end{align*}
+
+\textbf{Langkah (b) --- Perhitungan Metode Praktis Perbankan:}
+\begin{align*}
+    A_{\text{praktis}} &= K \cdot (1 + i)^2 \cdot \left(1 + \frac{7}{12} \cdot i\right) \\
+    &= 600.000.000 \times (1{,}06)^2 \times \left(1 + \frac{7}{12} \times 0{,}06\right) \\
+    &= 600.000.000 \times 1{,}123600 \times (1 + 0{,}035000) \\
+    &= 674.160.000 \times 1{,}035000 = \mathbf{\text{Rp } 697.755.600}
+\end{align*}
+
+\textbf{Langkah (c) --- Selisih Nominal \& Analisis Finansial:}
+$$\Delta = A_{\text{praktis}} - A_{\text{eksak}} = 697.755.600 - 697.468.721 = \mathbf{\text{Rp } 286.879}$$
+\textbf{Kesimpulan Finansial}: Perusahaan menerima kelebihan dana sebesar Rp 286.879. Secara matematis, karena fungsi eksponensial $g(f) = (1+i)^f$ adalah fungsi konveks tegas terhadap $f$, tali busur linearnya $1 + fi$ memenuhi pertidaksamaan tegas $1 + fi > (1+i)^f$ untuk setiap $0 < f < 1$. Oleh karena itu, metode praktis selalu menguntungkan investor simpanan dibandingkan perhitungan eksak.
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 02 ====================
+\section*{Materi 02: Bunga Nominal, Diskon, \& Intensitas Bunga ($\delta_t$)}
+
+\begin{kasusbox}[Pasar Uang, Surat Utang Jangka Pendek (T-Bills), \& Proyek Berisiko Tinggi]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Surat Berharga Negara / Treasury Bills (SPN)}: Di pasar uang, instrumen surat perbendaharaan negara bertenor di bawah 1 tahun tidak membayar kupon berkala, melainkan dijual dengan diskon di muka (*sold at a discount*). Investor membayar harga beli $P < F$, dan saat jatuh tempo menerima nilai par penuh $F$. Tingkat diskon yang dikutip di pasar adalah *annual discount rate* $d$, sehingga diskon dipotong langsung dari nilai nominal.
+    \item \textbf{Intensitas Bunga Non-Konstan ($\delta_t$)}: Dalam perbankan dan valuasi proyek energi terbarukan atau startup teknologi berisiko tinggi, asumsi suku bunga tetap sering tidak realistis. Tingkat pengembalian modal awal umumnya lebih rendah, kemudian meningkat seiring maturitas proyek. Dinamika ini dimodelkan dengan fungsi intensitas bunga kontinu variabel $\delta_t$.
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Valuasi SPN Pasar Uang \& Akumulasi Proyek Intensitas Bervariasi]
+\textbf{Bagian 1 (Valuasi SPN \& Ekuivalensi Suku Bunga Nominal):}  
+Sebuah manajer investasi membeli Surat Perbendaharaan Negara (SPN) bertenor 180 hari dengan nilai nominal jatuh tempo $F = \text{Rp } 1.000.000.000$. SPN tersebut dikutip di pasar uang dengan tingkat diskon tahunan sebesar $d = 5{,}2\%$ (basis konvensi pasar uang 360 hari, sehingga $t = \frac{180}{360} = 0{,}5$ tahun).
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Hitung harga beli ($P$) SPN tersebut pada pasar perdana.
+    \item Tentukan suku bunga nominal majemuk kuartalan $i^{(4)}$ yang ekuivalen dengan imbal hasil SPN tersebut.
+\end{enumerate}
+
+\textbf{Bagian 2 (Akumulasi Dana dengan Intensitas Bunga Berubah Terhadap Waktu):}  
+Sebuah reksadana penyertaan modal ventura menempatkan modal awal sebesar \textbf{Rp 250.000.000} pada proyek teknologi. Proyek ini menghasilkan intensitas bunga (*force of interest*) yang bertambah secara linear mengikuti model:
+$$\delta_t = 0{,}03 + 0{,}01t, \quad 0 \le t \le 5 \quad (t \text{ dalam tahun})$$
+Hitung nilai akumulasi investasi tersebut pada akhir tahun ke-5 ($t=5$).
+\end{soalbox}
+
+\begin{petunjukbox}[Rumus Diskon Pasar Uang, Konversi Suku Bunga, \& Integral Intensitas]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Harga beli diskon: $P = F(1 - dt)$.
+    \item Imbal hasil efektif tahunan: $1 + i = \left(\frac{F}{P}\right)^{1/t} = \left(\frac{F}{P}\right)^2$.
+    \item Konversi suku bunga nominal kuartalan: $\left(1 + \frac{i^{(4)}}{4}\right)^4 = 1 + i \implies i^{(4)} = 4 \left[ (1+i)^{1/4} - 1 \right]$.
+    \item Akumulasi kontinu variabel: $A(t) = K \cdot \exp\left(\int_0^t \delta_s \, ds\right)$.
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 2]
+\textbf{Bagian 1 --- SPN Pasar Uang:}
+\begin{enumerate}[label=(\alph*), leftmargin=4mm]
+    \item Harga beli SPN di pasar perdana:
+    \begin{align*}
+        P &= F \cdot (1 - d \cdot t) = 1.000.000.000 \times \left(1 - 0{,}052 \times \frac{180}{360}\right) \\
+        &= 1.000.000.000 \times (1 - 0{,}026) = \mathbf{\text{Rp } 974.000.000}
+    \end{align*}
+    \item Imbal hasil untuk tenor 180 hari adalah $\frac{F - P}{P} = \frac{26.000.000}{974.000.000} \approx 0{,}0266940$.  
+    Maka faktor akumulasi tahunan efektif adalah:
+    $$1 + i = (1 + 0{,}0266940)^2 = 1{,}054101$$
+    Hubungan ekuivalensi dengan $i^{(4)}$:
+    $$\left(1 + \frac{i^{(4)}}{4}\right)^4 = 1 + i \implies 1 + \frac{i^{(4)}}{4} = (1{,}054101)^{1/4} \approx 1{,}013259$$
+    $$i^{(4)} = 4 \times 0{,}013259 = 0{,}053036 = \mathbf{5{,}3036\% \text{ per tahun}}$$
+\end{enumerate}
+
+\textbf{Bagian 2 --- Akumulasi Dana Intensitas Variabel:}
+Hitung nilai integral dari fungsi gaya bunga $\delta_t$ dari $t=0$ hingga $t=5$:
+$$\int_0^5 \delta_t \, dt = \int_0^5 (0{,}03 + 0{,}01t) \, dt = \left[ 0{,}03t + 0{,}005t^2 \right]_0^5 = 0{,}03(5) + 0{,}005(25) = 0{,}15 + 0{,}125 = 0{,}275$$
+Nilai akumulasi pada akhir tahun ke-5:
+$$A(5) = K \cdot e^{\int_0^5 \delta_t \, dt} = 250.000.000 \times e^{0{,}275} \approx 250.000.000 \times 1{,}31653067 = \mathbf{\text{Rp } 329.132.669}$$
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 03 ====================
+\section*{Materi 03: Masalah Mengenai Suku Bunga}
+
+\begin{kasusbox}[Restrukturisasi Utang Korporasi \& Waktu Ekuivalen (*Equated Time*)]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Restrukturisasi / Konsolidasi Kewajiban}: Perusahaan yang memiliki beberapa kewajiban utang yang jatuh tempo pada waktu berbeda (misalnya utang obligasi jangka pendek dan pinjaman sindikasi bank) sering kali bernegosiasi dengan para kreditur untuk mengonsolidasi seluruh kewajiban menjadi satu pembayaran tunggal sebesar total nilai nominal utang pada suatu waktu ekuivalen $t$.
+    \item \textbf{Perdebatan Waktu Ekuivalen Eksak vs Waktu Rata-rata}: Dalam negosiasi restrukturisasi, akuntan sering mengusulkan *Method of Equated Time* (rata-rata tertimbang $\bar{t} = \frac{\sum C_k t_k}{\sum C_k}$) karena sangat mudah dihitung. Namun, aktuaris wajib menunjukkan bahwa metode tersebut menguntungkan debitur dan merugikan kreditor karena mengabaikan nilai waktu uang secara non-linear.
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Konsolidasi Kewajiban Utang Korporasi]
+PT Logistik Nusantara memiliki dua kewajiban utang yang belum terselesaikan:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Utang A}: Rp 300.000.000 jatuh tempo tepat \textbf{1 tahun} yang akan datang.
+    \item \textbf{Utang B}: Rp 500.000.000 jatuh tempo tepat \textbf{4 tahun} yang akan datang.
+\end{itemize}
+Debitur mengajukan permohonan kepada pihak konsorsium perbankan untuk menggabungkan kedua utang tersebut menjadi \textbf{satu kali pembayaran tunggal} sebesar jumlah nominal kedua utang, yaitu \textbf{Rp 800.000.000}, pada suatu waktu $t$ tahun dari sekarang. Konsorsium menyetujui restrukturisasi dengan suku bunga efektif tahunan $i = 8\%$.
+
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Tentukan waktu ekuivalen teoritis eksak ($t$) secara matematis agar nilai sekarang dari pembayaran tunggal sama persis dengan nilai sekarang kedua utang awal!
+    \item Hitung waktu ekuivalen aproksimasi menggunakan *Method of Equated Time* ($\bar{t}$).
+    \item Bandingkan kedua hasil tersebut dan buktikan secara teoritis mengapa $\bar{t} > t$ selalu berlaku pada suku bunga positif ($i > 0$)!
+\end{enumerate}
+\end{soalbox}
+
+\begin{petunjukbox}[Persamaan Nilai, Nilai Sekarang, \& Pertidaksamaan Jensen]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Persamaan Nilai pada $t=0$: $(C_1 + C_2) v^t = C_1 v^{t_1} + C_2 v^{t_2} \implies v^t = \frac{C_1 v^{t_1} + C_2 v^{t_2}}{C_1 + C_2}$.
+    \item Selesaikan $t$ dengan logaritma: $t = -\frac{\ln(v^t)}{\ln(1+i)}$.
+    \item Rata-rata tertimbang: $\bar{t} = \frac{\sum C_k t_k}{\sum C_k}$.
+    \item Fungsi diskonto $f(x) = v^x = e^{-x \delta}$ memiliki turunan kedua $f''(x) = \delta^2 e^{-x \delta} > 0$ (fungsi konveks tegas).
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 3]
+\textbf{Diketahui}: $C_1 = 300\text{ jt}, t_1 = 1$, $C_2 = 500\text{ jt}, t_2 = 4$, $C = 800\text{ jt}$, $i = 0{,}08$.  
+Faktor diskonto: $v = \frac{1}{1{,}08} \approx 0{,}925926$.
+
+\textbf{Langkah (a) --- Perhitungan Waktu Ekuivalen Eksak ($t$):}
+\begin{align*}
+    800 \cdot v^t &= 300 \cdot v^1 + 500 \cdot v^4 \\
+    800 \cdot (1{,}08)^{-t} &= 300 \times (1{,}08)^{-1} + 500 \times (1{,}08)^{-4} \\
+    800 \cdot (1{,}08)^{-t} &= 300 \times (0{,}925926) + 500 \times (0{,}735030) \\
+    800 \cdot (1{,}08)^{-t} &= 277{,}778 + 367{,}515 = 645{,}293\text{ jt} \\
+    (1{,}08)^{-t} &= \frac{645{,}293}{800} = 0{,}806616
+\end{align*}
+Mengambil logaritma natural pada kedua sisi:
+$$-t \ln(1{,}08) = \ln(0{,}806616) \implies -t (0{,}076961) = -0{,}214907$$
+$$t = \frac{0{,}214907}{0{,}076961} \approx \mathbf{2{,}7924 \text{ tahun (atau 2 tahun 9,5 bulan)}}$$
+
+\textbf{Langkah (b) --- Perhitungan *Method of Equated Time* ($\bar{t}$):}
+\begin{align*}
+    \bar{t} &= \frac{C_1 t_1 + C_2 t_2}{C_1 + C_2} = \frac{300(1) + 500(4)}{300 + 500} \\
+    &= \frac{300 + 2000}{800} = \frac{2300}{800} = \mathbf{2{,}8750 \text{ tahun (atau 2 tahun 10,5 bulan)}}
+\end{align*}
+
+\textbf{Langkah (c) --- Pembuktian \& Makna Finansial:}
+Selisih waktu adalah $\bar{t} - t = 2{,}8750 - 2{,}7924 = 0{,}0826$ tahun ($\approx 1$ bulan lebih lambat).  
+\textbf{Pembuktian Matematis}: Misalkan bobot $w_k = \frac{C_k}{\sum C_j}$ dengan $\sum w_k = 1$. Karena fungsi diskonto $f(t) = v^t$ merupakan fungsi konveks tegas terhadap $t$ untuk $i > 0$, berdasarkan \textbf{Pertidaksamaan Jensen}:
+$$f\left(\sum w_k t_k\right) < \sum w_k f(t_k) \implies v^{\bar{t}} < v^t$$
+Karena basis $v = \frac{1}{1+i} < 1$, fungsi eksponensial $v^x$ adalah fungsi monoton turun. Akibatnya:
+$$v^{\bar{t}} < v^t \iff \mathbf{\bar{t} > t}$$
+\textbf{Kesimpulan Finansial}: Metode rata-rata $\bar{t}$ menghasilkan waktu jatuh tempo yang lebih mundur sekitar 1 bulan. Jika bank mengizinkan pelunasan pada waktu $\bar{t}$, nilai sekarang dari pelunasan tersebut lebih kecil dari nilai utang semula, sehingga debitur diuntungkan dan kreditur mengalami kerugian nilai waktu uang (*loss of time value of money*).
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 04 ====================
+\section*{Materi 04: Tingkat Pengembalian Modal (Yield Rates, IRR, NPV, DWRR, TWRR)}
+
+\begin{kasusbox}[Standar Pelaporan Kinerja Reksa Dana: TWRR vs DWRR]
+Dalam industri manajemen investasi global (sesuai standar *Global Investment Performance Standards* / GIPS dan regulasi OJK):
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Time-Weighted Rate of Return (TWRR)}: Mengukur murni kepiawaian manajer investasi dalam memilih aset dan mengalokasikan portofolio tanpa terdistorsi oleh keputusan investor dalam menyetor atau menarik dana. Oleh karena itu, prospektus dan *fund fact sheet* wajib mempublikasikan TWRR.
+    \item \textbf{Dollar-Weighted Rate of Return (DWRR)}: Merupakan *Internal Rate of Return* (IRR) dari rekening investor. DWRR sangat sensitif terhadap *market timing* investor. Jika investor menyetor modal besar tepat sebelum pasar turun drastis, DWRR pribadinya akan jauh lebih buruk dibandingkan TWRR portofolio manajer investasi.
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Evaluasi Kinerja Portofolio Reksadana Saham]
+Seorang investor institusi memiliki rekening investasi reksadana yang dikelola oleh manajer investasi selama tahun 2024 dengan catatan mutasi sebagai berikut:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{1 Januari 2024 ($t=0$)}: Saldo awal portofolio bernilai \textbf{Rp 1.000.000.000}.
+    \item \textbf{1 Mei 2024 ($t = \frac{4}{12} = \frac{1}{3}$)}: Nilai portofolio tepat sebelum transaksi adalah \textbf{Rp 1.080.000.000}. Investor melakukan setoran modal tambahan (*inflow*) sebesar \textbf{Rp 400.000.000}.
+    \item \textbf{1 September 2024 ($t = \frac{8}{12} = \frac{2}{3}$)}: Nilai portofolio tepat sebelum transaksi turun menjadi \textbf{Rp 1.420.000.000}. Investor menarik modal (*outflow*) sebesar \textbf{Rp 200.000.000}.
+    \item \textbf{31 Desember 2024 ($t=1$)}: Nilai akhir portofolio tercatat sebesar \textbf{Rp 1.350.000.000}.
+\end{itemize}
+
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Hitung \textbf{Time-Weighted Rate of Return} (TWRR) portofolio manajer investasi selama tahun 2024!
+    \item Hitung \textbf{Dollar-Weighted Rate of Return} (DWRR) yang dialami investor dengan metode aproksimasi standar pasar modal!
+    \item Analisis mengapa nilai DWRR berbeda dari TWRR, dan jelaskan apakah keputusan timing arus kas investor menguntungkan atau merugikan dirinya sendiri!
+\end{enumerate}
+\end{soalbox}
+
+\begin{petunjukbox}[Formula TWRR \& DWRR]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item TWRR mengalikan faktor pertumbuhan setiap sub-periode: $1 + i_{\text{tw}} = \prod_{k=1}^m \frac{B_k^-}{B_{k-1}^+}$.
+    \item DWRR menggunakan rumus bunga tertimbang: $i_{\text{dw}} \approx \frac{I}{A + \sum C_k(1 - t_k)}$, dengan total bunga bersih $I = B - A - \sum C_k$.
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 4]
+\textbf{Langkah (a) --- Perhitungan TWRR ($i_{\text{tw}}$):}
+Portofolio terbagi menjadi 3 sub-periode:
+\begin{enumerate}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Sub-periode 1 (1 Jan -- 1 Mei)}:  
+    Saldo awal $B_0 = 1.000\text{ jt}$, saldo akhir $B_1^- = 1.080\text{ jt}$.  
+    $$1 + r_1 = \frac{1.080}{1.000} = 1{,}080000 \quad (+8{,}00\%)$$
+    Saldo setelah setoran $C_1 = +400\text{ jt}$ adalah $B_1^+ = 1.080 + 400 = 1.480\text{ jt}$.
+    
+    \item \textbf{Sub-periode 2 (1 Mei -- 1 Sep)}:  
+    Saldo awal $B_1^+ = 1.480\text{ jt}$, saldo akhir $B_2^- = 1.420\text{ jt}$.  
+    $$1 + r_2 = \frac{1.420}{1.480} = \frac{71}{74} \approx 0{,}959459 \quad (-4{,}05\%)$$
+    Saldo setelah penarikan $C_2 = -200\text{ jt}$ adalah $B_2^+ = 1.420 - 200 = 1.220\text{ jt}$.
+    
+    \item \textbf{Sub-periode 3 (1 Sep -- 31 Des)}:  
+    Saldo awal $B_2^+ = 1.220\text{ jt}$, saldo akhir $B_3 = 1.350\text{ jt}$.  
+    $$1 + r_3 = \frac{1.350}{1.220} = \frac{135}{122} \approx 1{,}106557 \quad (+10{,}66\%)$$
+\end{enumerate}
+Perhitungan komposit TWRR:
+$$1 + i_{\text{tw}} = (1 + r_1)(1 + r_2)(1 + r_3) = (1{,}080000) \times (0{,}959459) \times (1{,}106557) \approx 1{,}146633$$
+$$i_{\text{tw}} = 1{,}146633 - 1 = \mathbf{14{,}6633\% \text{ per tahun}}$$
+
+\textbf{Langkah (b) --- Perhitungan DWRR ($i_{\text{dw}}$):}
+\begin{align*}
+    \text{Total Bunga Bersih } I &= B - A - (C_1 + C_2) = 1.350 - 1.000 - (400 - 200) = 150\text{ jt} \\
+    \text{Penyebut Tertimbang} &= A + C_1(1 - t_1) + C_2(1 - t_2) \\
+    &= 1.000 + 400\left(1 - \frac{4}{12}\right) - 200\left(1 - \frac{8}{12}\right) \\
+    &= 1.000 + 400\left(\frac{2}{3}\right) - 200\left(\frac{1}{3}\right) = 1.000 + 266{,}67 - 66{,}67 = 1.200\text{ jt} \\
+    i_{\text{dw}} &\approx \frac{150}{1.200} = \mathbf{12{,}5000\% \text{ per tahun}}
+\end{align*}
+
+\textbf{Langkah (c) --- Analisis Evaluasi Investasi:}
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Didapatkan $\mathbf{DWRR (12{,}50\%) < TWRR (14{,}66\%)}$.
+    \item \textbf{Penyebab Utama}: Investor menyetor modal ekstra sebesar Rp 400 juta pada 1 Mei, tepat sebelum periode di mana manajer investasi mencatatkan imbal hasil negatif (turun $-4{,}05\%$). Selanjutnya, investor menarik Rp 200 juta pada 1 September, tepat sebelum periode di mana pasar melonjak tinggi ($+10{,}66\%$).
+    \item \textbf{Kesimpulan}: Keputusan waktu (*market timing*) setoran dan penarikan oleh investor bersifat sub-optimal sehingga imbal hasil uang pribadinya (DWRR) tergerus 2,16\% dibandingkan kinerja murni portofolio (TWRR).
+\end{itemize}
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 05 ====================
+\section*{Materi 05: Anuitas Dasar 1 (Immediate, Due, Perpetuitas, \& Deferred)}
+
+\begin{kasusbox}[Dana Abadi Universitas (*Endowment Fund*) \& Program Beasiswa Berkelanjutan]
+Banyak perguruan tinggi terkemuka dan yayasan sosial mengelola **Dana Abadi** (*Endowment Fund*):
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Pokok dana abadi yang disumbangkan oleh donatur tidak pernah boleh berkurang atau diambil (*principal preservation*). Dana tersebut diinvestasikan ke instrumen berpendapatan tetap dan pasar modal.
+    \item Hasil imbal hasil tahunan dari pokok tersebut digunakan untuk membiayai beasiswa mahasiswa secara abadi (*perpetuity*).
+    \item Jika ada masa tenggang untuk pengembangan fasilitas awal sebelum pembayaran beasiswa pertama kali dimulai, aliran kas tersebut dimodelkan sebagai **anuitas tertunda** (*deferred annuity / deferred perpetuity*).
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Strukturisasi Dana Abadi Riset \& Beasiswa]
+Seorang alumni filantropis berencana mendirikan \textbf{Dana Abadi Riset \& Beasiswa} di almamaternya. Program yang dirancang adalah sebagai berikut:
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Masa Persiapan}: Selama 3 tahun pertama ($t=1, 2, 3$), seluruh hasil investasi digulung kembali ke dalam pokok dana abadi (tidak ada pencairan beasiswa).
+    \item \textbf{Beasiswa Abadi}: Mulai akhir tahun ke-4 ($t=4$) dan seterusnya setiap akhir tahun selamanya (*in perpetuity*), dicairkan dana beasiswa sebesar \textbf{Rp 120.000.000} per tahun.
+    \item \textbf{Hibah Laboratorium}: Tepat pada akhir tahun ke-10 ($t=10$), dibutuhkan satu kali penarikan khusus sebesar \textbf{Rp 500.000.000} untuk pemutakhiran perangkat laboratorium riset.
+\end{itemize}
+Asumsikan dana abadi dikelola secara profesional dan menghasilkan suku bunga efektif tahunan konstan $i = 6\%$.
+
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Hitung total dana tunai minimum yang harus diserahkan oleh donatur pada hari ini ($t=0$) untuk mendanai seluruh komitmen di atas!
+    \item Jika yayasan memutuskan beasiswa tersebut tidak dibayarkan selamanya, melainkan hanya selama \textbf{20 tahun} (yaitu dibayarkan pada akhir tahun ke-4 hingga akhir tahun ke-23) dan hibah laboratorium ditiadakan, berapakah dana donasi yang diperlukan pada $t=0$?
+\end{enumerate}
+\end{soalbox}
+
+\begin{petunjukbox}[Rumus Perpetuitas Tertunda \& Anuitas Tertunda]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Nilai kini perpetuitas biasa pada awal periode pembayarannya ($t=3$): $PV_3 = \frac{R}{i}$.
+    \item Nilai kini perpetuitas tertunda pada $t=0$: $PV_0 = v^m \cdot \frac{R}{i}$, di mana $m=3$.
+    \item Pembayaran tunggal: $PV_{\text{lump-sum}} = C \cdot v^{10}$.
+    \item Nilai kini anuitas biasa tertunda 20 periode: $PV_0 = v^3 \cdot R \cdot a_{\angl{20}|i}$.
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 5]
+\textbf{Diketahui}: $R = \text{Rp } 120.000.000$, $i = 0{,}06$, $v = (1{,}06)^{-1} \approx 0{,}943396$.
+
+\textbf{Langkah (a) --- Donasi Total untuk Perpetuitas Abadi + Hibah Laboratorium:}
+\begin{enumerate}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Nilai Kini Beasiswa Abadi}:  
+    Aliran kas beasiswa dimulai pada $t=4, 5, 6, \dots$. Pada waktu $t=3$, nilai kini dari seluruh rangkaian pembayaran abadi ini adalah:
+    $$PV_3 = \frac{R}{i} = \frac{120.000.000}{0{,}06} = \text{Rp } 2.000.000.000$$
+    Tarik nilai tersebut ke waktu sekarang ($t=0$):
+    $$PV_{0, \text{beasiswa}} = PV_3 \cdot v^3 = 2.000.000.000 \times (1{,}06)^{-3} = 2.000.000.000 \times 0{,}839619 = \mathbf{\text{Rp } 1.679.238.566}$$
+    
+    \item \textbf{Nilai Kini Hibah Laboratorium}:  
+    Pengeluaran Rp 500.000.000 terjadi di $t=10$:
+    $$PV_{0, \text{lab}} = 500.000.000 \times v^{10} = 500.000.000 \times (1{,}06)^{-10} = 500.000.000 \times 0{,}558395 = \mathbf{\text{Rp } 279.197.388}$$
+    
+    \item \textbf{Total Donasi Awal ($t=0$)}:
+    $$PV_{\text{total}} = 1.679.238.566 + 279.197.388 = \mathbf{\text{Rp } 1.958.435.954}$$
+\end{enumerate}
+
+\textbf{Langkah (b) --- Donasi untuk Beasiswa Terbatas 20 Tahun:}
+Pembayaran beasiswa berlangsung selama 20 kali yaitu pada $t=4, 5, \dots, 23$.  
+Nilai kini anuitas biasa 20 tahun pada $t=3$ adalah:
+$$a_{\angl{20}|0{,}06} = \frac{1 - (1{,}06)^{-20}}{0{,}06} = \frac{1 - 0{,}311805}{0{,}06} = \frac{0{,}688195}{0{,}06} \approx 11{,}469921$$
+Maka nilai kini pada $t=3$:
+$$PV_3 = R \cdot a_{\angl{20}|0{,}06} = 120.000.000 \times 11{,}469921 = \text{Rp } 1.376.390.546$$
+Mendiskontokan nilai tersebut ke $t=0$:
+$$PV_0 = PV_3 \cdot v^3 = 1.376.390.546 \times (1{,}06)^{-3} = 1.376.390.546 \times 0{,}839619 = \mathbf{\text{Rp } 1.155.644.044}$$
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 06 ====================
+\section*{Materi 06: Anuitas Dasar 2 (Unknown Time, Balloon Payment, \& Drop Payment)}
+
+\begin{kasusbox}[Pelunasan Angsuran Kredit Usaha \& Skema Cicilan Akhir]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Masalah Tenor Pecahan pada Angsuran Bulat}: Dalam akad pembiayaan perbankan (seperti Kredit Usaha Rakyat atau Kredit Modal Kerja), nasabah sering kali meminta besaran cicilan dibulatkan ke angka tertentu (misalnya pas Rp 3.500.000 per bulan). Akibat pembulatan ini, masa angsuran $n$ hampir pasti bukan bilangan bulat.
+    \item \textbf{Pilihan Skema Pelunasan Akhir}: Karena $n$ bukan bilangan bulat, bank menawarkan dua opsi standar untuk menyelesaikan sisa utang:
+    \begin{enumerate}[label=\arabic*., leftmargin=5mm]
+        \item \textbf{Balloon Payment}: Sisa utang yang tersisa ditambahkan langsung pada cicilan reguler terakhir (periode ke-$n$), sehingga pembayaran di bulan ke-$n$ menjadi lebih besar dari cicilan biasa.
+        \item \textbf{Drop Payment}: Nasabah membayar cicilan reguler normal pada periode ke-$n$, kemudian membayar sisa pokok yang kecil pada periode berikutnya (periode ke-$n+1$).
+    \end{enumerate}
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Penyelesaian Kredit Modal Kerja dengan Pembayaran Khusus]
+PT Mitra Boga memperoleh pinjaman modal kerja dari bank sebesar \textbf{Rp 100.000.000} dengan suku bunga efektif \textbf{1\% per bulan}. Perusahaan menyepakati pembayaran angsuran tetap sebesar \textbf{Rp 3.500.000} pada setiap akhir bulan (*annuity-immediate*).
+
+\textbf{Pertanyaan:}
+\begin{enumerate}[label=(\alph*), topsep=1pt, itemsep=1pt]
+    \item Berapakah jumlah pembayaran penuh reguler ($n$) yang dapat dilakukan?
+    \item Berapakah besarnya sisa saldo pokok utang tepat setelah pembayaran reguler ke-$n$ dilakukan?
+    \item Hitung besarnya \textbf{Balloon Payment} ($B$) yang harus dibayarkan pada periode ke-$n$ jika pinjaman dilunasi sekaligus pada pembayaran ke-$n$!
+    \item Hitung besarnya \textbf{Drop Payment} ($D$) jika debitur memilih melunasi sisa pinjaman pada periode ke-($n+1$)!
+\end{enumerate}
+\end{soalbox}
+
+\begin{petunjukbox}[Formulasi Balloon \& Drop Payment]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Menentukan waktu pecahan: $L = R \cdot a_{\angl{n}|i} \implies (1+i)^{-n} = 1 - \frac{L \cdot i}{R} \implies n = -\frac{\ln\left(1 - \frac{Li}{R}\right)}{\ln(1+i)}$.
+    \item Ambil $n = \lfloor n_{\text{float}} \rfloor$ untuk pembayaran penuh.
+    \item Saldo retrospektif di $t=n$: $B_n = L(1+i)^n - R \cdot s_{\angl{n}|i}$.
+    \item Balloon Payment di $t=n$: $B = R + B_n$.
+    \item Drop Payment di $t=n+1$: $D = B_n \cdot (1+i)$.
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 6]
+\textbf{Diketahui}: $L = 100.000.000$, $R = 3.500.000$, $i = 0{,}01$ per bulan.
+
+\textbf{Langkah (a) --- Menghitung Jumlah Pembayaran Penuh ($n$):}
+\begin{align*}
+    100.000.000 &= 3.500.000 \cdot \left[ \frac{1 - (1{,}01)^{-n}}{0{,}01} \right] \\
+    \frac{100.000.000 \times 0{,}01}{3.500.000} &= 1 - (1{,}01)^{-n} \implies \frac{1.000.000}{3.500.000} = \frac{2}{7} \approx 0{,}285714 \\
+    (1{,}01)^{-n} &= 1 - \frac{2}{7} = \frac{5}{7} \approx 0{,}714286 \\
+    -n \ln(1{,}01) &= \ln(0{,}714286) = -0{,}336472 \\
+    n &= \frac{0{,}336472}{0{,}0099503} \approx 33{,}8152 \text{ bulan}
+\end{align*}
+Jadi, terdapat \textbf{33 kali pembayaran penuh} sebesar Rp 3.500.000 ($n = 33$).
+
+\textbf{Langkah (b) --- Sisa Saldo Utang setelah Pembayaran ke-33 ($B_{33}$):}
+Menggunakan metode retrospektif:
+\begin{align*}
+    B_{33} &= L(1+i)^{33} - R \cdot s_{\angl{33}|0{,}01} \\
+    &= 100.000.000 \times (1{,}01)^{33} - 3.500.000 \times \left[ \frac{(1{,}01)^{33} - 1}{0{,}01} \right] \\
+    (1{,}01)^{33} &\approx 1{,}388915 \\
+    B_{33} &= 100.000.000 \times (1{,}388915) - 3.500.000 \times \left(\frac{0{,}388915}{0{,}01}\right) \\
+    &= 138.891.500 - 3.500.000 \times 38{,}8915 = 138.891.500 - 136.070.250 \\
+    &= \mathbf{\text{Rp } 2.827.479}
+\end{align*}
+
+\textbf{Langkah (c) --- Perhitungan Balloon Payment ($B$) pada Periode 33:}
+Debitur membayar angsuran biasa ditambah sisa saldo pada bulan ke-33:
+$$B = R + B_{33} = 3.500.000 + 2.827.479 = \mathbf{\text{Rp } 6.327.479}$$
+
+\textbf{Langkah (d) --- Perhitungan Drop Payment ($D$) pada Periode 34:}
+Sisa saldo $B_{33}$ terakumulasi bunga selama 1 bulan berikutnya:
+$$D = B_{33} \cdot (1 + i) = 2.827.479 \times 1{,}01 = \mathbf{\text{Rp } 2.855.754}$$
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 07 ====================
+\section*{Materi 07: Anuitas yang Lebih Umum 1 (Periode Beda Frekuensi \& Aliran Kontinu)}
+
+\begin{kasusbox}[Pasar Obligasi, Tabungan Kuartalan, \& Arus Kas Kontinu Jalan Tol]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Frekuensi Pembayaran Tidak Sama dengan Frekuensi Bunga}: Dalam transaksi riil, bunga perbankan atau reksadana sering dikonversi bulanan ($m=12$), namun nasabah menabung setiap kuartal (3 bulan sekali). Sebelum menghitung akumulasi dana, suku bunga per kuartal harus dihitung secara ekuivalen.
+    \item \textbf{Aliran Kas Kontinu pada Proyek Infrastruktur Publik}: Pada proyek jalan tol (*toll road concession*), pelabuhan, atau pembangkit listrik tenaga air (PLTA), pemasukan tarif tiket/listrik diterima setiap jam setiap hari sepanjang tahun secara terus-menerus. Memodelkan pendapatan ini sebagai anuitas diskrit adalah aproksimasi kasar; aktuaris dan perbankan investasi menggunakan **anuitas kontinu** ($\bar{a}_{\angl{n}|}$) dengan intensitas suku bunga $\delta$.
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Tabungan Eksekutif Kuartalan \& Valuasi Konsesi Jalan Tol]
+\textbf{Kasus A (Setoran Kuartalan dengan Bunga Majemuk Bulanan):}  
+Seorang profesional menyisihkan dana sebesar \textbf{Rp 5.000.000} pada setiap akhir kuartal (3 bulan sekali) selama \textbf{6 tahun} ke rekening investasi yang memberikan suku bunga nominal tahunan $i^{(12)} = 6\%$ yang dikonversi secara bulanan. Hitung total saldo akumulasi pada akhir tahun ke-6!
+
+\textbf{Kasus B (Valuasi Konsesi Arus Kas Kontinu Jalan Tol):}  
+Konsorsium infrastruktur memegang hak konsesi jalan tol selama \textbf{15 tahun}. Pendapatan tarif tol bersih diperkirakan mengalir secara kontinu dengan laju konstan sebesar \textbf{Rp 24.000.000.000} per tahun. Jika tingkat diskonto kontinu (intensitas bunga) konstan adalah $\delta = 8\%$ per tahun:  
+Hitung nilai sekarang (*Present Value*) dari hak konsesi jalan tol tersebut!
+\end{soalbox}
+
+\begin{petunjukbox}[Suku Bunga Ekuivalen \& Anuitas Kontinu]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Suku bunga efektif per bulan: $j_{\text{bln}} = \frac{i^{(12)}}{12} = \frac{0{,}06}{12} = 0{,}005$.
+    \item Suku bunga ekuivalen per kuartal: $j = (1 + j_{\text{bln}})^3 - 1 = (1{,}005)^3 - 1$.
+    \item Total periode kuartal: $N = 6 \times 4 = 24$ kuartal. Rumus akumulasi: $S = R \cdot s_{\angl{24}|j}$.
+    \item Nilai sekarang anuitas kontinu: $PV = \bar{R} \cdot \bar{a}_{\angl{n}|\delta} = \bar{R} \cdot \left[ \frac{1 - e^{-n\delta}}{\delta} \right]$.
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 7]
+\textbf{Penyelesaian Kasus A --- Tabungan Kuartalan:}
+\begin{enumerate}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Suku bunga efektif per bulan adalah $j_{\text{bln}} = \frac{6\%}{12} = 0{,}5\% = 0{,}005$.
+    \item Karena pembayaran dilakukan per kuartal (3 bulan), hitung suku bunga efektif per kuartal $j$:
+    $$1 + j = (1 + 0{,}005)^3 = 1{,}015075125 \implies j = 0{,}015075125 \approx 1{,}507513\% \text{ per kuartal}$$
+    \item Dalam 6 tahun, terdapat $N = 6 \times 4 = 24$ kali pembayaran kuartalan.
+    \item Nilai akumulasi pada akhir tahun ke-6:
+    \begin{align*}
+        S &= R \cdot s_{\angl{24}|j} = 5.000.000 \times \left[ \frac{(1 + j)^{24} - 1}{j} \right] \\
+        (1 + j)^{24} &= \left[(1{,}005)^3\right]^{24} = (1{,}005)^{72} \approx 1{,}432044 \\
+        S &= 5.000.000 \times \left[ \frac{1{,}432044 - 1}{0{,}015075125} \right] = 5.000.000 \times \frac{0{,}432044}{0{,}015075125} \\
+        &= 5.000.000 \times 28{,}659416 = \mathbf{\text{Rp } 143.297.080}
+    \end{align*}
+\end{enumerate}
+
+\textbf{Penyelesaian Kasus B --- Valuasi Arus Kas Kontinu Jalan Tol:}
+Laju penerimaan kas kontinu $\bar{R} = 24\text{ miliar/tahun}$, jangka waktu $n = 15$ tahun, intensitas bunga $\delta = 0{,}08$.
+\begin{align*}
+    PV &= \bar{R} \cdot \bar{a}_{\angl{15}|0{,}08} = 24.000.000.000 \times \left[ \frac{1 - e^{-15 \times 0{,}08}}{0{,}08} \right] \\
+    -15 \times 0{,}08 &= -1{,}20 \implies e^{-1{,}20} \approx 0{,}3011942 \\
+    \bar{a}_{\angl{15}|0{,}08} &= \frac{1 - 0{,}3011942}{0{,}08} = \frac{0{,}6988058}{0{,}08} \approx 8{,}7350725 \\
+    PV &= 24.000.000.000 \times 8{,}7350725 = \mathbf{\text{Rp } 209.641.740.000}
+\end{align*}
+\textbf{Interpretasi}: Nilai pasar wajar (*fair present value*) dari hak konsesi ruas jalan tol tersebut adalah sekitar Rp 209,64 miliar.
+\end{solusibox}
+
+\newpage
+
+% ==================== BAB 08 ====================
+\section*{Materi 08: Anuitas yang Lebih Umum 2 (Anuitas Berubah: Geometrik \& Aritmatika)}
+
+\begin{kasusbox}[Dana Pensiun Terproteksi Inflasi \& Pembiayaan Mesin Pabrik Berjenjang]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Anuitas Geometrik untuk Proteksi Daya Beli Pensiun}: Dalam program pensiun swasta (*annuity plan*), pembayaran pensiun nominal tetap akan tergerus oleh inflasi. Untuk menjaga daya beli pensiunan, dana pensiun merancang anuitas bertumbuh (*growth annuity*), di mana manfaat pensiun meningkat secara persentase tahunan konstan ($k$) menyesuaikan proyeksi laju inflasi.
+    \item \textbf{Anuitas Gradien Aritmatika ($P, Q$) untuk Pembiayaan Industri}: Saat perusahaan manufaktur menambah mesin produksi baru, kapasitas produksi pada tahun-tahun awal belum mencapai 100\% (tahap *ramp-up*). Lembaga pembiayaan (*leasing*) merancang skema cicilan berjenjang naik (*graduated payment*), di mana angsuran bertambah sebesar nominal tetap $Q$ setiap tahun seiring meningkatnya arus kas operasional pabrik.
+\end{itemize}
+\end{kasusbox}
+
+\begin{soalbox}[Perencanaan Pensiun Anti-Inflasi \& Sewa Beli Mesin Berjenjang]
+\textbf{Kasus A (Anuitas Geometrik --- Dana Pensiun Mengimbangi Inflasi):}  
+Seorang eksekutif merencanakan masa pensiun selama \textbf{25 tahun}. Ia menginginkan pembayaran pensiun tahunan pertama sebesar \textbf{Rp 150.000.000} pada akhir tahun pertama masa pensiun ($t=1$). Setiap tahun berikutnya, uang pensiun bertambah secara geometris sebesar \textbf{4\% per tahun} ($k = 0{,}04$) untuk menutup kenaikan biaya hidup. Portofolio dana pensiun diinvestasikan dengan suku bunga efektif \textbf{7\% per tahun} ($i = 0{,}07$).  
+Hitung saldo dana pensiun yang harus terkumpul tepat saat pensiun dimulai ($t=0$)!
+
+\textbf{Kasus B (Anuitas Aritmatika $P, Q$ --- Pembiayaan Mesin Produksi Berjenjang):}  
+PT Surya Tekstil membeli mesin rajut otomatis dengan skema cicilan tahunan selama \textbf{8 tahun} di setiap akhir tahun. Karena pendapatan operasional bertambah secara bertahap, angsuran dirancang meningkat secara aritmatika:
+\begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item Akhir Tahun 1: Rp 40.000.000
+    \item Akhir Tahun 2: Rp 48.000.000
+    \item Akhir Tahun 3: Rp 56.000.000 $\dots$ dan seterusnya bertambah tetap Rp 8.000.000 per tahun hingga Tahun ke-8.
+\end{itemize}
+Jika suku bunga pembiayaan efektif adalah \textbf{9\% per tahun} ($i = 0{,}09$):  
+Hitung harga tunai mesin tersebut pada saat pembelian ($t=0$)!
+\end{soalbox}
+
+\begin{petunjukbox}[Rumus Anuitas Geometrik \& Aritmatika $(P, Q)$]
+\begin{itemize}[leftmargin=4mm, topsep=1pt, itemsep=1pt]
+    \item Nilai sekarang anuitas geometrik ($i \neq k$):
+    $$PV = R_1 \cdot \left[ \frac{1 - \left(\frac{1+k}{1+i}\right)^n}{i - k} \right]$$
+    \item Nilai sekarang anuitas aritmatika umum $(P, Q)$ dengan pembayaran pertama $P$ dan kenaikan $Q$:
+    $$PV = P \cdot a_{\angl{n}|i} + Q \cdot \left[ \frac{a_{\angl{n}|i} - n v^n}{i} \right]$$
+\end{itemize}
+\end{petunjukbox}
+
+\begin{solusibox}[Penyelesaian Kasus 8]
+\textbf{Penyelesaian Kasus A --- Dana Pensiun Geometrik:}
+\textbf{Diketahui}: $R_1 = \text{Rp } 150.000.000$, $k = 0{,}04$, $i = 0{,}07$, $n = 25$ tahun.
+\begin{align*}
+    i - k &= 0{,}07 - 0{,}04 = 0{,}03 \\
+    \frac{1+k}{1+i} &= \frac{1{,}04}{1{,}07} \approx 0{,}9719626 \\
+    \left(\frac{1+k}{1+i}\right)^{25} &= (0{,}9719626)^{25} \approx 0{,}491178 \\
+    1 - \left(\frac{1+k}{1+i}\right)^{25} &= 1 - 0{,}491178 = 0{,}508822 \\
+    PV &= 150.000.000 \times \left[ \frac{0{,}508822}{0{,}03} \right] = 150.000.000 \times 16{,}960728 = \mathbf{\text{Rp } 2.544.109.243}
+\end{align*}
+\textbf{Kesimpulan}: Eksekutif tersebut harus memiliki modal akumulasi pensiun sebesar Rp 2,544 miliar pada saat ia memasuki masa pensiun di $t=0$.
+
+\textbf{Penyelesaian Kasus B --- Pembiayaan Mesin Aritmatika $(P, Q)$:}
+\textbf{Diketahui}: $P = \text{Rp } 40.000.000$, $Q = \text{Rp } 8.000.000$, $n = 8$, $i = 0{,}09$.  
+Faktor diskonto: $v = \frac{1}{1{,}09} \approx 0{,}917431$, sehingga $v^8 = (1{,}09)^{-8} \approx 0{,}501866$.
+\begin{align*}
+    a_{\angl{8}|0{,}09} &= \frac{1 - (1{,}09)^{-8}}{0{,}09} = \frac{1 - 0{,}501866}{0{,}09} = \frac{0{,}498134}{0{,}09} \approx 5{,}534819 \\
+    \frac{a_{\angl{8}|0{,}09} - 8 v^8}{0{,}09} &= \frac{5{,}534819 - 8(0{,}501866)}{0{,}09} = \frac{5{,}534819 - 4{,}014928}{0{,}09} \\
+    &= \frac{1{,}519891}{0{,}09} \approx 16{,}887678
+\end{align*}
+Maka nilai harga tunai mesin pada $t=0$:
+\begin{align*}
+    PV &= P \cdot a_{\angl{8}|0{,}09} + Q \cdot \left[ \frac{a_{\angl{8}|0{,}09} - 8 v^8}{0{,}09} \right] \\
+    &= 40.000.000 \times (5{,}534819) + 8.000.000 \times (16{,}887678) \\
+    &= 221.392.760 + 135.101.424 = \mathbf{\text{Rp } 356.494.184}
+\end{align*}
+\textbf{Kesimpulan}: Nilai tunai (*cash price / fair purchase price*) mesin rajut otomatis tersebut adalah Rp 356.494.184.
+\end{solusibox}
+
+\vfill
+\begin{center}
+    \small\color{gray}
+    $\ast\ast\ast$ \textbf{Akhir Dokumen Kumpulan Soal \& Pembahasan UTS AK2161} $\ast\ast\ast$
+\end{center}
+
+\end{document}

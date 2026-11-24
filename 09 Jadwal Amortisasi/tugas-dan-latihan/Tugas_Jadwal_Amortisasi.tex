@@ -1,0 +1,166 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+
+\tcbset{
+    colback=gray!5,
+    colframe=black!75,
+    boxrule=0.6pt,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=2mm,
+    bottom=2mm
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+
+\title{\vspace{-1.5cm}\textbf{Tugas Mandiri Teori Suku Bunga}\\\large Topik: Jadwal Amortisasi (Slide Halaman 14 \& 25)\vspace{-0.8cm}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-0.5em}
+\hrule
+\vspace{0.8em}
+
+% =============================================================
+% SOAL 1 (SLIDE HALAMAN 14)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 1 (Slide Halaman 14):}\\
+Hutang $\$5000$ dibayarkan per tahun sebanyak 4 kali dengan sukubunga $8\%$. Tuliskan jadwal amortisasinya.
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+\textbf{1. Parameter yang diketahui:}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item Pokok pinjaman awal: $L = B_0 = 5000$
+    \item Suku bunga efektif per tahun: $i = 8\% = 0{,}08$
+    \item Jangka waktu: $n = 4$ tahun
+\end{itemize}
+
+\textbf{2. Menghitung besar angsuran tahunan ($R$):}
+\begin{align*}
+    L &= R \, a_{\overline{n}|i} = R \, a_{\overline{4}|0{,}08} \\[0.3em]
+    a_{\overline{4}|0{,}08} &= \frac{1 - (1 + i)^{-4}}{i} = \frac{1 - (1{,}08)^{-4}}{0{,}08} = \frac{1 - 0{,}73502985}{0{,}08} = 3{,}31212687 \\[0.3em]
+    R &= \frac{L}{a_{\overline{4}|0{,}08}} = \frac{5000}{3{,}31212687} = \mathbf{1509{,}6038 \approx 1509{,}60}
+\end{align*}
+
+\textbf{3. Perhitungan elemen jadwal amortisasi tiap periode:}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=2pt]
+    \item \textbf{Periode 1 ($t = 1$):}
+    \begin{align*}
+        I_1 &= i \cdot B_0 = 0{,}08 \times 5000 = \mathbf{400{,}00} \\
+        P_1 &= R - I_1 = 1509{,}60 - 400{,}00 = \mathbf{1109{,}60} \\
+        B_1 &= B_0 - P_1 = 5000 - 1109{,}60 = \mathbf{3890{,}40}
+    \end{align*}
+    \item \textbf{Periode 2 ($t = 2$):}
+    \begin{align*}
+        I_2 &= i \cdot B_1 = 0{,}08 \times 3890{,}40 = \mathbf{311{,}23} \\
+        P_2 &= R - I_2 = 1509{,}60 - 311{,}23 = \mathbf{1198{,}37} \quad (\text{cek: } P_1 \times 1{,}08 = 1198{,}37) \\
+        B_2 &= B_1 - P_2 = 3890{,}40 - 1198{,}37 = \mathbf{2692{,}03}
+    \end{align*}
+    \item \textbf{Periode 3 ($t = 3$):}
+    \begin{align*}
+        I_3 &= i \cdot B_2 = 0{,}08 \times 2692{,}03 = \mathbf{215{,}36} \\
+        P_3 &= R - I_3 = 1509{,}60 - 215{,}36 = \mathbf{1294{,}24} \quad (\text{cek: } P_2 \times 1{,}08 = 1294{,}24) \\
+        B_3 &= B_2 - P_3 = 2692{,}03 - 1294{,}24 = \mathbf{1397{,}79}
+    \end{align*}
+    \item \textbf{Periode 4 ($t = 4$):}
+    \begin{align*}
+        I_4 &= i \cdot B_3 = 0{,}08 \times 1397{,}79 = \mathbf{111{,}82} \\
+        P_4 &= R - I_4 = 1509{,}60 - 111{,}82 = \mathbf{1397{,}78 \approx 1397{,}79} \\
+        B_4 &= B_3 - P_4 = 1397{,}79 - 1397{,}79 = \mathbf{0{,}00}
+    \end{align*}
+\end{itemize}
+
+\textbf{4. Tabel Jadwal Amortisasi:}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Periode ($t$)} & \textbf{Angsuran ($R_t$)} & \textbf{Bunga ($I_t$)} & \textbf{Pokok ($P_t$)} & \textbf{Saldo Pinjaman ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$5000{,}00$ \\
+$1$ & $\$1509{,}60$ & $\$400{,}00$ & $\$1109{,}60$ & $\$3890{,}40$ \\
+$2$ & $\$1509{,}60$ & $\$311{,}23$ & $\$1198{,}37$ & $\$2692{,}03$ \\
+$3$ & $\$1509{,}60$ & $\$215{,}36$ & $\$1294{,}24$ & $\$1397{,}79$ \\
+$4$ & $\$1509{,}60$ & $\$111{,}82$ & $\$1397{,}78$ & $\$0{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$6038{,}40}$ & $\mathbf{\$1038{,}40}$ & $\mathbf{\$5000{,}00}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Verifikasi:}
+\begin{align*}
+    \sum_{t=1}^4 P_t &= 1109{,}60 + 1198{,}37 + 1294{,}24 + 1397{,}79 = \mathbf{5000{,}00} = L \\[0.2em]
+    \sum_{t=1}^4 I_t &= 400{,}00 + 311{,}23 + 215{,}36 + 111{,}82 = \mathbf{1038{,}40} = 4R - L
+\end{align*}
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+% =============================================================
+% SOAL 2 (SLIDE HALAMAN 25)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 2 (Slide Halaman 25):}\\
+A meminjam uang sebesar $\$10.000$ ke bank dan akan dikembalikan setiap bulan selama 2 tahun. Sukubunga semula adalah $12\%$ convertible quarterly. Namun terjadi perubahan sukubunga pada awal tahun kedua menjadi $12{,}4\%$ convertible quarterly. Besar angsuran tiap bulan selama 1 tahun adalah $\$500$, berapa besar angsuran untuk 1 tahun kemudian?
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+\textbf{1. Parameter yang diketahui:}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item Pinjaman awal: $L = 10.000$
+    \item Total periode: $n = 24$ bulan ($2$ tahun)
+    \item Tahun ke-1 ($t = 1, \dots, 12$ bulan): $i^{(4)} = 12\%$, angsuran bulanan $R_1 = 500$
+    \item Tahun ke-2 ($t = 13, \dots, 24$ bulan): $j^{(4)} = 12{,}4\%$, angsuran bulanan baru $X$
+\end{itemize}
+
+\textbf{2. Suku bunga efektif bulanan Tahun ke-1 ($i_m$):}
+\begin{align*}
+    i_q &= \frac{i^{(4)}}{4} = \frac{0{,}12}{4} = 0{,}03 \\[0.3em]
+    (1 + i_m)^3 &= 1 + i_q = 1{,}03 \\[0.3em]
+    1 + i_m &= (1{,}03)^{1/3} \approx 1{,}009901634 \implies i_m \approx \mathbf{0{,}009901634}
+\end{align*}
+
+\textbf{3. Saldo pinjaman akhir Tahun ke-1 ($B_{12}$) --- Metode Retrospektif:}
+\begin{align*}
+    B_{12} &= L(1 + i_m)^{12} - R_1 \, s_{\overline{12}|i_m} \\[0.3em]
+    (1 + i_m)^{12} &= \left[(1 + i_m)^3\right]^4 = (1{,}03)^4 = 1{,}12550881 \\[0.3em]
+    s_{\overline{12}|i_m} &= \frac{(1 + i_m)^{12} - 1}{i_m} = \frac{(1{,}03)^4 - 1}{(1{,}03)^{1/3} - 1} = \frac{0{,}12550881}{0{,}009901634} = 12{,}675565 \\[0.3em]
+    B_{12} &= 10.000 \times 1{,}12550881 - 500 \times 12{,}675565 \\[0.3em]
+    &= 11.255{,}09 - 6337{,}78 = \mathbf{4917{,}31}
+\end{align*}
+
+\textbf{4. Suku bunga efektif bulanan Tahun ke-2 ($j_m$):}
+\begin{align*}
+    j_q &= \frac{j^{(4)}}{4} = \frac{0{,}124}{4} = 0{,}031 \\[0.3em]
+    (1 + j_m)^3 &= 1 + j_q = 1{,}031 \\[0.3em]
+    1 + j_m &= (1{,}031)^{1/3} \approx 1{,}01022836 \implies j_m \approx \mathbf{0{,}01022836}
+\end{align*}
+
+\textbf{5. Menghitung besar revisi angsuran bulanan Tahun ke-2 ($X$):}
+\begin{align*}
+    B_{12} &= X \, a_{\overline{12}|j_m} \implies X = \frac{B_{12}}{a_{\overline{12}|j_m}} \\[0.3em]
+    v_j^{12} &= (1 + j_m)^{-12} = \left[(1 + j_m)^3\right]^{-4} = (1{,}031)^{-4} = 0{,}88506169 \\[0.3em]
+    a_{\overline{12}|j_m} &= \frac{1 - v_j^{12}}{j_m} = \frac{1 - (1{,}031)^{-4}}{(1{,}031)^{1/3} - 1} = \frac{0{,}11493831}{0{,}01022836} = 11{,}237218 \\[0.3em]
+    X &= \frac{4917{,}31}{11{,}237218} \approx \mathbf{\$437{,}59}
+\end{align*}
+
+\textit{(Perhitungan eksak tanpa pembulatan intermediet menghasilkan $X = \dfrac{4917{,}3075}{11{,}238855} = \mathbf{\$437{,}53}$)}.
+
+\end{document}

@@ -1,0 +1,668 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Skema Warna Harmonis (Konsisten dengan modul perkuliahan sebelumnya)
+\definecolor{primaryblue}{RGB}{24, 76, 120}
+\definecolor{accentblue}{RGB}{70, 130, 180}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{darkgreen}{RGB}{34, 139, 34}
+\definecolor{greenbg}{RGB}{245, 252, 245}
+\definecolor{darkred}{RGB}{178, 34, 34}
+\definecolor{darkorange}{RGB}{205, 92, 0}
+
+% Lingkungan Kotak Khusus (Custom Environments)
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=3mm,
+    boxsep=2mm
+}
+
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accentblue,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=accentblue,
+    boxsep=2mm
+}
+
+\newtcolorbox{theorembox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.8pt,
+    arc=2mm,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    boxsep=2mm
+}
+
+\newtcolorbox{notebox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=gray!60,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    boxrule=0.5pt,
+    arc=2mm,
+    coltitle=black!80,
+    colbacktitle=gray!20,
+    boxsep=2mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=accentblue,
+    citecolor=primaryblue
+}
+
+\title{\textbf{\LARGE Catatan Kuliah Teori Suku Bunga}\\[0.3em]
+\Large Pertemuan 14: \textit{Callable Bond}, \textit{Putable Bond}, dan Serangkaian \textit{Bond}\\[0.2em]
+\large Valuasi Obligasi dengan Opsi Penebusan Dini, \textit{Serial Bonds} (Rumus Makeham), dan Variasi Obligasi Lebih Umum}
+\author{\textbf{Referensi:} Stephen G. Kellison, \textit{The Theory of Interest} (3rd ed., Bab 7) \& Slide Perkuliahan ITB}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+% =========================================================================
+% BAGIAN 1: KONSEP DASAR CALLABLE DAN PUTABLE BOND
+% =========================================================================
+\section{Konsep Dasar \textit{Callable Bond} dan \textit{Putable Bond} (Slide Hal. 2)}
+
+Pada obligasi standar (\textit{straight bond}), tanggal penebusan pokok (\textit{redemption date}) sudah pasti dan berimpit dengan tanggal jatuh tempo (\textit{maturity date}). Namun, dalam praktik pasar modal, banyak obligasi yang memuat \textbf{opsi tertanam (\textit{embedded options})} yang mengizinkan salah satu pihak untuk menebus obligasi lebih awal sebelum tanggal jatuh tempo normalnya.
+
+\subsection{Definisi Terminologi Utama}
+
+\begin{definitionbox}[Definisi \textit{Callable Bond}, \textit{Putable Bond}, dan \textit{Lockout Period}]
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{\textit{Callable Bond}:} Obligasi di mana \textbf{penerbitnya (peminjam / \textit{issuer})} memiliki hak opsi untuk menebus (melunasi) obligasi \textbf{sebelum tanggal \textit{maturity}}-nya. Tanggal penebusan dini ini disebut \textbf{\textit{call date}}.
+    \item \textbf{\textit{Putable Bond}:} Obligasi di mana \textbf{pemiliknya (pemberi pinjaman / investor / \textit{holder})} memiliki hak opsi untuk meminta penebusan obligasi \textbf{sebelum tanggal \textit{normal maturity}}. Tanggal penebusan dini oleh investor ini disebut \textbf{\textit{put date}}.
+    \item \textbf{\textit{Lockout Period} (Periode Penguncian):} Periode beberapa tahun awal sejak tanggal penerbitan di mana obligasi \textbf{tidak boleh ditebus}. Dengan demikian, \textit{call date} atau \textit{put date} paling cepat adalah tepat setelah \textit{lockout period} berakhir.
+    \item \textbf{\textit{Call Premium}:} Selisih lebih antara nilai penebusan dini ($C_n$) di atas nilai par ($F$), yakni $\text{\textit{Call Premium}} = C_n - F > 0$, yang diberikan penerbit sebagai kompensasi kepada investor apabila obligasi di-\textit{call} lebih awal.
+\end{enumerate}
+\end{definitionbox}
+
+\subsection{Prinsip Valuasi: Mengapa \textit{Callable} Dijual pada Harga Terendah \& \textit{Putable} pada Harga Tertinggi?}
+
+Permasalahan utama dalam menilai \textit{callable} dan \textit{putable bond} adalah: \textbf{tanggal penebusan ($n$) tidak diketahui secara pasti di awal}, karena bergantung pada keputusan pemegang opsi di masa depan.
+
+\begin{theorembox}[Prinsip Fundamental Harga \textit{Callable} vs. \textit{Putable Bond} (Slide Hal. 2)]
+Misalkan investor mensyaratkan laju imbal hasil (\textit{yield rate}) minimum sebesar $i$ per periode kupon, dan $\mathcal{N}$ adalah himpunan seluruh periode penebusan yang diizinkan setelah \textit{lockout period} hingga \textit{maturity}. Jika $P_n$ menyatakan harga obligasi seandainya ditebus pada periode ke-$n \in \mathcal{N}$, maka:
+\begin{align}
+    P_{\text{callable}} &= \min_{n \in \mathcal{N}} P_n \qquad \text{(\textit{Callable bond} akan dijual pada \textbf{harga terendah})} \\
+    P_{\text{putable}}  &= \max_{n \in \mathcal{N}} P_n \qquad \text{(\textit{Putable bond} akan dijual pada \textbf{harga tertinggi})}
+\end{align}
+\end{theorembox}
+
+\begin{notebox}[Intuisi Ekonomi di Balik Prinsip Valuasi]
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Mengapa \textit{Callable Bond} mengambil $\min P_n$?}
+    Pada \textit{callable bond}, kendali penebusan berada di tangan \textbf{peminjam (penerbit)}. Peminjam yang rasional akan menebus obligasi pada tanggal yang paling menguntungkan dirinya, yang berarti \textbf{paling merugikan investor} (skenario terburuk / \textit{worst-case scenario} bagi investor). Agar investor tetap \textbf{dijamin} memperoleh \textit{yield rate} minimal sebesar $i$ apa pun keputusan penerbit nantinya, investor hanya bersedia membayar sebesar \textbf{harga terendah} ($\min P_n$). Jika penerbit ternyata menebus pada tanggal lain yang bukan skenario terburuk, investor justru akan memperoleh \textit{yield} yang lebih besar dari $i$.
+    \item \textbf{Mengapa \textit{Putable Bond} mengambil $\max P_n$?}
+    Pada \textit{putable bond}, kendali penebusan berada sepenuhnya di tangan \textbf{pemilik obligasi (investor)}. Investor yang rasional pasti akan memilih tanggal \textit{put} yang memberikan nilai sekarang arus kas paling besar bagi dirinya, sehingga nilai wajar obligasi tersebut adalah \textbf{harga tertinggi} ($\max P_n$).
+\end{itemize}
+\end{notebox}
+
+% =========================================================================
+% BAGIAN 2: ANALISIS MATEMATIS CALLABLE BOND
+% =========================================================================
+\section{Valuasi \textit{Callable Bond} (Slide Hal. 3--5)}
+
+\subsection{Sifat Kemonotonan Harga Obligasi terhadap Waktu Penebusan $n$}
+
+Misalkan suatu obligasi memiliki nilai par $F$, laju kupon $r$ per periode, nilai tebusan $C$ yang konstan pada suatu selang periode, dan dihitung pada \textit{yield rate} $i$ per periode. Berdasarkan rumus Premium/Diskon:
+\begin{equation}
+    P_n = Fr \, a_{\overline{n}|i} + C v^n = C + (Fr - Ci) \, a_{\overline{n}|i} = C + C(g - i) \, a_{\overline{n}|i}
+\end{equation}
+di mana $g = \dfrac{Fr}{C}$ adalah \textit{modified coupon rate}.
+
+Perhatikan selisih harga apabila penebusan ditunda satu periode dari $n$ ke $n+1$ (dengan nilai $C$ yang sama):
+\begin{equation}
+    \Delta P_n = P_{n+1} - P_n = (Fr - Ci)\left(a_{\overline{n+1}|i} - a_{\overline{n}|i}\right) = (Fr - Ci) v^{n+1} = C(g - i) v^{n+1}
+\end{equation}
+Karena $a_{\overline{n}|i} = \dfrac{1 - (1+i)^{-n}}{i}$ selalu merupakan fungsi yang \textbf{monoton naik} terhadap $n$ (untuk $i > 0$), maka arah perubahan $P_n$ sepenuhnya ditentukan oleh tanda dari $(Fr - Ci)$ atau $(g - i)$:
+
+\begin{theorembox}[Aturan Cepat Penentuan Tanggal Terburuk pada \textit{Callable Bond}]
+Untuk setiap rentang waktu di mana nilai tebusan $C$ bernilai \textbf{konstan}:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Obligasi Diskon ($i > g \iff Fr < Ci$):}
+    Karena $Fr - Ci < 0$, maka $P_n$ \textbf{monoton turun} terhadap $n$.
+    \begin{itemize}
+        \item \textit{Intuisi:} Kupon yang dibayarkan ($Fr$) lebih kecil daripada bunga pasar yang disyaratkan atas nilai tebusan ($Ci$). Penerbit diuntungkan jika menahan obligasi berkupon murah ini selama mungkin.
+        \item \textbf{Harga minimum ($\min P_n$)} pada rentang tersebut tercapai pada \textbf{$n$ paling besar (tanggal paling akhir)}.
+    \end{itemize}
+    \item \textbf{Obligasi Premium ($i < g \iff Fr > Ci$):}
+    Karena $Fr - Ci > 0$, maka $P_n$ \textbf{monoton naik} terhadap $n$.
+    \begin{itemize}
+        \item \textit{Intuisi:} Kupon yang dibayarkan ($Fr$) lebih mahal daripada bunga pasar ($Ci$). Penerbit ingin segera melunasi obligasi berkupon mahal ini secepat mungkin.
+        \item \textbf{Harga minimum ($\min P_n$)} pada rentang tersebut tercapai pada \textbf{$n$ paling kecil (tanggal paling awal)}.
+    \end{itemize}
+    \item \textbf{Obligasi Par ($i = g \iff Fr = Ci$):}
+    $P_n = C$ konstan untuk seluruh $n$ pada rentang tersebut.
+\end{enumerate}
+\end{theorembox}
+
+\subsection{Kasus Nilai Tebusan Bertingkat (\textit{Step-Down Call Schedule})}
+
+Sering kali \textit{callable bond} memiliki jadwal nilai tebusan $C_n$ yang menurun secara bertahap seiring waktu (\textit{step-down call schedule}), misalnya:
+\begin{itemize}
+    \item Rentang I ($n_1 \le n \le n_2 - 1$): nilai tebusan $C_{\text{I}}$
+    \item Rentang II ($n_2 \le n \le n_3 - 1$): nilai tebusan $C_{\text{II}}$ (dengan $C_{\text{II}} < C_{\text{I}}$)
+    \item Saat \textit{Maturity} ($n = n_3$): nilai tebusan $C_{\text{III}} = F$
+\end{itemize}
+
+\begin{notebox}[Prosedur Sistematis Valuasi \textit{Callable Bond} dengan $C_n$ Bertingkat]
+Apabila nilai tebusan $C_n$ berubah pada beberapa rentang waktu, kita \textbf{tidak cukup} hanya memeriksa ujung awal dan ujung akhir keseluruhan, melainkan harus:
+\begin{enumerate}[label=\textbf{Langkah \arabic*:}, leftmargin=5.5em]
+    \item Pada \textbf{masing-masing rentang} di mana $C_n$ konstan, tentukan apakah obligasi bersifat \textit{diskon} ($Fr < C_n i$) atau \textit{premium} ($Fr > C_n i$).
+    \item Ambil titik kandidat minimum pada setiap rentang:
+    \begin{itemize}
+        \item Jika pada rentang tersebut \textbf{diskon} ($Fr < C_n i$), kandidat minimumnya adalah \textbf{ujung kanan ($n$ terbesar)} dari rentang tersebut.
+        \item Jika pada rentang tersebut \textbf{premium} ($Fr > C_n i$), kandidat minimumnya adalah \textbf{ujung kiri ($n$ terkecil)} dari rentang tersebut.
+    \end{itemize}
+    \item Bandingkan nilai $P_n$ dari seluruh titik kandidat antar-rentang, lalu pilih nilai yang \textbf{paling kecil}:
+    \[
+        P_{\text{callable}} = \min\left\{\min_{\text{Rentang I}} P_n,\ \min_{\text{Rentang II}} P_n,\ \dots,\ P_{\text{maturity}}\right\}
+    \]
+\end{enumerate}
+\end{notebox}
+
+\begin{examplebox}[Contoh 1: \textit{Callable Bond} dengan $C_n$ Bertingkat (Slide Hal. 3--5)]
+\textbf{Soal:} Misal suatu \textit{bond} $\$100$ \textit{par value} $4\%$ dengan \textit{semiannual coupon}, \textit{callable} pada nilai \textit{redemption}:
+\begin{itemize}[topsep=2pt, itemsep=1pt]
+    \item $\$109$ pada kupon mulai 5 tahun setelah tanggal terbit sampai 5 tahun berikutnya
+    \item $\$104{,}5$ pada kupon mulai 10 tahun setelah tanggal terbit sampai 5 tahun berikutnya
+    \item $\$100$ saat \textit{maturity} pada akhir 15 tahun.
+\end{itemize}
+Hitung harga obligasi yang akan dibayar oleh investor, jika pemilik obligasi dijamin akan mendapat hasil/\textit{yield}:
+\begin{enumerate}[label=\textbf{\arabic*.}, topsep=2pt, itemsep=1pt]
+    \item $5\%$ \textit{convertible semiannually}
+    \item $3\%$ \textit{convertible semiannually}
+\end{enumerate}
+
+\tcblower
+\textbf{Pembahasan Lengkap:}
+
+\textbf{Identifikasi Parameter Dasar (per semester):}
+\begin{itemize}[topsep=2pt, itemsep=1pt]
+    \item Nilai par: $F = 100$, laju kupon per semester: $r = \dfrac{0{,}04}{2} = 0{,}02 \implies$ Besar kupon per semester: $Fr = 100 \times 0{,}02 = \$2$.\\
+    {\footnotesize \textit{(Catatan koreksi slide: Pada slide halaman 4 dan 5 tertulis angka $20$ di depan pecahan annuitas, yang merupakan salah ketik dari $Fr = 2$. Seluruh angka hasil perhitungan di slide dihitung menggunakan $Fr = 2$).}}
+    \item Jadwal nilai tebusan $C_n$ berdasarkan periode semester $n$:
+    \begin{itemize}
+        \item \textbf{Rentang I ($n = 10, 11, \dots, 19$):} $C_n = 109$ (\textit{call premium} $= \$9$; mulai akhir tahun ke-5 s.d. akhir tahun ke-9,5)
+        \item \textbf{Rentang II ($n = 20, 21, \dots, 29$):} $C_n = 104{,}5$ (\textit{call premium} $= \$4{,}5$; mulai akhir tahun ke-10 s.d. akhir tahun ke-14,5)
+        \item \textbf{Rentang III ($n = 30$):} $C_{30} = 100$ (saat \textit{maturity} pada akhir tahun ke-15)
+    \end{itemize}
+\end{itemize}
+
+\medskip
+\noindent\textbf{Kasus 1: \textit{Yield Rate} $5\%$ \textit{Convertible Semiannually} ($i = \dfrac{5\%}{2} = 2{,}5\% = 0{,}025 > r$)}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Rumus umum harga untuk penebusan pada semester ke-$n$:
+    \[
+        P_n = 2 \cdot \frac{1 - (1{,}025)^{-n}}{0{,}025} + C_n(1{,}025)^{-n} = C_n + (2 - 0{,}025\,C_n)\,a_{\overline{n}|0{,}025}
+    \]
+    \item Karena $Fr = 2 < 0{,}025\,C_n$ untuk ketiga nilai $C_n \in \{109;\ 104{,}5;\ 100\}$, maka pada setiap rentang nilai $P_n$ \textbf{monoton turun} terhadap $n$ (minimum di ujung kanan tiap rentang):
+    \begin{itemize}
+        \item \textbf{Rentang I ($n = 10, \dots, 19$, $C_n = 109$):}\\
+        $n = 10 \implies P_{10} = 102{,}6548$; \quad $n = 11 \implies P_{11} = 102{,}1022$; \quad $\dots$; \quad $n = 19 \implies P_{19} = \mathbf{98{,}1403}$.\\
+        Jadi harga minimum pada Rentang I adalah $\mathbf{\$98{,}1403}$ (pada $n = 19$).
+        \item \textbf{Rentang II ($n = 20, \dots, 29$, $C_n = 104{,}5$):}\\
+        $n = 20 \implies P_{20} = 94{,}9516$; \quad $n = 21 \implies P_{21} = 94{,}5869$; \quad $\dots$; \quad $n = 29 \implies P_{29} = \mathbf{91{,}9722}$.\\
+        Jadi harga minimum pada Rentang II adalah $\mathbf{\$91{,}9722}$ (pada $n = 29$).
+        \item \textbf{Rentang III ($n = 30$, $C_{30} = 100$):}
+        \[
+            n = 30: P_{30} = 2 \cdot \frac{1 - (1{,}025)^{-30}}{0{,}025} + 100(1{,}025)^{-30} = \mathbf{89{,}5349}
+        \]
+    \end{itemize}
+    \item \textbf{Kesimpulan Kasus 1:} Harga terendah dari seluruh kemungkinan tanggal penebusan adalah:
+    \[
+        P = \min\{98{,}1403;\ 91{,}9722;\ 89{,}5349\} = \mathbf{\$89{,}5349} \quad (\text{pada } n = 30 \text{ / \textit{maturity}}).
+    \]
+\end{itemize}
+
+\medskip
+\noindent\textbf{Kasus 2: \textit{Yield Rate} $3\%$ \textit{Convertible Semiannually} ($i = \dfrac{0{,}03}{2} = 0{,}015 < r$)}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Rumus umum harga untuk penebusan pada semester ke-$n$:
+    \[
+        P_n = 2 \cdot \frac{1 - (1{,}015)^{-n}}{0{,}015} + C_n(1{,}015)^{-n} = C_n + (2 - 0{,}015\,C_n)\,a_{\overline{n}|0{,}015}
+    \]
+    \item Periksa tanda $(Fr - C_n i) = 2 - 0{,}015\,C_n$ pada setiap rentang:
+    \begin{itemize}
+        \item Untuk $C_n = 109$: $C_n i = 109 \times 0{,}015 = 1{,}635 < 2$ (\textbf{Premium} $\implies P_n$ monoton naik, minimum di $n$ paling awal yakni $n = 10$).
+        \item Untuk $C_n = 104{,}5$: $C_n i = 104{,}5 \times 0{,}015 = 1{,}5675 < 2$ (\textbf{Premium} $\implies P_n$ monoton naik, minimum di $n$ paling awal yakni $n = 20$).
+        \item Untuk $C_{30} = 100$: $C_{30} i = 100 \times 0{,}015 = 1{,}50 < 2$ (\textbf{Premium}).
+    \end{itemize}
+    \item Perhitungan nilai pada masing-masing rentang:
+    \begin{itemize}
+        \item \textbf{Rentang I ($n = 10, \dots, 19$, $C_n = 109$):}\\
+        $n = 10 \implies P_{10} = \mathbf{112{,}3661}$; \quad $n = 11 \implies P_{11} = 112{,}6759$; \quad $\dots$; \quad $n = 19 \implies P_{19} = 114{,}9956$.\\
+        Jadi harga minimum pada Rentang I adalah $\mathbf{\$112{,}3661}$ (pada $n = 10$).
+        \item \textbf{Rentang II ($n = 20, \dots, 29$, $C_n = 104{,}5$):}\\
+        $n = 20 \implies P_{20} = \mathbf{111{,}9254}$; \quad $n = 21 \implies P_{21} = 112{,}2418$; \quad $\dots$; \quad $n = 29 \implies P_{29} = 114{,}6102$.\\
+        Jadi harga minimum pada Rentang II adalah $\mathbf{\$111{,}9254}$ (pada $n = 20$).
+        \item \textbf{Rentang III ($n = 30$, $C_{30} = 100$):}
+        \[
+            n = 30 \implies P_{30} = \mathbf{112{,}0079}
+        \]
+    \end{itemize}
+    \item \textbf{Kesimpulan Kasus 2:} Nilai $P$ terendah adalah:
+    \[
+        P = \min\{112{,}3661;\ 111{,}9254;\ 112{,}0079\} = \mathbf{\$111{,}9254}
+    \]
+    yaitu pada saat \textit{redemption} dilakukan tepat 10 tahun sesudah penerbitan ($n = 20$). Perhatikan bahwa meskipun $C_{30} = 100 < C_{20} = 104{,}5$, tambahan 10 semester kupon premium membuat $P_{30} = 112{,}0079$ sedikit lebih tinggi daripada $P_{20} = 111{,}9254$!
+\end{itemize}
+\end{examplebox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.92\textwidth,
+    height=6.8cm,
+    xlabel={Periode Penebusan Semester ke-$n$},
+    ylabel={Harga Obligasi $P_n$ (\$)},
+    xmin=9, xmax=31,
+    ymin=87, ymax=118,
+    xtick={10,12,14,16,18,19,20,22,24,26,28,29,30},
+    grid=both,
+    grid style={dashed, gray!30},
+    legend pos=south west,
+    legend style={font=\footnotesize},
+    title={\textbf{Visualisasi Kurva $P_n$ pada Contoh 1 (\textit{Step-Down Callable Bond})}}
+]
+% Kurva Yield 5% (i = 0.025) - Rentang 1, 2, 3
+\addplot[color=primaryblue, thick, mark=*, mark size=1.5pt] coordinates {
+    (10,102.6548) (11,102.1022) (12,101.5631) (13,101.0372) (14,100.5241)
+    (15,100.0235) (16,99.5351) (17,99.0587) (18,98.5938) (19,98.1403)
+};
+\addlegendentry{Yield 5\% ($i=2{,}5\%$): Diskon per rentang}
+\addplot[color=primaryblue, thick, mark=*, mark size=1.5pt, forget plot] coordinates {
+    (20,94.9516) (21,94.5870) (22,94.2312) (23,93.8841) (24,93.5454)
+    (25,93.2151) (26,92.8928) (27,92.5783) (28,92.2715) (29,91.9722)
+};
+\addplot[color=primaryblue, only marks, mark=square*, mark size=2.5pt, forget plot] coordinates {
+    (30,89.5349)
+};
+
+% Kurva Yield 3% (i = 0.015) - Rentang 1, 2, 3
+\addplot[color=darkred, thick, mark=triangle*, mark size=1.8pt] coordinates {
+    (10,112.3661) (11,112.6760) (12,112.9812) (13,113.2820) (14,113.5783)
+    (15,113.8703) (16,114.1579) (17,114.4413) (18,114.7205) (19,114.9956)
+};
+\addlegendentry{Yield 3\% ($i=1{,}5\%$): Premium per rentang}
+\addplot[color=darkred, thick, mark=triangle*, mark size=1.8pt, forget plot] coordinates {
+    (20,111.9254) (21,112.2418) (22,112.5535) (23,112.8606) (24,113.1632)
+    (25,113.4612) (26,113.7549) (27,114.0442) (28,114.3293) (29,114.6102)
+};
+\addplot[color=darkred, only marks, mark=square*, mark size=2.5pt, forget plot] coordinates {
+    (30,112.0079)
+};
+
+% Titik Minimum Global
+\node[pin={[pin edge={darkgreen,thick}, fill=greenbg, draw=darkgreen, rounded corners=2pt, font=\scriptsize]180:Min $i=2{,}5\%$: $\$89{,}53$ ($n=30$)}] at (axis cs:30,89.5349) {};
+\node[pin={[pin edge={darkgreen,thick}, fill=greenbg, draw=darkgreen, rounded corners=2pt, font=\scriptsize]90:Min $i=1{,}5\%$: $\$111{,}93$ ($n=20$)}] at (axis cs:20,111.9254) {};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+% =========================================================================
+% BAGIAN 3: ANALISIS MATEMATIS PUTABLE BOND
+% =========================================================================
+\section{Valuasi \textit{Putable Bond} (Slide Hal. 6--9)}
+
+Berbeda dengan \textit{callable bond}, pada \textbf{\textit{putable bond}} hak opsi untuk menebus lebih awal berada di tangan \textbf{pemegang obligasi (investor)}. Oleh karena itu, pemegang obligasi akan memilih tanggal penebusan $n$ yang menghasilkan \textbf{harga tertinggi} ($\max P_n$).
+
+\begin{theorembox}[Aturan Cepat Penentuan Tanggal Optimal pada \textit{Putable Bond}]
+Untuk nilai tebusan $C$ yang konstan (umumnya $C = F$), rumus harga obligasi adalah $P_n = C + (Fr - Ci)\,a_{\overline{n}|i}$:
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Obligasi Diskon ($i > r \iff Fr < Ci$):}
+    Karena $Fr - Ci < 0$, maka $P_n$ \textbf{monoton turun} terhadap $n$.
+    \begin{itemize}
+        \item \textit{Intuisi:} Kupon obligasi ($Fr$) lebih rendah daripada bunga pasar ($Ci$). Pemegang obligasi ingin menarik kembali uang pokoknya \textbf{secepat mungkin} agar dapat diinvestasikan kembali pada tingkat bunga pasar $i$ yang lebih tinggi.
+        \item \textbf{Harga tertinggi ($\max P_n$)} dicapai pada \textbf{\textit{put date} seawal mungkin} (tepat setelah \textit{lockout period} berakhir).
+    \end{itemize}
+    \item \textbf{Obligasi Premium ($i < r \iff Fr > Ci$):}
+    Karena $Fr - Ci > 0$, maka $P_n$ \textbf{monoton naik} terhadap $n$.
+    \begin{itemize}
+        \item \textit{Intuisi:} Kupon obligasi ($Fr$) lebih tinggi daripada bunga pasar ($Ci$). Pemegang obligasi sangat diuntungkan dengan terus menerima kupon tinggi ini selama mungkin dan tidak akan menggunakan opsi \textit{put}-nya lebih awal.
+        \item \textbf{Harga tertinggi ($\max P_n$)} dicapai pada \textbf{\textit{put date} seakhir mungkin} (yaitu saat \textit{maturity}).
+    \end{itemize}
+\end{enumerate}
+\end{theorembox}
+
+\subsection{Tabel Perbandingan Keputusan: \textit{Callable Bond} vs. \textit{Putable Bond}}
+
+Agar tidak tertukar saat mengerjakan soal ujian, tabel berikut merangkum perbandingan antara \textit{callable bond} dan \textit{putable bond} untuk nilai tebusan $C$ yang konstan:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{p{3.2cm}p{5.5cm}p{5.5cm}}
+\toprule
+\textbf{Kondisi Pasar} & \textbf{\textit{Callable Bond} ($\min P_n$ — Opsi Penerbit)} & \textbf{\textit{Putable Bond} ($\max P_n$ — Opsi Investor)} \\
+\midrule
+\textbf{Premium}\newline ($g > i \iff Fr > Ci$)\newline $P_n$ monoton \textbf{naik} &
+\textbf{Tebus Seawal Mungkin} ($n$ terkecil setelah \textit{lockout}).\newline
+\textit{Alasan:} Penerbit segera menghentikan kupon yang terlalu mahal. &
+\textbf{Tebus Seakhir Mungkin} ($n$ terbesar / saat \textit{maturity}).\newline
+\textit{Alasan:} Investor mempertahankan kupon tinggi selama mungkin. \\
+\midrule
+\textbf{Diskon}\newline ($g < i \iff Fr < Ci$)\newline $P_n$ monoton \textbf{turun} &
+\textbf{Tebus Seakhir Mungkin} ($n$ terbesar / saat \textit{maturity}).\newline
+\textit{Alasan:} Penerbit mempertahankan pinjaman berkupon murah selama mungkin. &
+\textbf{Tebus Seawal Mungkin} ($n$ terkecil setelah \textit{lockout}).\newline
+\textit{Alasan:} Investor segera menarik pokok untuk dibungakan pada yield pasar $i$. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{examplebox}[Contoh 2: \textit{Putable Bond} pada Kondisi Diskon \& Premium (Slide Hal. 6--9)]
+\textbf{Soal A (Slide Hal. 6--7 --- Diskon):} Misal \textit{bond} jangka waktu 10 tahun $\$100$ \textit{par value} dengan kupon $6\%$ \textit{payable semiannually} dibeli untuk menghasilkan $8\%$ \textit{convertible semiannually}. Jika \textit{bond} tersebut adalah \textit{putable} setiap saat mulai 5 tahun dari tanggal diterbitkan, berapa harga \textit{bond} tersebut?\\[0.4em]
+\textbf{Soal B (Slide Hal. 8--9 --- Premium):} Misal \textit{bond} jangka waktu 10 tahun $\$100$ \textit{par value} dengan kupon $8\%$ \textit{payable semiannually} dibeli untuk menghasilkan $6\%$ \textit{convertible semiannually}. Jika \textit{bond} tersebut adalah \textit{putable} setiap saat mulai 5 tahun dari tanggal diterbitkan, berapa harga \textit{bond} tersebut?
+
+\tcblower
+\textbf{Pembahasan Soal A (\textit{Yield} $8\%$ \textit{Convertible Semiannually} --- Diskon):}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Parameter per semester: $F = C = 100$, $r = \dfrac{0{,}06}{2} = 0{,}03 \implies Fr = 3$, dan $i = \dfrac{0{,}08}{2} = 0{,}04 \implies Ci = 4$.
+    \item Rentang \textit{putable} yang diizinkan (mulai akhir tahun ke-5 s.d. tahun ke-10): $n \in \{10, 11, \dots, 20\}$.
+    \item Karena $i = 0{,}04 > r = 0{,}03$, obligasi dijual dengan \textbf{diskon}:
+    \[
+        P_n = 100 + (3 - 4)\,a_{\overline{n}|0{,}04} = 100 - a_{\overline{n}|0{,}04}
+    \]
+    \item Karena $P_n$ monoton turun terhadap $n$, pemegang obligasi paling diuntungkan (harga tertinggi) jika memilih \textit{put date} \textbf{seawal mungkin}, yaitu pada akhir 5 tahun ($\mathbf{n = 10}$):
+    \[
+        P = P_{10} = 100 + (3 - 4)\,a_{\overline{10}|0{,}04} = 100 - 8{,}11090 = \mathbf{\$91{,}8891 \approx \$91{,}89}
+    \]
+    {\footnotesize (Sebagai perbandingan pada tabel Slide Hal. 7: untuk $n=10$ diperoleh $P_{10} = 91{,}8891$, sedangkan jika ditahan hingga $n=20$ nilainya turun terus menjadi $P_{20} = 86{,}40967$).}
+\end{itemize}
+
+\medskip
+\noindent\textbf{Pembahasan Soal B (\textit{Yield} $6\%$ \textit{Convertible Semiannually} --- Premium):}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Parameter per semester: $F = C = 100$, $r = \dfrac{0{,}08}{2} = 0{,}04 \implies Fr = 4$, dan $i = \dfrac{0{,}06}{2} = 0{,}03 \implies Ci = 3$.
+    \item Karena $i = 0{,}03 < r = 0{,}04$, obligasi dijual dengan \textbf{premium}:
+    \[
+        P_n = 100 + (4 - 3)\,a_{\overline{n}|0{,}03} = 100 + a_{\overline{n}|0{,}03}
+    \]
+    \item Karena $P_n$ monoton naik terhadap $n$, pemegang obligasi memperoleh harga tertinggi jika menunda \textit{put date} \textbf{seakhir mungkin}, yaitu saat \textit{maturity} pada akhir 10 tahun ($\mathbf{n = 20}$):
+    \[
+        P = P_{20} = 100 + (4 - 3)\,a_{\overline{20}|0{,}03} = 100 + 14{,}87747 = \mathbf{\$114{,}8775 \approx \$114{,}88}
+    \]
+    {\footnotesize (Sebagai perbandingan pada tabel Slide Hal. 9: pada $n=10$ nilainya baru $P_{10} = 108{,}5302$, dan terus meningkat hingga mencapai maksimum $P_{20} = \mathbf{114{,}8775}$ pada $n=20$).}
+\end{itemize}
+\end{examplebox}
+
+% =========================================================================
+% BAGIAN 4: SERANGKAIAN BONDS (SERIAL BONDS) & RUMUS MAKEHAM
+% =========================================================================
+\section{Serangkaian \textit{Bonds} (\textit{Serial Bonds}) \& Rumus Makeham (Slide Hal. 10--12)}
+
+\subsection{Konsep \textit{Serial Bonds} (Slide Hal. 10)}
+
+Peminjam yang membutuhkan dana dalam jumlah besar sering kali menerbitkan \textbf{serangkaian obligasi (\textit{serial bonds})} yang dilunasi secara bertahap pada beberapa tanggal \textit{redemption} yang berbeda, alih-alih melunasi seluruh pokok sekaligus pada satu tanggal jatuh tempo.
+
+\begin{notebox}[Dua Karakteristik Penting \textit{Serial Bonds}]
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Efisiensi Perhitungan Agregat:} Jika tanggal \textit{redemption} dari setiap obligasi diketahui, nilai total seluruh obligasi adalah jumlah dari nilai masing-masing obligasi. Namun, menghitung nilai total seluruh penerbitan sekaligus menggunakan \textbf{Rumus Makeham Agregat} jauh lebih efisien daripada menghitung harga obligasi satu per satu.
+    \item \textbf{Penebusan Acak (\textit{Random Redemption Selection}):} Dalam beberapa kasus, obligasi mana yang akan ditebus pada setiap tanggal angsuran dipilih secara \textbf{acak} (melalui pengundian nomor seri). Akibatnya, nilai dari satu lembar obligasi individu tidak dapat ditentukan secara pasti di awal. Akan tetapi, \textbf{nilai dari keseluruhan obligasi yang diterbitkan tetap dapat ditentukan secara pasti!}
+\end{enumerate}
+\end{notebox}
+
+\subsection{Rumus Makeham untuk Serangkaian \textit{Bond} (Slide Hal. 11)}
+
+Ingat kembali rumus Makeham untuk satu obligasi tunggal:
+\begin{equation}
+    P = K + \frac{g}{i}(C - K)
+\end{equation}
+di mana $C$ adalah nilai \textit{redemption}, $K = C v^n$ adalah nilai sekarang dari nilai \textit{redemption} pada \textit{yield rate} $i$, dan $g = \dfrac{Fr}{C}$ adalah \textit{modified coupon rate}.
+
+\begin{theorembox}[Rumus Makeham untuk Serangkaian \textit{Bonds} (Slide Hal. 11)]
+Misalkan suatu penerbitan serangkaian obligasi memiliki $m$ tanggal \textit{redemption} yang berbeda ($n_1, n_2, \dots, n_m$). Untuk sub-obligasi ke-$k$ ($k = 1, 2, \dots, m$), misalkan harga belinya adalah $P_k$, nilai \textit{redemption}-nya $C_k$, dan nilai sekarang dari nilai \textit{redemption}-nya adalah $K_k = C_k v^{n_k}$.
+
+Apabila seluruh sub-obligasi memiliki \textit{modified coupon rate} $g = \dfrac{F_k r}{C_k}$ dan \textit{yield rate} $i$ yang \textbf{sama}, maka harga total serangkaian obligasi tersebut adalah:
+\begin{equation}
+    P' = K' + \frac{g}{i}\left(C' - K'\right)
+\end{equation}
+dengan besaran agregat:
+\begin{equation}
+    P' = \sum_{k=1}^m P_k, \qquad C' = \sum_{k=1}^m C_k, \qquad K' = \sum_{k=1}^m K_k = \sum_{k=1}^m C_k v^{n_k}
+\end{equation}
+\end{theorembox}
+
+\noindent\textbf{Bukti Singkat:}
+Jumlahkan rumus Makeham untuk $k = 1, 2, \dots, m$:
+\[
+    P' = \sum_{k=1}^m P_k = \sum_{k=1}^m \left[K_k + \frac{g}{i}(C_k - K_k)\right] = \sum_{k=1}^m K_k + \frac{g}{i}\left(\sum_{k=1}^m C_k - \sum_{k=1}^m K_k\right) = K' + \frac{g}{i}(C' - K'). \quad \blacksquare
+\]
+
+\begin{examplebox}[Contoh 3: Valuasi \textit{Serial Bond} dengan Rumus Makeham (Slide Hal. 12)]
+\textbf{Soal:} Suatu \textit{bond} $\$1.000$ \textit{par value} $5{,}25\%$ dengan \textit{annual} kupon, akan ditebus dengan 10 kali angsuran per tahun dengan besar sama pada akhir dari tahun ke-11 sampai ke-20 dari tanggal penerbitan dengan harga $105$. \textit{Bond} dibeli untuk menghasilkan \textit{yield rate} $7\%$ efektif. Tentukan harga \textit{bond} keseluruhan!
+
+\tcblower
+\textbf{Pembahasan:}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Obligasi total $\$1.000$ tersebut dapat dipandang sebagai $m = 10$ obligasi terpisah yang ditebus masing-masing pada akhir tahun ke-$11, 12, \dots, 20$.
+    \item Untuk masing-masing obligasi bagian ($k = 1, 2, \dots, 10$):
+    \begin{itemize}
+        \item Nilai par per bagian: $F = \dfrac{1.000}{10} = 100$
+        \item Nilai \textit{redemption} per bagian (harga $105$ per $100$ par): $C = 105$
+        \item Laju kupon tahunan: $r = 0{,}0525$ dan \textit{yield rate} efektif tahunan: $i = 0{,}07$
+        \item \textit{Modified coupon rate} ($g$):
+        \[
+            g = \frac{Fr}{C} = \frac{100 \times 0{,}0525}{105} = \frac{5{,}25}{105} = \mathbf{0{,}05}
+        \]
+        {\footnotesize \textit{(Catatan koreksi slide: Pada slide halaman 12 baris tengah tertulis $= 0{,}5$, yang merupakan salah ketik dari $0{,}05$).}}
+    \end{itemize}
+    \item Menghitung total nilai \textit{redemption} ($C'$) dan total nilai sekarang dari \textit{redemption} ($K'$):
+    \begin{align*}
+        C' &= 10 \times 105 = \mathbf{1.050} \\
+        K' &= 105\left(v^{11} + v^{12} + \dots + v^{20}\right) = 105 \cdot v^{10} \, a_{\overline{10}|0{,}07} \\
+        &= 105 \times (1{,}07)^{-10} \times \frac{1 - (1{,}07)^{-10}}{0{,}07} = 105 \times 0{,}508349 \times 7{,}023582 = \mathbf{374{,}895}
+    \end{align*}
+    \item Harga obligasi keseluruhan ($P'$) menurut rumus Makeham:
+    \begin{align*}
+        P' &= K' + \frac{g}{i}(C' - K') = 374{,}895 + \frac{0{,}05}{0{,}07}\left(1.050 - 374{,}895\right) \\
+           &= 374{,}895 + 482{,}218 = \mathbf{\$857{,}11}
+    \end{align*}
+\end{itemize}
+\end{examplebox}
+
+% =========================================================================
+% BAGIAN 5: PERMASALAHAN BOND YANG LEBIH UMUM
+% =========================================================================
+\section{Permasalahan \textit{Bond} yang Lebih Umum (Slide Hal. 13--15)}
+
+Dalam soal-soal obligasi standar, diasumsikan bahwa: (1) frekuensi konversi \textit{yield rate} sama dengan frekuensi pembayaran kupon, (2) besar kupon konstan setiap periode, dan (3) \textit{yield rate} konstan sepanjang umur obligasi. Tiga subbab berikut membahas cara menyelesaikan valuasi obligasi apabila salah satu dari ketiga asumsi tersebut dilonggarkan.
+
+\subsection{Kasus 1: \textit{Yield Rate} dan \textit{Kupon Rate} Memiliki Frekuensi Berbeda (Slide Hal. 13)}
+
+\begin{theorembox}[Prinsip Penyesuaian Frekuensi Suku Bunga pada Obligasi]
+Apabila frekuensi konversi \textit{yield rate} berbeda dengan frekuensi pembayaran kupon, \textbf{jangan pernah mengubah frekuensi pembayaran kupon}, melainkan \textbf{konversikan \textit{yield rate} ke suku bunga efektif per periode pembayaran kupon} menggunakan hubungan ekuivalensi suku bunga majemuk.
+\end{theorembox}
+
+Sebagai contoh, jika kupon dibayarkan \textit{semiannually} (setiap setengah tahun, $2$ kali setahun), sedangkan diketahui \textit{yield rate} efektif tahunan sebesar $i$, maka kita mencari suku bunga efektif per semester $j = \dfrac{i^{(2)}}{2}$ melalui persamaan ekuivalensi:
+\begin{equation}
+    \left(1 + \frac{i^{(2)}}{2}\right)^2 = 1 + i \iff j = \frac{i^{(2)}}{2} = (1 + i)^{0{,}5} - 1
+\end{equation}
+Selanjutnya, seluruh rumus harga obligasi dihitung menggunakan periode semester $n$ dan suku bunga per semester $j$.
+
+\begin{examplebox}[Contoh 4: Frekuensi \textit{Yield Rate} \& Kupon Berbeda (Slide Hal. 13)]
+\textbf{Soal:} Tentukan harga \textit{bond} dengan $\$1.000$ \textit{par value} dengan \textit{maturity} 10 tahun, kupon $8{,}4\%$ dibayar \textit{semiannually}, \textit{redemption value} $\$1.050$. Investor akan mendapat \textit{yield rate} efektif tahunan sebesar $7\%$!
+
+\tcblower
+\textbf{Pembahasan:}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Parameter per semester: $F = 1.000$, $C = 1.050$, $n = 10 \times 2 = 20$ semester, dan kupon per semester $Fr = 1.000 \times \dfrac{0{,}084}{2} = \$42$.
+    \item Konversi \textit{yield rate} efektif tahunan $i = 0{,}07$ ke laju per setengah tahun $j = \dfrac{i^{(2)}}{2}$:
+    \begin{align*}
+        \left(1 + \frac{i^{(2)}}{2}\right)^2 &= 1 + i = 1{,}07 \implies i^{(2)} = 2\left(1{,}07^{0{,}5} - 1\right) = 0{,}06882 \\
+        j &= \frac{i^{(2)}}{2} = \mathbf{0{,}03441} \quad (\text{atau } 3{,}441\% \text{ per setengah tahun})
+    \end{align*}
+    \item Menghitung harga obligasi dengan rumus Premium/Diskon:
+    \begin{align*}
+        P &= 1.050 + \left[42 - (1.050)(0{,}03441)\right] a_{\overline{20}|0{,}03441} \\
+          &= 1.050 + (5{,}8695)(14{,}289626) = \mathbf{\$1.133{,}87}
+    \end{align*}
+\end{itemize}
+\end{examplebox}
+
+\subsection{Kasus 2: \textit{Kupon Rate} Tidak Konstan / Pertumbuhan Geometri (Slide Hal. 14)}
+
+Pada obligasi yang disesuaikan terhadap inflasi (\textit{inflation-adjusted bond}) atau obligasi berkupon bertumbuh, besar kupon tidak konstan melainkan meningkat secara geometri sebesar laju $k$ per periode.
+
+\begin{theorembox}[Rumus Harga Obligasi dengan Kupon Bertumbuh Geometri (Slide Hal. 14)]
+Misalkan obligasi membayarkan kupon pertama sebesar $Fr_1$ pada akhir periode ke-1, dan setiap kupon berikutnya meningkat sebesar proporsi $k$ dibanding kupon sebelumnya, sehingga kupon pada akhir periode ke-$t$ adalah $Fr_1(1+k)^{t-1}$ untuk $t = 1, 2, \dots, n$. Jika \textit{yield rate} efektif per periode adalah $i$ dan nilai tebusan pada akhir periode ke-$n$ adalah $C$, maka:
+\begin{equation}
+    P = \text{PV}_{\text{kupon}} + \text{PV}_{\text{redemption}} = \begin{cases}
+        Fr_1 \cdot \dfrac{1 - \left(\dfrac{1+k}{1+i}\right)^n}{i - k} + C(1+i)^{-n}, & \text{jika } i \neq k \\[1.2em]
+        Fr_1 \cdot \dfrac{n}{1 + i} + C(1+i)^{-n}, & \text{jika } i = k
+    \end{cases}
+\end{equation}
+\end{theorembox}
+
+\noindent\textbf{Penurunan Rumus $\text{PV}_{\text{kupon}}$:}
+\begin{align*}
+    \text{PV}_{\text{kupon}} &= \sum_{t=1}^n Fr_1(1+k)^{t-1}(1+i)^{-t} = \frac{Fr_1}{1+i} \sum_{t=1}^n \left(\frac{1+k}{1+i}\right)^{t-1} \\
+    &= \frac{Fr_1}{1+i} \cdot \frac{1 - \left(\frac{1+k}{1+i}\right)^n}{1 - \frac{1+k}{1+i}} = Fr_1 \cdot \frac{1 - \left(\frac{1+k}{1+i}\right)^n}{i - k}. \quad \blacksquare
+\end{align*}
+
+\begin{examplebox}[Contoh 5: \textit{Inflation-Adjusted Bond} / Kupon Geometri (Slide Hal. 14)]
+\textbf{Soal:} Suatu perusahaan akan menerbitkan \textit{an inflation-adjusted bond} dengan \textit{par value} $\$1.000$, \textit{annual} kupon dibayarkan setiap akhir tahun selama 10 tahun. \textit{Initial} kupon \textit{rate} $7\%$ dan setiap kupon berikutnya $3\%$ lebih besar dibanding kupon sebelumnya. \textit{Bond} akan dilunasi seharga $\$1.200$ pada akhir tahun ke-10. Jika \textit{yield rate} efektif tahunan $9\%$, tentukan harga \textit{bond}!
+
+\tcblower
+\textbf{Pembahasan:}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Parameter: $F = 1.000$, $C = 1.200$, $n = 10$ tahun, kupon pertama $Fr_1 = 1.000 \times 0{,}07 = \$70$, pertumbuhan geometri kupon $k = 0{,}03$, dan \textit{yield rate} efektif tahunan $i = 0{,}09$.
+    \item \textit{Present value} dari kupon dengan penambahan geometri sebesar $k = 0{,}03$:
+    \begin{align*}
+        \text{PV}_{\text{kupon}} &= 70 \cdot \frac{1 - \left(\dfrac{1+k}{1+i}\right)^n}{i - k} = 70 \cdot \frac{1 - \left(\dfrac{1 + 0{,}03}{1 + 0{,}09}\right)^{10}}{0{,}09 - 0{,}03} \\
+        &= 70 \cdot \frac{1 - 0{,}567685}{0{,}06} = \mathbf{504{,}368}
+    \end{align*}
+    \item \textit{Present value} dari \textit{redemption value}:
+    \[
+        \text{PV}_{\text{redemption}} = 1.200(1{,}09)^{-10} = \mathbf{506{,}893}
+    \]
+    \item Harga \textit{bond} keseluruhan:
+    \[
+        P = 504{,}368 + 506{,}893 = \mathbf{\$1.011{,}26}
+    \]
+\end{itemize}
+\end{examplebox}
+
+\subsection{Kasus 3: \textit{Yield Rate} Tidak Konstan (Slide Hal. 15)}
+
+Apabila \textit{yield rate} berubah dari $i_1$ (selama $n_1$ periode pertama) menjadi $i_2$ (selama $n_2$ periode berikutnya), maka setiap arus kas yang terjadi pada periode kedua ($t > n_1$) harus didiskontokan dua tahap: pertama didiskontokan ke waktu $n_1$ menggunakan suku bunga $i_2$, lalu didiskontokan dari waktu $n_1$ ke waktu $0$ menggunakan faktor $(1 + i_1)^{-n_1}$.
+
+\begin{theorembox}[Rumus Harga Obligasi dengan \textit{Yield Rate} Dua Tahap (Slide Hal. 15)]
+Misalkan suatu obligasi membayar kupon sebesar $Fr$ per periode selama total $n = n_1 + n_2$ periode dan ditebus seharga $C$ pada akhir periode ke-$n$. Jika \textit{yield rate} per periode adalah $i_1$ untuk $n_1$ periode pertama dan $i_2$ untuk $n_2$ periode berikutnya, maka:
+\begin{align}
+    \text{PV}_{\text{kupon}} &= Fr\left[a_{\overline{n_1}|i_1} + (1 + i_1)^{-n_1} \, a_{\overline{n_2}|i_2}\right] \\
+    \text{PV}_{\text{redemption}} &= C(1 + i_1)^{-n_1}(1 + i_2)^{-n_2} \\
+    P &= \text{PV}_{\text{kupon}} + \text{PV}_{\text{redemption}}
+\end{align}
+\end{theorembox}
+
+\begin{examplebox}[Contoh 6: \textit{Yield Rate} Tidak Konstan (Slide Hal. 15)]
+\textbf{Soal:} Tentukan harga \textit{bond} dengan $\$1.000$ \textit{par value} dengan \textit{maturity} 10 tahun, kupon $8{,}4\%$ dibayar \textit{semiannually}, \textit{redemption value} $\$1.050$. Investor akan mendapat \textit{yield rate} $10\%$ \textit{convertible semiannually} untuk 5 tahun pertama dan $9\%$ \textit{convertible semiannually} untuk 5 tahun berikutnya!
+
+\tcblower
+\textbf{Pembahasan:}
+\begin{itemize}[topsep=2pt, itemsep=2pt]
+    \item Parameter per semester: $F = 1.000$, $C = 1.050$, kupon per semester $Fr = 1.000 \times \dfrac{0{,}084}{2} = \$42$.
+    \item Periode I (5 tahun pertama $\implies n_1 = 10$ semester): $i_1 = \dfrac{0{,}10}{2} = 0{,}05$.
+    \item Periode II (5 tahun berikutnya $\implies n_2 = 10$ semester): $i_2 = \dfrac{0{,}09}{2} = 0{,}045$.
+    \item \textit{Present value} dari kupon:
+    \begin{align*}
+        \text{PV}_{\text{kupon}} &= 42\left[a_{\overline{10}|0{,}05} + (1{,}05)^{-10} \, a_{\overline{10}|0{,}045}\right] \\
+        &= 42\left[7{,}721735 + (0{,}613913)(7{,}912718)\right] = \mathbf{528{,}334}
+    \end{align*}
+    \item \textit{Present value} dari \textit{redemption value}:
+    \[
+        \text{PV}_{\text{redemption}} = 1.050(1{,}05)^{-10}(1{,}045)^{-10} = 1.050 \times 0{,}613913 \times 0{,}643928 = \mathbf{415{,}082}
+    \]
+    \item Harga \textit{bond} keseluruhan:
+    \[
+        P = 528{,}334 + 415{,}082 = \mathbf{\$943{,}42}
+    \]
+\end{itemize}
+\end{examplebox}
+
+% =========================================================================
+% BAGIAN 6: RINGKASAN RUMUS CEPAT (CHEAT SHEET)
+% =========================================================================
+\section{Ringkasan Rumus Cepat (\textit{Cheat Sheet} Bab 14)}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{p{4.2cm}p{10.2cm}}
+\toprule
+\textbf{Topik / Kasus} & \textbf{Rumus Kunci \& Aturan Keputusan} \\
+\midrule
+\textbf{Rumus Dasar \& Premium/Diskon} &
+$P_n = Fr \, a_{\overline{n}|i} + C_n v^n = C_n + (Fr - C_n i)\,a_{\overline{n}|i}$ \\
+\textbf{\textit{Callable Bond}} \newline (Opsi di tangan Penerbit) &
+Dijual pada \textbf{harga terendah} ($P = \min_n P_n$):\newline
+$\bullet$ Jika \textbf{Diskon} ($Fr < C_n i$): minimum di \textbf{$n$ paling akhir} pada rentang tersebut.\newline
+$\bullet$ Jika \textbf{Premium} ($Fr > C_n i$): minimum di \textbf{$n$ paling awal} pada rentang tersebut. \\
+\textbf{\textit{Putable Bond}} \newline (Opsi di tangan Investor) &
+Dijual pada \textbf{harga tertinggi} ($P = \max_n P_n$):\newline
+$\bullet$ Jika \textbf{Diskon} ($Fr < C_n i$): maksimum di \textbf{$n$ paling awal} (setelah \textit{lockout}).\newline
+$\bullet$ Jika \textbf{Premium} ($Fr > C_n i$): maksimum di \textbf{$n$ paling akhir} (saat \textit{maturity}). \\
+\textbf{Serangkaian \textit{Bonds}} \newline (\textit{Serial Bond} Makeham) &
+$P' = K' + \dfrac{g}{i}(C' - K')$, \quad dengan $g = \dfrac{F_k r}{C_k}$, \quad $C' = \sum_{k=1}^m C_k$, \quad $K' = \sum_{k=1}^m C_k v^{n_k}$ \\
+\textbf{Frekuensi Berbeda} &
+Samakan \textit{yield rate} ke periode kupon: $\left(1 + j\right)^p = (1 + i^{(m)}/m)^m \implies$ gunakan $j$. \\
+\textbf{Kupon Geometri ($k$)} &
+$P = Fr_1 \cdot \dfrac{1 - \left(\frac{1+k}{1+i}\right)^n}{i - k} + C(1+i)^{-n}$ \quad (untuk $i \neq k$). \\
+\textbf{\textit{Yield Rate} Berubah} &
+$P = Fr\left[a_{\overline{n_1}|i_1} + (1+i_1)^{-n_1}a_{\overline{n_2}|i_2}\right] + C(1+i_1)^{-n_1}(1+i_2)^{-n_2}$. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

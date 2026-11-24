@@ -1,0 +1,162 @@
+\documentclass[10.5pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[top=1.6cm,bottom=1.6cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+
+\tcbset{
+    colback=gray!5,
+    colframe=black!75,
+    boxrule=0.6pt,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.25em}
+
+\title{\vspace{-1.6cm}\textbf{Tugas Mandiri Teori Suku Bunga}\\\large Topik: Jadwal Amortisasi Obligasi Premium \& Diskon (Slide Halaman 23--25)\vspace{-0.9cm}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-0.6em}
+\hrule
+\vspace{0.6em}
+
+% =============================================================
+% SOAL 1: OBLIGASI DENGAN PREMIUM (SLIDE HALAMAN 23-24)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 1 --- Obligasi Dibeli dengan Premium (Slide Halaman 23--24):}\\
+Obligasi dengan $\$1.000$ \textit{par value} dua tahun $8\%$ dan kupon \textit{semiannual}, dibeli untuk menghasilkan (\textit{yield}) $6\%$ \textit{convertible semiannually}. Tuliskan perhitungan lengkap dan jadwal amortisasi obligasinya!
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+\textbf{1. Parameter yang diketahui (per periode setengah tahun / semester):}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item Nilai par dan nilai tebusan: $F = C = \$1.000$, dengan jumlah periode kupon: $n = 2 \text{ tahun} \times 2 = 4$ semester
+    \item Laju kupon per semester: $r = g = \dfrac{0{,}08}{2} = 0{,}04 \implies$ Besar kupon per semester: $Fr = 1.000 \times 0{,}04 = \$40{,}00$
+    \item Laju imbal hasil (\textit{yield rate}) per semester: $i = \dfrac{0{,}06}{2} = 0{,}03$
+\end{itemize}
+
+\textbf{2. Menghitung harga beli obligasi ($P = B_0$) dan besarnya premium:}
+\begin{align*}
+    a_{\overline{4}|0{,}03} &= \frac{1 - (1 + 0{,}03)^{-4}}{0{,}03} = \frac{1 - 0{,}88848705}{0{,}03} = 3{,}71709840 \\[0.2em]
+    P = B_0 &= Fr \, a_{\overline{4}|0{,}03} + C(1{,}03)^{-4} = C + (Fr - Ci) a_{\overline{4}|0{,}03} \\
+    &= 1.000 + (40 - 1.000 \times 0{,}03)(3{,}71709840) = 1.000 + 10(3{,}71709840) = \mathbf{\$1.037{,}17} \\
+    \text{Premium} &= P - C = 1.037{,}17 - 1.000 = \mathbf{\$37{,}17} \quad (\text{karena } g = 0{,}04 > i = 0{,}03)
+\end{align*}
+
+\textbf{3. Perhitungan elemen jadwal amortisasi tiap semester ($I_t = i \cdot B_{t-1}$, $P_t = Fr - I_t$, $B_t = B_{t-1} - P_t$):}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=1pt]
+    \item \textbf{Semester 1 ($t = 1$):}
+    $I_1 = 0{,}03 \times 1.037{,}17 = \mathbf{31{,}12}$; \quad $P_1 = 40{,}00 - 31{,}12 = \mathbf{8{,}88}$; \quad $B_1 = 1.037{,}17 - 8{,}88 = \mathbf{1.028{,}29}$
+    \item \textbf{Semester 2 ($t = 2$):}
+    $I_2 = 0{,}03 \times 1.028{,}29 = \mathbf{30{,}85}$; \quad $P_2 = 40{,}00 - 30{,}85 = \mathbf{9{,}15}$ {\footnotesize (cek: $8{,}88 \times 1{,}03 = 9{,}15$)}; \quad $B_2 = 1.028{,}29 - 9{,}15 = \mathbf{1.019{,}14}$
+    \item \textbf{Semester 3 ($t = 3$):}
+    $I_3 = 0{,}03 \times 1.019{,}14 = \mathbf{30{,}57}$; \quad $P_3 = 40{,}00 - 30{,}57 = \mathbf{9{,}43}$ {\footnotesize (cek: $9{,}15 \times 1{,}03 = 9{,}43$)}; \quad $B_3 = 1.019{,}14 - 9{,}43 = \mathbf{1.009{,}71}$
+    \item \textbf{Semester 4 ($t = 4$):}
+    $I_4 = 0{,}03 \times 1.009{,}71 = \mathbf{30{,}29}$; \quad $P_4 = 40{,}00 - 30{,}29 = \mathbf{9{,}71}$ {\footnotesize (cek: $9{,}43 \times 1{,}03 = 9{,}71$)}; \quad $B_4 = 1.009{,}71 - 9{,}71 = \mathbf{1.000{,}00} = C$
+\end{itemize}
+
+\textbf{4. Tabel Jadwal Amortisasi Obligasi Premium (\textit{Writing Down}):}
+\begin{center}
+\vspace{0.2em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{$\frac{1}{2}$ Tahun ($t$)} & \textbf{Kupon ($Fr$)} & \textbf{Bunga ($I_t$)} & \textbf{Besar Amortisasi Premium ($P_t$)} & \textbf{Book Value ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$1.037{,}17$ \\
+$1$ & $\$40{,}00$ & $\$31{,}12$ & $\$8{,}88$ & $\$1.028{,}29$ \\
+$2$ & $\$40{,}00$ & $\$30{,}85$ & $\$9{,}15$ & $\$1.019{,}14$ \\
+$3$ & $\$40{,}00$ & $\$30{,}57$ & $\$9{,}43$ & $\$1.009{,}71$ \\
+$4$ & $\$40{,}00$ & $\$30{,}29$ & $\$9{,}71$ & $\$1.000{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$160{,}00}$ & $\mathbf{\$122{,}83}$ & $\mathbf{\$37{,}17}$ & --- \\
+\bottomrule
+\end{tabular}
+\vspace{0.2em}
+\end{center}
+
+\textbf{Verifikasi:}
+\begin{align*}
+    \sum_{t=1}^4 P_t &= 8{,}88 + 9{,}15 + 9{,}43 + 9{,}71 = \mathbf{37{,}17} = P - C \quad (\text{Total Amortisasi Premium}) \\
+    \sum_{t=1}^4 I_t &= 31{,}12 + 30{,}85 + 30{,}57 + 30{,}29 = \mathbf{122{,}83} = \sum Fr - \sum P_t = 160{,}00 - 37{,}17
+\end{align*}
+
+\newpage
+
+% =============================================================
+% SOAL 2: OBLIGASI DENGAN DISKON (SLIDE HALAMAN 25)
+% =============================================================
+\begin{tcolorbox}
+\textbf{Soal 2 --- Obligasi Dibeli dengan Diskon (Slide Halaman 25):}\\
+Obligasi dengan $\$1.000$ \textit{par value} dua tahun $8\%$ dan kupon \textit{semiannual}, dibeli untuk menghasilkan (\textit{yield}) $10\%$ \textit{convertible semiannually}. Tuliskan perhitungan lengkap dan jadwal akumulasi diskon obligasinya!
+\end{tcolorbox}
+
+\textbf{Solusi:}
+
+\textbf{1. Parameter yang diketahui (per periode setengah tahun / semester):}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=0pt]
+    \item Nilai par dan nilai tebusan: $F = C = \$1.000$, dengan jumlah periode kupon: $n = 2 \text{ tahun} \times 2 = 4$ semester
+    \item Laju kupon per semester: $r = g = \dfrac{0{,}08}{2} = 0{,}04 \implies$ Besar kupon per semester: $Fr = 1.000 \times 0{,}04 = \$40{,}00$
+    \item Laju imbal hasil (\textit{yield rate}) per semester: $i = \dfrac{0{,}10}{2} = 0{,}05$
+\end{itemize}
+
+\textbf{2. Menghitung harga beli obligasi ($P = B_0$) dan besarnya diskon:}
+\begin{align*}
+    a_{\overline{4}|0{,}05} &= \frac{1 - (1 + 0{,}05)^{-4}}{0{,}05} = \frac{1 - 0{,}82270247}{0{,}05} = 3{,}54595050 \\[0.2em]
+    P = B_0 &= C + (Fr - Ci) a_{\overline{4}|0{,}05} \\
+    &= 1.000 + (40 - 1.000 \times 0{,}05)(3{,}54595050) = 1.000 - 10(3{,}54595050) = \mathbf{\$964{,}54} \\
+    \text{Diskon} &= C - P = 1.000 - 964{,}54 = \mathbf{\$35{,}46} \quad (\text{karena } g = 0{,}04 < i = 0{,}05)
+\end{align*}
+
+\textbf{3. Perhitungan elemen jadwal akumulasi diskon tiap semester ($I_t = i \cdot B_{t-1}$, $P_t = Fr - I_t$, $B_t = B_{t-1} - P_t$):}
+\begin{itemize}[leftmargin=1.5em, topsep=0pt, itemsep=1pt]
+    \item \textbf{Semester 1 ($t = 1$):}
+    $I_1 = 0{,}05 \times 964{,}54 = \mathbf{48{,}23}$; \quad $P_1 = 40{,}00 - 48{,}23 = \mathbf{-8{,}23} = \mathbf{(8{,}23)}$; \quad $B_1 = 964{,}54 - (-8{,}23) = \mathbf{972{,}77}$\\
+    {\footnotesize \textit{(Catatan: Pada slide halaman 25 baris ke-1 tertulis $965{,}54 - (-8{,}23) = 973{,}77$ akibat salah ketik angka satuan $965{,}54$, namun pada baris ke-2 hingga ke-4 di slide sudah menggunakan nilai yang benar yaitu $B_1 = 972{,}77$).}}
+    \item \textbf{Semester 2 ($t = 2$):}
+    $I_2 = 0{,}05 \times 972{,}77 = \mathbf{48{,}64}$; \quad $P_2 = 40{,}00 - 48{,}64 = \mathbf{-8{,}64} = \mathbf{(8{,}64)}$ {\footnotesize (cek: $-8{,}23 \times 1{,}05 = -8{,}64$)}; \quad $B_2 = 972{,}77 - (-8{,}64) = \mathbf{981{,}41}$
+    \item \textbf{Semester 3 ($t = 3$):}
+    $I_3 = 0{,}05 \times 981{,}41 = \mathbf{49{,}07}$; \quad $P_3 = 40{,}00 - 49{,}07 = \mathbf{-9{,}07} = \mathbf{(9{,}07)}$ {\footnotesize (cek: $-8{,}64 \times 1{,}05 = -9{,}07$)}; \quad $B_3 = 981{,}41 - (-9{,}07) = \mathbf{990{,}48}$
+    \item \textbf{Semester 4 ($t = 4$):}
+    $I_4 = 0{,}05 \times 990{,}48 = \mathbf{49{,}52}$; \quad $P_4 = 40{,}00 - 49{,}52 = \mathbf{-9{,}52} = \mathbf{(9{,}52)}$ {\footnotesize (cek: $-9{,}07 \times 1{,}05 = -9{,}52$)}; \quad $B_4 = 990{,}48 - (-9{,}52) = \mathbf{1.000{,}00} = C$
+\end{itemize}
+
+\textbf{4. Tabel Jadwal Akumulasi Obligasi Diskon (\textit{Writing Up}):}
+\begin{center}
+\vspace{0.2em}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{$\frac{1}{2}$ Tahun ($t$)} & \textbf{Kupon ($Fr$)} & \textbf{Bunga ($I_t$)} & \textbf{Besar Akumulasi Diskon ($P_t$)} & \textbf{Book Value ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$964{,}54$ \\
+$1$ & $\$40{,}00$ & $\$48{,}23$ & $(\$8{,}23)$ & $\$972{,}77$ \\
+$2$ & $\$40{,}00$ & $\$48{,}64$ & $(\$8{,}64)$ & $\$981{,}41$ \\
+$3$ & $\$40{,}00$ & $\$49{,}07$ & $(\$9{,}07)$ & $\$990{,}48$ \\
+$4$ & $\$40{,}00$ & $\$49{,}52$ & $(\$9{,}52)$ & $\$1.000{,}00$ \\
+\midrule
+\textbf{Total} & $\mathbf{\$160{,}00}$ & $\mathbf{\$195{,}46}$ & $\mathbf{(\$35{,}46)}$ & --- \\
+\bottomrule
+\end{tabular}
+\vspace{0.2em}
+\end{center}
+
+\textbf{Verifikasi:}
+\begin{align*}
+    \sum_{t=1}^4 P_t &= -8{,}23 - 8{,}64 - 9{,}07 - 9{,}52 = \mathbf{-35{,}46} = P - C = -(\text{Total Diskon}) \\
+    \sum_{t=1}^4 I_t &= 48{,}23 + 48{,}64 + 49{,}07 + 49{,}52 = \mathbf{195{,}46} = \sum Fr - \sum P_t = 160{,}00 - (-35{,}46)
+\end{align*}
+
+\end{document}

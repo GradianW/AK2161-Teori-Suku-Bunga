@@ -1,0 +1,446 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% Page Geometry - Optimal margin for formulas, density, and professional layout
+\geometry{
+    top=1.5cm,
+    bottom=1.5cm,
+    left=1.4cm,
+    right=1.4cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Professional Color Palette (konsisten dengan Cheatsheet_Rumus_UTS.tex)
+\definecolor{primaryblue}{RGB}{20, 60, 110}     % Main Navy
+\definecolor{secondaryblue}{RGB}{41, 128, 185}  % Bright Blue
+\definecolor{boxbg}{RGB}{246, 249, 253}         % Soft Ice Blue tint
+\definecolor{darkgreen}{RGB}{24, 120, 64}       % Emerald Green
+\definecolor{greenbg}{RGB}{243, 250, 245}       % Soft Mint tint
+\definecolor{darkred}{RGB}{175, 30, 30}         % Deep Red
+\definecolor{redbg}{RGB}{253, 245, 245}         % Soft Rose tint
+\definecolor{darkamber}{RGB}{195, 110, 10}      % Rich Amber
+\definecolor{amberbg}{RGB}{254, 250, 242}       % Soft Amber tint
+
+% Actuarial custom notation shortcuts
+\newcommand{\angl}[1]{\overline{#1|}}
+
+% Custom Box Styles (Full Width, completely stable layout, no equation clipping)
+\newtcolorbox{rumusbox}[1][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+\newtcolorbox{teoremabox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+\newtcolorbox{jebakanbox}[1][]{
+    enhanced,
+    breakable,
+    colback=redbg,
+    colframe=darkred,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkred,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+\newtcolorbox{perhatianbox}[1][]{
+    enhanced,
+    breakable,
+    colback=amberbg,
+    colframe=darkamber,
+    fonttitle=\bfseries\sffamily\small,
+    title={#1},
+    boxrule=0.7pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkamber,
+    arc=1.5mm,
+    left=2.5mm,
+    right=2.5mm,
+    top=1.5mm,
+    bottom=1.5mm,
+    boxsep=1mm
+}
+
+% Paragraph formatting
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.5pt}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=primaryblue,
+    pdftitle={AK2161 Teori Suku Bunga - Cheatsheet Rumus Kuis Obligasi},
+    pdfauthor={Persiapan Kuis Obligasi AK2161}
+}
+
+\begin{document}
+
+% ==============================================================================
+% HEADER TITLE BLOCK
+% ==============================================================================
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue!80!black,
+    arc=2mm,
+    boxrule=1pt,
+    left=4mm, right=4mm, top=3mm, bottom=3mm
+]
+\begin{center}
+    {\color{white}\LARGE\textbf{\textsf{CHEATSHEET \& RANGKUMAN RUMUS LENGKAP KUIS OBLIGASI}}}\\[0.25em]
+    {\color{white}\large\textbf{\textsf{AK2161 Teori Suku Bunga (Theory of Interest) --- Bab 12 s.d. Bab 14}}}\\[0.25em]
+    {\color{white!85}\small\textsf{Cakupan Materi: Valuasi Obligasi, Amortisasi \& Sinking Fund Obligasi, Penilaian di Antara Dua Tanggal Kupon, Aproksimasi YTM, Callable \& Putable Bond, Serial Bonds, serta Variasi Kupon/Yield Umum}}
+\end{center}
+\end{tcolorbox}
+
+\vspace{0.15em}
+
+% ==============================================================================
+% BAGIAN 0: PETA NOTASI, KLASIFIKASI & KONVERSI FREKUENSI OBLIGASI
+% ==============================================================================
+\section*{\large $\bigstar$ Bagian 0: Peta Notasi, Klasifikasi \& Konversi Frekuensi Obligasi}
+
+\begin{rumusbox}[Glosarium Simbol Fundamental Obligasi (Wajib Konsisten dalam Satuan Periode Kupon)]
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}p{2.0cm}p{5.4cm}p{2.2cm}p{6.2cm}@{}}
+\toprule
+\textbf{Simbol} & \textbf{Definisi \& Keterangan} & \textbf{Simbol} & \textbf{Definisi \& Keterangan} \\
+\midrule
+$P$ ($= B_0$) & Harga beli/jual obligasi pada $t = 0$ & $K$ & Nilai sekarang nilai tebusan: $\mathbf{K = C v^n}$ \\
+$F$ & \textit{Par value / face amount} (penentu kupon) & $G$ & \textit{Base amount}: $\mathbf{G = \dfrac{Fr}{i}}$ (sehingga $Gi = Fr$) \\
+$C$ & \textit{Redemption value} saat jatuh tempo/tebus & $B_t$ & \textit{Book value} tepat setelah kupon ke-$t$ ($B_n = C$) \\
+$r$ & \textit{Coupon rate} per periode kupon & $I_t, P_t$ & Porsi bunga ($I_t$) \& pokok ($P_t$) pada kupon ke-$t$ \\
+$Fr$ & Besar kupon tetap per periode ($Fr = Cg$) & $B_{t+k}^f$ & \textit{Flat / dirty price} ($0 < k < 1$), uang dibayar \\
+$g$ & \textit{Modified coupon rate}: $\mathbf{g = \dfrac{Fr}{C}}$ ($g=r$ bila $C=F$) & $B_{t+k}^m$ & \textit{Market / clean price} (tanpa \textit{accrued coupon}) \\
+$i$ & \textit{Yield rate} (YTM) per periode kupon & $Fr_k$ & \textit{Accrued coupon} (hak bunga pemilik lama) \\
+$n$ & Total banyaknya periode pembayaran kupon & $v$ & Faktor diskon per periode: $v = (1+i)^{-1}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{rumusbox}
+
+\begin{teoremabox}[Klasifikasi Obligasi \& Prinsip Ekuivalensi Frekuensi]
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=2pt]
+    \item \textbf{Klasifikasi Berdasarkan Aliran Kupon:}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=1pt]
+        \item \textit{Coupon Bond}: membayarkan kupon $Fr$ secara periodik sebelum \textit{redemption date}.
+        \item \textit{Zero-Coupon Bond}: tanpa kupon berkala; membayar satu kali sebesar $C$ pada $t=n$.
+        \item \textit{Accumulation Bond}: nilai tebusan adalah pokok awal ditambah bunga terakumulasi, $C = F(1+r_a)^n$.
+        \item \textit{Perpetual Bond} (contoh: \textit{British Consols}): tidak pernah jatuh tempo ($n \to \infty$), harga $P = \dfrac{Fr}{i}$.
+    \end{itemize}
+    \item \textbf{Klasifikasi Kepemilikan \& Agunan:}
+    \textit{Registered bond} (pemilik tercatat di penerbit) vs. \textit{Unregistered / Bearer bond} (kepemilikan legal oleh pemegang fisik); \textit{Mortgage bond} (dijamin agunan/\textit{collateral}, lebih aman saat \textit{default}) vs. \textit{Debenture bond} (kredit umum tanpa agunan khusus).
+    \item \textbf{Konversi Frekuensi Kupon ($m$ kali/tahun) vs. Yield ($p$ kali/tahun):}
+    Jika kupon dibayar $m$ kali/tahun (misal semiannual $m=2$) tetapi yield diketahui sebagai nominal $i^{(p)}$ (misal kuartalan $p=4$ atau efektif tahunan $p=1$), \textbf{selalu samakan $i$ ke satuan periode kupon}:
+    \begin{equation*}
+        \mathbf{(1 + i_{\text{kupon}})^m = \left(1 + \frac{i^{(p)}}{p}\right)^p} \implies \mathbf{i_{\text{kupon}} = \left(1 + \frac{i^{(p)}}{p}\right)^{p/m} - 1}
+    \end{equation*}
+\end{itemize}
+\end{teoremabox}
+
+% ==============================================================================
+% BAGIAN 1 (BAB 12): 4 RUMUS HARGA OBLIGASI & KRITERIA PREMIUM/DISKON
+% ==============================================================================
+\section*{\large 1. Bab 12 --- Penentuan Harga Obligasi, Premium/Diskon \& Kasus Khusus}
+
+\begin{rumusbox}[Empat Rumus Fundamental Harga Obligasi (Tepat Setelah Kupon Dibayar)]
+\begin{enumerate}[leftmargin=1.6em, topsep=1pt, itemsep=3pt]
+    \item \textbf{Rumus Dasar (\textit{Basic Formula}):} Nilai sekarang seluruh kupon ditambah nilai sekarang nilai tebusan.
+    \[
+        \mathbf{P = Fr \, a_{\angl{n}i} + C v^n = Fr \, a_{\angl{n}i} + K}
+    \]
+    \item \textbf{Rumus Premium / Diskon:} Memisahkan nilai tebusan $C$ dan selisih kupon terhadap bunga wajar $Ci$.
+    \[
+        \mathbf{P = C + (Fr - Ci) a_{\angl{n}i} = C + C(g - i) a_{\angl{n}i}}
+    \]
+    \item \textbf{Rumus \textit{Base Amount}:} Paling cepat untuk kalkulator karena hanya memakai satu faktor suku bunga ($v^n$).
+    \[
+        \mathbf{P = G + (C - G) v^n}, \qquad \text{dengan } G = \frac{Fr}{i}
+    \]
+    \item \textbf{Rumus Makeham:} Sangat ampuh untuk \textit{serial bonds} dan soal yang tidak menyebutkan $n$ (tetapi $K$ diketahui).
+    \[
+        \mathbf{P = K + \frac{g}{i}(C - K)}, \qquad \text{dengan } K = C v^n \text{ dan } g = \frac{Fr}{C}
+    \]
+\end{enumerate}
+\end{rumusbox}
+
+\begin{perhatianbox}[Kriteria Premium vs. Diskon \& Panduan Pemilihan Rumus]
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=2pt]
+    \item \textbf{Kriteria Wajib ($g$ vs. $i$, BUKAN $r$ vs. $i$ saat $C \neq F$):}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=1pt]
+        \item \textbf{Premium ($P > C$):} terjadi jika dan hanya jika $\mathbf{g > i}$ (ekuivalen $Fr > Ci$). Besar premium $= P - C = (Fr - Ci)a_{\angl{n}i} = C(g - i)a_{\angl{n}i}$ (mengalami \textit{loss} saat penebusan).
+        \item \textbf{Diskon ($P < C$):} terjadi jika dan hanya jika $\mathbf{g < i}$ (ekuivalen $Fr < Ci$). Besar diskon $= C - P = (Ci - Fr)a_{\angl{n}i} = C(i - g)a_{\angl{n}i}$ (mengalami \textit{profit} saat penebusan).
+        \item \textbf{Par ($P = C$):} terjadi jika $\mathbf{g = i}$ (ekuivalen $Fr = Ci$).
+    \end{itemize}
+    \item \textbf{Kapan Memakai Rumus Tertentu?}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=1pt]
+        \item \textit{Rumus Dasar:} kupon berubah-ubah atau yield tidak konstan.
+        \item \textit{Rumus Premium/Diskon:} menentukan premium/diskon, menulis jadwal amortisasi, atau analisis \textit{callable/putable} ($C$ konstan).
+        \item \textit{Rumus Makeham:} diketahui $K$ tanpa $n$, mencari $g$ atau $i$ dari $(P, C, K)$, atau menghitung harga \textit{serial bonds}.
+    \end{itemize}
+    \item \textbf{Zero-Coupon \& Accumulation Bond:} $P = C(1+i)^{-n} \iff i = \left(\dfrac{C}{P}\right)^{1/n} - 1$.
+\end{itemize}
+\end{perhatianbox}
+
+% ==============================================================================
+% BAGIAN 2 (BAB 12): JADWAL AMORTISASI, GARIS LURUS & SINKING FUND OBLIGASI
+% ==============================================================================
+\section*{\large 2. Bab 12 --- Jadwal Amortisasi Obligasi, Metode Garis Lurus \& Sinking Fund}
+
+\begin{rumusbox}[Relasi Rekursif, Rumus Langsung \& Teorema Barisan Geometri Amortisasi]
+Berbeda dari amortisasi pinjaman biasa (saldo menuju $0$), pada amortisasi obligasi nilai buku $B_t$ bergerak dari $B_0 = P$ menuju \textbf{nilai tebusan $B_n = C$}.
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=2pt]
+    \item \textbf{Hubungan Rekursif (untuk penyusunan tabel periode demi periode):}
+    \[
+        B_0 = P, \qquad \mathbf{I_t = i \cdot B_{t-1}}, \qquad \mathbf{P_t = Fr - I_t}, \qquad \mathbf{B_t = B_{t-1} - P_t}, \qquad \mathbf{B_{t+1} = B_t(1+i) - Fr}
+    \]
+    \item \textbf{Rumus Langsung pada Periode ke-$t$ (tanpa membuat tabel dari awal):}
+    \begin{align*}
+        \mathbf{B_t} &= C + (Fr - Ci)a_{\angl{n-t}i} = C + C(g - i)a_{\angl{n-t}i} \\
+        \mathbf{P_t} &= (Fr - Ci)v^{n-t+1} = C(g - i)v^{n-t+1} \\
+        \mathbf{I_t} &= Fr - P_t = Fr - (Fr - Ci)v^{n-t+1} = i\left[C + (Fr - Ci)a_{\angl{n-t+1}i}\right]
+    \end{align*}
+    \item \textbf{4 Pengamatan Kritis (Sifat Barisan Geometri):}
+    \begin{enumerate}[leftmargin=1.5em, topsep=0.5pt, itemsep=1pt]
+        \item \textbf{Rasio Geometri Pokok:} $\mathbf{P_t = P_k (1 + i)^{t-k}}$ (berlaku untuk premium maupun diskon).
+        \item \textbf{Total Kolom Pokok:} $\mathbf{\sum_{t=1}^n P_t = P - C = P_1 \, s_{\angl{n}i}}$ (sama dengan besar premium, atau negatif diskon).
+        \item \textbf{Total Kolom Bunga:} $\mathbf{\sum_{t=1}^n I_t = nFr - (P - C)}$ (total kupon dikurangi total pokok).
+        \item \textbf{Selisih Book Value Antar Periode:} $\mathbf{B_{a-1} - B_b = \sum_{t=a}^b P_t = P_a \, s_{\angl{b-a+1}i}}$.
+    \end{enumerate}
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Matriks Komparasi: Amortisasi Premium vs. Akumulasi Diskon vs. Amortisasi Pinjaman]
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{3.4cm}p{4.3cm}p{4.3cm}p{4.3cm}@{}}
+\toprule
+\textbf{Aspek} & \textbf{Obligasi Premium ($g > i$)} & \textbf{Obligasi Diskon ($g < i$)} & \textbf{Pinjaman Amortisasi} \\
+\midrule
+Arah $B_t$ & Menurun dari $P$ ke $C$ (\textit{Writing Down}) & Menaik dari $P$ ke $C$ (\textit{Writing Up}) & Menurun dari $L$ ke $0$ \\
+Tanda $P_t = \text{Bayar} - I_t$ & $P_t > 0$ (amortisasi premium) & $P_t < 0$ (akumulasi diskon) & $P_t > 0$ (pelunasan pokok) \\
+Perbandingan $I_t$ vs $Fr$ & $I_t < Fr$ & $I_t > Fr$ & $I_t < R$ \\
+Rasio $P_{t+1}/P_t$ & $1 + i$ ($|P_t|$ naik) & $1 + i$ ($|P_t|$ naik) & $1 + i$ ($P_t$ naik) \\
+Arah $I_t$ seiring waktu & Menurun menuju $Ci$ & Menaik menuju $Ci$ & Menurun menuju $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{teoremabox}
+
+\begin{rumusbox}[Metode Garis Lurus (\textit{Straight Line}) \& Metode Sinking Fund ($j \neq i$)]
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=2pt]
+    \item \textbf{Metode Garis Lurus (\textit{Straight Line Method}):}
+    Book value diinterpolasi linier dari $B_0 = P$ ke $B_n = C$ (tidak konsisten dengan bunga majemuk; error membesar jika $n$ panjang):
+    \[
+        \mathbf{P_t = \frac{P - C}{n} \quad (\text{konstan})}, \qquad \mathbf{I_t = Fr - P_t = Fr - \frac{P - C}{n}}, \qquad B_t = P - t\left(\frac{P - C}{n}\right)
+    \]
+    \item \textbf{Metode Sinking Fund pada Obligasi ($j \neq i$):}
+    Investor menginginkan imbal hasil $i$ per periode atas harga beli $P$ (bunga periodik $iP$), sedangkan selisih $(Fr - iP)$ disetor ke rekening \textit{sinking fund} berbunga $j$ per periode hingga berakumulasi menjadi $(P - C)$ pada waktu $n$:
+    \[
+        (Fr - iP) s_{\angl{n}j} = P - C \implies \mathbf{P_{\text{SF}} = \frac{C + Fr \, s_{\angl{n}j}}{1 + i \, s_{\angl{n}j}} = \frac{C\left(1 + g \, s_{\angl{n}j}\right)}{1 + i \, s_{\angl{n}j}}}
+    \]
+    \textit{Sifat:} Jika $j = i$, rumus tepat tereduksi menjadi harga standar $P = Fr\,a_{\angl{n}i} + Cv^n$. Jika $j < i$, maka $P_{\text{SF}} < P_{\text{standar}}$ karena dana penyisihan premium tumbuh lebih lambat.
+\end{itemize}
+\end{rumusbox}
+
+% ==============================================================================
+% BAGIAN 3 (BAB 13): VALUASI ANTAR DUA TANGGAL KUPON & APROKSIMASI YTM
+% ==============================================================================
+\section*{\large 3. Bab 13 --- Valuasi Antar Dua Tanggal Kupon \& Penentuan Yield Rate}
+
+\begin{rumusbox}[Konsep Flat Price, Accrued Coupon, Market Price \& Matriks 3 Metode ($0 < k < 1$)]
+Misalkan obligasi berpindah tangan pada waktu $t + k$ dengan $0 < k < 1$ (di antara tanggal kupon ke-$t$ dan ke-$(t+1)$). Identitas fundamental yang selalu berlaku adalah:
+\[
+    \mathbf{B_{t+k}^f = B_{t+k}^m + Fr_k} \qquad\iff\qquad \mathbf{B_{t+k}^m = B_{t+k}^f - Fr_k}
+\]
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{2.9cm}p{4.3cm}p{4.4cm}p{4.5cm}@{}}
+\toprule
+\textbf{Komponen} & \textbf{1. Metode Teoritis (Eksak)} & \textbf{2. Metode Praktis (Aproksimasi)} & \textbf{3. Metode Semi-teoritis (Pasar)} \\
+\midrule
+\textit{Flat / Dirty Price} ($B_{t+k}^f$) & $\mathbf{B_t (1 + i)^k}$ (bunga majemuk) & $\mathbf{B_t (1 + ik)}$ (bunga tunggal) & $\mathbf{B_t (1 + i)^k}$ (bunga majemuk) \\
+\textit{Accrued Coupon} ($Fr_k$) & $\mathbf{Fr \left[\dfrac{(1+i)^k - 1}{i}\right]}$ & $\mathbf{k \cdot Fr}$ (linier pro rata) & $\mathbf{k \cdot Fr}$ (linier pro rata) \\
+\textit{Market / Clean Price} ($B_{t+k}^m$) & $B_t(1+i)^k - Fr\left[\dfrac{(1+i)^k - 1}{i}\right]$ & $\mathbf{(1-k)B_t + k B_{t+1}}$ (interpolasi linier) & $\mathbf{B_t(1+i)^k - k \cdot Fr}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=1.5pt]
+    \item \textbf{Konvensi Hitungan Fraksi $k$:} \textbf{30/360} (setiap bulan dianggap 30 hari, 1 semester = 180 hari, 1 tahun = 360 hari) atau \textbf{Actual/Actual} (jumlah hari kalender sesungguhnya dibagi jumlah hari dalam periode kupon berjalan).
+    \item \textbf{Cek Premium/Diskon Antar Tanggal Kupon:} Selalu gunakan \textbf{\textit{Market Price} ($B_{t+k}^m$)}, \textbf{bukan} \textit{Flat Price}! Premium $= B_{t+k}^m - C$ ($g > i$), Diskon $= C - B_{t+k}^m$ ($i > g$).
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Penentuan Yield Rate: Aproksimasi YTM (Bond Salesman Formula) \& Reinvestasi Kupon]
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=2pt]
+    \item \textbf{Rumus Aproksimasi Yield to Maturity ($i$ per periode kupon):}
+    Dari $P = C + C(g - i)a_{\angl{n}i}$ dan ekspansi binomial $\dfrac{1}{a_{\angl{n}i}} \approx \dfrac{1}{n} + \dfrac{n+1}{2n}i$, definisikan $\mathbf{k = \dfrac{P - C}{C}}$ (hati-hati: di sini $k$ adalah premi/diskon relatif, bukan fraksi waktu!):
+    \begin{equation*}
+        \mathbf{i \approx \frac{g - \dfrac{k}{n}}{1 + \dfrac{n+1}{2n}k}}, \qquad\qquad \text{untuk } n \text{ sangat besar: } \mathbf{i \approx \frac{g - \dfrac{k}{n}}{1 + \dfrac{k}{2}}}
+    \end{equation*}
+    Jangan lupa mengalikan $i$ dengan frekuensi kupon $m$ untuk memperoleh nominal yield rate $i^{(m)} = m \cdot i$.
+    \item \textbf{Yield Keseluruhan dengan Reinvestasi Kupon ($j_{\text{tab}} \neq i$):}
+    Jika kupon $Fr$ disetor ke tabungan berbunga $j_{\text{tab}}$ per periode kupon hingga jatuh tempo (tahun ke-$T$), nilai akumulasi total di akhir periode adalah $\mathbf{FV = Fr \, s_{\angl{n}j_{\text{tab}}} + C}$, sehingga \textit{overall effective annual yield} $y$ memenuhi:
+    \[
+        P(1 + y)^T = Fr \, s_{\angl{n}j_{\text{tab}}} + C \implies \mathbf{y = \left(\frac{Fr \, s_{\angl{n}j_{\text{tab}}} + C}{P}\right)^{1/T} - 1}
+    \]
+\end{itemize}
+\end{teoremabox}
+
+% ==============================================================================
+% BAGIAN 4 (BAB 14): CALLABLE, PUTABLE, SERIAL BONDS & OBLIGASI UMUM
+% ==============================================================================
+\section*{\large 4. Bab 14 --- Callable Bond, Putable Bond, Serial Bonds \& Obligasi Umum}
+
+\begin{rumusbox}[Matriks Komparasi Callable vs. Putable Bond (Lockout Period \& Penentuan Harga)]
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.28}
+\begin{tabular}{@{}p{3.4cm}p{6.5cm}p{6.5cm}@{}}
+\toprule
+\textbf{Aspek} & \textbf{Callable Bond} & \textbf{Putable Bond} \\
+\midrule
+Pemegang Opsi & \textbf{Penerbit (Peminjam)} menebus sebelum maturity & \textbf{Pemilik Obligasi (Investor)} menebus sebelum maturity \\
+Prinsip Harga Investor & \textbf{Harga Terendah:} $\mathbf{P = \min_{n \in \mathcal{N}} P_n}$ (skenario terburuk / \textit{yield to worst}) & \textbf{Harga Tertinggi:} $\mathbf{P = \max_{n \in \mathcal{N}} P_n}$ (investor memilih opsi paling untung) \\
+Jika $C$ Konstan \& $g > i$ (Premium) & $P_n$ naik terhadap $n \implies$ pilih \textbf{Call Date Terawal} (tepat setelah \textit{lockout period}) & $P_n$ naik terhadap $n \implies$ pilih \textbf{Maturity Date} (paling akhir) \\
+Jika $C$ Konstan \& $g < i$ (Diskon) & $P_n$ turun terhadap $n \implies$ pilih \textbf{Maturity Date} (paling akhir) & $P_n$ turun terhadap $n \implies$ pilih \textbf{Put Date Terawal} (tepat setelah \textit{lockout period}) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=1.5pt]
+    \item \textbf{Aturan Call Premium Bertingkat ($C_n$ berubah antar interval):}
+    Pada setiap interval di mana $C_n$ bernilai konstan, hitung $g_{\text{seg}} = \dfrac{Fr}{C_{\text{seg}}}$ dan bandingkan dengan $i$:
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=1pt]
+        \item Jika $g_{\text{seg}} > i$ (segmen premium), kandidat $\min$ pada segmen itu adalah \textbf{ujung kiri ($n$ terkecil)}.
+        \item Jika $g_{\text{seg}} < i$ (segmen diskon), kandidat $\min$ pada segmen itu adalah \textbf{ujung kanan ($n$ terbesar)}.
+        \item Jika $g_{\text{seg}} = i$, maka $P_n = C_{\text{seg}}$ konstan di seluruh segmen tersebut.
+    \end{itemize}
+    Bandingkan seluruh kandidat antar segmen (termasuk saat jatuh tempo $n=N$) lalu ambil nilai terkecilnya!
+    \item \textbf{Analisis Realisasi Yield pada Callable Bond:} Jika harga beli $P$ ditetapkan dengan asumsi di-\textit{call} pada $n^*$ untuk menjamin yield minimum $i^*$, dan ternyata di-\textit{call} pada tanggal lain $n_{\text{real}}$, bandingkan $P_{n_{\text{real}}}(i^*)$ dengan $P$: karena $P(i)$ monoton turun terhadap $i$, maka $P_{n_{\text{real}}}(i^*) > P \implies i_{\text{aktual}} > i^*$.
+\end{itemize}
+\end{rumusbox}
+
+\begin{teoremabox}[Obligasi Berseri (\textit{Serial Bonds}) dengan Rumus Makeham]
+Jika penerbit menerbitkan serangkaian obligasi berkupon seragam ($g = Fr/C$ sama untuk tiap seri) dengan jadwal penebusan $C_1, C_2, \dots, C_m$ pada waktu $n_1, n_2, \dots, n_m$, harga totalnya dapat dihitung sekaligus (bahkan jika urutan penebusan diundi acak):
+\[
+    \mathbf{P' = K' + \frac{g}{i}\left(C' - K'\right)}, \qquad\text{dengan}\qquad C' = \sum_{j=1}^m C_j, \qquad K' = \sum_{j=1}^m C_j v^{n_j}
+\]
+\textbf{Trik Cepat $K'$ untuk Penebusan Merata:} Jika obligasi ditebus dalam $m$ angsuran identik sebesar $C_{\text{unit}}$ setiap tahun mulai akhir tahun $(a+1)$ hingga akhir tahun $(a+m)$, maka:
+\[
+    \mathbf{C' = m \cdot C_{\text{unit}}}, \qquad \mathbf{K' = C_{\text{unit}} \cdot v^a \, a_{\angl{m}i}}
+\]
+\end{teoremabox}
+
+\begin{rumusbox}[Permasalahan Obligasi yang Lebih Umum (Slide 14 Hal. 13--15 \& UAS ITB)]
+\begin{itemize}[leftmargin=1.5em, topsep=1pt, itemsep=2pt]
+    \item \textbf{1. Kupon Bertahap (\textit{Step-Up / Step-Down Coupon}):}
+    Pecah blok kupon menjadi anuitas bertunda (\textit{deferred annuity}). Misalkan kupon $Q_1$ untuk periode $1..n_1$, kupon $Q_2$ untuk periode $(n_1+1)..(n_1+n_2)$, dst.:
+    \[
+        \mathbf{P = Q_1 a_{\angl{n_1}i} + Q_2 v^{n_1} a_{\angl{n_2}i} + \cdots + C v^N}
+    \]
+    \item \textbf{2. Kupon Bertumbuh Geometrik (\textit{Inflation-Adjusted Bond}):}
+    Kupon pertama $Fr_1$, lalu kupon ke-$t$ tumbuh sebesar $k$ per periode menjadi $Fr_1(1+k)^{t-1}$:
+    \[
+        \mathbf{P = Fr_1 \left[\frac{1 - \left(\dfrac{1+k}{1+i}\right)^n}{i - k}\right] + C(1+i)^{-n}} \quad (k \neq i), \qquad\qquad \text{jika } k = i:\ \mathbf{P = n \cdot Fr_1(1+i)^{-1} + C(1+i)^{-n}}
+    \]
+    \item \textbf{3. Yield Rate Tidak Konstan:}
+    Jika yield berubah dari $i_1$ (selama $n_1$ periode pertama) menjadi $i_2$ (selama $n_2$ periode terakhir), diskontokan tiap blok sesuai suku bunga periode yang dilaluinya:
+    \[
+        \mathbf{P = Fr \left[a_{\angl{n_1}i_1} + (1+i_1)^{-n_1} a_{\angl{n_2}i_2}\right] + C(1+i_1)^{-n_1}(1+i_2)^{-n_2}}
+    \]
+\end{itemize}
+\end{rumusbox}
+
+% ==============================================================================
+% BAGIAN 5: POHON KEPUTUSAN KUIS & 8 JEBAKAN KLASIK
+% ==============================================================================
+\section*{\large $\bigstar$ Bagian 5: Pohon Keputusan Kuis (5 Langkah) \& 8 Jebakan Klasik}
+
+\begin{perhatianbox}[Pohon Keputusan Kuis Obligasi dalam 5 Langkah]
+\begin{enumerate}[leftmargin=1.5em, topsep=1pt, itemsep=1.5pt]
+    \item \textbf{Langkah 1 — Samakan Satuan Periode:} Cek frekuensi kupon ($m$). Ubah $n$ (jumlah kupon), $r = \text{kupon nominal}/m$, $Fr$, dan konversikan yield menjadi $i$ \textit{efektif per periode kupon}.
+    \item \textbf{Langkah 2 — Cek $C$ vs. $F$ \& Hitung $g = Fr/C$:} Tentukan status obligasi dari $g$ vs. $i$ (atau $Fr$ vs. $Ci$).
+    \item \textbf{Langkah 3 — Identifikasi Tipe Soal:}
+    \begin{itemize}[leftmargin=1.2em, topsep=0.5pt, itemsep=1pt]
+        \item \textit{Harga standar / amortisasi / SF:} pilih rumus tercepat (Dasar, Prem/Diskon, Base Amount, Makeham, atau $P_{\text{SF}}$).
+        \item \textit{Di antara 2 kupon ($0 < k < 1$):} hitung $B_t$ dulu, lalu tentukan metode (Teoritis / Praktis / Semi-teoritis).
+        \item \textit{Cari YTM dari $P$:} gunakan Zero-Coupon ($P=Cv^n$), Makeham (jika $K$ diketahui), atau Aproksimasi YTM ($k=(P-C)/C$).
+        \item \textit{Opsi Call/Put:} daftar seluruh tanggal tebus yang mungkin; evaluasi per segmen $C_n$ lalu ambil $\min$ (\textit{callable}) atau $\max$ (\textit{putable}).
+        \item \textit{Serial Bonds:} langsung gunakan Makeham agregat ($C', K'$).
+    \end{itemize}
+    \item \textbf{Langkah 4 — Cek Konsistensi Angka:} Untuk jadwal amortisasi, pastikan $I_t + P_t = Fr$ dan $\sum P_t = P - C$. Untuk harga obligasi, cek kewajaran terhadap $C$ (apakah seharusnya $> C$ atau $< C$).
+    \item \textbf{Langkah 5 — Cek Permintaan Akhir Soal:} Apakah yang ditanyakan $i$ per semester atau \textit{nominal annual rate} $i^{(2)} = 2i$? Apakah diminta *market price* atau *flat price*?
+\end{enumerate}
+\end{perhatianbox}
+
+\begin{jebakanbox}[8 Jebakan Klasik Kuis Obligasi yang Paling Sering Memotong Nilai]
+\begin{enumerate}[leftmargin=1.5em, topsep=1pt, itemsep=1.5pt]
+    \item \textbf{Jebakan $r$ vs. $i$ ketika $C \neq F$:} Misalnya kupon $8{,}4\%$ semiannual ($r = 4{,}2\%$) dan yield $8\%$ ($i = 4\%$), tetapi $F = 2.000$ dan $C = 2.200$. Di sini $g = 84/2.200 = 3{,}8182\% < i = 4\%$, sehingga obligasi adalah \textbf{DISKON}, bukan premium!
+    \item \textbf{Jebakan Frekuensi Yield vs. Kupon:} Yield $10\%$ \textit{convertible quarterly} pada kupon semiannual \textbf{bukan} $i = 5\%$ per semester, melainkan $(1{,}025)^2 - 1 = 5{,}0625\%$ per semester.
+    \item \textbf{Jebakan Call Premium Bertingkat:} Pada *callable bond* bersegmen, nilai minimum bisa muncul di batas tengah segmen (bukan hanya $n$ terkecil atau terbesar global). Selalu hitung kandidat setiap segmen!
+    \item \textbf{Jebakan Premium/Diskon Antar Kupon:} Status dan besar premium/diskon di waktu $t+k$ dihitung dari $\mathbf{B_{t+k}^m - C}$, bukan dari *flat price* $B_{t+k}^f - C$.
+    \item \textbf{Jebakan Tanda pada Amortisasi Diskon:} Untuk obligasi diskon, $P_t = Fr - I_t < 0$, sehingga $B_t = B_{t-1} - P_t = B_{t-1} + |P_t|$ harus \textbf{naik} mendekati $C$.
+    \item \textbf{Jebakan Indeks Pangkat pada Rumus Langsung $P_t$:} Pada periode ke-$t$ dari total $n$ periode, pangkat faktor diskonnya adalah $\mathbf{-(n - t + 1)}$, bukan $-(n - t)$. Cek cepat: untuk $t = n$, pangkatnya adalah $-1$.
+    \item \textbf{Jebakan Dua Arti Simbol $k$:} Dalam valuasi antar kupon, $k \in (0, 1)$ adalah fraksi waktu berjalan; dalam aproksimasi YTM, $k = \frac{P-C}{C}$ bisa negatif (diskon) maupun positif (premium).
+    \item \textbf{Jebakan Konvensi Hari ($30/360$ vs. Actual/Actual):} Perhatikan tanggal transaksi! Misalnya 1 Januari ke 1 Mei adalah $4$ bulan ($k = 4/6 = 2/3$ pada $30/360$), sedangkan jika diminta *actual/actual*, hitung hari kalender pastinya dibagi total hari antara dua tanggal kupon.
+\end{enumerate}
+\end{jebakanbox}
+
+\end{document}

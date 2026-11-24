@@ -1,0 +1,381 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{geometry}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% Pengaturan Margin Kertas
+\geometry{
+    top=1.8cm,
+    bottom=1.8cm,
+    left=1.6cm,
+    right=1.6cm
+}
+
+\tcbuselibrary{skins,breakable}
+
+% Skema Warna Konsisten
+\definecolor{primaryblue}{RGB}{20, 60, 110}
+\definecolor{secondaryblue}{RGB}{41, 128, 185}
+\definecolor{boxbg}{RGB}{248, 250, 254}
+\definecolor{darkgreen}{RGB}{22, 115, 60}
+\definecolor{greenbg}{RGB}{244, 251, 246}
+\definecolor{darkamber}{RGB}{185, 105, 10}
+\definecolor{amberbg}{RGB}{254, 251, 243}
+
+% Notasi Aktuaria Standar
+\newcommand{\angl}[1]{\overline{#1|}}
+
+\newtcolorbox{naskahsoalbox}[2][]{
+    enhanced,
+    breakable,
+    colback=boxbg,
+    colframe=primaryblue,
+    fonttitle=\bfseries\sffamily\small,
+    title={SOAL #2 \hfill \normalfont\sffamily\footnotesize #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=primaryblue,
+    arc=1.5mm,
+    left=3.5mm,
+    right=3.5mm,
+    top=2.5mm,
+    bottom=2.5mm,
+    before skip=3mm,
+    after skip=3mm
+}
+
+\newtcolorbox{solusibox}[1][]{
+    enhanced,
+    breakable,
+    colback=greenbg,
+    colframe=darkgreen,
+    fonttitle=\bfseries\sffamily\small,
+    title={KUNCI JAWABAN \& PEMBAHASAN: SOAL #1},
+    boxrule=0.8pt,
+    titlerule=0pt,
+    coltitle=white,
+    colbacktitle=darkgreen,
+    arc=1.5mm,
+    left=3.5mm,
+    right=3.5mm,
+    top=2.5mm,
+    bottom=2.5mm,
+    before skip=3mm,
+    after skip=3.5mm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    urlcolor=secondaryblue,
+    citecolor=primaryblue,
+    pdftitle={AK2161 Teori Suku Bunga - Simulasi Kuis Obligasi},
+    pdfauthor={Persiapan Kuis Obligasi AK2161}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+% ==================== HEADER PAKET A ====================
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue,
+    arc=2mm,
+    left=4mm,right=4mm,top=3.5mm,bottom=3.5mm,
+    boxrule=0pt
+]
+\begin{center}
+    {\fontsize{14}{17}\selectfont\bfseries\color{white} SIMULASI KUIS TERAKHIR --- AK2161 TEORI SUKU BUNGA}\\[1mm]
+    {\fontsize{12}{15}\selectfont\bfseries\color{amberbg} PAKET SIMULASI A (MATERI OBLIGASI: BAB 12--14)}\\[1mm]
+    {\fontsize{9.5}{12}\selectfont\color{white} Durasi: 50 Menit $\bullet$ 3 Soal Uraian (Total 100 Poin) $\bullet$ Sifat: Tutup Buku \& Kalkulator Saintifik}
+\end{center}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+    enhanced,
+    colback=boxbg,
+    colframe=secondaryblue,
+    arc=1.5mm,
+    boxrule=0.6pt,
+    left=3mm,right=3mm,top=2mm,bottom=2mm
+]
+\small
+\textbf{Petunjuk Simulasi:} Kerjakan \textbf{Paket A} selama 50 menit penuh tanpa membuka catatan, kemudian lanjutkan ke \textbf{Paket B} di halaman berikutnya sebagai \textit{drill} kedua. Kunci jawaban dan pembahasan lengkap tersedia pada \textbf{Bagian II}. Gunakan ketelitian minimal 4 desimal untuk suku bunga dan 2 desimal untuk nilai mata uang.
+\end{tcolorbox}
+
+% SOAL A1
+\begin{naskahsoalbox}[Bobot: 30 Poin --- Bab 12 (Harga, Jadwal Amortisasi \& Rumus Langsung)]{A1}
+Sebuah obligasi berjangka waktu 3 tahun memiliki nilai par $\$1.000$ dengan tingkat kupon $8{,}4\%$ \textit{payable semiannually} dan akan ditebus sebesar $\$1.050$ pada saat jatuh tempo. Obligasi tersebut dibeli untuk menghasilkan \textit{yield rate} $6\%$ \textit{convertible semiannually}.
+\begin{enumerate}[label=(\alph*), leftmargin=6mm, topsep=1pt, itemsep=1.5pt]
+    \item Hitung harga obligasi ($P$) dan besarnya \textit{premium} atau \textit{diskon}!
+    \item Susun jadwal amortisasi obligasi untuk \textbf{2 semester pertama} ($t = 0, 1, 2$)!
+    \item Tanpa menyusun tabel lanjutan, hitung secara langsung porsi pokok ($P_5$) dan porsi bunga ($I_5$) pada pembayaran kupon ke-5!
+\end{enumerate}
+\end{naskahsoalbox}
+
+% SOAL A2
+\begin{naskahsoalbox}[Bobot: 35 Poin --- Bab 13 (Valuasi di Antara Dua Tanggal Kupon)]{A2}
+Sebuah obligasi 5 tahun diterbitkan pada tanggal 1 Maret 2026 dengan nilai par dan nilai tebusan masing-masing sebesar $\$2.000$. Obligasi membayarkan kupon sebesar $7\%$ \textit{payable semiannually} dan dibeli untuk memperoleh \textit{yield rate} $9\%$ \textit{convertible semiannually}. Pada tanggal 1 Juni 2027 (gunakan konvensi $30/360$, yakni 3 bulan setelah kupon ke-2 pada 1 Maret 2027), obligasi dijual di pasar sekunder.
+\begin{enumerate}[label=(\alph*), leftmargin=6mm, topsep=1pt, itemsep=1.5pt]
+    \item Hitung \textit{book value} obligasi pada tanggal pembayaran kupon ke-2 ($B_2$, 1 Maret 2027)!
+    \item Hitung \textit{flat price} ($B_{2+0{,}5}^f$), \textit{accrued coupon} ($Fr_{0{,}5}$), dan \textit{market price} ($B_{2+0{,}5}^m$) pada tanggal 1 Juni 2027 dengan menggunakan:
+    \begin{enumerate}[label=(\roman*), leftmargin=6mm, topsep=1pt, itemsep=1pt]
+        \item Metode Teoritis,
+        \item Metode Semi-teoritis.
+    \end{enumerate}
+    \item Berdasarkan metode semi-teoritis, tentukan apakah obligasi diperdagangkan dengan \textit{premium} atau \textit{diskon} pada 1 Juni 2027 dan berapa besarnya!
+\end{enumerate}
+\end{naskahsoalbox}
+
+% SOAL A3
+\begin{naskahsoalbox}[Bobot: 35 Poin --- Bab 14 (Callable Bond dengan Call Premium Bertingkat)]{A3}
+Suatu obligasi \textit{callable} 12 tahun bernilai par $\$1.000$ membayarkan kupon $7\%$ \textit{payable semiannually}. Penerbit memiliki hak untuk menebus obligasi pada setiap tanggal pembayaran kupon dengan nilai penebusan sebagai berikut:
+\begin{itemize}[leftmargin=6mm, topsep=1pt, itemsep=1pt]
+    \item $\$1.060$ mulai akhir tahun ke-4 hingga sebelum akhir tahun ke-8 ($n = 8, 9, \dots, 15$),
+    \item $\$1.020$ mulai akhir tahun ke-8 hingga sebelum akhir tahun ke-12 ($n = 16, 17, \dots, 23$),
+    \item $\$1.000$ saat jatuh tempo pada akhir tahun ke-12 ($n = 24$).
+\end{itemize}
+Tentukan harga beli obligasi jika investor ingin dijamin memperoleh \textit{yield} minimal sebesar:
+\begin{enumerate}[label=(\alph*), leftmargin=6mm, topsep=1pt, itemsep=1pt]
+    \item $5\%$ \textit{convertible semiannually},
+    \item $8\%$ \textit{convertible semiannually}.
+\end{enumerate}
+\end{naskahsoalbox}
+
+\newpage
+
+% ==================== HEADER PAKET B ====================
+\begin{tcolorbox}[
+    enhanced,
+    colback=primaryblue,
+    colframe=primaryblue,
+    arc=2mm,
+    left=4mm,right=4mm,top=3.5mm,bottom=3.5mm,
+    boxrule=0pt
+]
+\begin{center}
+    {\fontsize{14}{17}\selectfont\bfseries\color{white} SIMULASI KUIS TERAKHIR --- AK2161 TEORI SUKU BUNGA}\\[1mm]
+    {\fontsize{12}{15}\selectfont\bfseries\color{amberbg} PAKET SIMULASI B (VARIASI LANJUTAN: BAB 12--14)}\\[1mm]
+    {\fontsize{9.5}{12}\selectfont\color{white} Durasi: 50 Menit $\bullet$ 3 Soal Uraian (Total 100 Poin) $\bullet$ Sifat: Tutup Buku \& Kalkulator Saintifik}
+\end{center}
+\end{tcolorbox}
+
+% SOAL B1
+\begin{naskahsoalbox}[Bobot: 35 Poin --- Bab 12 \& 14 (Pemilihan Obligasi, Frekuensi Beda \& Kupon Bertahap)]{B1}
+\begin{enumerate}[label=(\alph*), leftmargin=6mm, topsep=1pt, itemsep=2pt]
+    \item Seorang manajer dana perlu membeli sebuah obligasi 5 tahun yang memberikan nilai penebusan tepat sebesar $\text{Rp }200.000.000$ saat jatuh tempo. Tersedia dua pilihan obligasi 5 tahun dengan nilai penebusan $\text{Rp }200.000.000$:
+    \begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+        \item \textbf{Pilihan I:} Nilai par $\text{Rp }200.000.000$, kupon $10\%$ \textit{payable semiannually}, \textit{yield rate} efektif tahunan $8\%$.
+        \item \textbf{Pilihan II:} Nilai par $\text{Rp }180.000.000$, kupon $12\%$ \textit{payable semiannually}, \textit{yield rate} $9\%$ \textit{convertible semiannually}.
+    \end{itemize}
+    Tentukan harga masing-masing pilihan dan obligasi mana yang lebih menguntungkan (lebih murah dibeli)!
+    \item Sebuah obligasi 6 tahun bernilai par $\$1.000$ (ditebus pada par) memiliki \textit{yield} efektif tahunan $6\%$, dengan tingkat kupon tahunan sebesar $5\%$ untuk 3 tahun pertama dan $8\%$ untuk 3 tahun terakhir. Tentukan harga awal obligasi ($P_0$) dan \textit{book value} tepat setelah pembayaran kupon ke-2 ($B_2$)!
+\end{enumerate}
+\end{naskahsoalbox}
+
+% SOAL B2
+\begin{naskahsoalbox}[Bobot: 30 Poin --- Bab 13 \& 14 (Aproksimasi YTM \& Putable Bond)]{B2}
+\begin{enumerate}[label=(\alph*), leftmargin=6mm, topsep=1pt, itemsep=2pt]
+    \item Sebuah obligasi 6 tahun dengan nilai par $\$1.000$ (ditebus pada par) membayarkan kupon $6\%$ \textit{payable semiannually}. Jika obligasi tersebut saat ini dijual di harga $\$925$, taksirlah \textit{nominal yield rate convertible semiannually} ($i^{(2)}$) menggunakan rumus aproksimasi YTM!
+    \item Sebuah obligasi 10 tahun bernilai par $\$1.000$ (ditebus pada par) membayarkan kupon $6\%$ \textit{payable semiannually} dan bersifat \textit{putable} pada nilai par pada setiap tanggal kupon mulai akhir tahun ke-4 ($n = 8, 9, \dots, 20$). Hitunglah harga obligasi tersebut jika dibeli untuk menghasilkan \textit{yield}:
+    \begin{enumerate}[label=(\roman*), leftmargin=6mm, topsep=1pt, itemsep=1pt]
+        \item $8\%$ \textit{convertible semiannually},
+        \item $5\%$ \textit{convertible semiannually}.
+    \end{enumerate}
+\end{enumerate}
+\end{naskahsoalbox}
+
+% SOAL B3
+\begin{naskahsoalbox}[Bobot: 35 Poin --- Bab 12 \& 14 (Serial Bonds Makeham \& Sinking Fund Bond)]{B3}
+\begin{enumerate}[label=(\alph*), leftmargin=6mm, topsep=1pt, itemsep=2pt]
+    \item Sebuah obligasi berseri (\textit{serial bond}) memiliki total nilai par $\$20.000$ dan kupon tahunan $7{,}35\%$. Obligasi tersebut akan ditebus dalam 5 angsuran par yang sama besar (masing-masing $\$4.000$ nilai par) pada setiap akhir tahun ke-6 hingga akhir tahun ke-10 pada harga penebusan $105\%$ dari nilai par. Hitung harga total obligasi berseri tersebut pada \textit{yield} efektif tahunan $9\%$ menggunakan \textbf{Rumus Makeham}!
+    \item Sebuah obligasi 4 tahun dengan nilai par $\$1.000$ (ditebus pada par) memberikan kupon $9\%$ \textit{payable semiannually} dan dibeli untuk memperoleh \textit{yield} $7\%$ \textit{convertible semiannually}. Apabila investor menyisihkan amortisasi premium ke dalam rekening \textit{sinking fund} yang memberikan suku bunga $5\%$ \textit{convertible semiannually}, tentukan harga obligasi tersebut!
+\end{enumerate}
+\end{naskahsoalbox}
+
+\newpage
+
+% ==================== BAGIAN II: PEMBAHASAN PAKET A & B ====================
+\section*{\color{primaryblue} Bagian II: Kunci Jawaban \& Pembahasan Lengkap}
+
+\subsection*{\color{darkgreen} Pembahasan Paket Simulasi A}
+
+\begin{solusibox}{A1 (30 Poin)}
+\textbf{Bagian (a): Harga Obligasi dan Besar Premium}
+Diketahui $F = 1.000$, $C = 1.050$, $n = 3 \times 2 = 6$ semester, $r = 0{,}042 \implies Fr = 42$, $i = 0{,}03 \implies Ci = 31{,}50$, dan $g = \frac{42}{1.050} = 0{,}04 > i = 0{,}03$.
+\[
+    a_{\angl{6}0{,}03} = \frac{1 - (1{,}03)^{-6}}{0{,}03} = 5{,}41719144
+\]
+\[
+    P = C + (Fr - Ci)a_{\angl{6}0{,}03} = 1.050 + (42 - 31{,}50)(5{,}41719144) = 1.050 + 56{,}8805 = \mathbf{\$1.106{,}88}
+\]
+Karena $P > C$ ($g = 4\% > i = 3\%$), obligasi dijual dengan \textbf{premium} sebesar $P - C = \mathbf{\$56{,}88}$.
+
+\textbf{Bagian (b): Jadwal Amortisasi 2 Semester Pertama}
+Menggunakan $I_t = 0{,}03 B_{t-1}$, $P_t = 42 - I_t$, dan $B_t = B_{t-1} - P_t$:
+\begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item $t = 1$: $I_1 = 0{,}03(1.106{,}8805) = 33{,}21$; \quad $P_1 = 42 - 33{,}2064 = 8{,}79$; \quad $B_1 = 1.106{,}8805 - 8{,}7936 = 1.098{,}09$.
+    \item $t = 2$: $I_2 = 0{,}03(1.098{,}0869) = 32{,}94$; \quad $P_2 = 42 - 32{,}9426 = 9{,}06$; \quad $B_2 = 1.098{,}0869 - 9{,}0574 = 1.089{,}03$.
+\end{itemize}
+\begin{center}
+\small
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Semester ($t$)} & \textbf{Kupon ($Fr$)} & \textbf{Bunga ($I_t$)} & \textbf{Amortisasi Premium ($P_t$)} & \textbf{Book Value ($B_t$)} \\
+\midrule
+$0$ & --- & --- & --- & $\$1.106{,}88$ \\
+$1$ & $\$42{,}00$ & $\$33{,}21$ & $\$8{,}79$ & $\$1.098{,}09$ \\
+$2$ & $\$42{,}00$ & $\$32{,}94$ & $\$9{,}06$ & $\$1.089{,}03$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Bagian (c): Perhitungan Langsung $P_5$ dan $I_5$}
+\begin{align*}
+    P_5 &= (Fr - Ci)v^{6 - 5 + 1} = (42 - 31{,}50)(1{,}03)^{-2} = 10{,}50 \times 0{,}94259591 = \mathbf{\$9{,}90} \\
+    I_5 &= 42 - 9{,}8973 = \mathbf{\$32{,}10}
+\end{align*}
+\end{solusibox}
+
+\begin{solusibox}{A2 (35 Poin)}
+\textbf{Bagian (a): Book Value pada Kupon ke-2 ($B_2$)}
+Diketahui $F = C = 2.000$, $n = 10$ semester, $r = 0{,}035 \implies Fr = 70$, $i = 0{,}045 \implies Ci = 90$.
+\[
+    B_2 = 2.000 + (70 - 90)a_{\angl{10-2}0{,}045} = 2.000 - 20(6{,}59588607) = 2.000 - 131{,}9177 = \mathbf{\$1.868{,}08}
+\]
+
+\textbf{Bagian (b): Valuasi pada 1 Juni 2027 ($t = 2$, $k = 3/6 = 0{,}5$)}
+\begin{enumerate}[label=(\roman*), leftmargin=6mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Metode Teoritis:}
+    \begin{align*}
+        B_{2{,}5}^f &= B_2(1{,}045)^{0{,}5} = 1.868{,}0823 \times 1{,}02225242 = \mathbf{\$1.909{,}65} \\
+        Fr_{0{,}5} &= 70 \left[\frac{(1{,}045)^{0{,}5} - 1}{0{,}045}\right] = 70 \times 0{,}49449812 = \mathbf{\$34{,}61} \\
+        B_{2{,}5}^m &= 1.909{,}6516 - 34{,}6149 = \mathbf{\$1.875{,}04}
+    \end{align*}
+    \item \textbf{Metode Semi-teoritis:}
+    \begin{align*}
+        B_{2{,}5}^f &= B_2(1{,}045)^{0{,}5} = \mathbf{\$1.909{,}65}, \qquad Fr_{0{,}5} = 0{,}5 \times 70 = \mathbf{\$35{,}00} \\
+        B_{2{,}5}^m &= 1.909{,}6516 - 35{,}00 = \mathbf{\$1.874{,}65}
+    \end{align*}
+\end{enumerate}
+
+\textbf{Bagian (c): Status Premium atau Diskon (Semi-teoritis)}
+Bandingkan \textit{market price} terhadap nilai tebusan: $B_{2{,}5}^m = \$1.874{,}65 < C = \$2.000$, sehingga obligasi diperdagangkan dengan \textbf{diskon} sebesar $C - B_{2{,}5}^m = 2.000 - 1.874{,}65 = \mathbf{\$125{,}35}$.
+\end{solusibox}
+
+\begin{solusibox}{A3 (35 Poin)}
+Diketahui $F = 1.000$, $r = 0{,}035 \implies Fr = 35$. Nilai $g_n = Fr / C_n$ pada tiap segmen adalah:
+\begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item $n = 8, \dots, 15$ ($C = 1.060$): $g_1 = \dfrac{35}{1.060} = 3{,}3019\%$,
+    \item $n = 16, \dots, 23$ ($C = 1.020$): $g_2 = \dfrac{35}{1.020} = 3{,}4314\%$,
+    \item $n = 24$ ($C = 1.000$): $g_3 = \dfrac{35}{1.000} = 3{,}5000\%$.
+\end{itemize}
+Karena \textit{callable}, investor membayar harga \textbf{minimum} di semua tanggal penebusan yang mungkin ($8 \le n \le 24$).
+
+\textbf{Bagian (a): Dijamin Yield $5\%$ Convertible Semiannually ($i = 2{,}5\%$)}
+Karena $i = 2{,}5\% < g_k$ pada seluruh segmen (semua segmen premium, $P_n$ naik terhadap $n$), kandidat minimum tiap segmen ada di $n$ terkecil:
+\begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item $n = 8$ ($C = 1.060$): $P_8 = 35\,a_{\angl{8}0{,}025} + 1.060(1{,}025)^{-8} = 35(7{,}170137) + 1.060(0{,}820747) = \mathbf{\$1.120{,}95}$.
+    \item $n = 16$ ($C = 1.020$): $P_{16} = 35\,a_{\angl{16}0{,}025} + 1.020(1{,}025)^{-16} = 35(13{,}055003) + 1.020(0{,}673625) = \mathbf{\$1.144{,}02}$.
+    \item $n = 24$ ($C = 1.000$): $P_{24} = 35\,a_{\angl{24}0{,}025} + 1.000(1{,}025)^{-24} = 35(17{,}884986) + 1.000(0{,}552875) = \mathbf{\$1.178{,}85}$.
+\end{itemize}
+Harga obligasi: $\min\{1.120{,}95;\ 1.144{,}02;\ 1.178{,}85\} = \mathbf{\$1.120{,}95}$ (asumsi di-\textit{call} pada $n = 8$).
+
+\textbf{Bagian (b): Dijamin Yield $8\%$ Convertible Semiannually ($i = 4\%$)}
+Karena $i = 4\% > g_k$ pada seluruh segmen (semua segmen diskon, $P_n$ turun terhadap $n$), kandidat minimum tiap segmen ada di $n$ terbesar:
+\begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item $n = 15$ ($C = 1.060$): $P_{15} = 35\,a_{\angl{15}0{,}04} + 1.060(1{,}04)^{-15} = 35(11{,}118387) + 1.060(0{,}555265) = \mathbf{\$977{,}72}$.
+    \item $n = 23$ ($C = 1.020$): $P_{23} = 35\,a_{\angl{23}0{,}04} + 1.020(1{,}04)^{-23} = 35(14{,}856842) + 1.020(0{,}405726) = \mathbf{\$933{,}83}$.
+    \item $n = 24$ ($C = 1.000$): $P_{24} = 35\,a_{\angl{24}0{,}04} + 1.000(1{,}04)^{-24} = 35(15{,}246963) + 1.000(0{,}390121) = \mathbf{\$923{,}77}$.
+\end{itemize}
+Harga obligasi: $\min\{977{,}72;\ 933{,}83;\ 923{,}77\} = \mathbf{\$923{,}77}$ (asumsi jatuh tempo pada $n = 24$).
+\end{solusibox}
+
+\subsection*{\color{darkgreen} Pembahasan Paket Simulasi B}
+
+\begin{solusibox}{B1 (35 Poin)}
+\textbf{Bagian (a): Perbandingan Dua Pilihan Obligasi}
+Kedua obligasi berjangka $n = 10$ semester dengan $C = \text{Rp }200.000.000$:
+\begin{itemize}[leftmargin=5mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Pilihan I:} Kupon $Fr_{\text{I}} = 200.000.000 \times 0{,}05 = \text{Rp }10.000.000$. Karena yield efektif tahunan $8\%$, yield ekuivalen per semester adalah $j_{\text{I}} = (1{,}08)^{0{,}5} - 1 = 0{,}03923048$.
+    \[
+        P_{\text{I}} = 10.000.000 \, a_{\angl{10}0{,}03923048} + 200.000.000(1{,}03923048)^{-10} = \mathbf{\text{Rp }217.537.199{,}64}
+    \]
+    \item \textbf{Pilihan II:} Kupon $Fr_{\text{II}} = 180.000.000 \times 0{,}06 = \text{Rp }10.800.000$, yield per semester $i_{\text{II}} = 4{,}5\%$:
+    \begin{align*}
+        P_{\text{II}} &= 200.000.000 + (10.800.000 - 200.000.000 \times 0{,}045)a_{\angl{10}0{,}045} \\
+        &= 200.000.000 + 1.800.000(7{,}91271818) = \mathbf{\text{Rp }214.242.892{,}72}
+    \end{align*}
+\end{itemize}
+Karena keduanya memberikan nilai penebusan yang sama ($\text{Rp }200\text{ juta}$), \textbf{Pilihan II lebih menguntungkan} karena harganya lebih murah sebesar $\text{Rp }3.294.306{,}92$.
+
+\textbf{Bagian (b): Obligasi Kupon Bertahap}
+Diketahui $F = C = 1.000$, $i = 0{,}06$, kupon tahun 1--3 = $\$50$, tahun 4--6 = $\$80$.
+\begin{align*}
+    P_0 &= 50\,a_{\angl{3}0{,}06} + 80\,a_{\angl{3}0{,}06}(1{,}06)^{-3} + 1.000(1{,}06)^{-6} \\
+        &= 133{,}6506 + 179{,}5456 + 704{,}9605 = \mathbf{\$1.018{,}16} \\
+    B_2 &= 50\,a_{\angl{1}0{,}06} + 80\,a_{\angl{3}0{,}06}(1{,}06)^{-1} + 1.000(1{,}06)^{-4} \\
+        &= 47{,}1698 + 201{,}7367 + 792{,}0937 = \mathbf{\$1.041{,}00}
+\end{align*}
+\end{solusibox}
+
+\begin{solusibox}{B2 (30 Poin)}
+\textbf{Bagian (a): Aproksimasi YTM}
+Diketahui $F = C = 1.000$, $n = 12$ semester, $r = g = 0{,}03$, $P = 925$.
+\[
+    k = \frac{925 - 1.000}{1.000} = -0{,}075
+\]
+\[
+    i \approx \frac{g - \dfrac{k}{n}}{1 + \dfrac{n+1}{2n}k} = \frac{0{,}03 - \dfrac{-0{,}075}{12}}{1 + \dfrac{13}{24}(-0{,}075)} = \frac{0{,}03625}{0{,}959375} = 0{,}03778502 \approx 3{,}7785\% \text{ per semester}
+\]
+Maka \textit{nominal yield rate convertible semiannually} adalah $i^{(2)} = 2 \times 3{,}7785\% = \mathbf{7{,}56\%}$.
+
+\textbf{Bagian (b): Putable Bond pada Nilai Par}
+Diketahui $F = C = 1.000$, $r = g = 3\% \implies Fr = 30$, \textit{putable} pada $n = 8, \dots, 20$. Investor berhak memilih harga \textbf{maksimum}.
+\begin{enumerate}[label=(\roman*), leftmargin=6mm, topsep=1pt, itemsep=1pt]
+    \item \textbf{Yield $8\%$ ($i = 4\% > g = 3\%$):} Obligasi diskon ($P_n$ turun terhadap $n$), sehingga nilai maksimum dicapai pada \textit{put date} \textbf{paling awal} ($n = 8$):
+    \[
+        P = P_8 = 1.000 + (30 - 40)a_{\angl{8}0{,}04} = 1.000 - 10(6{,}73274487) = \mathbf{\$932{,}67}
+    \]
+    \item \textbf{Yield $5\%$ ($i = 2{,}5\% < g = 3\%$):} Obligasi premium ($P_n$ naik terhadap $n$), sehingga nilai maksimum dicapai pada \textit{put date} \textbf{paling akhir} ($n = 20$):
+    \[
+        P = P_{20} = 1.000 + (30 - 25)a_{\angl{20}0{,}025} = 1.000 + 5(15{,}58916229) = \mathbf{\$1.077{,}95}
+    \]
+\end{enumerate}
+\end{solusibox}
+
+\begin{solusibox}{B3 (35 Poin)}
+\textbf{Bagian (a): Serial Bond dengan Rumus Makeham}
+Dipandang sebagai 5 obligasi ($j = 1, \dots, 5$) dengan jatuh tempo akhir tahun ke-6 s.d. ke-10:
+$F_j = 4.000$, $C_j = 1{,}05 \times 4.000 = 4.200$, $F_j r = 4.000 \times 0{,}0735 = 294$, $g = \dfrac{294}{4.200} = 0{,}07$, dan $i = 0{,}09$.
+\begin{align*}
+    C' &= 5 \times 4.200 = \$21.000 \\
+    K' &= 4.200(1{,}09)^{-5} a_{\angl{5}0{,}09} = 4.200(0{,}64993139)(3{,}88965126) = \$10.617{,}6270
+\end{align*}
+\[
+    P' = K' + \frac{g}{i}(C' - K') = 10.617{,}6270 + \frac{0{,}07}{0{,}09}(21.000 - 10.617{,}6270) = \mathbf{\$18.692{,}81}
+\]
+
+\textbf{Bagian (b): Obligasi dengan Sinking Fund ($j \neq i$)}
+Diketahui $F = C = 1.000$, $n = 8$ semester, $g = r = 0{,}045$, $i = 0{,}035$, dan suku bunga \textit{sinking fund} $j = 0{,}025$.
+\[
+    s_{\angl{8}0{,}025} = \frac{(1{,}025)^8 - 1}{0{,}025} = 8{,}73611590
+\]
+\[
+    P_{\text{SF}} = \frac{C(1 + g \, s_{\angl{8}0{,}025})}{1 + i \, s_{\angl{8}0{,}025}} = \frac{1.000(1 + 0{,}045 \times 8{,}73611590)}{1 + 0{,}035 \times 8{,}73611590} = \frac{1.393{,}1252}{1{,}3057641} = \mathbf{\$1.066{,}90}
+\]
+\end{solusibox}
+
+\end{document}
